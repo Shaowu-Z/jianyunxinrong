@@ -14,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/news'
+      redirect: '/static/webstatic/register/login.html'
     },
     work,
     news,

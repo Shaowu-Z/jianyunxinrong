@@ -7,7 +7,7 @@ import privacyPolicy from '@/components/login/privacyPolicy'
 import personApprove from '@/components/login/personApprove'
 
 const loginConfig = {
-  path: '/login',
+  path: '/static/webstatic/register/login.html',
   component: login,
   children: [
     {

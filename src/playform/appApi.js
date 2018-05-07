@@ -202,7 +202,7 @@ Adaptive.init();
  
 window.appApi = {
 	isIpad : sUserAgent.match(/ipad/i),
-	isIphoneOs : sUserAgent.match(/iphone os/i) || isIpad,
+	isIphoneOs : sUserAgent.match(/iphone os/i) || this.isIpad,
 	isAndroid : sUserAgent.match(/android/i),
 	isApp : sUserAgent.match(/cy/i),
 	isWeixin : sUserAgent.match(/MicroMessenger/i) == 'micromessenger',
@@ -244,7 +244,7 @@ window.appApi = {
 			thumbImgUrl: image
 		}
 		this.callBackFun = callBackFun;
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			url = url.replace(/=/g, "+");
 			url = url.replace(/&/g, "||");
 			if(!isTop) {
@@ -252,7 +252,7 @@ window.appApi = {
 				return;
 			}
 			iosShare(shareType, JSON.stringify(shareJson));
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.share(shareType, JSON.stringify(shareJson));
 		} else {
 			console.info("请在app中调用");
@@ -279,7 +279,7 @@ window.appApi = {
 		}
 		this.callBackFun = callBackFun;
 		if(!content) content = "建云信融";
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			url = url.replace(/=/g, "+");
 			url = url.replace(/&/g, "||");
 			if(!isTop) {
@@ -287,7 +287,7 @@ window.appApi = {
 				return;
 			}
 			iosShare(shareType, JSON.stringify(shareJson));
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.share(shareType, JSON.stringify(shareJson));
 		} else {
 			console.info("请在app中调用");
@@ -307,7 +307,7 @@ window.appApi = {
 			data: arr
 		};
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				url = url.replace(/=/g, "+");
 				url = url.replace(/&/g, "||");
 				if(!isTop) {
@@ -315,7 +315,7 @@ window.appApi = {
 					return;
 				}
 				iosSetSelectData(JSON.stringify(json));
-			} else if(isApp && isAndroid) { //android
+			} else if(this.isApp && isAndroid) { //android
 				window.webactivity.setSelectData(JSON.stringify(json));
 			} else {
 				console.info("请在app中调用");
@@ -330,13 +330,13 @@ window.appApi = {
 	 */
 	refreshData: function(index) { //从0开始
 		var index = 2;
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosrefreshData(" + index + ",");
 				return;
 			}
 			iosRrefreshData(index);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.refreshData(index);
 		} else {
 			return "设备不支持";
@@ -361,13 +361,13 @@ window.appApi = {
 			data: arr
 		};
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosSetSelectData('" + JSON.stringify(json) + "'");
 					return;
 				}
 				iosSetSelectData(JSON.stringify(json));
-			} else if(isApp && isAndroid) { //android
+			} else if(this.isApp && isAndroid) { //android
 				window.webactivity.setSelectData(JSON.stringify(json));
 			} else {
 				console.info("请在app中调用");
@@ -386,9 +386,9 @@ window.appApi = {
      */
     showAddress:function(adr,lge,lte){
         try {
-            if(isApp && isIphoneOs) { //IOS
+            if(this.isApp && isIphoneOs) { //IOS
                 iosOpenBaiduMapPage(adr,lge,lte);
-            } else if(isApp && isAndroid) { //android
+            } else if(this.isApp && isAndroid) { //android
                 window.webactivity.openBaiduMapPage(adr,lge,lte);
             } else {
                 console.info("请在app中调用");
@@ -407,13 +407,13 @@ window.appApi = {
 			data: arr
 		};
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosSetSelectData('" + JSON.stringify(json) + "'");
 					return;
 				}
 				iosSetSelectData(JSON.stringify(json));
-			} else if(isApp && isAndroid) { //android
+			} else if(this.isApp && isAndroid) { //android
 				window.webactivity.setSelectData(JSON.stringify(json));
 			} else {
 				console.info("请在app中调用");
@@ -431,13 +431,13 @@ window.appApi = {
 			data: arr
 		};
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosSelectMemberForward('" + JSON.stringify(json) + "'");
 					return;
 				}
 				iosSelectMemberForward(JSON.stringify(json));
-			} else if(isApp && isAndroid) { //android
+			} else if(this.isApp && isAndroid) { //android
 				window.webactivity.selectMemberForward(JSON.stringify(json));
 			} else {
 				console.info("请在app中调用");
@@ -449,26 +449,26 @@ window.appApi = {
 
 	//震动
 	//  vibration: function () {
-	//      if (isApp && isIphoneOs) {
+	//      if (this.isApp && isIphoneOs) {
 	//          loadURL("vibration://vibration");
 	//          ;
-	//      } else if (isApp && isAndroid) {
+	//      } else if (this.isApp && isAndroid) {
 	//          window.webactivity.vibrator();
 	//      }
 	//  },
 	//隐藏菜单
 	//  hideMenu: function () {
-	//      if (isApp && isIphoneOs) {
+	//      if (this.isApp && isIphoneOs) {
 	//          loadURL("hidemenu://hideMenu");
-	//      } else if (isApp && isAndroid) {
+	//      } else if (this.isApp && isAndroid) {
 	//          window.webactivity.hideMenu();
 	//      }
 	//  },
 	//显示菜单
 	//  showMenu: function () {
-	//      if (isApp && isIphoneOs) {
+	//      if (this.isApp && isIphoneOs) {
 	//          loadURL("hidemenu://showMenu");
-	//      } else if (isApp && isAndroid) {
+	//      } else if (this.isApp && isAndroid) {
 	//          window.webactivity.showMenu();
 	//      }
 	//  },
@@ -479,13 +479,13 @@ window.appApi = {
 	 */
 	getLocation: function() {
 
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetLocation(");
 				return;
 			}
 			iosGetLocation();
-		} else if(isApp && isAndroid) { //Android
+		} else if(this.isApp && isAndroid) { //Android
 			return window.webactivity.getLocation();
 		} else {
 			console.info("设备不支持获取位置信息");
@@ -515,13 +515,13 @@ window.appApi = {
 	 * 回调方法  getQRCodeResult
 	 */
 	sweepQrCode: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosScanQR(");
 				return;
 			}
 			iosScanQR();
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.scanQR();
 		} else {
 			console.info("设备不支持");
@@ -538,9 +538,9 @@ window.appApi = {
 	//  */
 	// getDeviceMac: function (callBackFun) {
 	//     this.callBackFun = callBackFun;
-	//     if (isApp && isIphoneOs) {//IOS
+	//     if (this.isApp && isIphoneOs) {//IOS
 	//         loadURL("getDeviceMac://getMacAddress");
-	//     } else if (isApp && isAndroid) {//addroid
+	//     } else if (this.isApp && isAndroid) {//addroid
 	//         window.webactivity.getDeviceMac();
 	//     } else {
 	//         console.info("设备不支持");
@@ -548,9 +548,9 @@ window.appApi = {
 	// },
 	//摇一摇声音
 	//  playShakeSound: function () {
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("playShakeSound://playShakeSound");
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.playShakeSound();
 	//      } else {
 	//          console.info("设备不支持");
@@ -558,9 +558,9 @@ window.appApi = {
 	//  },
 	//设置手机号码
 	//  setPhoneNumber: function (phoneNumber) {
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("setPhoneNumber://set?phoneNumber=" + phoneNumber);
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.setPhoneNumber(phoneNumber);
 	//      } else {
 	//          console.info("设备不支持");
@@ -569,9 +569,9 @@ window.appApi = {
 	//  //获得app存储的手机号码
 	//  getPhoneNumber: function (callBackFun) {
 	//      this.callBackFun = callBackFun;
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("getPhoneNumber://getPhoneNumber");
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.getPhoneNumber();
 	//      } else {
 	//          console.info("设备不支持");
@@ -579,9 +579,9 @@ window.appApi = {
 	//  },
 	//震动
 	//  vibrator: function () {
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("vibrator://vibrator");
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.vibrator();
 	//      } else {
 	//          //手机震动1秒
@@ -594,9 +594,9 @@ window.appApi = {
 	//  },
 	//打印
 	//  printer: function (url) {
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("printer://printClick?url=" + url);
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.printer(url);
 	//      } else {
 	//          console.info("设备不支持");
@@ -607,13 +607,13 @@ window.appApi = {
 	 * @param {Object} type
 	 */
 	renderHorizonView: function(type) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSetScreenOrientation(");
 				return;
 			}
 			iosSetScreenOrientation(type);
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.setScreenOrientation(type);
 		} else {
 			console.info("设备不支持");
@@ -621,9 +621,9 @@ window.appApi = {
 	},
 	//关闭横屏
 	//  renderHorizonViewClose: function () {
-	//      if (isApp && isIphoneOs) {//IOS
+	//      if (this.isApp && isIphoneOs) {//IOS
 	//          loadURL("close://close");
-	//      } else if (isApp && isAndroid) {//addroid
+	//      } else if (this.isApp && isAndroid) {//addroid
 	//          window.webactivity.close();
 	//      } else {
 	//          console.info("设备不支持");
@@ -634,13 +634,13 @@ window.appApi = {
 	 * @param {Object} index 0-4，底部下标
 	 */
 	changeMenu: function(index) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSwitchMenu(");
 				return;
 			}
 			iosSwitchMenu(index);
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.switchMenu(index);
 		} else {
 			console.info("设备不支持");
@@ -652,13 +652,13 @@ window.appApi = {
 	 */
 	openNewWindow: function(url) {
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosOpenUrl('" + url + "',");
 					return;
 				}
 				iosOpenUrl(url);
-			} else if(isApp && isAndroid) { //addroid
+			} else if(this.isApp && isAndroid) { //addroid
 				window.webactivity.openUrl(url);
 			} else {
 				console.info("openPage:web");
@@ -675,13 +675,13 @@ window.appApi = {
 	 */
 	closeNewWindow: function(url) {
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosClose(");
 					return;
 				}
 				iosClose();
-			} else if(isApp && isAndroid) { //addroid
+			} else if(this.isApp && isAndroid) { //addroid
 				window.webactivity.close();
 			} else {
 				if(url) {
@@ -703,13 +703,13 @@ window.appApi = {
 	 * @param {Object} url
 	 */
 	goHome: function(url) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosPopToMain(");
 				return;
 			}
 			iosPopToMain();
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.popToMain();
 		} else {
 			window.location.href = url;
@@ -719,13 +719,13 @@ window.appApi = {
 	 *  隐藏返回键
 	 */
 	hideBack: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosHideBack(");
 				return;
 			}
 			iosHideBack();
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.hideBack();
 		} else {
 
@@ -735,13 +735,13 @@ window.appApi = {
 	 *  显示返回键
 	 */
 	showBack: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosShowBack(");
 				return;
 			}
 			iosShowBack();
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.isApp && isAndroid) { //addroid
 			window.webactivity.showBack();
 		} else {
 
@@ -754,13 +754,13 @@ window.appApi = {
 	 */
 	openLogin: function(type) {
 		try {
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosLoginQQWX(" + type + ",");
 					return;
 				}
 				iosLoginQQWX(type);
-			} else if(isApp && isAndroid) {
+			} else if(this.isApp && isAndroid) {
 				window.webactivity.loginQQWX(type);
 			}
 		} catch(e) {
@@ -775,13 +775,13 @@ window.appApi = {
 	 * @param js  打开导航页后执行的js
 	 */
 	popToMainTab: function(index, js) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosPopToMainTab(" + index + ",'" + js + "',");
 				return;
 			}
 			iosPopToMainTab(index, js);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.popToMainTab(index, js);
 		} else {
 			history.go(-1);
@@ -791,13 +791,13 @@ window.appApi = {
 	 * 向所有已打开页面发送JavaSrcipt脚本，用于页面之间同步和数据刷新
 	 */
 	broadcast: function(script) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosBroadcast('" + script + "',");
 				return;
 			}
 			iosBroadcast(script);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.broadcast(script);
 		}
 	},
@@ -806,13 +806,13 @@ window.appApi = {
 	 * 原生返回数据 调用    setContactsResult
 	 */
 	getContacts: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetContacts(");
 				return;
 			}
 			iosGetContacts();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.getContacts();
 		}
 	},
@@ -829,13 +829,13 @@ window.appApi = {
 	 *  获得app剪切板信息
 	 */
 	getTextFromClip:function(){
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetTextFromClip(");
 				return;
 			}
 			iosGetTextFromClip();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.getTextFromClip()
 		} else {
 			console.info("设备不支持");
@@ -847,13 +847,13 @@ window.appApi = {
 	 *  删除app剪切板信息
 	 */
 	copyText:function(text){
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetTextFromClip(");
 				return;
 			}
 			iosCopyText(text);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.copyText(text)
 		} else {
 			console.info("设备不支持");
@@ -872,13 +872,13 @@ window.appApi = {
 		if(undefined == maxCount) {
 			maxCount = 1;
 		}
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSetInputType(" + type + "," + cameraType + "," + maxCount + ",");
 				return;
 			}
 			iosSetInputType(type, cameraType, maxCount);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.setInputType(type, cameraType, maxCount);
 		}
 	},
@@ -891,13 +891,13 @@ window.appApi = {
 	 */
 	openChat: function(userName, userAvatar, nickName, chatType) {
 		// alert(4)
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosOpenChat('" + userName + "','" + userAvatar + "','" + nickName + "'," + chatType + ",");
 				return;
 			}
 			iosOpenChat(userName, userAvatar, nickName, chatType);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openChat(userName, userAvatar, nickName, chatType);
 		}
 	},
@@ -911,13 +911,13 @@ window.appApi = {
 	 * public String chatType;//接收方聊天类型  1=单聊 2=群聊
 	 */
 	sendNotifyMsg: function(jsonStr) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSendNotifyMsg('" + jsonStr + "',");
 				return;
 			}
 			iosSendNotifyMsg(jsonStr);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.sendNotifyMsg(JSON.stringify(jsonStr));
 		}
 	},
@@ -927,13 +927,13 @@ window.appApi = {
 	 * @param jsonStr 包含了名片名称、手机号、头像地址、名片地址，接收人环信ID、头像地址、名称，发送类型(单聊、群聊)
 	 */
 	sendVisitingCard: function(jsonStr) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSendVisitingCard('" + jsonStr + "',");
 				return;
 			}
 			iosSendVisitingCard(jsonStr);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.sendVisitingCard(jsonStr);
 		}
 	},
@@ -942,13 +942,13 @@ window.appApi = {
 	 * @param jsonStr
 	 */
 	sendToFriend: function(jsonStr) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSendToFriend('" + jsonStr + "',");
 				return;
 			}
 			iosSendToFriend(jsonStr);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.sendToFriend(jsonStr);
 		}
 	},
@@ -960,13 +960,13 @@ window.appApi = {
 	 * @param userAvatar  头像url  第一次没有传null
 	 */
 	loginHXChat: function(imId, impwd, userAvatar) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosLoginChat('" + imId + "','" + impwd + "','" + userAvatar + "',");
 				return;
 			}
 			iosLoginChat(imId, impwd, userAvatar);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.loginChat(imId, impwd, userAvatar);
 		}
 
@@ -978,14 +978,14 @@ window.appApi = {
 	 *@return  state = true or false    返回一个true或false
 	 */
 	saveUserInfo: function(resultJson, password) {
-		if(isApp && isIphoneOs) { //IOS{
-			if(!isTop) {
+		if(this.isApp && this.isIphoneOs) { //IOS{
+			if(!this.isTop) {
 				this.callFilter("iosSetUserInfo('" + resultJson + "','" + password + "'");
 				return;
 			}
 			iosSetUserInfo(resultJson, password);
 			return true;
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && this.isAndroid) {
 			return window.webactivity.setUserInfo(resultJson, password);
 		}
 	},
@@ -995,13 +995,13 @@ window.appApi = {
 	 */
 	getUserInfo: function() {
 
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetUserInfo(");
 				return;
 			}
 			iosGetUserInfo();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.getUserInfo();
 		} else {
 			console.info("设备不支持获取用户信息");
@@ -1014,13 +1014,13 @@ window.appApi = {
 	 */
 	getVersionInfo: function() {
 
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetVersionInfo(");
 				return;
 			}
 			iosGetVersionInfo();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.getVersionInfo();
 		} else {
 			console.info("设备不支持获取版本信息");
@@ -1033,13 +1033,13 @@ window.appApi = {
 	 * @returns {*}
 	 */
 	updateUserInfo: function(nickName, avatarUrl) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosUpdateUserAvatarNickName('" + nickName + "','" + avatarUrl + "',");
 				return;
 			}
 			iosUpdateUserAvatarNickName(nickName, avatarUrl);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.updateUserAvatarNickName(nickName, avatarUrl);
 		} else {
 			console.info("设备不支持更新用户信息");
@@ -1051,13 +1051,13 @@ window.appApi = {
 	 * @returns {*}
 	 */
 	clearUserInfo: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosClearUserInfo(");
 				return;
 			}
 			iosClearUserInfo();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.clearUserInfo();
 		}
 
@@ -1066,13 +1066,13 @@ window.appApi = {
 	 * 退出程序
 	 */
 	loginout: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosExitApp(");
 				return;
 			}
 			iosExitApp();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.exitApp();
 		}
 	},
@@ -1080,13 +1080,13 @@ window.appApi = {
 	 * 重新登录
 	 */
 	relogin: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosReLogin(");
 				return;
 			}
 			iosReLogin();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.reLogin();
 		}
 	},
@@ -1095,13 +1095,13 @@ window.appApi = {
 	 * 回调 setDeviceInfoResult
 	 */
 	getDeviceInfo: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetDeviceInfo(");
 				return;
 			}
 			iosGetDeviceInfo();
-		} else if(isApp && isAndroid) { //addroid
+		} else if(this.this.isApp && isAndroid) { //addroid
 			var info = window.webactivity.getDeviceInfo()
 			return JSON.parse(info);
 		} else {
@@ -1127,13 +1127,13 @@ window.appApi = {
 	 * 打开聊天记录搜索
 	 */
 	openMsgSearchPage: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosOpenMsgSearchPage(");
 				return;
 			}
 			iosOpenMsgSearchPage();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openMsgSearchPage();
 		} else {
 			console.info("设备不支持聊天记录搜索");
@@ -1162,13 +1162,13 @@ window.appApi = {
 	 * @param {Object} index  0-4
 	 */
 	refreshNav: function(index) { //从0开始
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosRefreshPage(" + index + ",");
 				return;
 			}
 			iosRefreshPage(index);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.refreshPage(index);
 		} else {
 			return "设备不支持";
@@ -1179,7 +1179,7 @@ window.appApi = {
 	 * @param {Object} callBack
 	 */
 	stopBack: function(callBack) { //关闭返回键事件
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			//注册事件
 			this.callBackFun = callBack;
 			if(!isTop) {
@@ -1187,7 +1187,7 @@ window.appApi = {
 				return;
 			}
 			iosSetBackState(false);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			//注册事件
 			this.callBackFun = callBack;
 			window.webactivity.setBackState(false);
@@ -1199,13 +1199,13 @@ window.appApi = {
 	 * 绑定后退事件
 	 */
 	resetBack: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSetBackState(true,");
 				return;
 			}
 			iosSetBackState(true);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.setBackState(true);
 		} else {
 			return "设备不支持";
@@ -1215,13 +1215,13 @@ window.appApi = {
 	 * 打开/关闭软键盘 ， 关闭则打开，打开则关闭
 	 */
 	showKeyboard: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosShowKeyboard(");
 				return;
 			}
 			iosShowKeyboard();
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.showKeyboard();
 		} else {
 			return "设备不支持";
@@ -1233,13 +1233,13 @@ window.appApi = {
 	 */
 	setPullRefresh: function(isRefresh) {
 		let isApp = sUserAgent.match(/cy/i);
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosSetPullRefresh(" + isRefresh + ",");
 				return;
 			}
 			iosSetPullRefresh(isRefresh);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			return window.webactivity.setPullRefresh(isRefresh);
 		} else {
 			return "设备不支持";
@@ -1249,13 +1249,13 @@ window.appApi = {
 	 * 打开文件预览
 	 */
 	openFile: function(url) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosOpenFile('" + url + "',");
 				return;
 			}
 			iosOpenFile(url);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openFile(url);
 		} else {
 			location.href = url;
@@ -1269,13 +1269,13 @@ window.appApi = {
 	 * @param thumbUmgUrl 缩略图
 	 */
 	openVideo: function(url, videoUrl, videoName, thumbUmgUrl) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosOpenVideo('" + url + "','" + videoUrl + "','" + videoName + "','" + thumbUmgUrl + "',");
 				return;
 			}
 			iosOpenVideo(url, videoUrl, videoName, thumbUmgUrl);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openVideo(url, videoUrl, videoName, thumbUmgUrl);
 		} else {
 			location.href = url;
@@ -1287,13 +1287,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	toGroupFileSharePage: function(groupId) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("toGroupFileSharePage('" + groupId + "',");
 				return;
 			}
 			iosToGroupFileSharePage(groupId);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.toGroupFileSharePage(groupId);
 		} else {
 			console.info("设备不支持");
@@ -1305,13 +1305,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	toMsgSearchPage: function(groupId) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("toMsgSearchPage('" + groupId + "',");
 				return;
 			}
 			iosToMsgSearchPage(groupId);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.toMsgSearchPage(groupId);
 		} else {
 			console.info("设备不支持");
@@ -1323,13 +1323,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	cleanGroupChatMsg: function(groupId) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("cleanGroupChatMsg('" + groupId + "',");
 				return;
 			}
 			iosCleanGroupChatMsg(groupId);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.cleanGroupChatMsg(groupId);
 		} else {
 			console.info("设备不支持");
@@ -1341,13 +1341,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	exitGroupChat: function(groupId) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("exitGroupChat('" + groupId + "',");
 				return;
 			}
 			iosExitGroupChat(groupId);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.exitGroupChat(groupId);
 		} else {
 			console.info("设备不支持");
@@ -1356,9 +1356,9 @@ window.appApi = {
 	},
 	// 清除浏览器缓存
 	cleanLocalWebCache: function() {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			// ios未实现 未处理
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.cleanLocalWebCache();
 		} else {
 			console.info("设备不支持");
@@ -1416,9 +1416,9 @@ window.appApi = {
                 }
             };*/
 
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			// ios未实现 未处理
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			var xhr;
 			if(window.XMLHttpRequest) {
 				xhr = new XMLHttpRequest();
@@ -1492,13 +1492,13 @@ window.appApi = {
     * @param isMultipe      是否多选,默认多选
 
 	 */
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("openProjectContactSelectPage('" + projectSn + "','" + title + "','" + beforeSelectId + "','" + selectType + "','" + isMultipe + "',");
 				return;
 			}
 			openProjectContactSelectPage(projectSn, title, beforeSelectId, selectType, isMultipe);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openProjectContactSelectPage(projectSn, title, beforeSelectId, selectType, isMultipe);
 		}
 	},
@@ -1510,13 +1510,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	openProjectContact: function(projectSn, projectName) {
-		if(isApp && isIphoneOs) { //IOS
+		if(this.isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("openProjectContact('" + projectSn + "','" + projectName + "'");
 				return;
 			}
 			iosOpenProjectContact(projectSn, projectName);
-		} else if(isApp && isAndroid) {
+		} else if(this.isApp && isAndroid) {
 			window.webactivity.openProjectContact(projectSn, projectName);
 		} else {
 			console.info("设备不支持");
@@ -1529,7 +1529,7 @@ window.appApi = {
 		},
     	init:function(){
 			// 如果不在App打开，适配H5的大图预览功能，仅此一段搞定
-			if(!isApp){
+			if(!this.isApp){
                 Base.getScript("../../../static/js/photo/photoSwipe.js"); 
 			}
     	},
@@ -1553,13 +1553,13 @@ window.appApi = {
 				"data":imgsData,
 				"type":type?type:_self.CONS.MAIN
 			});
-			if(isApp && isIphoneOs) { //IOS
+			if(this.isApp && isIphoneOs) { //IOS
 				if(!isTop) {
 					this.callFilter("iosOpenPicturePreview('" + jsonStr + "',");
 					return;
 				}
 				iosOpenPicturePreview(jsonStr);
-			} else if(isApp && isAndroid) {
+			} else if(this.isApp && isAndroid) {
 				window.webactivity.openPicturePreview(jsonStr);
 			} else {
 				pswipe.openImgView(index,imgsData);
@@ -1877,3 +1877,5 @@ var getQRCodeResult = function(str) {
  * @param isSys 是否为标准目录
  */
 var uploadTarget = function(id, isSys) {}
+
+export default window.appApi;

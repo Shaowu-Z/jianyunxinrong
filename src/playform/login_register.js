@@ -1,6 +1,9 @@
+import Vue from 'vue'
 import setting from './config.js'
+import appApi from './appApi.js'
+import removeThirdInfo from './common.js'
 /***************用户登录 - wyj******************/
-onload = function (){
+export default onload = function (){
 var login_register = new Vue({
     el:"#login-register",
     data:{
@@ -26,15 +29,10 @@ var login_register = new Vue({
         }
     },
     created: function () {
-        /*if (isIphoneOs) {
-            document.getElementById("wx_login").style.display = "none";
-        }else{
-            document.getElementById("wx_login").style.display = "block";
-        }*/
-        document.getElementById("wx_login").style.display = "block";
+        // document.getElementById("wx_login").style.display = "block";
         var _self = this;
         setTimeout(function(){
-            _self.$data.loginParams.deviceInfo = getDeviceInfo();
+            _self.$data.loginParams.deviceInfo = appApi.getDeviceInfo();
         },500)
     },
     methods:{
@@ -53,7 +51,7 @@ var login_register = new Vue({
             if(_self.loginParams.deviceInfo == undefined){
                 //延迟0.5秒，兼容IOS
                 setTimeout(function(){
-                    _self.loginParams.deviceInfo = getDeviceInfo();//再获取一次设备信息
+                    _self.loginParams.deviceInfo = appApi.getDeviceInfo();//再获取一次设备信息
                 },500)
                 if(_self.loginParams.deviceInfo == undefined){
                     // 超时未获取到设备信息
@@ -70,7 +68,7 @@ var login_register = new Vue({
                 //一般登录
                 params = _self.$data.loginParams;
             }
-            this.$http.post(setting.getUrl()+"/user_api/user_login",{params:params}).then(function (response) {
+            this.$http.post("http://java.winfreeinfo.com/user_api/user_login",{params:params}).then(function (response) {
                 var rs = response.data;
                 if(rs.code == 0) {
                     removeThirdInfo();
@@ -166,7 +164,7 @@ var login_register = new Vue({
         userAuth:function () {
             var R_flag = false;
             $.ajax({
-                url: setting.getUrl()+"/check_api/isCheck",
+                url: "http://java.winfreeinfo.com/check_api/isCheck",
                 dataType: "json",
                 type: "post",
                 async: false,
@@ -210,7 +208,7 @@ var login_register = new Vue({
                 alert("密码为6-16位字符！");
                 return false;
             }
-            this.$http.post(setting.getUrl()+"/user_api/user_register",params).then(function (response) {
+            this.$http.post("http://java.winfreeinfo.com/user_api/user_register",params).then(function (response) {
                 var rs = response.data;
                 if(rs.code == 0){
                     msg("注册成功");
@@ -257,7 +255,7 @@ var login_register = new Vue({
                     memberName:rs.userNick,
                     phoneNumber:rs.userPhone,
                     teamId:url_params.invTeam};
-                    this.$http.post(setting.getUrl()+"/concats_api/create_member", param).then(function (response) {
+                    this.$http.post("http://java.winfreeinfo.com/concats_api/create_member", param).then(function (response) {
                     window.location.href = DOWN_LOAD_APP_URL;
                     console.info(response);
                 }).catch(function(error){
@@ -268,7 +266,13 @@ var login_register = new Vue({
     }
 });
 }
-
+function warm(msg) {
+    layer.open({
+        type: 200
+        , content: msg
+        , btn: '确定'
+    });
+}
     function loginSetting(){
         function getDeviceInfo() {
             /*var deviceInfo;

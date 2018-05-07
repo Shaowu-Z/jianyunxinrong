@@ -131,7 +131,7 @@
 					</div>
 				</a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="mui-table-view-cell" @click="project">
 				<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(setting.getUrl()+'/static/webstatic/mycenter/project_list.html')">
 					<div class="oa-contact-cell mui-table">
 						<div class="oa-contact-avatar mui-table-cell">
@@ -158,7 +158,7 @@
 			<!--</a>-->
 		<!--</div>-->
 		<div class="singlebox">
-			<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/mycenter_setting.html')">
+			<a class="mui-navigate-right" @click="setting">
 				<span class="my-list-icon label-setting"></span>
 				设置
 			</a>
@@ -300,7 +300,7 @@ export default {
 				return false;
 			}
 			this.$http.post(setting.getUrl() + "/user_api/user_loginout").then(function(resp) {
-				if(appApi.isApp) {
+				if(appApi.this.isApp) {
 					window.appApi.loginout();
 				} else {
 					window.location.href = "../register/login.html";
@@ -328,7 +328,7 @@ export default {
 				date.setTime(date.getTime() - 10000);
 				document.cookie = "userid" + "=; expire=" + date.toGMTString() + "; path=/";
 				localStorage.clear();
-				if(appApi.isApp) {
+				if(appApi.this.isApp) {
 					window.appApi.relogin();
 				} else {
 					window.location.href = "../register/login.html";
@@ -486,6 +486,12 @@ export default {
 		},
 		cl(){
 			this.$router.push({path:'/setUp'})
+		},
+		setting(){
+		  this.$router.push({path:'/setting'});
+		  },
+		project(){
+		  this.$router.push({path:'/project'});
 		}
   },
   mounted() {

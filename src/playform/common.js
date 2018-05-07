@@ -1,10 +1,11 @@
 import setting from './config';
 var BackCookie = {
+    // 设置cookie
     setCookie: function (name, value, isEscape) {
         var cval = this.getCookie(name);
         //	if(cval==null){
         var hour = 4;
-        var exp = new Date();
+        var exp = new Date();  
         exp.setTime(exp.getTime() + hour * 60 * 60 * 1000);
         if (isEscape == 1) {
             document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
@@ -15,12 +16,14 @@ var BackCookie = {
         }
         //}
     },
+    // 删除cookie
     delCookie: function (name) {
         var exp = new Date();
         exp.setTime(exp.getTime() - 1);
         var cval = this.getCookie(name);
         if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
     },
+    // 获取cookie
     getCookie: function (name, isEscape) {
         var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
         if (arr != null) {
@@ -1020,7 +1023,7 @@ function setLoginParams(info_json) {
     localStorage.setItem(login_params_key, JSON.stringify(info_json));
 }
 
-function removeThirdInfo() {
+export default function removeThirdInfo() {
     localStorage.removeItem(third_info_wx_key);
     localStorage.removeItem(third_info_qq_key);
     localStorage.removeItem(cert_type_key);
@@ -1170,4 +1173,4 @@ function getFileType(suffix) {
     }
     return clazz;
 }
-export {Base,BackCookie}
+export {Base,BackCookie,removeThirdInfo}
