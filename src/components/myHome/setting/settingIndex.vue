@@ -66,7 +66,6 @@
 			</div>
 		</div>	
 	</section>
-	<share-bar :sharetrue="sharetrue"></share-bar>
   </div>
 </template>
 
@@ -86,7 +85,7 @@ export default {
 			this.$router.go(-1);
 		},
 		share(){
-			this.sharetrue = !this.sharetrue
+			this.$router.push({path:'/share'});
 		}
 	}
 }

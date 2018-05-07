@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-show="sharetrue">
+  <div id="app">
       <header class="mui-bar mui-bar-nav">
 		<button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
 			<span class="mui-icon mui-icon-back"></span>返回
@@ -36,7 +36,6 @@
 
 <script>
 export default {
-    props:['sharetrue'],
     data(){
         return{
             
@@ -44,7 +43,7 @@ export default {
     },
     methods:{
         goBack(){
-            this.sharetrue = !this.sharetrue
+            this.$router.go(-1)
         }
     },
     mounted(){
@@ -59,7 +58,6 @@ export default {
         height:100%;
         position: absolute;
         top: 0;
-        z-index: 999
     }
     .mui-backdrop{z-index: 8;}
 		.share{

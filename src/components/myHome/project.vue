@@ -4,22 +4,22 @@
 		<!--<a class="mui-action-back mui-icon iconfont icon-close"></a>-->
 		<h1 class="mui-title">我的项目</h1>
 	</header>
-	<section class="mui-content" id="team_list" >
+	<section class="mui-content" id="app" >
 		<ul class="mui-table-view eg-table-view search-list">
-	        <!--工头、材料采购商项目列表-->
-			<ul>
-				<li class="mui-table-view-cell">
-					<a>
-					<div class="view-pic">
-						<!-- <img v-if="item.img_url!=undefined && item.img_url!='undefined'" v-bind:src=imgurl+item.img_url>
-						<img v-if="item.img_url==undefined || item.img_url=='undefined'" src="../../assets/images/defualt.png"> -->
-						<!--<img src="../../images/defualt.png">-->
+			<div v-for="(item,index) in list" :key="index">
+				<li class="mui-table-view-cell" >
+					<div @click="onProjectDetail(item)">
+						<div class="view-pic">
+							<img src="../../assets/images/defualt.png">
+						</div>
+						<h4 class="oa-title" v-text="item.projectName"></h4>
+						<section>
+							<p class="mui-clearfix"><span class="mui-pull-left"><span class="data">{{item.ProjectName}}</span></span></p>
+							<p class="mui-clearfix"><span class="mui-pull-left">开工日期：<span class="data">{{item.MissionStartDateOriginal}}</span></span></p>
+						</section>
 					</div>
-					<h4 class="oa-title"></h4>
-					<p class="mui-clearfix"><span class="mui-pull-left">开工日期：<span class="data"></span></span></p>
-					</a>
 				</li>
-			</ul>
+			</div>
 		</ul>
 	</section>
   </div>
@@ -29,15 +29,18 @@
 export default {
     data(){
         return{
-
+			list:[],
         }
     },
     methods:{
 
     },
     created(){
-            this.$http.post("http://java.winfreeinfo.com//chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
-                console.log(response);
+			const _self=this
+            this.$http.post("/api/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
+				console.log(response);
+				_self.list = response.data.result;
+				console.log(_self.list);
             }).catch(function (error) {
                 console.info(error);
             });
@@ -46,5 +49,17 @@ export default {
 </script>
 
 <style>
-
+.mui-table-view-cell div{
+	display: flex;
+	
+}
+.view-pic{
+	width:60px;
+	height:60px;
+	margin-right: 10px;
+}
+.view-pic img{
+	width:60px;
+	height:60px;
+}
 </style>

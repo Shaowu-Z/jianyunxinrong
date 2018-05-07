@@ -4,6 +4,7 @@ import setUp from '@/components/myHome/setUp'
 import set from '@/components/myHome/setUp/set'
 import setting from '@/components/myHome/setting'
 import settingIndex from '@/components/myHome/setting/settingIndex'
+import share from '@/components/myHome/setting/share'
 import project from '@/components/myHome/project'
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
@@ -32,8 +33,12 @@ const myHomeConfig = {
       component: setting,
       children: [
         {
-          path: '/',
+          path: '',
           component: settingIndex
+        },
+        {
+          path: '/share',
+          component: share
         }
       ]
     }

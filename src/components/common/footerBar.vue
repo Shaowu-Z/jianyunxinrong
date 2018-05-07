@@ -45,8 +45,8 @@ export default {
         },
         {
           tabText: '我的',
-          tabName: 'myHome',
-          routerPath: '/myHome',
+          tabName: '/static/webstatic/mycenter/mycenter.html',
+          routerPath: '/static/webstatic/mycenter/mycenter.html',
           index: 0
         }
       ]
