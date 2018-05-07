@@ -75,7 +75,7 @@ export default {
             this.loginParams.certCode = this.$refs.user.value;
             this.loginParams.pwd = this.$refs.pwd.value;
             var _this=this
-            this.$http.post("apis/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
+            this.$http.post("/api/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
                 console.log(response);
                 if(rs.code === 0){
