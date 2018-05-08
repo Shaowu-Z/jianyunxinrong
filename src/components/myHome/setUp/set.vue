@@ -57,13 +57,22 @@ export default {
             map[param[0]] = decodeURI(param[1]);
         }
     }
-    created: ()=> {
-            var _self = this;
-            this.loadData();
-    }
+    
     function reLoad(){
         window.location.reload();
     }
+  },
+  created() {
+      this.loadData();
+      var _self = this;
+      var formparam = new FormData();
+      this.$http.post("/api/concats_api/query_team_list_info",formparam).then(function (response) {
+        console.log(1111);
+        // _self.$data.items = response.data.result;
+        console.log("结果",response.data.result)
+      }).catch(function (error) {
+          console.info(error);
+      });
   },
   methods:{
     hide_shade: function(){
@@ -71,16 +80,6 @@ export default {
         this.shade = false;
     },
     loadData: function(){
-      var _self = this;
-      var formparam = new FormData();
-      formparam.append("userId",BackCookie.getCookie("userid"))
-      this.$http.post("http://java.winfreeinfo.com/concats_api/query_team_list_info",formparam).then(function (response) {
-        console.log(1111);
-          //console.log("结果",response.data.result)
-          _self.$data.items = response.data.result;
-      }).catch(function (error) {
-          console.info(error);
-      });
     }
   }
 }

@@ -9,12 +9,12 @@
 			<form class="mui-input-group" id="registerform">
 				<div class="mui-input-row">
 					<label>手机号</label>
-					<input type="text" class="mui-input-clear mui-input" name="certCode" id="phonenum" placeholder="请输入手机号">
+					<input type="text" class="mui-input-clear mui-input" name="certCode" id="phonenum" placeholder="请输入手机号" ref="phone">
 				</div>
 				<div class="mui-input-row input-yanzm">
 					<label>验证码</label>
 					<input type="text" class="mui-input-clear mui-input" name="captcha" id="" placeholder="请输入验证码">
-					<button type="button" class="mui-btn mui-btn-link btn-yanzm"  id="msgbutton" onclick="sendvcode()">获取验证码</button>
+					<button type="button" class="mui-btn mui-btn-link btn-yanzm"  id="msgbutton" @click="sendvcode">获取验证码</button>
 				</div>
 				<div class="mui-input-row">
 					<label>密码</label>
@@ -51,7 +51,7 @@
 export default {
     data(){
         return {
-
+			params: ''
         }
     },
     methods:{
@@ -66,6 +66,21 @@ export default {
 		},
 		subReg() {
 			this.$router.push('/login/personApprove');
+		},
+		sendvcode(){
+			console.log(this.$refs.phone.value);
+			this.params = this.$refs.phone.value;
+			var myreg=/^[1][3,4,5,7,8][0-9]{9}$/; 
+			if(!myreg.test(this.params)){
+				alert('请正确填写手机号');
+			} else {
+				this.$http.post('http://java.winfreeinfo.com/common_api/fetch_captcha',{phoneNum:this.params},{'contentType': "application/json"})
+				.then(function(response){
+					console.log(1111);
+				}).catch(function (error) {
+					console.info(error);
+				});
+			}
 		}
     },
     mounted(){

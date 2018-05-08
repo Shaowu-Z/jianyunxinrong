@@ -7,16 +7,16 @@
       <section id="mycenter" class="mui-content mycenter-content">
 	<div class="myhead">
 		<!-- href="my_info.html" -->
-		<a class="" onclick="appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/my_info.html')">
+		<a class="">
 			<div class="oa-contact-cell mui-table">
 				<div class="oa-contact-avatar mui-table-cell">
-					<img class="my-pic"/>
+					<img class="my-pic" :src='user.uImg'/>
 				</div>
 				<div class="oa-contact-content mui-table-cell">
-					<h4 class="oa-contact-name"></h4>
+					<h4 class="oa-contact-name">{{user.uName}}</h4>
 					<!--<p class="oa-contact-email"><span class="mui-icon iconfont icon-certification"></span>未认证</p>-->
 					<!--<p class="oa-contact-email active"><span class="mui-icon iconfont icon-certification"></span>已认证</p>-->
-					<p class="oa-contact-email"></p>
+					<p class="oa-contact-email">{{user.phoneNum}}</p>
 				</div>
 			</div>
 			<span class="btn-code"></span>
@@ -119,7 +119,7 @@
 					<!--&lt;!&ndash;<span  id="cus_zhiye_active" class="mui-badge mui-badge-inverted" v-text="zytag_txt"></span>&ndash;&gt;-->
 				<!--</a>-->
 			<!--</li>-->
-			<li class="mui-table-view-cell" @click="cl">
+			<li class="mui-table-view-cell" @click="set">
 				<a class="mui-navigate-right">
 					<div class="oa-contact-cell mui-table">
 						<div class="oa-contact-avatar mui-table-cell">
@@ -132,7 +132,7 @@
 				</a>
 			</li>
 			<li class="mui-table-view-cell" @click="project">
-				<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(setting.getUrl()+'/static/webstatic/mycenter/project_list.html')">
+				<a class="mui-navigate-right">
 					<div class="oa-contact-cell mui-table">
 						<div class="oa-contact-avatar mui-table-cell">
 							<span class="my-list-icon label-project"></span>
@@ -280,11 +280,7 @@ export default {
   data () {
     return {
       items: {},
-      user: {
-        cert_count: 0,
-        cellectCount: 0,
-        attentionCount: 0
-      },
+      user: {},
       imgHost: "",
       allZhiYeTag: [],
       myZhiYeTag: [],
@@ -295,217 +291,28 @@ export default {
     }
   },
   methods: {
-    		loginout: function() {
-			if(!confirm("确定要退出登录吗？")) {
-				return false;
-			}
-			this.$http.post(setting.getUrl() + "/user_api/user_loginout").then(function(resp) {
-				if(appApi.this.isApp) {
-					window.appApi.loginout();
-				} else {
-					window.location.href = "../register/login.html";
-				}
-				// if (resp.data.code == 200) {
-				//     console.info(resp.message);
-				//     window.location.href = "../register/login.html";
-				// } else {
-				//     console.info(resp.data.message);
-				//     remin(resp.data.message);
-				// }
-			}).catch(function(error) {
-				console.info(error.date.message);
-				remin(error.data.message);
-			});
-		},
-		relogin: function() {
-			if(!confirm("确定要重新登录吗？")) {
-				return false;
-			}
-			this.$http.post("http://java.winfreeinfo.com/user_api/user_loginout").then(function(resp) {
-
-				//清除cookie
-				var date = new Date();
-				date.setTime(date.getTime() - 10000);
-				document.cookie = "userid" + "=; expire=" + date.toGMTString() + "; path=/";
-				localStorage.clear();
-				if(appApi.this.isApp) {
-					window.appApi.relogin();
-				} else {
-					window.location.href = "../register/login.html";
-				}
-
-			}).catch(function(error) {
-				console.info(error.date.message);
-				remin(error.data.message);
-			});
-		},
-		goShare: function() {
-			var url = setting.getUrl() + "/static/webstatic/mycenter/ext/share_detail.html";
-			var logo = setting.getUrl() + "/static/images/app-logo.jpg";
-			appApi.share(-1, "建云信融APP", "工程人员都在用建云信融，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
-		},
-		resetpwd: function() {
-			var url = setting.getUrl() + "/static/webstatic/mycenter/resetpwd.html";
-			window.appApi.openNewWindow(url);
-		},
-		test: function() {
-			var userIds = "36";
-			var jsondata = {
-				'userIds': "36"
-			};
-			var param = JSON.stringify(jsondata);
-			axios({
-				method: 'POST',
-				url: setting.getUrl() + "/check_api/check_phone?userIds=" + userIds,
-				data: null,
-				dataType: 'json',
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8'
-				}
-			}).then(function(resp) {
-				confirm(resp.data.code + resp.data.message);
-			}).catch(function(error) {
-				confirm(error.message);
-			});
-		},
-		open_zhiye_popver: function() {
-			mui('#cus_zhiye_popver').popover('toggle');
-			appApi.setPullRefresh(false);
-
-			jQuery(".mui-backdrop").click(function() {
-					appApi.setPullRefresh(true);
-				})
-				// mui('body').on('tap','.mui-backdrop',function(){
-
-			// mui('.mui-backdrop').off();
-			// });
-		},
-		load_zhiye: function() {
-			var _self = this;
-			if(_self.$data.loadZhiYe == 0) {
-				axios({
-					method: 'GET',
-					url: setting.getUrl() + "/work_api/queryAllTag",
-					async: false,
-					dataType: 'json',
-				}).then(function(result) {
-					console.info(result.data);
-					_self.$data.allZhiYeTag = result.data.result.allZhiYeTag;
-					_self.$data.myZhiYeTag = result.data.result.myZhiYeTag;
-					_self.$data.zhiyeCons = result.data.result.zhiyetag;
-					_self.$data.loadZhiYe = 1;
-					if(_self.$data.myZhiYeTag.length == 0) {
-						document.getElementById("cus_zhiye_active").innerText = "未设置标签";
-						mui('#cus_zhiye_popver').popover('toggle');
-						appApi.setPullRefresh(false);
-						jQuery(".mui-backdrop").click(function() {
-							appApi.setPullRefresh(true);
-						})
-					}
-					mui('#cus_zhiye_popver_sc').scroll();
-					var my = result.data.result.myZhiYeTag;
-					console.info(my);
-					var zytag_txt = null;
-					for(var i = 0; i < my.length; i++) {
-						var a = my[i].zhiyetagid;
-						_self.$data.zybiaoqian.push(a);
-						if(zytag_txt) {
-							zytag_txt = zytag_txt + "," + my[i].zhiyetagname;
-						} else {
-							zytag_txt = my[i].zhiyetagname;
-						}
-					}
-					_self.$data.zytag_txt = zytag_txt;
-
-				}).catch(function(error) {
-					console.info(error);
-				});
-			}
-			// 打开popver
-			/*mui('#cus_zhiye_popver').popover('toggle');*/
-
-		},
-		zhiye_confirm: function() {
-			var _self = this;
-			var zybiaoqian = _self.$data.zybiaoqian;
-			var arr = [];
-			var zytag_txt = null;
-
-			var allZhiYeTag = _self.allZhiYeTag
-			for(var i = 0; i < zybiaoqian.length; i++) {
-
-				for(var k = 0; k < allZhiYeTag.length; k++) {
-					var tags = allZhiYeTag[k].datas;
-					for(var j = 0; j < tags.length; j++) {
-						if(tags[j].zhiyeid == zybiaoqian[i]) {
-							var a = {
-								"zhiyetagid": tags[j].zhiyeid,
-								"zhiyetagname": tags[j].zhiyename,
-								"xuhao": tags[j].xuhao
-							};
-							arr.push(a);
-
-							if(zytag_txt) {
-								zytag_txt = zytag_txt + "," + tags[j].zhiyename;
-							} else {
-								zytag_txt = tags[j].zhiyename;
-							}
-							break;
-						}
-					}
-				}
-
-				// var arrt = zybiaoqian[i].split(":");
-				// var a = {"zhiyetagid":arrt[0],"zhiyetagname":arrt[1]};
-				// arr.push(a);
-				// if(zytag_txt){
-				//     zytag_txt = zytag_txt+","+arrt[1];
-				// }else{
-				//     zytag_txt = arrt[1];
-				// }
-			}
-			_self.$data.zytag_txt = zytag_txt;
-			var param = new FormData();
-			param.append("zhiyetags", JSON.stringify(arr));
-			axios({
-				method: 'POST',
-				url: setting.getUrl() + "/work_api/saveMyZYTag",
-				// data: {"zhiyetags":JSON.stringify(_self.$data.zybiaoqian)},
-				data: param,
-				dataType: 'json',
-			}).then(function(result) {
-				// 关闭popver
-				mui('#cus_zhiye_popver').popover('toggle');
-				localStorage.removeItem("zhiyes")
-				appApi.setPullRefresh(true);
-				appApi.refreshNav(2);
-			}).catch(function(error) {
-				console.info(error);
-			});
-
-		},
-		cl(){
+		set(){
 			this.$router.push({path:'/setUp'})
 		},
 		setting(){
 		  this.$router.push({path:'/setting'});
-		  },
+		},
 		project(){
 		  this.$router.push({path:'/project'});
+		//   console.log(this.user)
 		}
   },
-  mounted() {
-    created:()=> {
-      var _self = this;
-      this.$http.post("http://java.winfreeinfo.com/user_api/find_login_user").then(function(response) {
+  created() {
+    
+	  var _self = this;
+      this.$http.post("/api/user_api/find_login_user").then(function(response) {
         _self.$data.user = response.data.result.userInfo;
         console.log("用户",_self.$data.user)
       }).catch(function(error) {
         console.info(error);
       });
 
-      this.load_zhiye();
-    }
+    // this.load_zhiye();
     function openWindow(url) {
       window.appApi.openNewWindow(url);
     }

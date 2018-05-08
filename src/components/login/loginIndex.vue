@@ -22,8 +22,8 @@
             <!--<button class="mui-btn mui-btn-block mui-btn-primary reg-btn" onclick="login_register.doLogin()">登录</button>-->
             <button class="mui-btn mui-btn-block mui-btn-primary reg-btn" @click="loginAction()">登录</button>
             <p class="content-tips mui-text-center">
-                <a class="mui-pull-left">立即注册</a>
-                <a class="mui-pull-right">忘记密码？</a>
+                <a class="mui-pull-left" @click="register">立即注册</a>
+                <a class="mui-pull-right" @click="backpwd">忘记密码？</a>
             </p>
             <div class="other-style">
                 <div class="more-title"><span class="title">使用其他方式登录</span></div>
@@ -80,12 +80,17 @@ export default {
                 console.log(response);
                 if(rs.code === 0){
                    window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
-                   
                   _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
                 }
             }).catch(function (error) {
                 console.info(error);
             });
+    },
+    register(){
+        this.$router.push({path:'/register'});
+    },
+    backpwd(){
+        this.$router.push({path:'/backpwd'});
     }
   }
 }

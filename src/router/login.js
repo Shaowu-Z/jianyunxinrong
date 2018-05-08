@@ -15,23 +15,23 @@ const loginConfig = {
       component: loginIndex
     },
     {
-      path: 'register',
+      path: '/register',
       component: register,
     },
     {
-      path: 'serviceAgreement',
+      path: '/serviceAgreement',
       component: serviceAgreement,
     },
     {
-      path: 'privacyPolicy',
+      path: '/privacyPolicy',
       component: privacyPolicy,
     },
     {
-      path: 'backpwd',
+      path: '/backpwd',
       component: backpwd
     },
     {
-      path: 'personApprove',
+      path: '/personApprove',
       component: personApprove,
     },
   ]
