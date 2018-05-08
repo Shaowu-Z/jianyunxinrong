@@ -1,9 +1,8 @@
 <template>
   <div id='app'>
-      <header class="mui-bar mui-bar-nav">
+    <header class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">账号注册</h1>
 	</header>
-
 	<section class="mui-content" id="login-register">
 		<div class="register-form">
 			<form class="mui-input-group" id="registerform">
@@ -13,7 +12,7 @@
 				</div>
 				<div class="mui-input-row input-yanzm">
 					<label>验证码</label>
-					<input type="text" class="mui-input-clear mui-input" name="captcha" id="" placeholder="请输入验证码">
+					<input type="text" class="mui-input-clear mui-input" name="captcha" id="" placeholder="请输入验证码" :value="regParams.captcha">
 					<button type="button" class="mui-btn mui-btn-link btn-yanzm"  id="msgbutton" @click="sendvcode">获取验证码</button>
 				</div>
 				<div class="mui-input-row">
@@ -52,6 +51,14 @@ export default {
     data(){
         return {
 			params: '',
+			myreg : /^[1][3,4,5,7,8][0-9]{9}$/,
+			regParams:{
+				certCode:"",
+				certType:0,
+				pwd:"", 
+				eventId:"",
+				captcha:""
+			}
         }
     },
     methods:{
@@ -67,15 +74,38 @@ export default {
 		subReg() {
 			// /user_api/user_register
 			// this.$router.push('/login/personApprove');
+			const myreg=/^[1][3,4,5,7,8][0-9]{9}$/; 
+			if(!this.myreg.test(this.params)){
+				alert('请正确填写手机号')
+				return false;
+			} else if(this.regParams.eventId == '' || this.regParams.eventId == null){
+				alert("抱歉，您还未获取验证码")
+				return false;
+			} else if(this.regParams.captcha.length<0 || this.regParams.captcha.length<4){
+				alert('请正确输入验证码')
+				return false;
+			} else if(this.regParams.pwd == ''){
+				alert("请设置登录密码")
+                return false;
+			} else if(this.regParams.pwd.length<6 || this.regParams.pwd.length>16){
+				alert("密码为6-16位字符！");
+                return false;
+			} else{
+				this.$http.post('/api/user_api/user_register',{params:this.regParams})
+				.then(function(response){
+					console.log(response);
+				}).catch(function (error) {
+					console.info(error);
+				});
+			}
 		},
 		sendvcode(){
 			console.log(this.$refs.phone.value);
 			this.params = this.$refs.phone.value;
-			var myreg=/^[1][3,4,5,7,8][0-9]{9}$/; 
-			if(!myreg.test(this.params)){
+			if(!this.myreg.test(this.params)){
 				alert('请正确填写手机号');
 			} else {
-				this.$http.post('http://java.winfreeinfo.com/common_api/fetch_captcha',{phoneNum:this.params},{'contentType': "application/json"})
+				this.$http.post('/api/common_api/fetch_captcha',{phoneNum:this.params},{'contentType': "application/json"})
 				.then(function(response){
 					console.log(1111);
 				}).catch(function (error) {
