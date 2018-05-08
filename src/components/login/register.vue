@@ -51,7 +51,7 @@
 export default {
     data(){
         return {
-			params: ''
+			params: '',
         }
     },
     methods:{
@@ -65,7 +65,8 @@ export default {
             this.$router.push('/login/privacyPolicy');
 		},
 		subReg() {
-			this.$router.push('/login/personApprove');
+			// /user_api/user_register
+			// this.$router.push('/login/personApprove');
 		},
 		sendvcode(){
 			console.log(this.$refs.phone.value);

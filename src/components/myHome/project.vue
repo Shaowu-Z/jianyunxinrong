@@ -3,6 +3,7 @@
       <header class="mui-bar mui-bar-nav">
 		<!--<a class="mui-action-back mui-icon iconfont icon-close"></a>-->
 		<h1 class="mui-title">我的项目</h1>
+		<button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
 	</header>
 	<section class="mui-content" id="app" >
 		<ul class="mui-table-view eg-table-view search-list">
@@ -33,7 +34,9 @@ export default {
         }
     },
     methods:{
-
+		goBack(){
+			this.$router.go(-1);
+		}
     },
     created(){
 			const _self=this
