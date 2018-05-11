@@ -43,7 +43,7 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    // host:"0.0.0.0",
+    host:"0.0.0.0",
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
@@ -54,8 +54,7 @@ module.exports = {
         target:"http://java.winfreeinfo.com",//设置你调用的接口域名和端口号 别忘了加http
         changeOrigin:true,
         pathRewrite:{
-          '^/api':''//这里理解成用‘/api'代替target里面的地址，后面组件中我们掉接口时直接用api代替 
-               //比如我要调用'http://40.00.100.133:3002/user/login'，直接写‘/api/user/login'即可
+          '^/api':''
         }
       }
     },

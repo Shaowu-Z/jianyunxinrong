@@ -244,7 +244,7 @@ window.appApi = {
 			thumbImgUrl: image
 		}
 		this.callBackFun = callBackFun;
-		if(this.isApp && isIphoneOs) { //IOS
+		if(this.isApp && this.isIphoneOs) { //IOS
 			url = url.replace(/=/g, "+");
 			url = url.replace(/&/g, "||");
 			if(!isTop) {
@@ -252,7 +252,7 @@ window.appApi = {
 				return;
 			}
 			iosShare(shareType, JSON.stringify(shareJson));
-		} else if(this.isApp && isAndroid) { //addroid
+		} else if(this.isApp && this.isAndroid) { //addroid
 			window.webactivity.share(shareType, JSON.stringify(shareJson));
 		} else {
 			console.info("请在app中调用");

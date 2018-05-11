@@ -54,11 +54,11 @@
 			<!--</li>-->
 		</ul>
 		<!--项目联系人-->
-		<div v-for="(item,index) in projects" :key="index">
+		<div v-for="(itemone,index) in projects" :key="index">
 			<ul class="mui-table-view">
-				<button v-if="item.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+item.teamId+'&code='+item.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
+				<button v-if="itemone.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+itemone.teamId+'&code='+itemone.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
-					<a @click ="clickshow">
+					<a @click ="clickshow(index)" class="border-bottom">
 						<div class="mui-slider-cell">
 							<div class="oa-contact-cell mui-table">
 								<div class="oa-contact-avatar mui-table-cell">
@@ -67,15 +67,15 @@
 
 								<div class="oa-contact-content mui-table-cell">
 									<!--<button v-if="item.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+item.teamId+'&code='+item.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-invitation"></span>管理</button>-->
-									<h4 class="oa-contact-name" v-text="item.ProjectName"></h4>
+									<h4 class="oa-contact-name" v-text="itemone.ProjectName"></h4>
 								</div>
 
 							</div>
 						</div>
 					</a>
 
-					<ul class="mui-table-view" v-show="true">
-						<li class="mui-table-view-cell">
+					<ul class="mui-table-view-cell" :class="{'hide' : Listshow.indexOf(index) == -1}" >
+						<li class="mui-table-view-cell" @click="project(index)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -88,7 +88,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell" @click="Office(index)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -122,7 +122,7 @@
 			<ul class="mui-table-view">
 				<button v-if="item.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+item.teamId+'&code='+item.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
-					<a @click ="clickshow">
+					<a @click ="clickshowone(index)" class="border-bottom">
 						<div class="mui-slider-cell">
 							<div class="oa-contact-cell mui-table">
 								<div class="oa-contact-avatar mui-table-cell">
@@ -138,7 +138,7 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view" v-show="true">
+					<ul class="mui-table-view-cell" :class="{'hide' : Listshow1.indexOf(index) == -1}" >
 						<li class="mui-table-view-cell">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
@@ -152,7 +152,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell">
+						<!-- <li class="mui-table-view-cell">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -163,7 +163,7 @@
 									</div>
 								</div>
 							</div>
-						</li>
+						</li> -->
 					</ul>
 				</li>
 			</ul>
@@ -236,17 +236,20 @@
 
 <script>
 import footerBar from '../common/footerBar'
-
 export default {
   components: {
-    footerBar,
+	footerBar,
   },
   data () {
     return {
+	show1: false,
+	show2: false,
     items:[],
     projects:[],
     //userInfo:window.appApi.getUserInfo()
-    userInfo:[]
+	userInfo:[],
+	Listshow: [],
+	Listshow1: [],
 	}
   },
   mounted() {
@@ -273,16 +276,17 @@ export default {
     }
 }
   },
-      created: function () {
+      created() {
+		  //  企业信息
         var _self = this;
-        this.$http.post('http://java.winfreeinfo.com/concats_api/find_team_list',{}).then(function (response) {
+        this.$http.post('/api/concats_api/find_team_list',{}).then(function (response) {
             console.log("数据",response.data.result)
             _self.$data.items = response.data.result;
         }).catch(function (error) {
             console.info(error);
         });
 
-        this.$http.post('http://java.winfreeinfo.com/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
+        this.$http.post('/api/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
             console.log("数据",response.data.result)
             _self.$data.projects = response.data.result;
         }).catch(function (error) {
@@ -308,10 +312,33 @@ export default {
 }
     },
   methods:{
-    clickshow: function () {
-            // alert($(this).className);
-            return true;
-        },
+    clickshow(index) {
+			console.log(index);
+			const newIndex = this.Listshow.indexOf(index);
+			if (newIndex === -1) {
+				this.Listshow.push(index);
+				console.log('aaaaa',newIndex)
+			} else {
+				this.Listshow.splice(newIndex);
+			}
+		},
+	clickshowone(index){
+		console.log(index);
+		const newIndex1 = this.Listshow1.indexOf(index);
+		console.log(newIndex1)
+		if (newIndex1 === -1) {
+			this.Listshow1.push(index);
+			console.log('aaaaa',newIndex1)
+		} else {
+			this.Listshow1.splice(newIndex1);
+		}
+	},
+	project(index){
+		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[index].serialNum,dataType:2,memberType:2}})
+	},
+	Office(index){
+		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[index].serialNum,dataType:1,memberType:2,roomId:this.projects[index].roomId}})
+	},
         doShare:function () {
             var _self = this;
             //alert(_self.$data.userInfo.userId);
@@ -332,4 +359,10 @@ export default {
 
 <style> 
 	@import "../../assets/css/common/style.less";
+	.hide{
+		display: none
+	}
+	.border-bottom{
+		border-bottom: 1px solid #ccc
+	}
 </style>

@@ -1,5 +1,6 @@
 import contacts from '@/components/contacts'
 import contactsIndex from '@/components/contacts/contactsIndex'
+import addstyle from '@/components/contacts/addStyle'
 
 const contactsConfig = {
   path: '/contacts',
@@ -8,6 +9,10 @@ const contactsConfig = {
     {
       path: '',
       component: contactsIndex
+    },
+    {
+      path: '/addstyle',
+      component: addstyle
     }
   ]
 }
