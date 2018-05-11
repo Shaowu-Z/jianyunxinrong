@@ -17,7 +17,6 @@
       <!--v-if="item.type==0"-->
       <a class="mui-navigate-right" :href="['javascript:appApi.openNewWindow(pagepath+\'/mycenter/enterprise_home.html?teamId='+item.id+'&teamCode='+item.teamCode+'&tagName='+item.tagName+'\')']">
         <div class="multi-con" >
-          <p v-text="item.tagName"></p>
           <p v-text="item.teamName"></p>
           <p class="secondary" v-text="item.teamCode"></p>
         </div>
@@ -37,6 +36,7 @@
 </template>
 
 <script>
+import {BackCookie} from '../../../playform/common.js'
 export default {
   data () {
     return {
@@ -66,9 +66,10 @@ export default {
       this.loadData();
       var _self = this;
       var formparam = new FormData();
+      formparam.append("userId",BackCookie.getCookie("userid"))
       this.$http.post("/api/concats_api/query_team_list_info",formparam).then(function (response) {
         console.log(1111);
-        // _self.$data.items = response.data.result;
+        _self.$data.items = response.data.result;
         console.log("结果",response.data.result)
       }).catch(function (error) {
           console.info(error);

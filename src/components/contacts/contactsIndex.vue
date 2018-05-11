@@ -295,9 +295,9 @@ export default {
 
         //延迟0.5秒，兼容IOS
         setTimeout(function(){
-            if (appApi.this.isApp && isIphoneOs) {//IOS
+            if (appApi.isApp && isIphoneOs) {//IOS
                 window.appApi.getUserInfo();
-            } else if (appApi.this.isApp && isAndroid) {
+            } else if (appApi.isApp && isAndroid) {
                 var userInfoAndroid = window.appApi.getUserInfo();
                 _self.$data.userInfo = JSON.parse(userInfoAndroid)
                 //alert(_self.$data.userInfo.userId);

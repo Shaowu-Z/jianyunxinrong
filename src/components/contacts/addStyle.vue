@@ -98,10 +98,10 @@ export default {
                 let qrcode = new QRCode('qrcode', {  
                     width: 100,  
                     height: 100, // 高度  
-                    text: '56663159', // 二维码内容
-                    image: ''  
+                    text: "/api/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode, // 二维码内容
+                    image: '',  
                     // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                    // background: '#f0f'  
+                    // background: '#f0f',  
                     // foreground: '#ff0'  
                 })  
                 console.log(qrcode,11111111111111111)  
@@ -122,20 +122,20 @@ export default {
     codeClick() {
         appApi.share(6, "", "#快来加入“建云项目协作群”，协作最方便#复制此信息，打开“建云信融”app即可加入"+this.sites.projectName+"项目！" + this.sites.inviteCode);
     },
-            qrcodeShare () {
-                        var url = "/api/static/webstatic/mycenter/ext/share_detail.html";
-                        var logo = "/api/static/images/app-logo.jpg";
-                        var title = "";
-					    // 邀请加入办公室
-					    if(app.type == 1){
-                            title = this.sites.title1+"邀请您加入"+this.sites.projectName+"办公室";
-					    // 邀请加入项目组
-						}else{
-                            title = this.sites.currRoomName+"公司("+this.sites.currRoomClassName+")邀请您加入"+this.sites.projectName;
-						}
-                        appApi.share(-1, title, "工程人员都在用建云信融，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
-                    //    appApi.share(7, "", "", "", "https://cli.im/api/qrcode/code?text=https://www.baidu.com");
-            }
+    qrcodeShare () {
+        var url = "http://java.winfreeinfo.com/static/webstatic/mycenter/ext/share_detail.html";
+        var logo = "http://java.winfreeinfo.com/static/images/app-logo.jpg";
+        var title = "";
+        // 邀请加入办公室
+        if(app.type == 1){
+            title = this.sites.title1+"邀请您加入"+this.sites.projectName+"办公室";
+        // 邀请加入项目组
+        }else{
+            title = this.sites.currRoomName+"公司("+this.sites.currRoomClassName+")邀请您加入"+this.sites.projectName;
+        }
+        appApi.share(-1, title, "工程人员都在用建云信融，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
+    //    appApi.share(7, "", "", "", "https://cli.im/api/qrcode/code?text=https://www.baidu.com");
+    }
     },
     created(){
         this.initData();
