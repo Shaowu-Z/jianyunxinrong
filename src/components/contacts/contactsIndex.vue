@@ -20,15 +20,15 @@
 				<span class="mui-icon iconfont icon-search"></span>加入企(事)业组织
 			</a>
 		</li>
-		<li class="mui-table-view-cell" onclick="appApi.sweepQrCode()"><span class="mui-icon iconfont icon-personadd"></span>扫码加建云好友</li>
+		<li class="mui-table-view-cell" :click="sweepQrCode"><span class="mui-icon iconfont icon-personadd"></span>扫码加建云好友</li>
 		<!--<li class="mui-table-view-cell" onclick="appApi.openNewWindow(pagepath+'/contacts/phone_list.html')">添加好友</li>-->
 	</ul>
 </div>
 <section class="mui-content" id="team_list">
 	<div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
-		<ul class="mui-table-view mui-table-view-striped">
+		<ul class="mui-table-view mui-table-view-striped" @click="friends">
 			<li class="mui-table-view-cell">
-				<a href="javascript:appApi.openNewWindow(pagepath+'/contacts/eg_list.html')"><div class="mui-slider-cell">
+				<div class="mui-slider-cell">
 					<div class="oa-contact-cell mui-table">
 						<div class="oa-contact-avatar mui-table-cell">
 							<img src="../../assets/images/ico_connect.gif" />
@@ -37,7 +37,7 @@
 							<h4 class="oa-contact-name">建云好友</h4>
 						</div>
 					</div>
-				</div></a>
+				</div>
 			</li>
 
 			<!--<li class="mui-table-view-cell">-->
@@ -54,11 +54,11 @@
 			<!--</li>-->
 		</ul>
 		<!--项目联系人-->
-		<div v-for="(itemone,index) in projects" :key="index">
+		<div v-for="(itemone,submenu) in projects" :key="submenu">
 			<ul class="mui-table-view">
 				<button v-if="itemone.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+itemone.teamId+'&code='+itemone.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
-					<a @click ="clickshow(index)" class="border-bottom">
+					<a @click ="clickshow(submenu)" class="border-bottom">
 						<div class="mui-slider-cell">
 							<div class="oa-contact-cell mui-table">
 								<div class="oa-contact-avatar mui-table-cell">
@@ -74,8 +74,8 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view-cell" :class="{'hide' : Listshow.indexOf(index) == -1}" >
-						<li class="mui-table-view-cell" @click="project(index)">
+					<ul class="mui-table-view-cell" :class="{'hide' : Listshow.indexOf(submenu) == -1}" >
+						<li class="mui-table-view-cell" @click="project(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -88,7 +88,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell" @click="Office(index)">
+						<li class="mui-table-view-cell" @click="Office(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -101,7 +101,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell" @click="participate(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -117,12 +117,53 @@
 				</li>
 			</ul>
 		</div>
+							<!-- <ul class="mui-table-view" v-show="true">
+						<li class="mui-table-view-cell" @click ="javascript:appApi.openNewWindow(getUrl()+'/static/newwebstatic/add_style.html?dataType=2&memberType=2&projectSn='+item.serialNum)">
+							<div class="mui-slider-cell">
+								<div class="oa-contact-cell mui-table">
+									<div class="oa-contact-avatar mui-table-cell">
+										<img src="../../images/ico_second.gif" />
+									</div>
+									<div class="oa-contact-content mui-table-cell">
+										<h4 class="oa-contact-name">邀请加入其他方</h4>
+									</div>
+								</div>
+							</div>
+						</li>
 
-		<div v-for="(item,index) in items" :key="index">
+						<li class="mui-table-view-cell" @click ="javascript:appApi.openNewWindow(getUrl()+'/static/newwebstatic/add_style.html?dataType=1&memberType=2&projectSn='+item.serialNum+'&roomId='+item.roomId)">
+							<div class="mui-slider-cell">
+								<div class="oa-contact-cell mui-table">
+									<div class="oa-contact-avatar mui-table-cell">
+										<img src="../../images/ico_second.png" />
+									</div>
+									<div class="oa-contact-content mui-table-cell">
+										<h4 class="oa-contact-name">邀请加入本方</h4>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li class="mui-table-view-cell" @click ="javascript:appApi.openProjectContact(item.serialNum,item.ProjectName)">
+							<div class="mui-slider-cell">
+								<div class="oa-contact-cell mui-table">
+									<div class="oa-contact-avatar mui-table-cell">
+										<img src="../../images/ico_second.png" />
+									</div>
+									<div class="oa-contact-content mui-table-cell">
+										<h4 class="oa-contact-name">查看项目各方</h4>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul> -->
+		<div v-for="(item,submenuIcon) in items" :key="submenuIcon">
 			<ul class="mui-table-view">
 				<button v-if="item.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+item.teamId+'&code='+item.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
-					<a @click ="clickshowone(index)" class="border-bottom">
+					<a @click ="clickshowone(submenuIcon)" class="border-bottom">
 						<div class="mui-slider-cell">
 							<div class="oa-contact-cell mui-table">
 								<div class="oa-contact-avatar mui-table-cell">
@@ -138,7 +179,7 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view-cell" :class="{'hide' : Listshow1.indexOf(index) == -1}" >
+					<ul class="mui-table-view-cell" :class="{'hide' : Listshow1.indexOf(submenuIcon) == -1}" >
 						<li class="mui-table-view-cell">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
@@ -281,23 +322,24 @@ export default {
         var _self = this;
         this.$http.post('/api/concats_api/find_team_list',{}).then(function (response) {
             console.log("数据",response.data.result)
-            _self.$data.items = response.data.result;
+			_self.$data.items = response.data.result;
         }).catch(function (error) {
             console.info(error);
         });
 
         this.$http.post('/api/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
             console.log("数据",response.data.result)
-            _self.$data.projects = response.data.result;
+			_self.$data.projects = response.data.result;
+			console.log(_self.$data.projects);
         }).catch(function (error) {
             console.info(error);
         });
 
         //延迟0.5秒，兼容IOS
         setTimeout(function(){
-            if (appApi.isApp && isIphoneOs) {//IOS
-                window.appApi.getUserInfo();
-            } else if (appApi.isApp && isAndroid) {
+            if (appApi.isApp && appApi.isIphoneOs) {//IOS
+				window.appApi.getUserInfo();
+            } else if (appApi.isApp && appApi.isAndroid) {
                 var userInfoAndroid = window.appApi.getUserInfo();
                 _self.$data.userInfo = JSON.parse(userInfoAndroid)
                 //alert(_self.$data.userInfo.userId);
@@ -312,46 +354,56 @@ export default {
 }
     },
   methods:{
-    clickshow(index) {
-			console.log(index);
-			const newIndex = this.Listshow.indexOf(index);
+	sweepQrCode(){
+		window.appApi.sweepQrCode();
+	},
+    clickshow(submenu) {
+			console.log(submenu);
+			const newIndex = this.Listshow.indexOf(submenu);
 			if (newIndex === -1) {
-				this.Listshow.push(index);
+				this.Listshow.push(submenu);
 				console.log('aaaaa',newIndex)
 			} else {
 				this.Listshow.splice(newIndex);
 			}
 		},
-	clickshowone(index){
-		console.log(index);
-		const newIndex1 = this.Listshow1.indexOf(index);
+	clickshowone(submenuIcon){
+		console.log(submenuIcon);
+		const newIndex1 = this.Listshow1.indexOf(submenuIcon);
 		console.log(newIndex1)
 		if (newIndex1 === -1) {
-			this.Listshow1.push(index);
+			this.Listshow1.push(submenuIcon);
 			console.log('aaaaa',newIndex1)
 		} else {
 			this.Listshow1.splice(newIndex1);
 		}
 	},
-	project(index){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[index].serialNum,dataType:2,memberType:2}})
+	project(submenu){
+		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
+	},	
+	Office(submenu){
+		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
 	},
-	Office(index){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[index].serialNum,dataType:1,memberType:2,roomId:this.projects[index].roomId}})
+	participate(submenu){
+		console.log(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
+		window.appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
 	},
-        doShare:function () {
-            var _self = this;
-            //alert(_self.$data.userInfo.userId);
-            //JSON.parse( _self.$data.userInfo)
-            //var obj = eval('(' + _self.$data.userInfo + ')');
-            //var userId=_self.$data.userInfo.userId;
-            var userId = _self.$data.userInfo.userId;
-            //alert("--1!-"+userId);
+	friends(){
+		this.$router.push({path:'/egList'})
+	},
+	doShare:function () {
+		var _self = this;
+		//alert(_self.$data.userInfo.userId);
+		//JSON.parse( _self.$data.userInfo)
+		//var obj = eval('(' + _self.$data.userInfo + ')');
+		//var userId=_self.$data.userInfo.userId;
+		var userId = _self.$data.userInfo.userId;
+		//alert("--1!-"+userId);
 
-            var url = setting.getUrl() + "/static/webstatic/register/share_reg.html?type=1&invUser=" + userId;
-            var logo = setting.getUrl() + "/static/images/app-logo.jpg";
-	        appApi.share(-1,"您有一条好友申请","点击我进入注册吧",url,logo,null);
-        }
+		var url = setting.getUrl() + "/static/webstatic/register/share_reg.html?type=1&invUser=" + userId;
+		var logo = setting.getUrl() + "/static/images/app-logo.jpg";
+		appApi.share(-1,"您有一条好友申请","点击我进入注册吧",url,logo,null);
+	}
     }
 }
 

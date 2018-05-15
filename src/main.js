@@ -14,6 +14,7 @@ import './assets/css/common/common.less';
 Vue.use(router)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
+Vue.prototype.HOST = '/api'
 
 /* eslint-disable no-new */
 new Vue({

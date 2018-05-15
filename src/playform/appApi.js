@@ -1510,13 +1510,13 @@ window.appApi = {
 	 * @returns {string}
 	 */
 	openProjectContact: function(projectSn, projectName) {
-		if(this.isApp && isIphoneOs) { //IOS
+		if(this.isApp && this.isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("openProjectContact('" + projectSn + "','" + projectName + "'");
 				return;
 			}
 			iosOpenProjectContact(projectSn, projectName);
-		} else if(this.isApp && isAndroid) {
+		} else if(this.isApp && this.isAndroid) {
 			window.webactivity.openProjectContact(projectSn, projectName);
 		} else {
 			console.info("设备不支持");

@@ -1,6 +1,7 @@
 import contacts from '@/components/contacts'
 import contactsIndex from '@/components/contacts/contactsIndex'
 import addstyle from '@/components/contacts/addStyle'
+import egList from '@/components/contacts/egList'
 
 const contactsConfig = {
   path: '/contacts',
@@ -13,6 +14,10 @@ const contactsConfig = {
     {
       path: '/addstyle',
       component: addstyle
+    },
+    {
+      path:'/egList',
+      component: egList
     }
   ]
 }

@@ -5,23 +5,27 @@
       <!--<span class="mui-icon mui-icon-back"></span>-->
       <!--返回-->
     <!--</button>-->
-    <!--<button id="btn_referrer" class="mui-btn mui-btn-link mui-action-back mui-pull-left"><span class="mui-icon iconfont icon-back "></span>返回</button>-->
+    <button id="btn_referrer" class="mui-btn mui-btn-link mui-action-back mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
     <h1 class="mui-title">我的企业</h1>
     <!--<a class="mui-icon iconfont icon-add02 mui-pull-right" onclick="javascript:appApi.openNewWindow(pagepath+'/mycenter/team_info_create.html')"></a>-->
   </header>
 
   <section class="mui-content" id="project_personnel_list">
     <!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper"  style="padding-top: 44px">-->
-    <div class="singlebox" v-for="(item,index) in items" :key="index">
 
       <!--v-if="item.type==0"-->
-      <a class="mui-navigate-right" :href="['javascript:appApi.openNewWindow(pagepath+\'/mycenter/enterprise_home.html?teamId='+item.id+'&teamCode='+item.teamCode+'&tagName='+item.tagName+'\')']">
-        <div class="multi-con" >
-          <p v-text="item.teamName"></p>
-          <p class="secondary" v-text="item.teamCode"></p>
+      <ul class="mui-table-view group-list list-clearance">
+        <div v-if="items.length>0" v-for="(item,index) in items" :key="index">
+          <li class="mui-table-view-cell item top">
+            <a class="mui-navigate-right" :href="['javascript:appApi.openNewWindow(pagepath+\'/mycenter/enterprise_home.html?teamId='+item.id+'&teamCode='+item.teamCode+'&tagName='+item.tagName+'\')']">
+              <div class="oa-contact-content mui-table-cell">
+                <h4 class="oa-contact-name" v-text="item.teamName"></h4>
+                <p class="oa-contact-email mui-clearfix"><span class="mui-pull-le ft">项目数量：<span class="data" v-text="item.projectNum"></span></span></p>
+              </div>
+            </a>
+          </li>
         </div>
-        <span class="mui-badge mui-badge-inverted"></span>
-      </a>
+      </ul>
       <!--<a  v-if="item.type==1">-->
         <!--<div class="multi-con" >-->
           <!--<p v-text="item.teamName"></p>-->
@@ -29,7 +33,6 @@
         <!--</div>-->
         <!--<span class="mui-badge mui-badge-inverted" v-text=""></span>-->
       <!--</a>-->
-    </div>
     <!--</div>-->
   </section>
   </div>
@@ -81,11 +84,16 @@ export default {
         this.shade = false;
     },
     loadData: function(){
+    },
+    goBack(){
+      this.$router.go(-1)
     }
   }
 }
 </script>
 
 <style>
-
+  .top{
+     margin-bottom:10px
+  }
 </style>
