@@ -6,10 +6,14 @@ import router from './router'
 import axios from 'axios'
 import $ from 'jquery'
 import setting from "./playform/appApi.js";
+import "./playform/alert.js";
+import "./playform/layer.js";
 import './assets/css/common/mui.less'
 import './assets/css/common/mui.min.less'
 import './assets/css/common/icons-extend.less';
 import './assets/css/common/common.less';
+import './assets/css/common/style.less';
+import './assets/css/common/layer.less';
 
 Vue.use(router)
 Vue.prototype.$http = axios
