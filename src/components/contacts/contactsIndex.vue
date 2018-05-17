@@ -161,7 +161,7 @@
 			</ul> -->
 		<div v-for="(item,submenuIcon) in items" :key="submenuIcon">
 			<ul class="mui-table-view">
-				<button v-if="item.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+item.teamId+'&code='+item.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
+				<button v-if="item.memberType=='1'" @click="administration(item.teamId,item.identifyNo)" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
 					<a @click ="clickshowone(submenuIcon)" class="border-bottom">
 						<div class="mui-slider-cell">
@@ -354,6 +354,9 @@ export default {
 }
     },
   methods:{
+	administration(teamId,identifyNo){
+		this.$router.push({path:'/groupManage',query:{teamId:teamId,code:identifyNo}})
+	},
 	phone(){
 		this.$router.push({path:'/phoneList'})
 	},

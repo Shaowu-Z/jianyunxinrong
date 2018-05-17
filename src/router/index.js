@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import work from './work'
-import news from './news'
 import market from './market'
 import myHome from './myHome'
 import contacts from './contacts'
@@ -17,7 +16,6 @@ export default new Router({
       redirect: '/static/webstatic/register/login.html'
     },
     work,
-    news,
     market,
     myHome,
     contacts,
