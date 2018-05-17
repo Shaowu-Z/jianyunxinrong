@@ -11,7 +11,7 @@
 				<div class="title">口令邀请</div>
 				<p class="sub-title">点击复制口令发送给被邀请人</p>
 				<div style="display: none;"></div>
-				<button class="mui-btn mui-btn-primary" @click="codeClick">分享口令</button>
+				<button class="mui-btn mui-btn-primary"   @click="popupstatus='block'">分享口令</button>
 			</div>
 			<div class="add-style add-code">
 				<div class="title">二维码邀请</div>
@@ -24,6 +24,24 @@
 					<button class="mui-btn mui-btn-block mui-btn-primary" @click="qrcodeShare">分享二维码</button>
 				</div>
 			</div>
+            <!--遮罩层-->
+			<div class="mui-backdrop"  :style="{display : popupstatus}" style="display: none; z-index: 999;" @click="popupstatus='none'"></div>
+
+			<!--口令张贴弹框-->
+			<div class="mui-popup popup-pure mui-popup-in pup-sure" :style="{display : popupstatus}"  style="display: none">
+				<div class="mui-popup-content">
+					<div class="password-contain">
+						<div class="p-title">已为您生成邀请口令</div>
+						<div class="p-con" v-text="codeinfo"></div>
+					</div>
+				</div>
+				<div class="mui-popup-btn no-sppd border">
+					<div class="mui-table v-line">
+						<div class="mui-table-cell"><button class="mui-btn mui-btn-link mui-btn-gray" @click="popupstatus='none'">不分享了</button></div>
+						<div class="mui-table-cell"><button class="mui-btn mui-btn-link" @click="codeClick">去粘贴</button></div>
+					</div>
+				</div>
+			</div>
 		</section>
 		</div>
 </template>
@@ -34,7 +52,9 @@ export default {
     data(){
         return{
             sites: {},
-			type:"",
+            type:"",
+            popupstatus: "none",
+            codeinfo: ''
         }
     },
     methods:{
@@ -93,6 +113,7 @@ export default {
                 options.dom="#qrcode";//二维码生成的位置
                 options.image=_self.$refs.image;//图片id
                 options.render="image";//设置生成的二维码是canvas格式，也有image、div格式
+                _self.$data.codeinfo = "#快来加入“建云项目协作群”，协作最方便#复制此信息，打开“建云信融”app即可加入"+_self.sites.projectName+"项目！" + inviteCode;
             function qrcode(options) {  
                 console.log(1111);
                 let qrcode = new QRCode('qrcode', {  

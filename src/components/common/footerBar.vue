@@ -25,18 +25,6 @@ export default {
           routerPath: '/news',
           index: 0
         },
-        // {
-        //   tabText: '市场',
-        //   tabName: 'market',
-        //   routerPath: '/market',
-        //   index: 0
-        // },
-        // {
-        //   tabText: '工作',
-        //   tabName: 'work',
-        //   routerPath: '/work',
-        //   index: 0
-        // },
         {
           tabText: '联系人',
           tabName: 'contacts',

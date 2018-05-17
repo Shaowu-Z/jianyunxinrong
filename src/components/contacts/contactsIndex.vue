@@ -213,7 +213,7 @@
 
 		<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 			<li class="mui-table-view-cell">
-				<a href="javascript:appApi.openNewWindow(pagepath+'/contacts/phone_list.html')"><div class="mui-slider-cell">
+				<a @click="phone"><div class="mui-slider-cell">
 					<div class="oa-contact-cell mui-table">
 						<div class="oa-contact-avatar mui-table-cell">
 							<img src="../../assets/images/ico_telebook.gif" />
@@ -354,6 +354,9 @@ export default {
 }
     },
   methods:{
+	phone(){
+		this.$router.push({path:'/phoneList'})
+	},
 	sweepQrCode(){
 		window.appApi.sweepQrCode();
 	},
