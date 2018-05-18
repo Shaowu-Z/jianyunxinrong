@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav">
-            <button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
+            <button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <h1 class="mui-title">新的好友</h1>
@@ -84,6 +84,9 @@ export default {
 
     },
     methods:{
+        goBack(){
+            this.$router.go(-1)
+        },
         agreeFriends(addId,addUserId,cellPhone,userName) {
             //alert(addId+'--'+'--'+addUserId+'----'+cellPhone+'-----'+userName);
             var addVo = {addId:addId,addUserId:addUserId,cellPhone:cellPhone,userName:userName};
