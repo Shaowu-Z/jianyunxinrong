@@ -5,6 +5,8 @@ import egList from '@/components/contacts/egList'
 import newFriends from '@/components/contacts/newFriends'
 import phoneList from '@/components/contacts/phoneList'
 import groupManage from '@/components/contacts/groupManage'
+import groupAddress from '@/components/contacts/groupAddress'
+import contact_edit from '@/components/contacts/contact_edit'
 
 const contactsConfig = {
   path: '/contacts',
@@ -33,7 +35,15 @@ const contactsConfig = {
     {
       path:'/groupManage',
       component: groupManage
-    }
+    },
+    {
+      path:'/groupAddress',
+      component: groupAddress,
+    },
+    {
+      path:'/contact_edit',
+      component: contact_edit
+    },
   ]
 }
 

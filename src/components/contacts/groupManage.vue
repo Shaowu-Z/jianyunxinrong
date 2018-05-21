@@ -12,14 +12,14 @@
                 <!--<div class="group-score"><span class="score">5</span><small>分</small></div>-->
                 <div class="group-name text" v-text="none.teamName"></div>
                 <!--<span class="label-certification" id="authenticateStatus" v-text="none.authenticateStatus"></span>-->
-                <span v-if="none.authenticateStatus=='未认证'" class="label-certification"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
-                <span v-if="none.authenticateStatus=='认证中'" class="label-certification"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
-                <span v-if="none.authenticateStatus=='已认证'" class="label-certification certified"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
+                <span v-if="none.authenticateStatus=='未认证'" class="label-certification posi"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
+                <span v-if="none.authenticateStatus=='认证中'" class="label-certification posi"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
+                <span v-if="none.authenticateStatus=='已认证'" class="label-certification certified posi"><span class="iconfont icon-certification"></span> <span v-text="none.authenticateStatus"></span></span>
             </div>
             <h5 class="mui-content-padded text">通用设置</h5>
             <ul class="mui-table-view mui-table-view-striped">
                 <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="javascript:appApi.openNewWindow(pagepath+'/contacts/group_address_m.html?teamId='+teamId)"><div class="mui-slider-cell">
+                    <a class="mui-navigate-right" @click="staff"><div class="mui-slider-cell">
                         <div class="oa-contact-cell mui-table">
                             <div class="oa-contact-avatar mui-table-cell">
                                 <span class="oa-pic-default mui-icon iconfont icon-contact" style="color:#09f;"></span>
@@ -158,13 +158,14 @@ export default {
         return{
             jsTeamDiv:false,
             shade:false,
-            none:{}
+            none:{},
+            teamId: ''
         }
     },
     created () {
         var _self = this;
-        var teamId = this.$route.query.teamId;
-        this.$http.post("/api/concats_api/find_team_info?teamId="+teamId).then(function (response) {
+        this.teamId = this.$route.query.teamId;
+        this.$http.post("/api/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
             _self.$data.none = response.data.result;
             var teamName = response.data.result.teamName;
         }).catch(function (error) {
@@ -172,6 +173,9 @@ export default {
         });
     },
     methods:{
+        staff(){
+            this.$router.push({path:'/groupAddress',query:{teamId:this.teamId}})
+        },
         goBack(){
             this.$router.go(-1)
         },
@@ -233,6 +237,13 @@ export default {
 <style>
     .text{
         text-align:left;
+    }
+    .layui-m-layerbtn span{
+        width:50%;
+    }
+    .posi{
+        position: relative;
+        left:-143px;
     }
     .layui-m-layerbtn span{
         width:50%;
