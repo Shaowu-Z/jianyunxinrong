@@ -45,7 +45,7 @@ module.exports = {
     env: require('./dev.env'),
     host:"0.0.0.0",
     port: 8080,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // proxyTable: proxyConfig.proxy,
@@ -75,7 +75,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
