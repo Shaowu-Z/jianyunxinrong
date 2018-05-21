@@ -5,6 +5,11 @@ import market from './market'
 import myHome from './myHome'
 import contacts from './contacts'
 import login from './login'
+// const work = resolve => require(['./work'], resolve)
+// const market = resolve => require(['./market'], resolve)
+// const myHome = resolve => require(['./myHome'], resolve)
+// const contacts = resolve => require(['./contacts'], resolve)
+// const login = resolve => require(['./login'], resolve)
 
 Vue.use(Router)
 
