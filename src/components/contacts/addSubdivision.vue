@@ -5,7 +5,7 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
-            <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right" onclick="app.addDeptInfo()">完成</button>
+            <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right" @click="addDeptInfo()">完成</button>
         </header>
         <section class="mui-content" id="add_dept">
             <ul class="mui-table-view eg-table-view eg-detail-list">
@@ -38,7 +38,16 @@
             <div class="pop-title"></div>
 
             <div class="pop-content select-box col-xs-6 mui-clearfix" id="deptHtml">
-
+                <ul class="mui-table-view group-list">
+                    <li class="mui-table-view-cell mui-radio" v-for="(item,index) in newJson" :key="index">
+                            <div class="oa-contact-cell mui-table" @click="save_dept(index)">
+                            <div class="oa-contact-input mui-table-cell"><input type="radio"  name="check1" value="'+deptId+'='+deptName+'"/></div>
+                            <div class="oa-contact-content mui-table-cell">
+                            <h4 class="oa-contact-name" ref="h4" id="h4">{{item.deptName}}</h4>
+                            </div>
+                            </div>
+                    </li>
+                </ul>
             </div>
             <!--<div class="pop-footer btn-contain">
                 <button type="button" class="mui-btn mui-btn-primary mui-btn-block" @click="save_tags">确定</button>
@@ -60,7 +69,8 @@ export default {
             members:[],
             teamId: this.$route.query.teamId,
             paDeptId: this.$route.query.teamId,
-            select_dept : false
+            select_dept : false,
+            newJson:[],
         }
     },
     created(){
@@ -83,57 +93,62 @@ export default {
         },
         show_depts () {//选择部门
             // $("#select_dept").show();
+            var that = this;
             this.select_dept = !this.select_dept
             appApi.hideBack();//隐藏返回键
             // getSubDept(teamId,0);
             function getSubDept(teamId,deptInId) {//查询下级部门列表(部门ID为空或者0时，查询团队ID下的一级部门列表)
                 var deptInId = 0;
-                var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
+                var par = {deptId:that.parentDeptId,teamId:that.teamId,parentDeptId:deptInId};
                 console.info(par);
-                this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
-                    var newJson =response.data.result;
-                    console.info(newJson);
-                    var deptHtml = '<ul class="mui-table-view group-list">';
-                    for(var j=0;j<newJson.length;j++){
-                        var arrJ = newJson[j];
-                        var deptId = arrJ.deptId;
-                        var deptName = arrJ.deptName;
-                        deptHtml+='<li class="mui-table-view-cell mui-radio">'+
-                            '<div class="oa-contact-cell mui-table" onclick="app.save_dept()">'+
-                            '<div class="oa-contact-input mui-table-cell"><input type="radio" name="check1" value="'+deptId+'='+deptName+'"/></div>'+
-                            '<div class="oa-contact-content mui-table-cell">'+
-                            '<h4 class="oa-contact-name">'+deptName+'</h4>'+
-                            '</div>'+
-                            '</div>';
+                that.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+                    that.newJson =response.data.result;
+                    console.info(that.newJson);
+                    // var deptHtml = '';
+                    // for(var j=0;j<newJson.length;j++){
+                    //     var arrJ = newJson[j];
+                    //     var deptId = arrJ.deptId;
+                    //     var deptName = arrJ.deptName;
+                    //     deptHtml+='';
 
-                            //如果有下级部门才显示下级按钮
-                            var lowerDeptNum = arrJ.lowerDeptNum;
-                            if(lowerDeptNum>0){
-                                deptHtml+='<div class="sub-btn" onclick="getSubDept('+teamId+','+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>';
-                            }
-                            deptHtml+='</li>';
-                    }
-                    deptHtml=deptHtml+'</ul>';
-                    document.getElementById("deptHtml").innerHTML=deptHtml;
+                    //         //如果有下级部门才显示下级按钮
+                    //         var lowerDeptNum = arrJ.lowerDeptNum;
+                    //         if(lowerDeptNum>0){
+                    //             deptHtml+='<div class="sub-btn" onclick="getSubDept('+teamId+','+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>';
+                    //         }
+                    //         deptHtml+='</li>';
+                    // }
+                    // deptHtml=deptHtml+'';
+                    // document.getElementById("deptHtml").innerHTML=deptHtml;
                 }).catch(function (error) {
                     //alert("获取部门信息失败,请联系管理员!");
                     console.info(error);
                 });
             }
+            getSubDept();
         },
-        save_dept: function () {//保存选择的部门
-				$("#select_dept").hide();
+        save_dept: function (index) {//保存选择的部门
+                // $("#select_dept").hide();
+                this.select_dept = !this.select_dept
 				appApi.showBack();//显示返回键
-				var arrDept = $('input:radio[name="check1"]:checked').val();
+                // var arrDept = $('input:radio[name="check1"]:checked').val();
+                var arrDept = this.$refs.h4[index].innerHTML;
+                console.log(this.$refs.h4);
 				if(arrDept!=null && arrDept!=undefined){
-					var dept_arr = arrDept.split("=");
-					var parentDeptId =dept_arr[0];
-					this.parentDeptId = parentDeptId;
-					this.parentDeptName=dept_arr[1];
-					paDeptId=dept_arr[0];
+                    var dept_arr = arrDept.split("=");
+                    console.log(dept_arr);
+                    var parentDeptId =dept_arr[0];
+                    console.log(parentDeptId);
+                    this.parentDeptId = parentDeptId;
+                    console.log(dept_arr);
+                    this.parentDeptName=dept_arr[0];
+                    console.log(this.parentDeptName);
+                    this.paDeptId=dept_arr[0];
+                    console.log(this.paDeptId);
 				}
 			},
         getSubDept: function (parentDeptId) {//查询下级部门列表
+            var that = this;
             var hrefPar = window.location.href.split('?')[1].split('=')[1];
             var teamId = hrefPar.split("&")[0];
             //var deptInId = window.location.href.split('?')[1].split('=')[2];
@@ -141,7 +156,7 @@ export default {
             var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
             console.info(par);
             this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
-                var newJson =response.data.result;
+                that.newJson =response.data.result;
                 console.info(newJson);
                 var deptHtml = '<ul class="mui-table-view group-list">';
                 for(var j=0;j<newJson.length;j++){
@@ -149,13 +164,13 @@ export default {
                     var deptId = arrJ.deptId;
                     var deptName = arrJ.deptName;
                     deptHtml+='<li class="mui-table-view-cell mui-checkbox">'+
-                            '<div class="oa-contact-cell mui-table" onclick="app.save_dept()">'+
+                            '<div class="oa-contact-cell mui-table" onclick="save_dept()">'+
                             '<div class="oa-contact-input mui-table-cell"><input type="checkbox" name="checkbox1" value="'+deptId+'='+deptName+'"/></div>'+
                             '<div class="oa-contact-content mui-table-cell">'+
                             '<h4 class="oa-contact-name">'+deptName+'</h4>'+
                             '</div>'+
                             '</div>'+
-                            '<div class="sub-btn" onclick="app.getSubDept('+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>'+
+                            '<div class="sub-btn" onclick="getSubDept('+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>'+
                             '</li>';
                 }
                 deptHtml=deptHtml+'</ul>';
@@ -166,7 +181,7 @@ export default {
             });
         },
         addDeptInfo:function () {
-            var deptName = app.deptName;
+            var deptName = this.deptName;
             if(deptName=="" || deptName==null){
                 layer.open({
                     content: '请输入部门名称!'
@@ -176,22 +191,22 @@ export default {
                 });
                 return;
             }
-            if(paDeptId==undefined){
-                paDeptId=0;
+            if(this.paDeptId==undefined){
+                this.paDeptId=0;
             }
 
             //是否创建群组
-            var hasGroup="";
-            var classStr = $("#is_create_dept").attr("class");
-            if(classStr!=undefined && classStr.indexOf("mui-active")>-1){//创建
-                hasGroup = "1";
-            }else{
-                hasGroup = "0";
-            }
+            // var hasGroup="";
+            // var classStr = $("#is_create_dept").attr("class");
+            // if(classStr!=undefined && classStr.indexOf("mui-active")>-1){//创建
+            //     hasGroup = "1";
+            // }else{
+            //     hasGroup = "0";
+            // }
 
             var hrefPar = window.location.href.split('?')[1].split('=')[1];
             var teamId = hrefPar.split("&")[0];
-            var par = {parentDeptId:paDeptId,teamId:teamId,deptName:this.deptName,hasGroup:hasGroup};
+            var par = {parentDeptId:this.paDeptId,teamId:teamId,deptName:this.deptName,hasGroup:0};
             console.info(par);
             this.$http.post("/api/concats_api/add_dept_info",par).then(function (response) {
                 var respCode = response.data.code;
@@ -206,7 +221,8 @@ export default {
                     });
                 }else{
                     alert("创建部门成功!");
-                    window.location.href="../contacts/group_address_m.html?teamId="+teamId;
+                    // window.location.href="../contacts/group_address_m.html?teamId="+teamId;
+                    this.$router.push({path:'/groupAddress',query:{teamId:this.$router.query.teamId}})
                 }
             }).catch(function (error) {
                 alert("创建部门失败,请联系管理员!");
