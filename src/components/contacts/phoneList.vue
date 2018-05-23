@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header class="mui-bar mui-bar-nav">
-		<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
+		<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
 			<span class="mui-icon mui-icon-back"></span>联系人
 		</button>
 		<h1 class="mui-title">手机通讯录</h1>
@@ -75,6 +75,9 @@ export default {
         window.appApi.getContacts();
 	},
 	methods: {
+		goBack(){
+			this.$router.go(-1)
+		},
         addFriends(index1, index2) {
             var phoneMap = this.$data.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};

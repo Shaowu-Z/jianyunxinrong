@@ -1,0 +1,224 @@
+<template>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">添加子部门</h1>
+            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left"><span
+                    class="mui-icon mui-icon-back"></span>返回
+            </button>
+            <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right" onclick="app.addDeptInfo()">完成</button>
+        </header>
+        <section class="mui-content" id="add_dept">
+            <ul class="mui-table-view eg-table-view eg-detail-list">
+                <li class="mui-table-view-cell mui-input-row text">
+                    <label>部门名称</label>
+                    <input type="text" class="mui-input-clear" placeholder="必填" v-model="deptName"/>
+                    <span class="mui-icon mui-icon-clear mui-hidden"></span>
+                </li>
+                <li class="mui-table-view-cell text" @click="show_depts">
+                    <a class="mui-navigate-right" >上级部门<span class="mui-badge mui-badge-inverted" v-text="parentDeptName"></span></a>
+                </li>
+            </ul>
+            <!--<div class="singlebox">-->
+                <!--创建内部群-->
+                <!--<div id="is_create_dept" class="mui-switch mui-switch-blue mui-switch-mini mui-active">-->
+                    <!--<div class="mui-switch-handle"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<h5 class="mui-content-padded content-added">创建后，部门群会自动关联本部门，新人入职后自动加群</h5>-->
+            
+        </section>
+        <!--选择上级部门开始-->
+        <div class="pop-up" style="display: none; height: 100%;" id="select_dept" v-show="select_dept">
+            <!--<div class="pop-title"><a href="javascript:$('#select_dept').hide();">取消</a>     选择部门</div>-->
+            <div class="pop-header">
+                <h1 class="p-title">选择部门</h1>
+                <button class="mui-btn mui-btn-link mui-pull-left" @click="hide">取消</button>
+            </div>
+            <div class="pop-title"></div>
+            <div class="pop-title"></div>
+
+            <div class="pop-content select-box col-xs-6 mui-clearfix" id="deptHtml">
+
+            </div>
+            <!--<div class="pop-footer btn-contain">
+                <button type="button" class="mui-btn mui-btn-primary mui-btn-block" @click="save_tags">确定</button>
+            </div>-->
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    data(){
+        return{
+            deptName:"",
+			parentDeptId:0,
+			parentDeptName:"请选择",
+			industry_name:"*必选",
+			industry_id:0,
+			region_name:"",
+            members:[],
+            teamId: this.$route.query.teamId,
+            paDeptId: this.$route.query.teamId,
+            select_dept : false
+        }
+    },
+    created(){
+			//var paDeptId = window.location.href.split('?')[1].split('=')[2];
+			var _self = this;
+			var deptId = window.location.href.split("?")[1].split("=")[2];
+			var param = {teamId:this.teamId,deptId:deptId};
+			this.$http.post("/api/concats_api/query_team_dept",param).then(function (response) {
+				var resp = response.data.result;
+				_self.data = resp;
+				app.parentDeptName = resp.deptName;//新建部门时，默认的上级部门为进入的部门
+				console.info(resp);
+			}).catch(function (error) {
+				console.info(error);
+			});
+	},
+    methods:{
+        hide(){
+            this.select_dept = !this.select_dept
+        },
+        show_depts () {//选择部门
+            // $("#select_dept").show();
+            this.select_dept = !this.select_dept
+            appApi.hideBack();//隐藏返回键
+            // getSubDept(teamId,0);
+            function getSubDept(teamId,deptInId) {//查询下级部门列表(部门ID为空或者0时，查询团队ID下的一级部门列表)
+                var deptInId = 0;
+                var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
+                console.info(par);
+                this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+                    var newJson =response.data.result;
+                    console.info(newJson);
+                    var deptHtml = '<ul class="mui-table-view group-list">';
+                    for(var j=0;j<newJson.length;j++){
+                        var arrJ = newJson[j];
+                        var deptId = arrJ.deptId;
+                        var deptName = arrJ.deptName;
+                        deptHtml+='<li class="mui-table-view-cell mui-radio">'+
+                            '<div class="oa-contact-cell mui-table" onclick="app.save_dept()">'+
+                            '<div class="oa-contact-input mui-table-cell"><input type="radio" name="check1" value="'+deptId+'='+deptName+'"/></div>'+
+                            '<div class="oa-contact-content mui-table-cell">'+
+                            '<h4 class="oa-contact-name">'+deptName+'</h4>'+
+                            '</div>'+
+                            '</div>';
+
+                            //如果有下级部门才显示下级按钮
+                            var lowerDeptNum = arrJ.lowerDeptNum;
+                            if(lowerDeptNum>0){
+                                deptHtml+='<div class="sub-btn" onclick="getSubDept('+teamId+','+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>';
+                            }
+                            deptHtml+='</li>';
+                    }
+                    deptHtml=deptHtml+'</ul>';
+                    document.getElementById("deptHtml").innerHTML=deptHtml;
+                }).catch(function (error) {
+                    //alert("获取部门信息失败,请联系管理员!");
+                    console.info(error);
+                });
+            }
+        },
+        save_dept: function () {//保存选择的部门
+				$("#select_dept").hide();
+				appApi.showBack();//显示返回键
+				var arrDept = $('input:radio[name="check1"]:checked').val();
+				if(arrDept!=null && arrDept!=undefined){
+					var dept_arr = arrDept.split("=");
+					var parentDeptId =dept_arr[0];
+					this.parentDeptId = parentDeptId;
+					this.parentDeptName=dept_arr[1];
+					paDeptId=dept_arr[0];
+				}
+			},
+        getSubDept: function (parentDeptId) {//查询下级部门列表
+            var hrefPar = window.location.href.split('?')[1].split('=')[1];
+            var teamId = hrefPar.split("&")[0];
+            //var deptInId = window.location.href.split('?')[1].split('=')[2];
+            var deptInId = 0;
+            var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
+            console.info(par);
+            this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+                var newJson =response.data.result;
+                console.info(newJson);
+                var deptHtml = '<ul class="mui-table-view group-list">';
+                for(var j=0;j<newJson.length;j++){
+                    var arrJ = newJson[j];
+                    var deptId = arrJ.deptId;
+                    var deptName = arrJ.deptName;
+                    deptHtml+='<li class="mui-table-view-cell mui-checkbox">'+
+                            '<div class="oa-contact-cell mui-table" onclick="app.save_dept()">'+
+                            '<div class="oa-contact-input mui-table-cell"><input type="checkbox" name="checkbox1" value="'+deptId+'='+deptName+'"/></div>'+
+                            '<div class="oa-contact-content mui-table-cell">'+
+                            '<h4 class="oa-contact-name">'+deptName+'</h4>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="sub-btn" onclick="app.getSubDept('+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>'+
+                            '</li>';
+                }
+                deptHtml=deptHtml+'</ul>';
+                document.getElementById("deptHtml").innerHTML=deptHtml;
+            }).catch(function (error) {
+                alert("获取部门信息失败,请联系管理员!");
+                console.info(error);
+            });
+        },
+        addDeptInfo:function () {
+            var deptName = app.deptName;
+            if(deptName=="" || deptName==null){
+                layer.open({
+                    content: '请输入部门名称!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
+                return;
+            }
+            if(paDeptId==undefined){
+                paDeptId=0;
+            }
+
+            //是否创建群组
+            var hasGroup="";
+            var classStr = $("#is_create_dept").attr("class");
+            if(classStr!=undefined && classStr.indexOf("mui-active")>-1){//创建
+                hasGroup = "1";
+            }else{
+                hasGroup = "0";
+            }
+
+            var hrefPar = window.location.href.split('?')[1].split('=')[1];
+            var teamId = hrefPar.split("&")[0];
+            var par = {parentDeptId:paDeptId,teamId:teamId,deptName:this.deptName,hasGroup:hasGroup};
+            console.info(par);
+            this.$http.post("/api/concats_api/add_dept_info",par).then(function (response) {
+                var respCode = response.data.code;
+                if(respCode==202){
+                    //重名
+                    //alert("同一团队中部门名称不允许重复!");
+                    layer.open({
+                        content: '同一团队中部门名称不允许重复!'
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                        ,anim:false
+                    });
+                }else{
+                    alert("创建部门成功!");
+                    window.location.href="../contacts/group_address_m.html?teamId="+teamId;
+                }
+            }).catch(function (error) {
+                alert("创建部门失败,请联系管理员!");
+                console.info(error);
+            });
+        }
+    }
+}
+</script>
+
+<style scoped>
+    .text{
+        text-align: left
+    }
+</style>

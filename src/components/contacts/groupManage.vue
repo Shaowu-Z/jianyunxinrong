@@ -32,7 +32,7 @@
                 </li>
 
 
-                <li class="mui-table-view-cell">
+                <!-- <li class="mui-table-view-cell">
                     <a class="mui-navigate-right" href="javascript:appApi.openNewWindow(pagepath+'/contacts/group_chat_set.html?hasGroup=1&teamId='+app.none.teamId)"><div class="mui-slider-cell">
                         <div class="oa-contact-cell mui-table">
                             <div class="oa-contact-avatar mui-table-cell">
@@ -43,12 +43,12 @@
                             </div>
                         </div>
                     </div></a>
-                </li>
+                </li> -->
             </ul>
             <h5 class="mui-content-padded text">专属服务</h5>
             <ul class="mui-table-view mui-table-view-striped">
                 <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="javascript:window.appApi.openNewWindow(pagepath+'/contacts/teamcert/team_issue.html?teamId='+teamId)">
+                    <a class="mui-navigate-right" @click="qualifi">
                         <div class="mui-slider-cell">
                             <div class="oa-contact-cell mui-table">
                                 <div class="oa-contact-avatar mui-table-cell">
@@ -64,7 +64,7 @@
                 </li>
 
                 <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="javascript:window.appApi.openNewWindow(pagepath+'/contacts/select_team_admin.html?teamId='+teamId)">
+                    <a class="mui-navigate-right" @click="Administration">
                         <div class="mui-slider-cell">
                             <div class="oa-contact-cell mui-table">
                                 <div class="oa-contact-avatar mui-table-cell">
@@ -163,21 +163,29 @@ export default {
         }
     },
     created () {
+        //  相当于setDeptHead
         var _self = this;
         this.teamId = this.$route.query.teamId;
         this.$http.post("/api/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
-            _self.$data.none = response.data.result;
+            console.log(response.data.result);
+            _self.none = response.data.result;
             var teamName = response.data.result.teamName;
         }).catch(function (error) {
             console.info(error);
         });
     },
     methods:{
+        Administration(){
+            this.$router.push({path:'/select_team_admin',query:{teamId:this.teamId}})
+        },
+        qualifi(){
+            this.$router.push({path:'/teamIssue',query:{teamId:this.teamId}})
+        },
         staff(){
             this.$router.push({path:'/groupAddress',query:{teamId:this.teamId}})
         },
         goBack(){
-            this.$router.go(-1)
+            this.$router.push({path:'/contacts'})
         },
         hide_shade(){
             this.jsTeamDiv = false;
@@ -244,8 +252,5 @@ export default {
     .posi{
         position: relative;
         left:-143px;
-    }
-    .layui-m-layerbtn span{
-        width:50%;
     }
 </style>

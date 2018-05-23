@@ -179,8 +179,8 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view-cell" :class="{'hide' : Listshow1.indexOf(submenuIcon) == -1}" >
-						<li class="mui-table-view-cell">
+					<ul class="mui-table-view-cell" style="padding:0;" :class="{'hide' : Listshow1.indexOf(submenuIcon) == -1}"  @click="enterprise(submenuIcon)">
+						<li class="mui-table-view-cell" style="margin-top:10px;">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -226,7 +226,7 @@
 			</li>
 		</ul>
 
-		<ul class="mui-table-view mui-table-view-chevron">
+		<!-- <ul class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell mui-collapse fold-title mui-active">
 				<a href="javascript:void(0)">
 					<div class="mui-slider-cell">
@@ -239,7 +239,7 @@
 							</div>
 						</div>
 					</div>
-				</a>
+				</a> -->
 				<!--<ul class="mui-table-view mui-table-view-chevron">-->
 					<!--<li class="mui-table-view-cell">-->
 						<!--<div class="mui-slider-cell">-->
@@ -266,8 +266,8 @@
 						<!--</div>-->
 					<!--</li>-->
 				<!--</ul>-->
-			</li>
-		</ul>
+			<!-- </li>
+		</ul> -->
 
 	</div>
 </section>
@@ -321,13 +321,13 @@ export default {
       created() {
 		  //  企业信息
         var _self = this;
-        // this.$http.post('/api/concats_api/find_team_list',{}).then(function (response) {
-        //     console.log("数据",response.data.result)
-		// 	_self.$data.items = response.data.result;
-        // }).catch(function (error) {
-        //     console.info(error);
-        // });
-		this.seekFindTeamList()
+        this.$http.post('/api/concats_api/find_team_list',{}).then(function (response) {
+            console.log("数据",response.data.result)
+			_self.$data.items = response.data.result;
+        }).catch(function (error) {
+            console.info(error);
+        });
+		// this.seekFindTeamList()
         this.$http.post('/api/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
             console.log("数据",response.data.result)
 			_self.$data.projects = response.data.result;
@@ -355,6 +355,9 @@ export default {
 }
     },
   methods:{
+	enterprise(submenuIcon){
+		this.$router.push({path:'/orgStructure',query:{from:0,teamId:this.items[submenuIcon].teamId}})
+	},
 	seekFindTeamList () {
 		findTeamList().then((res) => {
 			console.log(res)

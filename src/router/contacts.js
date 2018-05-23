@@ -15,6 +15,13 @@ const phoneList = resolve => require(['@/components/contacts/phoneList'], resolv
 const groupManage = resolve => require(['@/components/contacts/groupManage'], resolve)
 const groupAddress = resolve => require(['@/components/contacts/groupAddress'], resolve)
 const contact_edit = resolve => require(['@/components/contacts/contact_edit'], resolve)
+const subdivision = resolve => require(['@/components/contacts/subdivision'], resolve)
+const orgStructure = resolve => require(['@/components/contacts/enterprise/orgStructure'], resolve)
+const teamIssue = resolve => require(['@/components/contacts/teamIssue'], resolve)
+const addTeamIssue = resolve => require(['@/components/contacts/addTeamIssue'], resolve)
+const select_team_admin = resolve => require(['@/components/contacts/select_team_admin'], resolve)
+const eg_details = resolve => require(['@/components/contacts/eg_details'], resolve)
+const addSubdivision = resolve => require(['@/components/contacts/addSubdivision'], resolve)
 
 const contactsConfig = {
   path: '/contacts',
@@ -22,7 +29,11 @@ const contactsConfig = {
   children: [
     {
       path: '',
-      component: contactsIndex
+      component: contactsIndex,
+    },
+    {
+      path: '/orgStructure',
+      component: orgStructure
     },
     {
       path: '/addstyle',
@@ -51,6 +62,30 @@ const contactsConfig = {
     {
       path:'/contact_edit',
       component: contact_edit
+    },
+    {
+      path:'/subdivision',
+      component: subdivision
+    },
+    {
+      path:'/teamIssue',
+      component: teamIssue
+    },
+    {
+      path:'/addTeamIssue',
+      component: addTeamIssue
+    },
+    {
+      path:'/select_team_admin',
+      component: select_team_admin
+    },
+    {
+      path:'/eg_details',
+      component: eg_details
+    },
+    {
+      path:'/addSubdivision',
+      component: addSubdivision
     },
   ]
 }

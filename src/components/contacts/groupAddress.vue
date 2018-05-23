@@ -12,8 +12,8 @@
         <div class="fixed-bottom">
             <div class="mui-table mui-text-center">
                 <!--<div class="mui-table-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/add_manually.html?type=0&teamId='+window.location.href.split('?')[1].split('=')[1])" class="">添加员工</a></div>-->
-                <div class="mui-table-cell"><a href="#add_type">添加员工</a></div>
-                <div class="mui-table-cell"><a class="" href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/add_subdivision.html?teamId='+window.location.href.split('?')[1].split('=')[1]+'&deptId=0')">添加子部门</a></div>
+                <div class="mui-table-cell"><a @click="join">添加员工</a></div>
+                <div class="mui-table-cell"><a class="" @click="department">添加子部门</a></div>
             </div>
         </div>
         <section class="mui-content" id="member_list">
@@ -22,10 +22,13 @@
             </div-->
             <div class="mui-indexed-list-inner group-box">
                 <ul class="mui-table-view">
-                    <div class="group-header text" id="dept_head"></div>
+                    <div class="group-header text" id="dept_head">{{none.teamName}}</div>
                 </ul>
                 <!--子部门列表-->
-                <ul class="mui-table-view eg-table-view eg-detail-list" id="deptHtml">
+                <ul class="mui-table-view eg-table-view eg-detail-list">
+                    <li class="mui-table-view-cell text" v-for="(item,index) in newJson" :key="index">
+                        <a class="mui-navigate-right" @click="subd(index)">{{item.deptName}}<span class="mui-badge mui-badge-inverted">{{item.memberNum}}</span></a>
+                    </li>
                     <!--<li class="mui-table-view-cell">
                         <a class="mui-navigate-right" href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/subdivision.html?deptId=')">开发组<span class="mui-badge mui-badge-inverted"></span></a>
                     </li>
@@ -76,7 +79,7 @@
         </div>
 
         <!--选择方式弹框开始-->
-        <div id="add_type" class="mui-popover top-menu">
+        <div id="add_type" class="mui-popover top-menu" v-show="this.add_type" style="display:block">
             <div class="mui-popup-title mui-text-left">请选择添加成员的方式</div>
             <ul class="mui-popup-content mui-table-view mui-text-left eg-table-view">
                 <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/select_phone_list.html?type=0&teamId='+window.location.href.split('?')[1].split('=')[1])">从通讯录批量选择</a></li>
@@ -93,111 +96,40 @@ export default {
         return {
             add_type:false,
             shade:false,
-            items:[] 
+            items:[],
+            newJson:[],
+            none:[] 
         }
     },
     created() {
         var _self = this;
-        var teamId = window.location.href.split("?")[1].split("=")[1];
+        var teamId =this.$route.query.teamId;
 
         // contacts.setDeptHead('n','n',teamId,0,0);//获取头部信息
-        //设置部门页头部信息 (org:是否组织管理进入，is_dept:是否在部门中调用) userId:名片userId或者群聊临时表ID
-        var org ='n';
-        var is_dept = 'n';
-        var deptId = 0;
-        var userId = 0;
-        function setDeptHead(org,is_dept,teamId,deptId,userId){
-            var par = {deptId:deptId,teamId:teamId};
-            let _this=this;
-            _this.$http.post("/api/concats_api/query_team_dept",par).then(function(response){
-                var newJson =response.data.result;
-                console.info("info=="+newJson);
-                console.info(newJson.regionName);
-                var rTeamId = newJson.teamId;//团队ID
-                var rDeptId = newJson.deptId;
-                var rTeamName = newJson.teamName;
-                var deptHtml = '';
-                var teamUrl = "";
 
-                if(org=='y'){//组织架构进入
-                    var hostUrl = getPagePath()+"/contacts/address_list.html";
-                    deptHtml += '<a href="javascript:appApi.openNewWindow(\''+hostUrl+'\')">联系人</a>  >';
-                    teamUrl = getPagePath()+"/contacts/org_structure.html?from=0&teamId="+rTeamId;
-                }else if(org=='x'){//发送名片
-                    teamUrl = getPagePath()+"/contacts/org_structure.html?from=1&userId="+userId+"&teamId="+rTeamId;
-                }else if(org=='n'){
-                    teamUrl = getPagePath()+"/contacts/group_address_m.html?teamId="+rTeamId;
-                }else if(org=='g'){
-                    teamUrl = getPagePath()+"/contacts/org_structure.html?from=2&tempId="+userId+"&teamId="+rTeamId;
-                }
-
-                if(is_dept=='y'){//团队的部门中
-                    deptHtml += '<a href="javascript:appApi.openNewWindow(\''+teamUrl+'\')">'+rTeamName+'</a>  > ';
-                }else{
-                    deptHtml += rTeamName+' ';
-                }
-
-                var pDeptNames = newJson.regionName;//上级部门名称(所有上级部门)
-                if(pDeptNames!=null && pDeptNames.split(",").length>1){
-                    var deptNameArr = pDeptNames.split(",");
-                    for(var i=deptNameArr.length-1;i>0;i--){
-                        if(i>0){//当前部门往上
-                            var arri = deptNameArr[i].split("=");
-                            var deptIdI = arri[0];
-                            var deptNameI = arri[1];
-                            var deptUrl ="";
-                            if(org=='y'){//组织架构进入
-                                deptUrl = getPagePath()+"/contacts/subdivision.html?org=y&teamId="+rTeamId+"&deptId="+deptIdI;
-                            }else if(org=='x'){//发送名片
-                                deptUrl = getPagePath()+"/contacts/subdivision.html?org=x&userId="+userId+"&teamId="+rTeamId+"&deptId="+deptIdI;
-                            }else if(org=='n'){//管理页面
-                                deptUrl = getPagePath()+"/contacts/subdivision.html?org=n&teamId="+rTeamId+"&deptId="+deptIdI;
-                            }else if(org=='g'){//发起群聊
-                                deptUrl = getPagePath()+"/contacts/subdivision.html?org=g&tempId="+userId+"&teamId="+rTeamId+"&deptId="+deptIdI;
-                            }
-                            if(i==1){//当前部门
-                                deptHtml += ' '+deptNameI;
-                            }else{
-                                deptHtml += '<a href="javascript:appApi.openNewWindow(\''+deptUrl+'\')">'+deptNameI+'</a>  > ';
-                            }
-                        }
-                    }
-                }
-                document.getElementById("dept_head").innerHTML=deptHtml;
-            }).catch(function(error) {
-                //alert("获取部门信息失败,请联系管理员!");
-                console.info(error);
-            });
-        };
-        setDeptHead();
+        this.teamId = this.$route.query.teamId;
+        this.$http.post("/api/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
+            console.log(response.data.result);
+            _self.none = response.data.result;
+            var teamName = response.data.result.teamName;
+        }).catch(function (error) {
+            console.info(error);
+        });
 
         var param = {teamId:teamId};
         this.$http.post("/api/concats_api/query_team_members",param).then(function (response) {
-            _self.$data.items = response.data.result;
-            console.info(response.data.result);
+            _self.items = response.data.result;
+            console.info(response.data.result,222222222222);
         }).catch(function (error) {
             console.info(error);
         });
 
         //deptHtml 获取一级部门
-        //var teamId = window.location.href.split('?')[1].split('=')[1];
-        var par = {deptId:0,teamId:teamId};
+        let par = {deptId:0,teamId:teamId};
         console.info(par);
         this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
-            var newJson =response.data.result;
-            console.info(newJson);
-            var deptHtml = '';
-            for(var j=0;j<newJson.length;j++){
-                var arrJ = newJson[j];
-                var teamId = arrJ.teamId;
-                var deptId = arrJ.deptId;
-                var deptName = arrJ.deptName;
-                var memberNum = arrJ.memberNum;
-                deptHtml+='<li class="mui-table-view-cell text">'+
-                    '<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(\'/api/static/webstatic/contacts/subdivision.html?org=n&teamId='+teamId+'&deptId='+deptId+'\')">'+deptName+'<span class="mui-badge mui-badge-inverted">'+memberNum+'</span></a>'+
-                    '</li>';
-            }
-            document.getElementById("deptHtml").innerHTML=deptHtml;
+            _self.newJson =response.data.result;
+            console.info(_self.newJson,111111111111);
         }).catch(function (error) {
             //alert("获取部门信息失败,请联系管理员!");
             console.info(error);
@@ -205,11 +137,21 @@ export default {
 
     },
     methods:{
+        department(){
+            this.$router.push({path:'/addSubdivision',query:{teamId:this.$route.query.teamId,deptId:0}});
+        },
+        join(){
+            console.log(this.add_type);
+            this.add_type = !this.add_type;
+        },
+        subd(index){
+            this.$router.push({path:'/subdivision',query:{org:'n',teamId:this.newJson[index].teamId,deptId:this.newJson[index].deptId}});
+        },
         edit(index){
             this.$router.push({path:'/contact_edit',query:{memberId:this.items[index].memberId}});
         },
         goBack(){
-            this.$router.back(-1)
+            this.$router.push({path:'/groupManage',query:{teamId:this.$route.query.teamId}});
         },
         clickshow: function () {
             return true;
