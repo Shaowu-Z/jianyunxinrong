@@ -15,6 +15,9 @@ const setting = resolve => require(['@/components/myHome/setting'], resolve)
 const settingIndex = resolve => require(['@/components/myHome/setting/settingIndex'], resolve)
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
 const project = resolve => require(['@/components/myHome/project'], resolve)
+const aboutUs = resolve => require(['@/components/myHome/setting/aboutUs'], resolve)
+const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
+const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
   component: myHome,
@@ -48,9 +51,23 @@ const myHomeConfig = {
         {
           path: '/share',
           component: share
+        },
+        {
+          path: '/aboutUs',
+          component: aboutUs
         }
       ]
-    }
+    },
+    {
+      path: '/myCenter',
+      component: myCenter,
+      children: [
+        {
+          path: '/myInfo',
+          component: myInfo
+        }
+      ]
+    },
   ]
 }
 

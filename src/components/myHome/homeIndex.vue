@@ -1,11 +1,14 @@
 <style>
   @import '../../assets/css/myHome/style.css';
   @import '../../assets/css/common/common.less';
+  .mycenter-content .myhead{
+  	padding: 40px 15px;
+  }
 </style>
 <template>
   <div id="app">
       <section id="mycenter" class="mui-content mycenter-content">
-	<div class="myhead">
+	<div class="myhead" @click="mycenter">
 		<!-- href="my_info.html" -->
 		<a class="">
 			<div class="oa-contact-cell mui-table">
@@ -291,6 +294,9 @@ export default {
     }
   },
   methods: {
+  	mycenter(){
+  		this.$router.push({path:'/myInfo'})
+  	},
 		set(){
 			this.$router.push({path:'/setUp'})
 		},

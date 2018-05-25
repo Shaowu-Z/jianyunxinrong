@@ -98,10 +98,6 @@ export default {
 
 <style>
     @import '../../assets/css/common/style.less';
-    body,
-    .mui-content {
-        background: #ffffff;
-    }
     html,
     body {
         height: 100%;

@@ -34,9 +34,9 @@ export default {
         align-items: center;
         border-bottom: 1px solid #ccc;
         img{
-            display: inline-block;
-            width:10px;
-            height:15px;
+        	display: inline-block;
+        	width: 10px;
+        	height: 15px;
         }
         p{
             flex:0.8;
