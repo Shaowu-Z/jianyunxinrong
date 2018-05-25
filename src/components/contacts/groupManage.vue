@@ -94,8 +94,8 @@
                 </li>
 
 
-                <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="javascript:appApi.openNewWindow(pagepath+'/dish/sign_list.html?type=0&teamId='+teamId+'&code='+code)">
+                <li class="mui-table-view-cell">    
+                    <a class="mui-navigate-right" @click="seal">
                         <div class="mui-slider-cell">
                             <div class="oa-contact-cell mui-table">
                                 <div class="oa-contact-avatar mui-table-cell">
@@ -175,6 +175,9 @@ export default {
         });
     },
     methods:{
+        seal(){
+            this.$router.push({path:'/signList',query:{type:0,teamId:this.teamId,code:this.$route.query.code}})
+        },
         Administration(){
             this.$router.push({path:'/select_team_admin',query:{teamId:this.teamId}})
         },

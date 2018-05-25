@@ -22,6 +22,8 @@ const addTeamIssue = resolve => require(['@/components/contacts/addTeamIssue'], 
 const select_team_admin = resolve => require(['@/components/contacts/select_team_admin'], resolve)
 const eg_details = resolve => require(['@/components/contacts/eg_details'], resolve)
 const addSubdivision = resolve => require(['@/components/contacts/addSubdivision'], resolve)
+const signList = resolve => require(['@/components/contacts/signList'], resolve)
+const signListsave = resolve => require(['@/components/contacts/signListsave'], resolve)
 
 const contactsConfig = {
   path: '/contacts',
@@ -86,6 +88,14 @@ const contactsConfig = {
     {
       path:'/addSubdivision',
       component: addSubdivision
+    },
+    {
+      path:'/signList',
+      component: signList
+    },
+    {
+      path:'/signListsave',
+      component: signListsave
     },
   ]
 }

@@ -2,7 +2,7 @@
     <div id="app">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">添加子部门</h1>
-            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left"><span
+            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goback"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
             <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right" @click="addDeptInfo()">完成</button>
@@ -88,6 +88,9 @@ export default {
 			});
 	},
     methods:{
+        goback(){
+            this.$router.go(-1)
+        },
         hide(){
             this.select_dept = !this.select_dept
         },
@@ -104,22 +107,6 @@ export default {
                 that.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
                     that.newJson =response.data.result;
                     console.info(that.newJson);
-                    // var deptHtml = '';
-                    // for(var j=0;j<newJson.length;j++){
-                    //     var arrJ = newJson[j];
-                    //     var deptId = arrJ.deptId;
-                    //     var deptName = arrJ.deptName;
-                    //     deptHtml+='';
-
-                    //         //如果有下级部门才显示下级按钮
-                    //         var lowerDeptNum = arrJ.lowerDeptNum;
-                    //         if(lowerDeptNum>0){
-                    //             deptHtml+='<div class="sub-btn" onclick="getSubDept('+teamId+','+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>';
-                    //         }
-                    //         deptHtml+='</li>';
-                    // }
-                    // deptHtml=deptHtml+'';
-                    // document.getElementById("deptHtml").innerHTML=deptHtml;
                 }).catch(function (error) {
                     //alert("获取部门信息失败,请联系管理员!");
                     console.info(error);
