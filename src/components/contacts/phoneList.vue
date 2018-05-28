@@ -71,9 +71,6 @@ export default {
 			phones: []
 		}
 	},
-	created: function () {
-        window.appApi.getContacts();
-	},
 	methods: {
 		goBack(){
 			this.$router.go(-1)
@@ -116,7 +113,9 @@ export default {
         });
 	},
 	created(){
-		appApi.callBackFun = function (callFlag, CONTENT) {
+		window.appApi.getContacts();
+		console.log(111);
+		window.appApi.callBackFun = function (callFlag, CONTENT) {
 			isLoginIm = true;
 			if (callFlag == appApi.callBackFlag.CONTACTS) {
 				//查询用户的好友

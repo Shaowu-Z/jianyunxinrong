@@ -81,9 +81,6 @@ export default {
             goUrl : '',
         }
     },
-    created (){
-        
-    },
     methods:{
         hide(){
             this.select_dept = !this.select_dept;
@@ -145,7 +142,6 @@ export default {
                     var type = _self.$route.query.type;
                         if(type==0){
                             _self.$router.push({path:'/add_manually',query:{type:0,teamId:_self.teamId}});
-                            console.log(111);
                         }
                         if(type==1){
                             _self.$router.push({path:'/add_manually',query:{type:0,teamId:_self.teamId,deptId:_self.deptId}});

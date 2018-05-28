@@ -3,7 +3,7 @@
     <header class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">联系人</h1>
 		<a class="mui-icon iconfont icon-personadd mui-pull-right" @click="popover"></a>
-		<a class="mui-icon mui-icon-search mui-pull-right"></a>
+		<!-- <a class="mui-icon mui-icon-search mui-pull-right"></a> -->
 	</header>
 <div :class="{'mui-backdrop mui-active' : show == true}" @click="popover"></div>
 <div id="popover-add" class="mui-popover top-menu" :class="{'mui-active1' : show == true}">
