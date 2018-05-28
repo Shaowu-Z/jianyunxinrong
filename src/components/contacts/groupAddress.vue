@@ -77,14 +77,15 @@
                 </li>
             </ul>
         </div>
-
+        <div :class="{'mui-backdrop mui-active' : this.add_type == true }" @click="join"></div>
         <!--选择方式弹框开始-->
-        <div id="add_type" class="mui-popover top-menu" v-show="this.add_type" style="display:block">
+        <div id="add_type" class="mui-popover top-menu" style="display:block; top: 460px; left: 5px;" :class="{'mui-active' : this.add_type == true }">
             <div class="mui-popup-title mui-text-left">请选择添加成员的方式</div>
             <ul class="mui-popup-content mui-table-view mui-text-left eg-table-view">
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/select_phone_list.html?type=0&teamId='+window.location.href.split('?')[1].split('=')[1])">从通讯录批量选择</a></li>
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/add_manually.html?type=0&teamId='+window.location.href.split('?')[1].split('=')[1])" class="">手动输入</a></li>
+                <li class="mui-table-view-cell"><a @click="mailList">从通讯录批量选择</a></li>
+                <li class="mui-table-view-cell"><a @click="manual" class="">手动输入</a></li>
             </ul>
+            <div class="mui-popover-arrow mui-bottom" style="left:82px"></div>
         </div>
     </div>
 </template>
@@ -137,11 +138,16 @@ export default {
 
     },
     methods:{
+        manual(){
+            this.$router.push({path:'/add_manually',query:{teamId:this.$route.query.teamId,type:0}});
+        },
+        mailList(){
+            this.$router.push({path:'/select_phone_list',query:{teamId:this.$route.query.teamId,type:0}});
+        },
         department(){
             this.$router.push({path:'/addSubdivision',query:{teamId:this.$route.query.teamId,deptId:0}});
         },
         join(){
-            console.log(this.add_type);
             this.add_type = !this.add_type;
         },
         subd(index){
@@ -176,5 +182,9 @@ export default {
     .post{
         position: relative;
         left: -163px;
+    }
+    .mui-active{
+        display: block;
+        opacity: 1;
     }
 </style>

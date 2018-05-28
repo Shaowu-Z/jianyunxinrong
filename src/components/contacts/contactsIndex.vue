@@ -2,20 +2,20 @@
   <div id="app">
     <header class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">联系人</h1>
-		<a class="mui-icon iconfont icon-personadd mui-pull-right" href="#popover-add"></a>
+		<a class="mui-icon iconfont icon-personadd mui-pull-right" @click="popover"></a>
 		<a class="mui-icon mui-icon-search mui-pull-right"></a>
 	</header>
-
-<div id="popover-add" class="mui-popover top-menu">
-	<div class="mui-popover-arrow"></div>
+<div :class="{'mui-backdrop mui-active' : show == true}" @click="popover"></div>
+<div id="popover-add" class="mui-popover top-menu" :class="{'mui-active1' : show == true}">
+	<div class="mui-popover-arrow" style="left:174px"></div>
 	<ul class="mui-table-view">
 		<!--<li class="mui-table-view-cell" onclick="app.doShare()">分享</li>-->
-		<li class="mui-table-view-cell">
-			<a href="javascript:appApi.openNewWindow(pagepath+'/contacts/team_create.html')">
+		<li class="mui-table-view-cell" @click="create">
+			<a>
 				<span class="mui-icon iconfont icon-add02"></span>创建企(事)业组织
 			</a>
 		</li>
-		<li class="mui-table-view-cell">
+		<li class="mui-table-view-cell" @click="search">
 			<a href="javascript:appApi.openNewWindow(pagepath+'/contacts/team_search.html')">
 				<span class="mui-icon iconfont icon-search"></span>加入企(事)业组织
 			</a>
@@ -277,13 +277,14 @@
 
 <script>
 import footerBar from '../common/footerBar'
-import {findTeamList} from '../../api/seek'
+// import {findTeamList} from '../../api/seek'
 export default {
   components: {
 	footerBar,
   },
   data () {
     return {
+	show: false,
 	show1: false,
 	show2: false,
     items:[],
@@ -355,6 +356,15 @@ export default {
 }
     },
   methods:{
+	create(){
+		this.$router.push({path:'/team_create'})
+	},
+	search(){
+		this.$router.push({path:'/team_search'})
+	},
+	popover(){
+		this.show = !this.show
+	},
 	enterprise(submenuIcon){
 		this.$router.push({path:'/orgStructure',query:{from:0,teamId:this.items[submenuIcon].teamId}})
 	},
@@ -434,5 +444,11 @@ export default {
 	}
 	.border-bottom{
 		border-bottom: 1px solid #ccc
+	}
+	.mui-active1{
+		display: block;
+		opacity: 1;
+		right: 5px;
+    	top: 55px;
 	}
 </style>

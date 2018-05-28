@@ -168,6 +168,7 @@ export default {
             });
         },
         addDeptInfo:function () {
+            var _self = this;
             var deptName = this.deptName;
             if(deptName=="" || deptName==null){
                 layer.open({
@@ -209,7 +210,7 @@ export default {
                 }else{
                     alert("创建部门成功!");
                     // window.location.href="../contacts/group_address_m.html?teamId="+teamId;
-                    this.$router.push({path:'/groupAddress',query:{teamId:this.$router.query.teamId}})
+                    _self.$router.push({path:'/groupAddress',query:{teamId:teamId}})
                 }
             }).catch(function (error) {
                 alert("创建部门失败,请联系管理员!");

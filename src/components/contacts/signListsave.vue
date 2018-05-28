@@ -88,8 +88,8 @@ export default {
             console.log(el)
             console.log('******************************')
             el.addEventListener('change', (e) => {
-                this.sealInfo.sealData = e.path[0].value
-                console.log(e.path[0].value)
+                this.sealInfo.sealData = e.path[0].value.slice(12)
+                console.log(e)
             })
         },
         goBack(){

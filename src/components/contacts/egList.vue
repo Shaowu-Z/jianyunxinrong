@@ -9,7 +9,7 @@
     </header>
 <section class="mui-content" id="eg_list">
 	<div id='list' class="mui-indexed-list address-list">
-		<div class="singlebox mui-singlebox">
+		<div class="singlebox mui-singlebox text">
 			<a @click="newFriends" class="mui-navigate-right">新的好友</a>
 		</div>
 		<div class="mui-indexed-list-search mui-input-row mui-search">
@@ -108,5 +108,8 @@ export default {
 </script>
 
 <style>
-    @import '../../assets/css/common/mui.indexedList.css';
+	@import '../../assets/css/common/mui.indexedList.css';
+	.text{
+		text-align: left
+	}
 </style>

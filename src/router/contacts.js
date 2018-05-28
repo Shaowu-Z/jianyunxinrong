@@ -24,6 +24,10 @@ const eg_details = resolve => require(['@/components/contacts/eg_details'], reso
 const addSubdivision = resolve => require(['@/components/contacts/addSubdivision'], resolve)
 const signList = resolve => require(['@/components/contacts/signList'], resolve)
 const signListsave = resolve => require(['@/components/contacts/signListsave'], resolve)
+const team_create = resolve => require(['@/components/contacts/team_create'], resolve)
+const team_search = resolve => require(['@/components/contacts/team_search'], resolve)
+const select_phone_list = resolve => require(['@/components/contacts/select_phone_list'], resolve)
+const add_manually = resolve => require(['@/components/contacts/add_manually'], resolve)
 
 const contactsConfig = {
   path: '/contacts',
@@ -96,6 +100,22 @@ const contactsConfig = {
     {
       path:'/signListsave',
       component: signListsave
+    },
+    {
+      path:'/team_create',
+      component: team_create
+    },
+    {
+      path:'/team_search',
+      component: team_search
+    },
+    {
+      path:'/select_phone_list',
+      component: select_phone_list
+    },
+    {
+      path:'/add_manually',
+      component: add_manually
     },
   ]
 }
