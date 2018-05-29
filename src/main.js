@@ -6,6 +6,7 @@ import router from './router'
 import axios from 'axios'
 import $ from 'jquery'
 import setting from "./playform/appApi.js";
+import mui from "./playform/mui.js";
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'

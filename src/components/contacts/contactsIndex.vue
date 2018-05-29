@@ -413,7 +413,6 @@ export default {
 		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
 	},
 	participate(submenu){
-		console.log(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
 		window.appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
 	},
 	friends(){

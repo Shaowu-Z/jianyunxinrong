@@ -98,7 +98,7 @@ export default {
         },
         importPhones () {
             //loading("同步中...");
-            window.appApi.getContacts()
+            appApi.getContacts()
 
         }
     },
@@ -109,13 +109,13 @@ export default {
             var list = document.getElementById('list');
             list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
             // alert(list.innerHTML);
-            window.indexedList = new mui.IndexedList(list)
+            indexedList = new mui.IndexedList(list)
         });
 	},
 	created(){
-		window.appApi.getContacts();
+		appApi.getContacts();
 		console.log(111);
-		window.appApi.callBackFun = function (callFlag, CONTENT) {
+		appApi.callBackFun = function (callFlag, CONTENT) {
 			isLoginIm = true;
 			if (callFlag == appApi.callBackFlag.CONTACTS) {
 				//查询用户的好友
@@ -354,6 +354,6 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+	@import '../../assets/css/common/mui.indexedList.css';
 </style>

@@ -79,7 +79,7 @@
         </div>
         <div :class="{'mui-backdrop mui-active' : this.add_type == true }" @click="join"></div>
         <!--选择方式弹框开始-->
-        <div id="add_type" class="mui-popover top-menu" style="display:block; top: 460px; left: 5px;" :class="{'mui-active' : this.add_type == true }">
+        <div id="add_type" class="mui-popover top-menu" style="top: 460px; left: 5px;" :class="{'mui-active' : this.add_type == true }">
             <div class="mui-popup-title mui-text-left">请选择添加成员的方式</div>
             <ul class="mui-popup-content mui-table-view mui-text-left eg-table-view">
                 <li class="mui-table-view-cell"><a @click="mailList">从通讯录批量选择</a></li>

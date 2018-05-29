@@ -46,7 +46,7 @@
                         <span class="mui-badge mui-badge-inverted badge-file">
                             <img class="img-upload" style="width: 33px;display: none" id="img_view" v-show="fm.issueUrl!=''" :src="fm.issueUrl"/>
                             <button class="mui-btn">上传照片</button>
-                            <input type="file" id="upfile" value="" onclick="window.webactivity.setInputType(1);" accept="image/png,image/gif,image/jpeg" onchange="selectCertImg(this)" class="input-file">
+                            <input type="file" id="upfile" value="" accept="image/png,image/gif,image/jpeg" v-on:change="selectCertImg(this)" class="input-file">
                         </span>
                     </a>
                 </li>
@@ -148,9 +148,9 @@ export default {
                     height: 600
                 }).then(function (rst) {
                     uploadStatus = true;
-                    add_issue.$data.fm["imgData"] = rst.base64;
-                    add_issue.$data.fm["width"] = 800;
-                    add_issue.$data.fm["height"] = 600;
+                    add_issue.fm["imgData"] = rst.base64;
+                    add_issue.fm["width"] = 800;
+                    add_issue.fm["height"] = 600;
                     var v = document.getElementById("img_view");
                     v.src = rst.base64;
                     v.style.display = "inline-block"
@@ -166,7 +166,7 @@ export default {
                     return false;
                 }
             }
-            if (!uploadStatus && add_issue.$data.fm.issueUrl == "") {
+            if (!uploadStatus && add_issue.fm.issueUrl == "") {
                 msg("请上传证书照片");
                 return false;
             }
@@ -255,10 +255,10 @@ export default {
 		,deleteCert:function (id) {
 			var _self = this;
 			if(undefined == id){
-				id = _self.$data.fm.id;
+				id = _self.fm.id;
 			}
 			if(confirm("确认要删除此资质吗？")){
-				axios.get(getUrl() + "/app_team_rz/remove_issue?issueId=" + id + "&teamId=" + _self.$data.fm.teamId).then(function (response) {
+				axios.get(getUrl() + "/app_team_rz/remove_issue?issueId=" + id + "&teamId=" + _self.fm.teamId).then(function (response) {
 					if (response.data.code == 0) {
 						msg("已成功删除此资质");
 						setTimeout(function () {
