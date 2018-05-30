@@ -102,6 +102,10 @@ export default {
     body {
         height: 100%;
     }
+    .register-form{
+        background: #ffffff;
+        margin-top: 0
+    }
 
     #LXB_CONTAINER_SHOW {
         display: none!important;

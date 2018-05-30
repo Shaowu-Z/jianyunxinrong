@@ -9,6 +9,7 @@ import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import "./playform/alert.js";
 import "./playform/layer.js";
+import "./playform/mui.js";
 import './assets/css/common/mui.less'
 import './assets/css/common/mui.min.less'
 import './assets/css/common/icons-extend.less';

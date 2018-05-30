@@ -18,7 +18,7 @@
 				</li>
 
 				<li class="mui-table-view-cell"><label>姓名</label><span class="mui-badge mui-badge-inverted" v-text="user.uName"></span></li>
-				<li class="mui-table-view-cell" onclick="mycenter.openPopover()"><label>手机号码</label><span class="mui-badge mui-badge-inverted" v-text="user.phoneNum"></span></li>
+				<li class="mui-table-view-cell" o	nclick="mycenter.openPopover()"><label>手机号码</label><span class="mui-badge mui-badge-inverted" v-text="user.phoneNum"></span></li>
 				<li class="mui-table-view-cell" onclick="mycenter.openEmailEdit()"><label>邮箱</label><span class="mui-badge mui-badge-inverted" v-text="user.email"></span></li>
 				<li class="mui-table-view-cell"><label>身份证号</label><span class="mui-badge mui-badge-inverted" v-text="auth"></span></li>
 				<li class="mui-table-view-cell" onclick="appApi.openNewWindow(pagepath_m+'/mycenter/my_codecard.html')"><label>二维码名片</label><span class="mui-badge mui-badge-inverted"><span class="mui-icon iconfont icon-code"></span></span>
@@ -54,6 +54,7 @@
 
 <script>
 	import { BackCookie } from '../../../playform/common.js'
+	
 	export default {
 		data() {
 			return {
@@ -333,5 +334,10 @@
 </script>
 
 <style>
-
+.mui-bar-nav ~ .mui-content {
+    padding-top: 44px;
+}
+.show-table-view .mui-table-view-cell label{
+	text-align: left;
+}
 </style>

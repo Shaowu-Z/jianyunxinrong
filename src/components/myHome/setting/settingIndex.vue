@@ -170,6 +170,9 @@ export default {
 </script>
 
 <style>
+body{
+	background: #efeff4 !important;
+}
 	.oa-contact-name{
 		color: #000;
 	}

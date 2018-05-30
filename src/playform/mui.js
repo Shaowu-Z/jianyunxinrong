@@ -453,4 +453,8 @@ var mui = (function(document, undefined) {
 	return $;
 })(document);
 //window.mui = mui;
+
+//'$' in window || (window.$ = mui);
+export default mui; 
+
 //'$' in window || (window.$ = mui);

@@ -34,26 +34,7 @@
 // 	SHARE_OPERATE : {
 // 		DISH_SHARE: 1,
 // 		VIDEO_SHARE: 2
-// 	},
-// 	newFunction:()=>{
-// 		if (curr_url.substr("https://m.cloudccif.com") > -1) {
-// 			SUNLINE_SERVER_ADDRESS = "https://m.cloudccif.com";
-// 			HAOSI_SERVER_ADDRESS = "https://haosi.cloudccif.com";
-// 			HAOSI_SERVER_SHORT = "https://haosi";
-// 			ANDROID_URL = "http://17120431944.fx.sj.360.cn/qcms/view/t/detail?id=3914913&appinstall=0"; // 360
-// 			IOS_URL = "https://itunes.apple.com/cn/app/id1296162995?mt=8";
-// 			UPLOAD_SERVER_ADDRESS = "https://m.cloudccif.com:8000";
-// 			// ANDROID_URL = "http://shouji.baidu.com/software/22848501.html";  // 百度
-// 		} else {
-// 			SUNLINE_SERVER_ADDRESS = "http://java.winfreeinfo.com";
-// 			HAOSI_SERVER_ADDRESS = "http://haosi.winfreeinfo.com:9001";
-// 			HAOSI_SERVER_SHORT = "http://haosi";
-// 			ANDROID_URL = "https://www.pgyer.com/jyxr";
-// 			IOS_URL = "https://www.pgyer.com/jyxr";
-// 			UPLOAD_SERVER_ADDRESS = "http://res.winfreeinfo.com:8000";
-// 		}
-// 		newFunction();
-// 	},
+// 	}
 // 	getCookie:(name)=> {
 // 		let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 // 		if(arr != null)
@@ -137,14 +118,49 @@
 // 	}
 // }
 
+
 function setting () {
+
+	function newFunction(){
+		// var SUNLINE_SERVER_ADDRESS=''
+		// var HAOSI_SERVER_SHORT=''
+		// var HAOSI_SERVER_ADDRESS=''
+		// var ANDROID_URL=''
+		// var IOS_URL=''
+		// var UPLOAD_SERVER_ADDRESS=''
+		// var newFunction
+		var curr_url=getUrl()
+		var rtnurl;
+		var SUNLINE_SERVER_ADDRESS,HAOSI_SERVER_ADDRESS,
+		HAOSI_SERVER_SHORT,ANDROID_URL,IOS_URL,UPLOAD_SERVER_ADDRESS
+		if (curr_url.substr("https://m.cloudccif.com") > -1) {
+			SUNLINE_SERVER_ADDRESS = "https://m.cloudccif.com";
+			HAOSI_SERVER_ADDRESS = "https://haosi.cloudccif.com";
+			HAOSI_SERVER_SHORT = "https://haosi";
+			ANDROID_URL = "http://17120431944.fx.sj.360.cn/qcms/view/t/detail?id=3914913&appinstall=0"; // 360
+			IOS_URL = "https://itunes.apple.com/cn/app/id1296162995?mt=8";
+			UPLOAD_SERVER_ADDRESS = "https://m.cloudccif.com:8000";
+			// ANDROID_URL = "http://shouji.baidu.com/software/22848501.html";  // 百度
+		} else {
+			SUNLINE_SERVER_ADDRESS = "http://java.winfreeinfo.com";
+			HAOSI_SERVER_ADDRESS = "http://haosi.winfreeinfo.com:9001";
+			HAOSI_SERVER_SHORT = "http://haosi";
+			ANDROID_URL = "https://www.pgyer.com/jyxr";
+			IOS_URL = "https://www.pgyer.com/jyxr";
+			UPLOAD_SERVER_ADDRESS = "http://res.winfreeinfo.com:8000";
+		}
+		return HAOSI_SERVER_ADDRESS;
+	}
 	//获取上下文路径
 	function getUrl() {
+	
 		var url = window.location.href;
 		var str1 = url.substr(url.indexOf("/") + 2, url.length - 1);
 		var index = str1.indexOf("/") + url.indexOf("/") + 2;
 		return url.substr(0, index);
 	}
+	
+
 	// 获取页面上下文的路径
 	function getPagePath() {
 		return getUrl() + "/static/webstatic";
@@ -161,6 +177,7 @@ function setting () {
 			return arr[2];
 		return null;
 	}
+	
 	window.onload = function() {
 		var sUserAgent = navigator.userAgent.toLowerCase();
 		var tab_list = document.getElementById("tab_list_id");
@@ -182,25 +199,27 @@ function setting () {
 		}
 	
 	}
+	
 	return {
+		// newFunction:newFunction,
 		getUrl : getUrl,
 		getPagePath : getPagePath,
 		getCookie : getCookie,
 		setCookie : setCookie,
+		
 		/*--------通用常量配置--------*/
 		// 当前访问的地址
 		curr_url : window.location.href,
-		
 		/****** sunline平台 ******/
 		// sunline域名
-		SUNLINE_SERVER_ADDRESS : "",
+		
 		//上传服务器地址
 		UPLOAD_SERVER_ADDRESS : '',
 		/****** sunline平台 ******/
 
 		/****** 好思平台 ******/
 		// 好思域名
-		HAOSI_SERVER_ADDRESS : '',
+		HAOSI_SERVER_ADDRESS : newFunction(),
 		// 好思域名关键部分截取
 		HAOSI_SERVER_SHORT : '',
 		// 好思域名通配符

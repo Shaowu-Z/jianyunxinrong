@@ -4,15 +4,6 @@ import {Base,BackCookie} from './common';
 /**
  * app接口
  */
-// const app = {
-// 	sUserAgent : navigator.userAgent.toLowerCase(),
-// 	isIpad : sUserAgent.match(/ipad/i),
-// 	isIphoneOs : sUserAgent.match(/iphone os/i) || isIpad,
-// 	isAndroid : sUserAgent.match(/android/i),
-// 	isApp : sUserAgent.match(/cy/i),
-// 	isWeixin : sUserAgent.match(/MicroMessenger/i) == 'micromessenger',
-// 	isTop : window = top
-// }
 var sUserAgent = navigator.userAgent.toLowerCase();
 var isIpad = sUserAgent.match(/ipad/i);
 var isIphoneOs = sUserAgent.match(/iphone os/i) || isIpad;
@@ -861,14 +852,12 @@ window.appApi = {
 	getContacts: function() {
 		if(isApp && isIphoneOs) { //IOS
 			if(!isTop) {
-				this.callFilter("iosGetContacts()");
+				this.callFilter("iosGetContacts(");
 				return;
 			}
 			iosGetContacts();
 		} else if(isApp && isAndroid) {
 			window.webactivity.getContacts();
-			appApi.getContacts();
-			alert(1111)
 		}
 	},
 
