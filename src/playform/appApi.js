@@ -54,6 +54,7 @@ if(!isTop) {
 
 window.Adaptive = {
 	init: function() {
+		let DEVICE_FLAG;
 		// 返回键
 		if(typeof DEVICE_FLAG == "string" && !sUserAgent.match(DEVICE_FLAG)) {
 			var back = document.getElementById("btn-referrer");
@@ -82,6 +83,7 @@ window.Adaptive = {
 		}
 	},
 	adpPage: function(isAddNav, nav_flag) {
+		let DEVICE_FLAG;
 		if(!sUserAgent.match(DEVICE_FLAG)) {
 			if(isAddNav) {
 
