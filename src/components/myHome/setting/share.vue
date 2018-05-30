@@ -14,8 +14,8 @@
 				<!--<img v-bind:src ="card.imageHost + card.userIcon" class="hpic"  />
 				<h4 v-text="card.nickName"></h4>
 				<p id="area" v-text="card.areaInfo"></p>-->
-				<div id="code"></div>
-				<img id="img-buffer" src="../../../assets/images/company_logo.png">
+				<div id="code" ref="code"></div>
+				<img id="img-buffer" ref="buffer" src="../../../assets/images/company_logo.png">
 				<!--<img class="cpic" v-bind:src ="card.imageHost + card.qrUrl"/>-->
 			</div>
 		</div>
@@ -35,18 +35,56 @@
 </template>
 
 <script>
+import setting from '../../../playform/config'
+import xyqrcode from '../../../playform//xyqrcode'
 export default {
     data(){
         return{
-            
+            card:{
+				imageHost: "",
+				userIcon: "",
+				nickName: "未设置",
+				areaInfo: "中国",
+				qrUrl: ""
+			}
         }
-    },
+	},
+	created(){
+		var _self=this
+		this.$http.post("/api/user_api/user_code_card").then(function (response) {
+			console.log(response)
+			var info = response.data.result;
+			_self.card = info;
+			/*var img = document.createElement("img")
+			img.setAttribute("class","cpic");
+			img.setAttribute("src",_self.$data.card.imageHost + _self.$data.card.qrUrl +"?t=" +new Date().getTime());
+			document.getElementById("con").insertBefore(img,document.getElementById("area"))
+			console.info(response.data.result);*/
+		}).catch(function (error) {
+			console.info(error);
+		});
+			this.showQrcode()
+		
+		console.log("________"+this.$refs.code)
+	},
     methods:{
         goBack(){
-            this.$router.go(-1)
-        }
+			// this.$router.go(-1)
+			console.log(setting);
+		},
+		showQrcode(){
+			var options={};
+			options.url= setting.HAOSI_SERVER_ADDRESS+"/static/webstatic/mycenter/ext/share_detail.html"; //二维码的链接
+			// options.url= "http://localhost:8080/static/webstatic/mycenter/ext/share_detail.html";
+			options.dom="#code";//二维码生成的位置
+			options.image=document.getElementById("img-buffer");//图片id
+			options.render="image";//设置生成的二维码是canvas格式，也有image、div格式
+			// console.log("PPPPPPPP:"+options.url)
+			xyqrcode(options);
+		}
     },
     mounted(){
+	
     }
 }
 </script>
@@ -72,4 +110,8 @@ export default {
 			text-align: center;
 			font-size: 16px;
 		}
+	img{
+		width: 100%;
+		height: 100%;
+	}
 </style>

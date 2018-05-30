@@ -146,8 +146,8 @@
 					</div>
 				</a>
 			</li>
-		</ul>
-		<div class="singlebox">
+		</ul> 
+		<div class="singlebox" @click="collect">
 			<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/my_collect.html')">
 				<span class="my-list-icon label-shoucang"></span>
 				我的收藏
@@ -301,11 +301,15 @@ export default {
 			this.$router.push({path:'/setUp'})
 		},
 		setting(){
-		  this.$router.push({path:'/setting'});
+		//   this.$router.push({path:'/setting'});
+		  this.$router.push({path:'/shoufukuan'});
 		},
 		project(){
 		  this.$router.push({path:'/project'});
 		//   console.log(this.user)
+		},
+		collect(){
+			 this.$router.push({path:'/myCollect'});
 		}
   },
   created() {
@@ -319,9 +323,9 @@ export default {
       });
 
     // this.load_zhiye();
-    function openWindow(url) {
-      window.appApi.openNewWindow(url);
-    }
+    // function openWindow(url) {
+    //   window.appApi.openNewWindow(url);
+    // }
   }
 }
 </script>

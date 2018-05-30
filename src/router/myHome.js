@@ -18,6 +18,9 @@ const project = resolve => require(['@/components/myHome/project'], resolve)
 const aboutUs = resolve => require(['@/components/myHome/setting/aboutUs'], resolve)
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
+const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
+const shoufukuan = resolve => require(['@/components/myHome/myCenter/shoufukuan'], resolve)
+
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
   component: myHome,
@@ -65,6 +68,14 @@ const myHomeConfig = {
         {
           path: '/myInfo',
           component: myInfo
+        },
+        {
+          path: '/myCollect',
+          component: myCollect
+        },
+        {
+          path: '/shoufukuan',
+          component: shoufukuan
         }
       ]
     },

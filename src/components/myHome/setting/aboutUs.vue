@@ -108,4 +108,16 @@
 </script>
 
 <style>
+body{
+	background: #ffffff
+}
+#content{
+	background: #ffffff;
+	margin-top:44px;
+	padding-top:1px;
+}
+.mui-bar-nav ~ .mui-content{
+	padding-top: 0;
+}
+
 </style>

@@ -854,14 +854,12 @@ window.appApi = {
 	getContacts: function() {
 		if(isApp && isIphoneOs) { //IOS
 			if(!isTop) {
-				this.callFilter("iosGetContacts()");
+				this.callFilter("iosGetContacts(");
 				return;
 			}
 			iosGetContacts();
 		} else if(isApp && isAndroid) {
 			window.webactivity.getContacts();
-			appApi.getContacts();
-			alert(1111)
 		}
 	},
 
