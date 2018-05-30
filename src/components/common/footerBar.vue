@@ -45,7 +45,7 @@ export default {
       console.log(index)
       switch (index) {
         case 0:
-          this.$router.push(this.footerTab[0].routerPath)
+          window.webactivity.openMessagePage()
           break
         case 1:
           this.$router.push(this.footerTab[1].routerPath)
