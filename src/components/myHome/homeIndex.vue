@@ -301,8 +301,8 @@ export default {
 			this.$router.push({path:'/setUp'})
 		},
 		setting(){
-		//   this.$router.push({path:'/setting'});
-		  this.$router.push({path:'/shoufukuan'});
+		  this.$router.push({path:'/setting'});
+		//   this.$router.push({path:'/shoufukuan'});
 		},
 		project(){
 		  this.$router.push({path:'/project'});

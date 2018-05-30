@@ -79,8 +79,39 @@ export default {
                 var rs = response.data;
                 console.log(response);
                 if(rs.code === 0){
-                   window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
-                  _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                     //登录成功
+                    var userInfo = rs.result.userInfo;
+                    //登录环信
+                    window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
+                     //保存用户信息
+                     window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
+                      //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
+                       try {
+                           _this.$http.post("/api/concats_api/checked_message").then(function (response) {
+                                //debugger;
+                                //alert("检测推送成功！");
+                            }).catch(function (error) {
+                                //alert("检测推送失败！");
+                                console.info(error);
+                            });
+                        } catch (e) {
+                            console.info("出现异常(继续运行代码):" + e);
+                        }
+                    _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                }else if(rs.code == 1002){
+                    //未实名认证
+                    _this.loginParams=rs.result;
+                    _this.$router.push({path:'personApprove.vue'});
+                }else if(rs.code == 1049){
+                     //微信未被注册
+                     setThirdInfoForWx(rs.result);
+                    //  _this.$router.push({path:'third_bind.vue'});
+                }else if(rs.code == 1050){
+                    setThirdInfoForQq(rs.result);
+                     //  _this.$router.push({path:'third_bind.vue'});
+                }else{
+                    warm(rs.message);
+                    layer.close(index_);
                 }
             }).catch(function (error) {
                 console.info(error);
