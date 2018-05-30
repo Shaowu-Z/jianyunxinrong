@@ -76,7 +76,7 @@ export default {
 			this.$router.go(-1)
 		},
         addFriends(index1, index2) {
-            var phoneMap = this.$data.phones[index1][index2];
+            var phoneMap = this.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
             this.$http.post("/api/concats_api/insert_add_info", addVo).then(function (response) {
@@ -113,9 +113,11 @@ export default {
         });
 	},
 	created(){
+		// 获取通讯录联系人
 		appApi.getContacts();
-		console.log(111);
+		// 查询用户好友
 		appApi.callBackFun = function (callFlag, CONTENT) {
+			var appPl = this
 			isLoginIm = true;
 			if (callFlag == appApi.callBackFlag.CONTACTS) {
 				//查询用户的好友
@@ -123,11 +125,12 @@ export default {
 				param.append("userId", "");
 				this.$http.post("/api/concats_api/find_eg_list", param).then(function (response) {
 					var resultArray = response.data.result;
+					alert(resultArray);
 					var resultStr = ",";
 					for(var i in resultArray){
 						resultStr = resultStr + resultArray[i].cellPhone + ",";
 					}
-					appPl.$data.phones = convertData(CONTENT.result, resultStr);
+					// appPl.phones = convertData(CONTENT.result, resultStr);
 				}).catch(function (error) {
 					console.info(error);
 				});

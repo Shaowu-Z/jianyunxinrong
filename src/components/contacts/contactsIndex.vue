@@ -26,7 +26,7 @@
 </div>
 <section class="mui-content" id="team_list">
 	<div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
-		<ul class="mui-table-view mui-table-view-striped heig" @click="friends">
+		<ul class="mui-table-view mui-table-view-striped" @click="friends">
 			<li class="mui-table-view-cell">
 				<div class="mui-slider-cell">
 					<div class="oa-contact-cell mui-table">
@@ -55,7 +55,7 @@
 		</ul>
 		<!--项目联系人-->
 		<div v-for="(itemone,submenu) in projects" :key="submenu">
-			<ul class="mui-table-view heig">
+			<ul class="mui-table-view">
 				<button v-if="itemone.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+itemone.teamId+'&code='+itemone.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
 					<a @click ="clickshow(submenu)" class="border-bottom">
@@ -74,7 +74,7 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view-cell heig" :class="{'hide' : Listshow.indexOf(submenu) == -1}" >
+					<ul class="mui-table-view-cell" :class="{'hide' : Listshow.indexOf(submenu) == -1}" >
 						<li class="mui-table-view-cell" @click="project(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
@@ -88,7 +88,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell heig" @click="Office(submenu)">
+						<li class="mui-table-view-cell" @click="Office(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -101,7 +101,7 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell heig" @click="participate(submenu)">
+						<li class="mui-table-view-cell" @click="participate(submenu)">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
 									<div class="oa-contact-avatar mui-table-cell">
@@ -160,7 +160,7 @@
 				</li>
 			</ul> -->
 		<div v-for="(item,submenuIcon) in items" :key="submenuIcon">
-			<ul class="mui-table-view heig">
+			<ul class="mui-table-view">
 				<button v-if="item.memberType=='1'" @click="administration(item.teamId,item.identifyNo)" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
 				<li class="mui-table-view-cell mui-collapse fold-title">
 					<a @click ="clickshowone(submenuIcon)" class="border-bottom">
@@ -179,7 +179,7 @@
 						</div>
 					</a>
 
-					<ul class="mui-table-view-cell heig" style="padding:0;" :class="{'hide' : Listshow1.indexOf(submenuIcon) == -1}"  @click="enterprise(submenuIcon)">
+					<ul class="mui-table-view-cell" style="padding:0;" :class="{'hide' : Listshow1.indexOf(submenuIcon) == -1}"  @click="enterprise(submenuIcon)">
 						<li class="mui-table-view-cell" style="margin-top:10px;">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
@@ -211,7 +211,7 @@
 		</div>
 
 
-		<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed heig">
+		<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 			<li class="mui-table-view-cell">
 				<a @click="phone"><div class="mui-slider-cell">
 					<div class="oa-contact-cell mui-table">
@@ -313,7 +313,7 @@ export default {
     function reLoad() {
         window.location.reload();
     }
-    window.appApi.callBackFun = function(callFlag, CONTENT) {
+    appApi.callBackFun = function(callFlag, CONTENT) {
     if(callFlag == appApi.callBackFlag.USER_INFO) {
         app.userInfo = JSON.parse(CONTENT);//转换成json对象
     }
