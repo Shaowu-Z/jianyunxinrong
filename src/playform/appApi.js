@@ -4,15 +4,6 @@ import {Base,BackCookie} from './common';
 /**
  * app接口
  */
-// const app = {
-// 	sUserAgent : navigator.userAgent.toLowerCase(),
-// 	isIpad : sUserAgent.match(/ipad/i),
-// 	isIphoneOs : sUserAgent.match(/iphone os/i) || isIpad,
-// 	isAndroid : sUserAgent.match(/android/i),
-// 	isApp : sUserAgent.match(/cy/i),
-// 	isWeixin : sUserAgent.match(/MicroMessenger/i) == 'micromessenger',
-// 	isTop : window = top
-// }
 var sUserAgent = navigator.userAgent.toLowerCase();
 var isIpad = sUserAgent.match(/ipad/i);
 var isIphoneOs = sUserAgent.match(/iphone os/i) || isIpad;
@@ -63,6 +54,7 @@ if(!isTop) {
 
 window.Adaptive = {
 	init: function() {
+		let DEVICE_FLAG;
 		// 返回键
 		if(typeof DEVICE_FLAG == "string" && !sUserAgent.match(DEVICE_FLAG)) {
 			var back = document.getElementById("btn-referrer");
@@ -91,6 +83,7 @@ window.Adaptive = {
 		}
 	},
 	adpPage: function(isAddNav, nav_flag) {
+		let DEVICE_FLAG;
 		if(!sUserAgent.match(DEVICE_FLAG)) {
 			if(isAddNav) {
 
