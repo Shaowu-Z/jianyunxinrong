@@ -555,7 +555,7 @@ export default {
 		             var param = "types="+types+"&lat="+lat+"&lng="+lng+"&addr="+addr+"&msg="+msg+"&filename="+filename
 		                 +"&url="+FileUrl+"&lengthSize="+length+"&thumb="+thumb;
 		            //打开转发选人页面
-		            window.appApi.openNewWindow("/api/static/webstatic/mycenter/select_member_share.html?"+param);
+		            window.appApi.openNewWindow("/static/webstatic/mycenter/select_member_share.html?"+param);
 		        }else{
 		            remin("暂时不支持这种类型的收藏转发", 1);
 		        }
@@ -570,7 +570,7 @@ export default {
 		        if(!confirm(msg)){
 		            return false;
 		        }
-		        this.$http.get("/api/collect/do", {
+		        this.$http.get("/collect/do", {
 		            params: {id:id,type:type}
 		        }).then(function (response) {
 		            if (response.data.code==200){
@@ -754,7 +754,7 @@ export default {
 	        //                 this.dishDownLoad(id);
 	        //             }else if(type == 5){
 	        //                 /*视频*/
-	        //                 this.$http.get( "/api/community/video/detail", {
+	        //                 this.$http.get( "/community/video/detail", {
 	        //                     params: {id:id}
 	        //                 }).then(function (response) {
 	        //                     if (response.data.code == 0) {
@@ -782,7 +782,7 @@ export default {
 	        //                 if(msgType=='txt'){
 	        //                 	var ishref = this.isHref(msg);
 	        //                   //这里需要打开信息的详情页面
-			// 					window.appApi.openNewWindow("/api/static/webstatic/mycenter/my_collection_detail.html?msgId="+id+"&ishref="+ishref
+			// 					window.appApi.openNewWindow("/static/webstatic/mycenter/my_collection_detail.html?msgId="+id+"&ishref="+ishref
 			// 					+"&addTime="+addTime+"&type="+type);
 			// 				}
 	        //                 if(msgType=='loc'){
@@ -814,7 +814,7 @@ export default {
 					sendCollect: function(note){
 			            var _self = this
 			            console.log(_self.$data.type+","+_self.$data.id+","+note+","+this.$route.query.type+","+sendId+","+_self.$data.msgType);//收藏类型，收藏所对应的id,备注,发送的目标类型,发送的类型所对应的id(环信id)
-			            this.$http.get("/api/collect/send_msg_all?this.$route.query.type="+this.$route.query.type+"&sendId="+sendId+"&note="+note+"&type="+_self.$data.type+"&id="+_self.$data.id+"&msgType="+_self.$data.msgType
+			            this.$http.get("/collect/send_msg_all?this.$route.query.type="+this.$route.query.type+"&sendId="+sendId+"&note="+note+"&type="+_self.$data.type+"&id="+_self.$data.id+"&msgType="+_self.$data.msgType
 			             ).then(function (response) {
 			                if (response.data.code == 0||response.data.code==200) {
 			                    remin("发送成功", 1);
@@ -877,7 +877,7 @@ export default {
 			        getSendMessage: function () {
 			            var _self = this;
 			            console.log(this.$route.query.type+","+sendId);
-			            this.$http.get( "/api/collect/send_message", {
+			            this.$http.get( "/collect/send_message", {
 			                params: {type:this.$route.query.type,id:sendId}
 			             }).then(function (response) {
 			                if (response.data.code == 0||response.data.code==200) {
@@ -909,7 +909,7 @@ export default {
 			        doPlays:function (url,thumb) {
 			            console.log(url);
 			            if(isApp){
-			                window.appApi.openVideo("/api/static/webstatic/mycenter/play_video.html",url,"视频详情",thumb);
+			                window.appApi.openVideo("/static/webstatic/mycenter/play_video.html",url,"视频详情",thumb);
 			            }else{
 			                setCookie("vUrl", url);
 			                console.log(getCookie("vUrl"));
@@ -926,7 +926,7 @@ export default {
 			        },
 					loadData: function () {
 						var _self = this;
-						this.$http.get("/api/collect/list", {
+						this.$http.get("/collect/list", {
 							params: pageParams
 						}).then(function (response) {
 							if (response.data.code == 0||response.data.code==200) {
@@ -956,13 +956,13 @@ export default {
 						
 					},
 					openProduct: function (id) {
-						appApi.openNewWindow('/api/static/webstatic/mall/market/product_detail.html?goodsId=' + id);
+						appApi.openNewWindow('/static/webstatic/mall/market/product_detail.html?goodsId=' + id);
 					},
 			        getFileUrl: function(id) {
-			            return "/api/cdish/file/download?id=" + id;
+			            return "/cdish/file/download?id=" + id;
 			        },
 			        getMsgFileUrl: function(id) {
-			            return "/api/collect/file/download?id="+id;
+			            return "/collect/file/download?id="+id;
 			        },
 					dishDownLoad:function (id) {
 						var _self = this;

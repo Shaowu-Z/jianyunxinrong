@@ -20,7 +20,7 @@ import './assets/css/common/layer.less';
 Vue.use(router)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
-Vue.prototype.HOST = '/api'
+Vue.prototype.HOST = ''
 
 /* eslint-disable no-new */
 new Vue({

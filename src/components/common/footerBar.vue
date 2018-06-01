@@ -16,6 +16,9 @@
 <script>
 
 export default {
+  props:{
+    title:Object
+  },
   data () {
     return {
       footerTab: [
@@ -33,8 +36,8 @@ export default {
         },
         {
           tabText: '我的',
-          tabName: '/static/webstatic/mycenter/mycenter.html',
-          routerPath: '/static/webstatic/mycenter/mycenter.html',
+          tabName: '/myHome',
+          routerPath: '/myHome',
           index: 0
         }
       ]
@@ -45,6 +48,7 @@ export default {
       console.log(index)
       switch (index) {
         case 0:
+        console.log(this.title)
           window.webactivity.openMessagePage()
           break
         case 1:

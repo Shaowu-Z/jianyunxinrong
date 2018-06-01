@@ -75,7 +75,7 @@ export default {
             this.loginParams.certCode = this.$refs.user.value;
             this.loginParams.pwd = this.$refs.pwd.value;
             var _this=this
-            this.$http.post("/api/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
+            this.$http.post("/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
                 console.log(response);
                 if(rs.code === 0){
@@ -84,10 +84,10 @@ export default {
                     //登录环信
                     window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
                      //保存用户信息
-                     window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
+                    window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
                        try {
-                           _this.$http.post("/api/concats_api/checked_message").then(function (response) {
+                           _this.$http.post("/concats_api/checked_message").then(function (response) {
                                 //debugger;
                                 //alert("检测推送成功！");
                             }).catch(function (error) {
@@ -97,7 +97,7 @@ export default {
                         } catch (e) {
                             console.info("出现异常(继续运行代码):" + e);
                         }
-                    _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                    _this.$router.push({path:'/myHome'});
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;

@@ -277,7 +277,7 @@
 
 <script>
 import footerBar from '../common/footerBar'
-// import {findTeamList} from '../../api/seek'
+// import {findTeamList} from '../../seek'
 export default {
   components: {
 	footerBar,
@@ -322,14 +322,14 @@ export default {
       created() {
 		  //  企业信息
         var _self = this;
-        this.$http.post('/api/concats_api/find_team_list',{}).then(function (response) {
+        this.$http.post('/concats_api/find_team_list',{}).then(function (response) {
             console.log("数据",response.data.result)
 			_self.$data.items = response.data.result;
         }).catch(function (error) {
             console.info(error);
         });
 		// this.seekFindTeamList()
-        this.$http.post('/api/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
+        this.$http.post('/chart/column/table_swprojectinfo?used=getPro',{}).then(function (response) {
             console.log("数据",response.data.result)
 			_self.$data.projects = response.data.result;
 			console.log(_self.$data.projects);

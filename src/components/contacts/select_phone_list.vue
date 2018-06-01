@@ -100,7 +100,7 @@ export default {
             var phoneMap = this.$data.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
-            this.$http.post("/api/concats_api/insert_add_info", addVo).then(function (response) {
+            this.$http.post("/concats_api/insert_add_info", addVo).then(function (response) {
                 var friendVO = response.data.result;
                 if(friendVO.isOwnOrFriend=="0"){
                     msg("不可添加自己为好友!");
@@ -164,7 +164,7 @@ export default {
             console.info(newJsonMember);
 
             var newJsonTeamVo = {teamId:teamId,projectTeamMemberTList:newJsonMember};
-            this.$http.post("/api/concats_api/batch_add_member_f",newJsonTeamVo).then(function (response) {
+            this.$http.post("/concats_api/batch_add_member_f",newJsonTeamVo).then(function (response) {
                 //_self.$data.items = response.data.result;
                 loading('批量操作成功！');
                 window.location.href = locationUrl;
@@ -399,7 +399,7 @@ export default {
                 //查询用户的好友
                 var param = new FormData();
                 param.append("userId", "");
-                this.$http.post("/api/concats_api/find_eg_list", param).then(function (response) {
+                this.$http.post("/concats_api/find_eg_list", param).then(function (response) {
                     var resultArray = response.data.result;
                     var resultStr = ",";
                     for(var i in resultArray){

@@ -97,7 +97,7 @@ export default {
 //								}
 //							})
 //                      }
-        this.$http.post("/api/pcontact_api/createinviteinfo", param).then(function(response) {
+        this.$http.post("/pcontact_api/createinviteinfo", param).then(function(response) {
             if(response.data.code == 0) {
                 
                 var inviteCodeAndType = response.data.result.inviteCode;
@@ -109,7 +109,7 @@ export default {
                 }
                 var options={};
 //                                options.url=getUrl()+"/q/aw?t="+type+"&c="+ic_t; //二维码的链接
-                options.url="/api/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode
+                options.url="/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode
                 options.dom="#qrcode";//二维码生成的位置
                 options.image=_self.$refs.image;//图片id
                 options.render="image";//设置生成的二维码是canvas格式，也有image、div格式
@@ -119,7 +119,7 @@ export default {
                 let qrcode = new QRCode('qrcode', {  
                     width: 100,  
                     height: 100, // 高度  
-                    text: "/api/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode, // 二维码内容
+                    text: "/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode, // 二维码内容
                     image: '',  
                     // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                     // background: '#f0f',  
@@ -155,7 +155,7 @@ export default {
             title = this.sites.currRoomName+"公司("+this.sites.currRoomClassName+")邀请您加入"+this.sites.projectName;
         }
         appApi.share(-1, title, "工程人员都在用建云信融，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
-    //    appApi.share(7, "", "", "", "https://cli.im/api/qrcode/code?text=https://www.baidu.com");
+    //    appApi.share(7, "", "", "", "https://cli.im/qrcode/code?text=https://www.baidu.com");
     }
     },
     created(){

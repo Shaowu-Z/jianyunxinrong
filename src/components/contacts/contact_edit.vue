@@ -68,7 +68,7 @@ export default {
         var _self = this;
         var memberId = this.$route.query.memberId;
         //var param = {memberId:memberId};
-        this.$http.get("/api/concats_api/query_member?memberId="+memberId).then(function (response) {
+        this.$http.get("/concats_api/query_member?memberId="+memberId).then(function (response) {
             _self.$data.none = response.data.result;
             console.info(response.data.result);
             //this.date.memberName =
@@ -105,7 +105,7 @@ export default {
                     ,yes: function(index, layero){
                         var memberId = _self.$route.query.memberId;
                         console.log(memberId);
-                        _self.$http.post("/api/concats_api/delete_member_batch",{memberIds:memberId}).then(function (response) {
+                        _self.$http.post("/concats_api/delete_member_batch",{memberIds:memberId}).then(function (response) {
                             console.info(response);
                             //loading('创建成员成功！正在跳转！');
                             //console.info(getUrl()+"/contacts/group_address_m.html?teamId="+teamIdB);
@@ -136,7 +136,7 @@ export default {
             var param = {memberType:this.none.memberType,memberId:memberId,teamId:this.none.teamId,deptId:deptId,userId:this.none.userId,memberName:this.none.memberName,phoneNumber:this.none.phoneNumber,position:this.none.position,createDate:this.none.createDate};
             //param.projectTeamMemberVOList=members;
             console.log(param);
-            this.$http.post("/api/concats_api/update_member", param).then(function (response) {
+            this.$http.post("/concats_api/update_member", param).then(function (response) {
                 console.info(response);
                 //loading('创建成员成功！正在跳转！');
                 // window.location.href="../contacts/group_address_m.html?teamId="+teamId;
@@ -156,7 +156,7 @@ export default {
                 var deptInId = 0;
                 var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
                 console.info(par);
-                this.$router.post("/api/concats_api/query_dept_list",par).then(function (response) {
+                this.$router.post("/concats_api/query_dept_list",par).then(function (response) {
                     var newJson =response.data.result;
                     console.info(newJson);
                     var deptHtml = '<ul class="mui-table-view group-list">';
@@ -204,7 +204,7 @@ export default {
             var deptInId = 0;
             var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
             console.info(par);
-            this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+            this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
                 var newJson =response.data.result;
                 console.info(newJson);
                 var deptHtml = '<ul class="mui-table-view group-list">';

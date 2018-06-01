@@ -60,7 +60,7 @@ export default {
         },
         //申请加入
         apply (teamId) {
-            this.$http.post("/api/project_team_info/send_add_team_News",teamId).then(function(response){
+            this.$http.post("/project_team_info/send_add_team_News",teamId).then(function(response){
                 console.log(response);
                 (function success(){
                     if(response.data.code==200||response.data.code==0){
@@ -77,7 +77,7 @@ export default {
             let data ={teamName:parseInt(this.$refs.searchStr.value)}
             let _self = this
             console.log(data);
-            this.$http.post("/api/project_team_info/search_list",data).then(function(response){
+            this.$http.post("/project_team_info/search_list",data).then(function(response){
                 console.log(response);
                 (function success (){
                     console.log(response.data.code);

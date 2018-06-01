@@ -109,7 +109,7 @@ export default {
         // contacts.setDeptHead('n','n',teamId,0,0);//获取头部信息
 
         this.teamId = this.$route.query.teamId;
-        this.$http.post("/api/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
+        this.$http.post("/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
             console.log(response.data.result);
             _self.none = response.data.result;
             var teamName = response.data.result.teamName;
@@ -118,7 +118,7 @@ export default {
         });
 
         var param = {teamId:teamId};
-        this.$http.post("/api/concats_api/query_team_members",param).then(function (response) {
+        this.$http.post("/concats_api/query_team_members",param).then(function (response) {
             _self.items = response.data.result;
             console.info(response.data.result,222222222222);
         }).catch(function (error) {
@@ -128,7 +128,7 @@ export default {
         //deptHtml 获取一级部门
         let par = {deptId:0,teamId:teamId};
         console.info(par);
-        this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+        this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
             _self.newJson =response.data.result;
             console.info(_self.newJson,111111111111);
         }).catch(function (error) {
@@ -168,7 +168,7 @@ export default {
     },
     filters: {
         getImageUrl: function (val) {
-            if(val==null || val=="") return "/api/static/images/60x60.gif";
+            if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         }
     }

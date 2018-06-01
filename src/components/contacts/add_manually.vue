@@ -123,7 +123,7 @@ export default {
             var param = {createType:"1",memberName:this.member_name,phoneNumber:this.phone_number,position:this.position,teamId:this.teamId,deptId:this.deptId};
             //param.projectTeamMemberVOList=members;
             console.log(param);
-            this.$http.post("/api/concats_api/create_member", param).then(function (response) {
+            this.$http.post("/concats_api/create_member", param).then(function (response) {
                 console.info(response);
                 /*layer.open({
                     content: '创建成功!'

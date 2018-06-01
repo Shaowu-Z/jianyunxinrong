@@ -75,7 +75,7 @@ export default {
     },
     created: function () {
         var _self = this;
-        this.$http.post("/api/concats_api/find_new_friends").then(function (response) {
+        this.$http.post("/concats_api/find_new_friends").then(function (response) {
              _self.$data.items = response.data.result;
              console.info(response.data.result);
          }).catch(function (error) {
@@ -91,7 +91,7 @@ export default {
             //alert(addId+'--'+'--'+addUserId+'----'+cellPhone+'-----'+userName);
             var addVo = {addId:addId,addUserId:addUserId,cellPhone:cellPhone,userName:userName};
             console.info(addVo);
-            this.$http.post("/api/concats_api/insert_friend_info",addVo).then(function (response) {
+            this.$http.post("/concats_api/insert_friend_info",addVo).then(function (response) {
                 loading('好友添加成功！');
                 window.location.href="../contacts/address_list.html";
             }).catch(function (error) {
@@ -101,7 +101,7 @@ export default {
     },
     filters: {
         getImageUrl: function (val) {
-            if(val==null || val=="") return "/api/static/images/60x60.gif";
+            if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         }
     }

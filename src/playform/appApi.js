@@ -162,7 +162,7 @@ function limitFn() {
 	//
 	var h = window.location.href;
 	//	var isLimit = h.indexOf("isLimit") > 0;
-	if(h.indexOf("/static/webstatic/mycenter/mycenter.html") > 0) {
+	if(h.indexOf("/myHome") > 0) {
 		var tmp = document.getElementById("cus_zy_item");
 
 		tmp.onclick = function() {

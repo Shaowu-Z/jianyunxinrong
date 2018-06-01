@@ -270,7 +270,7 @@
     </div>
 </div>-->
 <!--分享方式结束-->
-      <footer-bar></footer-bar>
+      <footer-bar :title="user"></footer-bar>
   </div>
 </template>
 
@@ -315,9 +315,9 @@ export default {
   created() {
     
 	  var _self = this;
-      this.$http.post("/api/user_api/find_login_user").then(function(response) {
-        _self.$data.user = response.data.result.userInfo;
-        console.log("用户",_self.$data.user)
+      this.$http.post("/user_api/find_login_user").then(function(response) {
+        _self.user = response.data.result.userInfo;
+        console.log("用户",_self.user)
       }).catch(function(error) {
         console.info(error);
       });

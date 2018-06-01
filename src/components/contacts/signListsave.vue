@@ -56,7 +56,7 @@ export default {
         if(this.opType==1){//修改
             // $("#del").show();
             var _self = this;
-            this.$http.post("/api/sign/query_seal_list",{id:this.tpId}).then(function (response) {
+            this.$http.post("/sign/query_seal_list",{id:this.tpId}).then(function (response) {
                 var resp = response.data.result[0];
                 _self.sealInfo = resp;
                 if(resp.isDefaultSign=="1"){
@@ -130,7 +130,7 @@ export default {
                 }
                 params.append("operateType",operateType);
                 console.log(params);
-                this.$http.post("/api/sign/save_seal_info",params).then(function (response) {
+                this.$http.post("/sign/save_seal_info",params).then(function (response) {
                     loading('保存成功，跳转中...！');
                     //msg("保存成功");
 
@@ -155,7 +155,7 @@ export default {
                     ,btn: ['确认', '取消']
                     ,yes: function(index, layero){
                         //继续
-                        this.$http.post("/api/sign/save_seal_info",params).then(function (response) {
+                        this.$http.post("/sign/save_seal_info",params).then(function (response) {
                             layer.closeAll();
                             loading('删除成功，跳转中...！');
                             //msg("删除成功");

@@ -51,7 +51,7 @@ export default {
 	},
 	created(){
 		var _self=this
-		this.$http.post("/api/user_api/user_code_card").then(function (response) {
+		this.$http.post("/user_api/user_code_card").then(function (response) {
 			console.log(response)
 			var info = response.data.result;
 			_self.card = info;

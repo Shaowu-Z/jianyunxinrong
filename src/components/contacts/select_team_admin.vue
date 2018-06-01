@@ -49,7 +49,7 @@ export default {
 		var _self = this;
         var teamId = this.$route.query.teamId;
         var param = {teamId:teamId,queryType:2};//查询团队管理员列表
-        this.$http.post("/api/concats_api/query_team_members",param).then(function (response) {
+        this.$http.post("/concats_api/query_team_members",param).then(function (response) {
             _self.items = response.data.result;
             console.info(response.data.result);
         }).catch(function (error) {
@@ -66,7 +66,7 @@ export default {
     },
     filters: {
         getImageUrl: function (val) {
-            if(val==null || val=="") return "/api/static/images/60x60.gif";
+            if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         }
     }

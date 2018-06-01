@@ -70,7 +70,7 @@ export default {
       var _self = this;
       var formparam = new FormData();
       formparam.append("userId",BackCookie.getCookie("userid"))
-      this.$http.post("/api/concats_api/query_team_list_info",formparam).then(function (response) {
+      this.$http.post("/concats_api/query_team_list_info",formparam).then(function (response) {
         console.log(1111);
         _self.$data.items = response.data.result;
         console.log("结果",response.data.result)

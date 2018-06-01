@@ -40,7 +40,7 @@ export default {
     },
     created(){
 			const _self=this
-            this.$http.post("/api/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
+            this.$http.post("/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
 				console.log(response);
 				_self.list = response.data.result;
 				console.log(_self.list);

@@ -78,7 +78,7 @@ export default {
 			var _self = this;
 			var deptId = window.location.href.split("?")[1].split("=")[2];
 			var param = {teamId:this.teamId,deptId:deptId};
-			this.$http.post("/api/concats_api/query_team_dept",param).then(function (response) {
+			this.$http.post("/concats_api/query_team_dept",param).then(function (response) {
 				var resp = response.data.result;
 				_self.data = resp;
 				app.parentDeptName = resp.deptName;//新建部门时，默认的上级部门为进入的部门
@@ -104,7 +104,7 @@ export default {
                 var deptInId = 0;
                 var par = {deptId:that.parentDeptId,teamId:that.teamId,parentDeptId:deptInId};
                 console.info(par);
-                that.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+                that.$http.post("/concats_api/query_dept_list",par).then(function (response) {
                     that.newJson =response.data.result;
                     console.info(that.newJson);
                 }).catch(function (error) {
@@ -142,7 +142,7 @@ export default {
             var deptInId = 0;
             var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
             console.info(par);
-            this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+            this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
                 that.newJson =response.data.result;
                 console.info(newJson);
                 var deptHtml = '<ul class="mui-table-view group-list">';
@@ -196,7 +196,7 @@ export default {
             var teamId = hrefPar.split("&")[0];
             var par = {parentDeptId:this.paDeptId,teamId:teamId,deptName:this.deptName,hasGroup:0};
             console.info(par);
-            this.$http.post("/api/concats_api/add_dept_info",par).then(function (response) {
+            this.$http.post("/concats_api/add_dept_info",par).then(function (response) {
                 var respCode = response.data.code;
                 if(respCode==202){
                     //重名

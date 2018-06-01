@@ -49,7 +49,7 @@ export default {
     },
     created: function () {
         var _self = this;
-        this.$http.post("/api/sign/query_seal_list",{sealType:this.type,businessId:this.tpId}).then(function (response) {
+        this.$http.post("/sign/query_seal_list",{sealType:this.type,businessId:this.tpId}).then(function (response) {
             
             _self.items = response.data.result;
             console.info(response.data.result);

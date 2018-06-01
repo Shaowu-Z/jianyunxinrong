@@ -265,7 +265,7 @@ export default {
         }
     },
     created:function (){
-        this.$http.post("/api/concats_api/query_tags_or_industry?queryType=0").then(function (response) {
+        this.$http.post("/concats_api/query_tags_or_industry?queryType=0").then(function (response) {
             var newJson =response.data.result;
             console.info(newJson);
             var tagsHtml = "";
@@ -283,7 +283,7 @@ export default {
             console.info(error);
         });
 
-        this.$http.post("/api/concats_api/query_tags_or_industry?queryType=1").then(function (response) {
+        this.$http.post("/concats_api/query_tags_or_industry?queryType=1").then(function (response) {
             var newJson =response.data.result;
             console.info(newJson);
             var industryHtml = "";
@@ -302,7 +302,7 @@ export default {
         });
 
         //获取专业
-        this.$http.post("/api/concats_api/query_tags_or_industry?queryType=2").then(function (response) {
+        this.$http.post("/concats_api/query_tags_or_industry?queryType=2").then(function (response) {
             var newJson =response.data.result;
             console.info(newJson);
             var majorHtml = "";
@@ -563,7 +563,7 @@ export default {
 		        region_name:_self.region_name,
 		        projectTeamMemberTList:members*/
 	        };
-	        this.$http.post("/api/concats_api/create_team_member", param).then(function (response) {
+	        this.$http.post("/concats_api/create_team_member", param).then(function (response) {
 		        console.info(response);
 		        if (response.data.code == 0) {
 			        loading('创建成功！正在跳转！');

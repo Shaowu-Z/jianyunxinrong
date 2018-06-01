@@ -166,7 +166,7 @@ export default {
         //  相当于setDeptHead
         var _self = this;
         this.teamId = this.$route.query.teamId;
-        this.$http.post("/api/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
+        this.$http.post("/concats_api/find_team_info?teamId="+this.teamId).then(function (response) {
             console.log(response.data.result);
             _self.none = response.data.result;
             var teamName = response.data.result.teamName;
@@ -195,7 +195,7 @@ export default {
             this.shade = false;
         },
         gorenzheng (teamId) {//进入企业认证
-            var url = "/api/static/webstatic/qiyerenzh/group_certification_company.html?teamId="+teamId;
+            var url = "/static/webstatic/qiyerenzh/group_certification_company.html?teamId="+teamId;
             window.appApi.openNewWindow(url);
         },
         jsTeam () {
@@ -224,7 +224,7 @@ export default {
         dissolutionTeam () {
             var pwd = document.getElementById("pwd").value;
             var param = {teamId:teamId,teamName:this.none.teamName,password:pwd};
-            this.$http.post("/api/concats_api/delete_team",param).then(function (response){
+            this.$http.post("/concats_api/delete_team",param).then(function (response){
                 var resp = response.data;
                 if(resp.code==400){
                     layer.open({

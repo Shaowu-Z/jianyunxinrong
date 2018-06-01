@@ -238,7 +238,7 @@ export default {
 		getCert:function (id) {
 			var _self = this;
 			if(id){
-				Base.load({url:"/api/app_team_rz/get_issue?issueId=" + id,dataType:"json"},function(response){
+				Base.load({url:"/app_team_rz/get_issue?issueId=" + id,dataType:"json"},function(response){
 					if (response.code == 0) {
 						_self.fm = response.result.issue;
 						_self.fm.issueTime = formDate(_self.fm.issueTime);

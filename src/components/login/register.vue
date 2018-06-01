@@ -91,7 +91,7 @@ export default {
 				alert("密码为6-16位字符！");
                 return false;
 			} else{
-				this.$http.post('/api/user_api/user_register',{params:this.regParams})
+				this.$http.post('/user_api/user_register',{params:this.regParams})
 				.then(function(response){
 					console.log(response);
 				}).catch(function (error) {
@@ -105,7 +105,7 @@ export default {
 			if(!this.myreg.test(this.params)){
 				alert('请正确填写手机号');
 			} else {
-				this.$http.post('/api/common_api/fetch_captcha',{phoneNum:this.params},{'contentType': "application/json"})
+				this.$http.post('/common_api/fetch_captcha',{phoneNum:this.params},{'contentType': "application/json"})
 				.then(function(response){
 					console.log(1111);
 				}).catch(function (error) {

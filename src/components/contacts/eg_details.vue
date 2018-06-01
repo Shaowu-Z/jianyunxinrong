@@ -132,7 +132,7 @@ export default {
         param.append("cellPhone", phone);
         var _self = this;
 
-        this.$http.post("/api/concats_api/query_contacts_info", param).then(function (response){
+        this.$http.post("/concats_api/query_contacts_info", param).then(function (response){
             var resp = response.data;
             console.info("res",resp);
             if(resp.code == 0){
@@ -208,7 +208,7 @@ export default {
             if(this.addClickNum++ > 0) return;
             var _self = this;
             var addVo = {cellPhone: this.items.cellPhone, receivedUserName: this.items.nickName};
-            this.$http.post("/api/concats_api/insert_add_info", addVo).then(function (response) {
+            this.$http.post("/concats_api/insert_add_info", addVo).then(function (response) {
                 if(response.data.code==0) {
                     var friendVO = response.data.result;
                     if (friendVO.isOwnOrFriend == "0") {
@@ -263,7 +263,7 @@ export default {
     },
     filters: {
         getImageUrl: function (val) {
-            if(val==null || val=="") return "/api/static/images/60x60.gif";
+            if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         }
     },

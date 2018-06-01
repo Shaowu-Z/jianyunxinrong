@@ -41,7 +41,7 @@ export default {
 		//获取参数
 		var url_params = this.$route.query.teamId;
 			_self.$data.teamId = url_params.teamId;
-			this.$http.get("/api/app_team_rz/get_issues?teamId=" + url_params).then(function (response) {
+			this.$http.get("/app_team_rz/get_issues?teamId=" + url_params).then(function (response) {
 				if (response.data.code == 0) {
                     var rs = response.data.result;  
 					_self.issue_list = rs.issue_list;

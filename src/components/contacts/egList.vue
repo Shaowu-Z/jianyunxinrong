@@ -85,7 +85,7 @@ export default {
             var param = new FormData();
             param.append("userId", "");
             param.append("key", _self.key);
-            this.$http.post("/api/concats_api/find_eg_list", param).then(function (response) {
+            this.$http.post("/concats_api/find_eg_list", param).then(function (response) {
                 console.info(response.data.result);
                 _self.friendsList = response.data.result
             }).catch(function (error) {
@@ -100,7 +100,7 @@ export default {
         var _self = this;
         var param = new FormData();
         param.append("userId", "");
-        this.$http.post("/api/concats_api/find_eg_list",param).then(function (response) {
+        this.$http.post("/concats_api/find_eg_list",param).then(function (response) {
             console.info(response.data.result);
             _self.friendsList = convertData(response.data.result)
             console.log(_self.friendsList);
@@ -118,7 +118,7 @@ export default {
 				for (var j = 0; j < friendArray.length; j++) {
 
 					var f = friendArray[j].nameInitials.toUpperCase();
-					var headerImage = !friendArray[j].avatar|| friendArray[j].avatar=="" ? "/api/static/images/60x60.gif" : friendArray[j].avatar;
+					var headerImage = !friendArray[j].avatar|| friendArray[j].avatar=="" ? "/static/images/60x60.gif" : friendArray[j].avatar;
 					var obj = {name: friendArray[j].remarksName, phone:friendArray[j].cellPhone, friendsUserId: friendArray[j].friendsUserId, headerImage:headerImage};
 					switch (f) {
 						case 'A' :

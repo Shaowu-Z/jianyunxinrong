@@ -6,7 +6,7 @@ _self : window,
     var deptInId = 0;
     var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
     console.info(par);
-    this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+    this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
         var newJson =response.data.result;
         console.info(newJson);
         var deptHtml = '<ul class="mui-table-view group-list">';
@@ -46,7 +46,7 @@ setDeptHead(org,is_dept,teamId,deptId,userId){
     var par = {deptId:deptId,teamId:teamId};
     console.log(11111,contacts._self);
     console.log(222222222,contacts)
-    _this.$http.post("/api/concats_api/query_team_dept",par).then((response) => {
+    _this.$http.post("/concats_api/query_team_dept",par).then((response) => {
         var newJson =response.data.result;
         console.info("info=="+newJson);
         console.info(newJson.regionName);
@@ -117,7 +117,7 @@ sendCard(imId,headerImage,rName,recUserId) {
     }*/
     cardUserId = window.location.href.split('?')[1].split('=')[2].split("&")[0];//名片userId
 
-    var url="/api/static/webstatic/contacts/eg_details.html?userId="+cardUserId;//名片地址
+    var url="/static/webstatic/contacts/eg_details.html?userId="+cardUserId;//名片地址
     var phone;//名片手机号
     var nickName;//名片昵称
     var avatarUrl;//名片头像地址
@@ -125,7 +125,7 @@ sendCard(imId,headerImage,rName,recUserId) {
 
     var param = new FormData();
     param.append("userId", cardUserId);//根据名片userId查询名片名称、头像、手机号
-    this.$http.post("/api/concats_api/query_contacts_info", param).then(function (response){
+    this.$http.post("/concats_api/query_contacts_info", param).then(function (response){
         var data = response.data.result.contactsInfoVO;
         nickName = data.nickName;
         avatarUrl = data.userAvatar;
@@ -168,10 +168,10 @@ groupChat(tempId){
         param = {operateType:1,userIds:userIds,tempId:tempId};
     }
 
-    this.$http.post("/api/concats_api/update_gm_temp",param).then(function (response) {
+    this.$http.post("/concats_api/update_gm_temp",param).then(function (response) {
         var data = response.data.result;
         console.info(data);
-        var url="/api/static/webstatic/contacts/group_create.html?tempId="+data.tempId;//
+        var url="/static/webstatic/contacts/group_create.html?tempId="+data.tempId;//
         appApi.openNewWindow(url);
     }).catch(function (error) {
         console.info(error);

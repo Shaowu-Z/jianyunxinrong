@@ -181,7 +181,7 @@
 					params.append("imageName", file.name);
 					params.append("width", 96);
 					params.append("height", 96);
-					this.$http.post("/api/user_api/upload_user_base64icon", params).then(function(response) {
+					this.$http.post("/user_api/upload_user_base64icon", params).then(function(response) {
 
 						if(response.data.code == 0) {
 							var map = response.data.result;
@@ -209,7 +209,7 @@
 		created: function() {
 			var _self = this;
 
-			this.$http.post("/api/user_api/find_login_user").then(function(response) {
+			this.$http.post("/user_api/find_login_user").then(function(response) {
 				var info = response.data.result;
 				console.log("用户信息", info)
 				_self.$data.user = info.userInfo;
@@ -234,7 +234,7 @@
 				 * 如果没有二维码，则创建一个用户的二维码(为保证进入二维码页面显示正常) 2017.12.4
 				 */
 				if(!info.userInfo.userQrUrl) {
-					this.$http.post( "/api/user_api/user_code_card").then(function(response) {
+					this.$http.post( "/user_api/user_code_card").then(function(response) {
 
 					}).catch(function(error) {
 						console.info(error);
@@ -247,7 +247,7 @@
 			}).catch(function(error) {
 				console.info(error);
 			});
-			this.$http.post("/api/common_api/area_list").then(function(response) {
+			this.$http.post("/common_api/area_list").then(function(response) {
 				_self.$data.areas = response.data.result;
 				initAddr();
 			}).catch(function(error) {
@@ -319,7 +319,7 @@
 				location.href = "../register/change_phone.html";
 			},
 			updateInfo: function(obj) {
-				this.$http.post("/api/user_api/update_user_info", obj).then(function(resp) {
+				this.$http.post("/user_api/update_user_info", obj).then(function(resp) {
 					//如果修改是姓名，则更新用户在android的用户信息
 					if(obj.uName) {
 						window.appApi.updateUserInfo(obj.uName, "");

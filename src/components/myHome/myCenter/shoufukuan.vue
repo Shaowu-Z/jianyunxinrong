@@ -521,7 +521,7 @@ import setting from '../../../playform/config.js'
 						var param = {
 							id: paramMap.id,
 						}
-						this.$http.post( "/api/contract/get_content", param).then(function(response) {
+						this.$http.post( "/contract/get_content", param).then(function(response) {
 							if(response.data.code == 200) {
 								console.log(response.data.result)
 								var norl = JSON.parse(response.data.result.noralJson)
@@ -564,7 +564,7 @@ import setting from '../../../playform/config.js'
 					},
 					imgsrc: function(n) {
 						var _self = this
-						this.$http.post("/api/sass_api/ get_uploadfile_info?fileIdStr=" + n).then(function(response) {
+						this.$http.post("/sass_api/ get_uploadfile_info?fileIdStr=" + n).then(function(response) {
 							if(response.data.code == 200) {
 								console.log(response.data.result)
 								for(var i = 0; i < response.data.result.length; i++) {
@@ -828,7 +828,7 @@ import setting from '../../../playform/config.js'
 						}
 						//alert(JSON.stringify(param))
 						console.log(param);
-						this.$http.post( "/api/contract/save", param).then(
+						this.$http.post( "/contract/save", param).then(
 							function(response) {
 								//alert(JSON.stringify(response));
 								if(response.data.code == 200) {
@@ -902,7 +902,7 @@ import setting from '../../../playform/config.js'
 					 */
 					getHt: function() {
 						var _self = this
-						this.$http.post("/api/chart/column/table_w_contract?used=getContract&projectSN=" +
+						this.$http.post("/chart/column/table_w_contract?used=getContract&projectSN=" +
 								_self.$data.projectSn)
 							.then(
 								function(response) {
@@ -925,7 +925,7 @@ import setting from '../../../playform/config.js'
 					moveimg: function(n) {
 						var _self = this;
 						console.log(n)
-						this.$http.post("/api/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrimg[n - 1]).then(function(response) {
+						this.$http.post("/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrimg[n - 1]).then(function(response) {
 							if(response.data.code == 0) {
 								console.log(response.data)
 								ludan("删除成功", 1, 2)
@@ -949,7 +949,7 @@ import setting from '../../../playform/config.js'
 					},
 					movefj: function(n) {
 						var _self = this;
-						this.$http.post(  "/api/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrfujian[n - 1]).then(function(response) {
+						this.$http.post(  "/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrfujian[n - 1]).then(function(response) {
 							if(response.data.code == 0) {
 								console.log(response.data)
 								ludan("删除成功", 1, 2)

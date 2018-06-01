@@ -102,7 +102,7 @@ export default {
             let teamId = this.$route.query.teamId;
             let userId = this.$route.query.userId;
             // setDeptHead('x','n',teamId,0,userId);//获取头部信息
-            this.$http.post("/api/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
+            this.$http.post("/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
                 console.log(response.data.result);
                 _self.none = response.data.result;
                 var teamName = response.data.result.teamName;
@@ -112,7 +112,7 @@ export default {
         }else if(this.from==0){//组织架构
             let teamId = this.$route.query.teamId;
             // setDeptHead('y','n',teamId,0,userId);//获取头部信息
-            this.$http.post("/api/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
+            this.$http.post("/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
                 console.log(response.data.result);
                 _self.none = response.data.result;
                 var teamName = response.data.result.teamName;
@@ -123,7 +123,7 @@ export default {
             let teamId = this.$route.query.teamId;
             let userId = this.$route.query.userId;
             // setDeptHead('x','n',teamId,0,userId);//获取头部信息
-            this.$http.post("/api/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
+            this.$http.post("/concats_api/find_team_info?teamId=" + this.$route.query.teamId).then(function (response) {
                 console.log(response.data.result);
                 _self.none = response.data.result;
                 var teamName = response.data.result.teamName;
@@ -134,7 +134,7 @@ export default {
         }
 
         var param = {teamId:this.$route.query.teamId};
-        this.$http.post("/api/concats_api/query_team_members",param).then(function (response) {
+        this.$http.post("/concats_api/query_team_members",param).then(function (response) {
             _self.items = response.data.result;
             console.info("team",response.data.result);
         }).catch(function (error) {
@@ -145,7 +145,7 @@ export default {
         //var teamId = window.location.href.split('?')[1].split('=')[1];
         var par = {deptId:0,teamId:this.$route.query.teamId,isOrg:"y"};
         console.info(par);
-        this.$http.post("/api/concats_api/query_dept_list",par).then(function (response) {
+        this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
             _self.newJson =response.data.result;
             console.info(_self.newJson);
 
@@ -191,7 +191,7 @@ export default {
     },
     filters: {
         getImageUrl: function (val) {
-            if(val==null || val=="") return "/api/static/images/60x60.gif";
+            if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         }
     }
