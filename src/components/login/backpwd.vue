@@ -51,4 +51,8 @@ export default {
 <style>
     @import "../../assets/css/common/style.less";
     @import "../../assets/css/common/layer.less";
+	.register-form{
+		background: #fff;
+  		margin-top: 0;
+	}
 </style>
