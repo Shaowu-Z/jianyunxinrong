@@ -20,7 +20,7 @@
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "mui": "^0.0.1",
-    "qrcodejs2": "^0.0.2",
+    "qrcodejs2": "0.0.2",
     "style-loader": "^0.20.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"

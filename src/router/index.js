@@ -18,7 +18,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/static/webstatic/register/login.html'
+      redirect: '/loginIndex'
     },
     work,
     market,
