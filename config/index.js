@@ -48,6 +48,7 @@ module.exports = {
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // proxyTable:{},
     proxyTable: {
       '*': {
         target: 'http://java.winfreeinfo.com',

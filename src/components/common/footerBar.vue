@@ -24,7 +24,7 @@ export default {
       footerTab: [
         {
           tabText: '消息',
-          tabName: 'news',
+          tabName: '/news',
           routerPath: '/news',
           index: 0
         },
@@ -36,8 +36,8 @@ export default {
         },
         {
           tabText: '我的',
-          tabName: '/myHome',
-          routerPath: '/myHome',
+          tabName: '/static/webstatic/mycenter/mycenter.html',
+          routerPath: '/static/webstatic/mycenter/mycenter.html',
           index: 0
         }
       ]
