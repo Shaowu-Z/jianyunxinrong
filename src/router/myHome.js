@@ -16,6 +16,8 @@ const settingIndex = resolve => require(['@/components/myHome/setting/settingInd
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
 const project = resolve => require(['@/components/myHome/project'], resolve)
 const aboutUs = resolve => require(['@/components/myHome/setting/aboutUs'], resolve)
+const privacy_policy = resolve => require(['@/components/myHome/setting/privacy_policy'], resolve)
+const serviceAgreement = resolve => require(['@/components/myHome/setting/serviceAgreement'], resolve)
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
@@ -57,7 +59,15 @@ const myHomeConfig = {
         },
         {
           path: '/aboutUs',
-          component: aboutUs
+          component: aboutUs,
+        },
+        {
+          path: '/privacy_policy',
+          component: privacy_policy
+        },
+        {
+          path: '/serviceAgreement',
+          component: serviceAgreement
         }
       ]
     },

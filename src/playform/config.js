@@ -149,7 +149,7 @@ function setting () {
 			IOS_URL = "https://www.pgyer.com/jyxr";
 			UPLOAD_SERVER_ADDRESS = "http://res.winfreeinfo.com:8000";
 		}
-		return HAOSI_SERVER_ADDRESS;
+		return SUNLINE_SERVER_ADDRESS;
 	}
 	//获取上下文路径
 	function getUrl() {
@@ -212,14 +212,14 @@ function setting () {
 		curr_url : window.location.href,
 		/****** sunline平台 ******/
 		// sunline域名
-		
+		SUNLINE_SERVER_ADDRESS:newFunction(),
 		//上传服务器地址
 		UPLOAD_SERVER_ADDRESS : '',
 		/****** sunline平台 ******/
 
 		/****** 好思平台 ******/
 		// 好思域名
-		HAOSI_SERVER_ADDRESS : newFunction(),
+		HAOSI_SERVER_ADDRESS : '',
 		// 好思域名关键部分截取
 		HAOSI_SERVER_SHORT : '',
 		// 好思域名通配符
