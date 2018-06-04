@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+var webpack=require("webpack")
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -30,6 +31,9 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
+  },
+  externals: {
+    mui: 'mui'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json','less'],
@@ -88,5 +92,13 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  plugins: [  
+    new webpack.optimize.CommonsChunkPlugin('common.js'),  
+    new webpack.ProvidePlugin({  
+      jQuery: "jquery",  
+      $: "jquery"  ,
+      "window.jQuery":"jquery"
+    })  
+  ] 
 }

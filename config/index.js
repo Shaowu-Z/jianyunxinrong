@@ -56,6 +56,7 @@ module.exports = {
         filter: function (pathname, req) {
           return pathname.match('^/concats_api')
             || pathname.match('^/pcontact_api')
+            || pathname.match('^/notice_api')
             || pathname.match('^/user_api');
         }
       },
