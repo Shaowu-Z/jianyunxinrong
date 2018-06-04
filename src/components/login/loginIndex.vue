@@ -72,6 +72,7 @@ export default {
   },
   methods:{
     loginAction(){
+        alert(333)
             this.loginParams.certCode = this.$refs.user.value;
             this.loginParams.pwd = this.$refs.pwd.value;
             var _this=this
@@ -80,12 +81,14 @@ export default {
                 console.log(response);
                 if(rs.code === 0){
                      //登录成功
+                     alert(588)
                     var userInfo = rs.result.userInfo;
                     //登录环信
                     window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
                      //保存用户信息
                     window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
+
                        try {
                            _this.$http.post("/concats_api/checked_message").then(function (response) {
                                 //debugger;
@@ -97,7 +100,9 @@ export default {
                         } catch (e) {
                             console.info("出现异常(继续运行代码):" + e);
                         }
-                    _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                        
+                    _this.$router.push({path:'/myHome'});
+                    // window.appApi.goHome('/myHome')
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;

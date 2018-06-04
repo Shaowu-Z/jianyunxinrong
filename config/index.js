@@ -43,13 +43,14 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    host:"0.0.0.0",
+    host:"192.168.0.93",
     port: 8080,
-    autoOpenBrowser: false,
+    autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // proxyTable:{},
     proxyTable: {
+
       '*': {
         target: 'http://java.winfreeinfo.com',
         changeOrigin: true,
@@ -60,6 +61,24 @@ module.exports = {
             || pathname.match('^/user_api');
         }
       },
+
+      // '*'
+      // : {
+      //   target: 'http://java.winfreeinfo.com',
+      //   changeOrigin: true,
+      //   filter: function (pathname, req) {
+      //     return pathname.match('^/concats_api')
+      //       || pathname.match('^/pcontact_api')
+      //       || pathname.match('^/user_api');
+      //   },
+        
+      // },
+      // "/api": {
+      //   target: "http://java.winfreeinfo.com",
+      //   changeOrigin:true,
+      //   pathRewrite: {"^/api" : ""}
+      // }
+
     },
     cssSourceMap: false
   },

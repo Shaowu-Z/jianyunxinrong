@@ -31,8 +31,8 @@
 			</div>
 			<div class="about-footer">
 				<p class="info-link">
-					<a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/service_agreement.html')">服务协议</a>
-					<a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/privacy_policy.html')">隐私政策</a>
+					<a href="javascript:;" @click="service_agreement">服务协议</a>
+					<a href="javascript:;" @click="privacy_policy">隐私政策</a>
 				</p>
 				<!--<p class="info-link">&lt;!&ndash;<a href="#">官网</a>&ndash;&gt;<a href="service_agreement.html">服务条款</a></p>-->
 				<p class="copy-right">Copyright©2017 建云信融</p>
@@ -77,7 +77,14 @@
     methods:{
         goBack(){
             this.$router.go(-1)
-        }
+		},
+		privacy_policy(){
+			this.$router.push({path:'/privacy_policy'});
+		},
+		service_agreement(){
+			this.$router.push({path:'/serviceAgreement'});
+		}
+		
     },
     mounted(){
     }
