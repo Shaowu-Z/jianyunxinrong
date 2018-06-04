@@ -56,7 +56,7 @@
 		<!--项目联系人-->
 		<div v-for="(itemone,submenu) in projects" :key="submenu">
 			<ul class="mui-table-view">
-				<button v-if="itemone.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstatic/contacts/group_manage.html?teamId='+itemone.teamId+'&code='+itemone.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button>
+				<!-- <button v-if="itemone.memberType=='1'" :onclick="['appApi.openNewWindow(getUrl()+\'/static/webstaticwebstatic/contacts/group_manage.html?teamId='+itemone.teamId+'&code='+itemone.identifyNo+'\')']" class="mui-btn mui-btn-link btn-invite"><span class="mui-icon iconfont icon-manage"></span>管理</button> -->
 				<li class="mui-table-view-cell mui-collapse fold-title">
 					<a @click ="clickshow(submenu)" class="border-bottom">
 						<div class="mui-slider-cell">

@@ -48,6 +48,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // proxyTable:{},
     proxyTable: {
       // '*'
       // : {

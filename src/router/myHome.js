@@ -24,7 +24,7 @@ const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'],
 const shoufukuan = resolve => require(['@/components/myHome/myCenter/shoufukuan'], resolve)
 
 const myHomeConfig = {
-  path: '/myHome',
+  path: '/static/webstatic/mycenter/mycenter.html',
   component: myHome,
   children: [
     {

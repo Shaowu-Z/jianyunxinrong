@@ -86,20 +86,21 @@ export default {
                     //登录环信
                     window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
                      //保存用户信息
-                    window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
+                    window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
-                    //    try {
-                    //        _this.$http.post("/concats_api/checked_message").then(function (response) {
-                    //             //debugger;
-                    //             //alert("检测推送成功！");
-                    //         }).catch(function (error) {
-                    //             //alert("检测推送失败！");
-                    //             console.info(error);
-                    //         });
-                    //     } catch (e) {
-                    //         console.info("出现异常(继续运行代码):" + e);
-                    //     }
-                        alert(25)
+
+                       try {
+                           _this.$http.post("/concats_api/checked_message").then(function (response) {
+                                //debugger;
+                                //alert("检测推送成功！");
+                            }).catch(function (error) {
+                                //alert("检测推送失败！");
+                                console.info(error);
+                            });
+                        } catch (e) {
+                            console.info("出现异常(继续运行代码):" + e);
+                        }
+                        
                     _this.$router.push({path:'/myHome'});
                     // window.appApi.goHome('/myHome')
                 }else if(rs.code == 1002){
