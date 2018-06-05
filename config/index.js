@@ -43,7 +43,7 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    host:"192.168.0.93",
+    host:"localhost",
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
@@ -51,33 +51,22 @@ module.exports = {
     // proxyTable:{},
     proxyTable: {
 
-      '*': {
-        target: 'http://java.winfreeinfo.com',
-        changeOrigin: true,
-        filter: function (pathname, req) {
-          return pathname.match('^/concats_api')
-            || pathname.match('^/pcontact_api')
-            || pathname.match('^/notice_api')
-            || pathname.match('^/user_api');
-        }
-      },
-
-      // '*'
-      // : {
+      // '*': {
       //   target: 'http://java.winfreeinfo.com',
       //   changeOrigin: true,
       //   filter: function (pathname, req) {
       //     return pathname.match('^/concats_api')
       //       || pathname.match('^/pcontact_api')
+      //       || pathname.match('^/notice_api')
       //       || pathname.match('^/user_api');
-      //   },
-        
+      //   }
       // },
-      // "/api": {
-      //   target: "http://java.winfreeinfo.com",
-      //   changeOrigin:true,
-      //   pathRewrite: {"^/api" : ""}
-      // }
+      // },
+      "/api": {
+        target: "http://java.winfreeinfo.com",
+        changeOrigin:true,
+        pathRewrite: {"^/api" : ""}
+      }
 
     },
     cssSourceMap: false

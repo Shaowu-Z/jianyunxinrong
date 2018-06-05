@@ -4,10 +4,6 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 var webpack=require("webpack")
-<<<<<<< HEAD
-
-=======
->>>>>>> 88fa9968ff963d6779fe9b8deb4821c3fd302131
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
