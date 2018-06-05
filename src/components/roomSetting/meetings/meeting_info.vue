@@ -32,7 +32,7 @@
                                     <div class="oa-contact-cell mui-table">
                                         <a :href="['javascript:appApi.openNewWindow(pagepath+\'/contacts/eg_details.html?type=f&userId='+member.userId+'\')']">
                                         <div class="oa-contact-avatar mui-table-cell">
-                                            <img v-if="member.userIcon==null" src="../../../static/images/60x60.gif" alt="" />
+                                            <img v-if="member.userIcon==null" src="../../../assets/images/60x60.gif" alt="" />
                                             <img v-if="member.userIcon!=null" v-bind:src="member.userIcon" alt="..." />
                                         </div>
                                         <div class="oa-contact-content mui-table-cell">
@@ -97,7 +97,7 @@ export default {
             console.log("查询会议详情");
             var parame = new FormData();
             parame.append("mId",mId)
-            axios.post(getUrl() + "/pcontact_api/findMeetingInfoById", parame).then(function (response) {
+            this.$http.post("/pcontact_api/findMeetingInfoById", parame).then(function (response) {
                 if (response.data.code == 0) {
                     var result = response.data.result;
                     if (result != null) {
@@ -146,7 +146,8 @@ export default {
             var _self = this;
             var formdata=new FormData();
             formdata.append("roomId",mId);
-            axios.post(getUrl() + "/pcontact_api/getroominfo", formdata).then(function (response) {
+            console.log(formdata);
+            this.$http.post("/pcontact_api/getroominfo", formdata).then(function (response) {
                 if(response.data.code==0){
                     _self.form.roomClass = response.data.result;
                 }
@@ -156,13 +157,13 @@ export default {
             });
 
         },
-        selectRoomMember:function(mId){//查询房间成员
+        selectRoomMember:function(mId,projectSN){//查询房间成员
             var _self = this;
             var formdata=new FormData();
             formdata.append("roomId",mId);
             formdata.append("memberType","12");
             formdata.append("projectSn",projectSN);
-            axios.post(getUrl() + "/pcontact_api/findRoomUsers", formdata).then(function (response) {
+            this.$http.post("/pcontact_api/findRoomUsers", formdata).then(function (response) {
                 if(response.data.code==0){
                     var result=response.data.result;
                     console.log("加载房间成员...",result)
@@ -188,7 +189,7 @@ export default {
                     formdata.append("userIds",userId);
                     formdata.append("roomId",mId);
                     loading("请稍后...");
-                    axios.post(getUrl() + "/pcontact_api/addvisitors", formdata).then(function (response) {
+                    this.$http.post("/pcontact_api/addvisitors", formdata).then(function (response) {
                         setTimeout(function(){
                             appApi.broadcast("reLoad()");
                             appApi.openChat(_self.form.roomClass.roomImId,"/static/images/ico_project_memting.jpg",_self.form.roomClass.name,2);},500)
@@ -215,7 +216,7 @@ export default {
             var _self = this;
             var formdata = new FormData();
             formdata.append("meetingId",mId)
-            axios.post(getUrl() + "/pcontact_api/findHuiyijiyao", formdata).then(function (response) {
+            this.$http.post("/pcontact_api/findHuiyijiyao", formdata).then(function (response) {
                 if(response.data.code==0){
                     var result=response.data.result;
                     if(result!=null&&result!=""){

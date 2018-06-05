@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import QRCode from 'qrcodejs2'
+// import QRCode from 'qrcodejs2'
+import xyqrcode from '../../playform/xyqrcode'
 export default {
     data(){
         return{
@@ -114,20 +115,21 @@ export default {
                 options.image=_self.$refs.image;//图片id
                 options.render="image";//设置生成的二维码是canvas格式，也有image、div格式
                 _self.$data.codeinfo = "#快来加入“建云项目协作群”，协作最方便#复制此信息，打开“建云信融”app即可加入"+_self.sites.projectName+"项目！" + inviteCode;
-            function qrcode(options) {  
-                console.log(1111);
-                let qrcode = new QRCode('qrcode', {  
-                    width: 100,  
-                    height: 100, // 高度  
-                    text: "/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode, // 二维码内容
-                    image: '',  
-                    // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                    // background: '#f0f',  
-                    // foreground: '#ff0'  
-                })  
-                console.log(qrcode,11111111111111111)  
-                }
-                qrcode();
+            // function qrcode(options) {  
+            //     console.log(1111);
+            //     let qrcode = new QRCode('qrcode', {  
+            //         width: 100,  
+            //         height: 100, // 高度  
+            //         text: "/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode, // 二维码内容
+            //         image: '',  
+            //         // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+            //         // background: '#f0f',  
+            //         // foreground: '#ff0'  
+            //     })  
+            //     console.log(qrcode,11111111111111111)  
+            //     }
+            //     qrcode();
+                xyqrcode(options);
                 console.log(options);
                 _self.sites = response.data.result;
                 _self.$data.type=_self.$route.query.dataType

@@ -12,6 +12,10 @@ const videoComment = resolve => require(['@/components/roomSetting/video/videoCo
 const meetings = resolve => require(['@/components/roomSetting/meetings'], resolve)
 const meetingIndex = resolve => require(['@/components/roomSetting/meetings/meetingsIndex'], resolve)
 const meetingLaunch = resolve => require(['@/components/roomSetting/meetings/meeting_launch'], resolve)
+const meeting_info = resolve => require(['@/components/roomSetting/meetings/meeting_info'], resolve)
+const template = resolve => require(['@/components/roomSetting/template'], resolve)
+const fileTemplate = resolve => require(['@/components/roomSetting/template/fileTemplate'], resolve)
+const open_common = resolve => require(['@/components/roomSetting/template/open_common'], resolve)
 
 const roomSettingConfig = {
   path: '/static/newwebstatic',
@@ -75,8 +79,26 @@ const roomSettingConfig = {
           path: '/static/webstatic/meeting/meeting_launch.html',
           component: meetingLaunch
         },
+        {
+          path: '/static/webstatic/meeting/meeting_info.html',
+          component: meeting_info
+        },
       ],
-    }
+    },
+    {
+      path: '/static/webstatic/dish/common.html',
+      component: template,
+      children:[
+        {
+          path: '',
+          component: fileTemplate
+        },
+        {
+          path: '/static/webstatic/dish/open_common.html',
+          component: open_common
+        },
+      ]
+    },
   ]
 }
 

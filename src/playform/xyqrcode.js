@@ -1,3 +1,4 @@
+import './jquery-qrcode-0.14.0'
 function xyqrcode(options) {
   console.log("????????????"+options)
   var settings = {
@@ -34,8 +35,8 @@ function xyqrcode(options) {
       }
       console.log(settings)
   settings.text=settings.url; //在qrcode生成二维码的地址是text。这里就把url赋值给text
-      // document.getElementById(settings.dom)[.qrcode(settings);
-      $(settings.dom).qrcode(settings);
+    //   document.getElementById(settings.dom).qrcode(settings);
+      document.getElementById(settings.dom).qrcode(settings);
       
     
 }

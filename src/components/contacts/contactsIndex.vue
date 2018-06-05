@@ -420,7 +420,8 @@ export default {
 		// this.$router.push({path:'/static/newwebstatic/gonggao/gonggao.html'})
 		// this.$router.push({path:'/static/webstatic/dish/index.html'})
 		// this.$router.push({path:'/static/webstatic/community/community.html'})
-		this.$router.push({path:'/static/webstatic/meeting/meetings.html'})
+		// this.$router.push({path:'/static/webstatic/meeting/meetings.html'})
+		this.$router.push({path:'/static/webstatic/dish/common.html'})
 	},
 	doShare:function () {
 		var _self = this;

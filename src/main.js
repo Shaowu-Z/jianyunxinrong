@@ -26,6 +26,7 @@ let http = axios.create({
 })
 Vue.use(http)
 Vue.use(router)
+Vue.use(mui)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http
 Vue.config.productionTip = false
