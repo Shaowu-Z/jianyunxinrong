@@ -16,6 +16,9 @@ const meeting_info = resolve => require(['@/components/roomSetting/meetings/meet
 const template = resolve => require(['@/components/roomSetting/template'], resolve)
 const fileTemplate = resolve => require(['@/components/roomSetting/template/fileTemplate'], resolve)
 const open_common = resolve => require(['@/components/roomSetting/template/open_common'], resolve)
+const myDownstream = resolve => require(['@/components/roomSetting/myDownstream'], resolve)
+const room_set_mysub = resolve => require(['@/components/roomSetting/myDownstream/room_set_mysub'], resolve)
+const room_set_shaer = resolve => require(['@/components/roomSetting/myDownstream/room_set_shaer'], resolve)
 
 const roomSettingConfig = {
   path: '/static/newwebstatic',
@@ -96,6 +99,20 @@ const roomSettingConfig = {
         {
           path: '/static/webstatic/dish/open_common.html',
           component: open_common
+        },
+      ]
+    },
+    {
+      path: '/static/webstatic/roomshare/room_set_mysub.html',
+      component: myDownstream,
+      children:[
+        {
+          path: '',
+          component: room_set_mysub
+        },
+        {
+          path: '/static/webstatic/roomshare/room_set_shaer.html',
+          component: room_set_shaer
         },
       ]
     },

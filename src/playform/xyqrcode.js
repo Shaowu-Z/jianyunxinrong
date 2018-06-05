@@ -1,6 +1,5 @@
 import './jquery-qrcode-0.14.0'
 function xyqrcode(options) {
-  console.log("????????????"+options)
   var settings = {
       dom:'',
       render: 'canvas',   //生成二维码的格式还有image、div
@@ -10,7 +9,7 @@ function xyqrcode(options) {
       fill:"#333333", //二维码纹路的颜色
       fontcolor:"#ff9818",
       fontname:"Ubuntu",
-      image:{},
+      image:'',
       label:"",
       mPosX:0.5,   //图片在X轴的位置
       mPosY:0.5,    //图片在X轴的位置
@@ -23,7 +22,6 @@ function xyqrcode(options) {
   };
       if (options) {
           $.extend(settings, options);//options对象跟settings比较，相同的就替换，没有的就添加
-
       }
       if(settings.dom.length==0){
           window.console.log("Error: dom empty!");
@@ -33,11 +31,9 @@ function xyqrcode(options) {
           window.console.log("Error: url empty!");
           return;
       }
-      console.log(settings)
   settings.text=settings.url; //在qrcode生成二维码的地址是text。这里就把url赋值给text
-    //   document.getElementById(settings.dom).qrcode(settings);
-      document.getElementById(settings.dom).qrcode(settings);
-      
+    
+    $(settings.dom).qrcode(settings)
     
 }
 export default xyqrcode
