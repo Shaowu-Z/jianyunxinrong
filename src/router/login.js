@@ -15,7 +15,7 @@ const privacyPolicy = resolve => require(['@/components/login/privacyPolicy'], r
 const personApprove = resolve => require(['@/components/login/personApprove'], resolve)
 
 const loginConfig = {
-  path: '/loginIndex',
+  path: '/static/webstatic/register/login.html',
   component: login,
   children: [
     {

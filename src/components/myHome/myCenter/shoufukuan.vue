@@ -50,7 +50,7 @@
     
                 <header class="mui-bar mui-bar-nav">
     
-                    <h1 class="mui-title">收付款</h1>
+                    <h1 class="mui-title">收付款-Vue</h1>
     
                     <a class="mui-action-back mui-icon iconfont icon-back" style="display: none;" v-show="backicon!=0" @click="back"></a>
     
@@ -243,7 +243,8 @@ import setting from '../../../playform/config.js'
             return {
     
                 id: '',
-    
+				zrimg:[],
+				zrfujian:[],
                 backicon: 0,
     
                 tapyewu: false,
@@ -457,7 +458,6 @@ import setting from '../../../playform/config.js'
                 return t;
     
             }
-            // console.log("LLLLLLL"+formDate())
             var _self = this;
     
             var getTime = new Date()
@@ -488,7 +488,7 @@ import setting from '../../../playform/config.js'
     
             }
     
-            _self.$data.nowtime = nowshi + ":" + noefen + ":" +
+            _self.nowtime = nowshi + ":" + noefen + ":" +
     
                 nowmiao
     
@@ -496,7 +496,7 @@ import setting from '../../../playform/config.js'
     
             _self.form.MissionStartDate = formDate(printTime);
     
-            _self.$data.dateShenqing = formDate(printTime);
+            _self.dateShenqing = formDate(printTime);
     
             //获取合同
     
@@ -523,40 +523,39 @@ import setting from '../../../playform/config.js'
 						}
 						this.$http.post( "/contract/get_content", param).then(function(response) {
 							if(response.data.code == 200) {
-								console.log(response.data.result)
 								var norl = JSON.parse(response.data.result.noralJson)
 								var cont = JSON.parse(response.data.result.contentJson)
 								var data = response.data.result
 								//页面上显示信息
-								_self.$data.form.MissionStartDate = norl.tablefields.dateFasheng.split(" ")[0]
-								_self.$data.jine = norl.tablefields.money
-								_self.$data.htong = norl.tablefields.contractName
-								_self.$data.companyBuyName = norl.tablefields.companyBuyName
-								_self.$data.companySaleName = norl.tablefields.companySaleName
-								_self.$data.beiz = norl.tablefields.beizhu
+								_self.form.MissionStartDate = norl.tablefields.dateFasheng.split(" ")[0]
+								_self.jine = norl.tablefields.money
+								_self.htong = norl.tablefields.contractName
+								_self.companyBuyName = norl.tablefields.companyBuyName
+								_self.companySaleName = norl.tablefields.companySaleName
+								_self.beiz = norl.tablefields.beizhu
 								//附件
 								_self.imgsrc(norl.attachment)
 								//提交信息
-								_self.$data.id = paramMap.id
-								_self.$data.cfgid = norl.table.id
-								_self.$data.projectSn = norl.table.projectid
-								_self.$data.isRoomId = norl.table.roomid
-								_self.$data.isRoomName = norl.table.roomname
+								_self.id = paramMap.id
+								_self.cfgid = norl.table.id
+								_self.projectSn = norl.table.projectid
+								_self.isRoomId = norl.table.roomid
+								_self.isRoomName = norl.table.roomname
 
-								_self.$data.currRoomImId = norl.currRoomImId
-								_self.$data.currRoomClassName = norl.currRoomClassName
-								_self.$data.currRoomName = norl.curRoomName
-								_self.$data.toImId.push(norl.toImid)
+								_self.currRoomImId = norl.currRoomImId
+								_self.currRoomClassName = norl.currRoomClassName
+								_self.currRoomName = norl.curRoomName
+								_self.toImId.push(norl.toImid)
 
-								_self.$data.fapiaoTaxLv = norl.tablefields.fapiaoTaxLv
-								_self.$data.piao = norl.tablefields.fapiaoTitle
-								_self.$data.projectName = norl.tablefields.projectName
-								_self.$data.companyBuyID = norl.tablefields.companyBuyID
-								_self.$data.companyBuyRoomID = norl.tablefields.companyBuyRoomID
-								_self.$data.companySaleID = norl.tablefields.companySaleID
-								_self.$data.companySaleRoomID = norl.tablefields.companySaleRoomID
-								_self.$data.contractType = norl.tablefields.contractType
-								_self.$data.contractID = norl.tablefields.contractID,
+								_self.fapiaoTaxLv = norl.tablefields.fapiaoTaxLv
+								_self.piao = norl.tablefields.fapiaoTitle
+								_self.projectName = norl.tablefields.projectName
+								_self.companyBuyID = norl.tablefields.companyBuyID
+								_self.companyBuyRoomID = norl.tablefields.companyBuyRoomID
+								_self.companySaleID = norl.tablefields.companySaleID
+								_self.companySaleRoomID = norl.tablefields.companySaleRoomID
+								_self.contractType = norl.tablefields.contractType
+								_self.contractID = norl.tablefields.contractID,
 
 									_self.getHt()
 							}
@@ -566,21 +565,20 @@ import setting from '../../../playform/config.js'
 						var _self = this
 						this.$http.post("/sass_api/ get_uploadfile_info?fileIdStr=" + n).then(function(response) {
 							if(response.data.code == 200) {
-								console.log(response.data.result)
 								for(var i = 0; i < response.data.result.length; i++) {
 									if(response.data.result[i].type == 1) { //imgs fujians name
-										_self.$data.imgs.push({
+										_self.imgs.push({
 											src: response.data.result[i].longurl
 										})
-										imgid.push(response.data.result[i].id)
+										_self.imgid.push(response.data.result[i].id)
 									} else {
-										_self.$data.fujians.push({
-											name: response.data.result[i].filename
+										_self.fujians.push({
+											name: response.data.result[i].filename,
+											fileid:response.data.result[i].id
 										})
-										fujianid.push(response.data.result[i].id)
+										_self.fujianid.push(response.data.result[i].id)
 									}
 								}
-
 							}
 						})
 					},
@@ -724,11 +722,11 @@ import setting from '../../../playform/config.js'
 					 */
 					back: function() {
 						var _self = this
-						if(_self.$data.backicon == 1) {
+						if(_self.backicon == 1) {
 							appApi.showBack()
 						}
-						if(_self.$data.backicon > 0) {
-							_self.$data.backicon = _self.$data.backicon - 1
+						if(_self.backicon > 0) {
+							_self.backicon = _self.backicon - 1
 						}
 
 					},
@@ -741,119 +739,142 @@ import setting from '../../../playform/config.js'
 						// 	labels: ['年', '月', '日'], //设置默认标签区域提示语 
 						// })
 						// dtpicker.show(function(e) {
-						// 	_self.$data.form.MissionStartDate = e.value
+						// 	_self.form.MissionStartDate = e.value
 						// 	dtpicker.dispose()
 						// })
 					},
 					initData: function(type) {
 						//获取数据
 						var _self = this;
+						
+						
 						if(type == 1) {
-							ludan("保存中", 0, 1)
+							// ludan("保存中", 0, 1)
+							var save=layer.open({
+								type:2,
+								title:"保存中",
+								content:""
+							})
 						} else {
-							ludan("提交中", 0, 1)
+							// ludan("提交中", 0, 1)
+							var push=layer.open({
+								type:2,
+								title:"提交中",
+								content:""
+							})
 						}
 						var fjid
-						if(_self.$data.attachmentIds == '') {
-							_self.$data.attachmentIds = ''
+						if(_self.attachmentIds == '') {
+							_self.attachmentIds = ''
 						} else {
-							_self.$data.attachmentIds = "," + _self.$data.attachmentIds
+							_self.attachmentIds = "," + _self.attachmentIds
 						}
-						if(imgid.toString() == '') {
-							fjid = fujianid.toString()
-						} else if(fujianid.toString() == '') {
-							fjid = imgid.toString()
+						console.log("imgid",_self.imgid)
+						console.log("fujianid",_self.fujianid)
+						var imgId=[]
+						var fjId=[]
+						for(var i=0;i<_self.imgid.length;i++){
+							imgId.push(_self.imgid[i].fileId)
+						}
+						for(var i=0;i<_self.fujianid.length;i++){
+							fjId.push(_self.fujianid[i].fileId)
+						}
+						console.log("(((((((("+imgId.toString() )
+						if(imgId.toString() == '') {
+							fjid = fjId.toString()
+						} else if(fjId.toString() == '') {
+							fjid = imgId.toString()
 						} else {
-							fjid = imgid.toString() + "," + fujianid.toString()
+							fjid =imgId.toString() + "," +fjId.toString()
 						}
 						//						var id="5a6ecbda70474ea263ddfbb5";
 						//						var uid='10392';
-						if(_self.$data.jine == '') {
-							_self.$data.jine = 0
+						if(_self.jine == '') {
+							_self.jine = 0
 						}
 						var tablefield = {
-							userName: decodeURI(username),
-							userID: userid,
-							dateShenqing: _self.$data.dateShenqing +
+							userName: _self.username,
+							userID: _self.userid,
+							dateShenqing: _self.dateShenqing +
 								" 00:00:00",
-							projectName: _self.$data.projectName,
-							projectSN: _self.$data.projectSn,
-							contractName: _self.$data.htong,
-							contractType: _self.$data.contractType,
-							companySaleName: _self.$data.companySaleName,
-							companySaleID: _self.$data.companySaleID,
-							companySaleRoomID: _self.$data.companySaleRoomID,
-							companyBuyName: _self.$data.companyBuyName,
-							companyBuyID: _self.$data.companyBuyID,
-							companyBuyRoomID: _self.$data.companyBuyRoomID,
-							money: parseFloat(_self.$data.jine),
-							htTotal: _self.$data.jine,
-							fapiaoTitle: _self.$data.piao,
-							fapiaoTaxLv: _self.$data.fapiaoTaxLv,
+							projectName: _self.projectName,
+							projectSN: _self.projectSn,
+							contractName: _self.htong,
+							contractType: _self.contractType,
+							companySaleName: _self.companySaleName,
+							companySaleID: _self.companySaleID,
+							companySaleRoomID: _self.companySaleRoomID,
+							companyBuyName: _self.companyBuyName,
+							companyBuyID: _self.companyBuyID,
+							companyBuyRoomID: _self.companyBuyRoomID,
+							money: parseFloat(_self.jine),
+							htTotal: _self.jine,
+							fapiaoTitle: _self.piao,
+							fapiaoTaxLv: _self.fapiaoTaxLv,
 							dateFasheng: _self.form.MissionStartDate +
-								" " + _self.$data.nowtime,
-							beizhu: _self.$data.beiz,
+								" " + _self.nowtime,
+							beizhu: _self.beiz,
 							confirmStatus: "",
 							confirmPersonName: "",
 							confirmPersonID: "",
-							contractType: _self.$data.contractType,
-							contractID: _self.$data.contractID,
+							contractType: _self.contractType,
+							contractID: _self.contractID,
 						}
-						if(_self.$data.id != '') {
-							tablefield["id"] = _self.$data.id
+						if(_self.id != '') {
+							tablefield["id"] = _self.id
 						}
 						if(type == 2) {
-							_self.$data.confirm = '1';
-                            _self.$data.postType = '1';
+							_self.confirm = '1';
+                            _self.postType = '1';
 						} else {
-							_self.$data.confirm = '0';
+							_self.confirm = '0';
 						}
+						console.log(JSON.stringify(fjid)+"//////////"+JSON.stringify(_self.attachmentIds))
 						var param = {
 							table: {
-								id: _self.$data.cfgid,
-								projectid: _self.$data.projectSn,
-								roomid: _self.$data.isRoomId,
-								roomname: _self.$data.isRoomName
+								id: _self.cfgid,
+								projectid: _self.projectSn,
+								roomid: _self.isRoomId,
+								roomname: _self.isRoomName
 							},
-							confirm: _self.$data.confirm,
-                            postType: _self.$data.postType ,
-							attachment: fjid + _self.$data.attachmentIds,
-							toroomimid: _self.$data.toImId.toString(),
-							currRoomImId: _self.$data.currRoomImId,
-							currRoomClassName: _self.$data.currRoomClassName,
-							curRoomName: _self.$data.currRoomName,
-							toImid: _self.$data.toImId.toString(),
+							confirm: _self.confirm,
+                            postType: _self.postType ,
+							attachment: fjid + _self.attachmentIds,
+							toroomimid: _self.toImId.toString(),
+							currRoomImId: _self.currRoomImId,
+							currRoomClassName: _self.currRoomClassName,
+							curRoomName: _self.currRoomName,
+							toImid: _self.toImId.toString(),
 							tablefields: tablefield,
 							subtablefields: [],
 						}
 						//alert(JSON.stringify(param))
-						console.log(param);
 						this.$http.post( "/contract/save", param).then(
 							function(response) {
 								//alert(JSON.stringify(response));
 								if(response.data.code == 200) {
-									//console.log(response)
-									_self.$data.id = response.data.result.id
-									_self.$data.sites = response.data.result.tablefields;
+									_self.id = response.data.result.id
+									_self.sites = response.data.result.tablefields;
                                     var titletype = encodeURIComponent(encodeURIComponent("收付款"));
-                                    var title = encodeURIComponent(encodeURIComponent(decodeURI(username)));
+									var title = encodeURIComponent(encodeURIComponent(_self.username));
+									alert("保存成功")
 									var todojson = {
-										"title": decodeURI(username) + "的收付款",
-										"titileTwo": _self.$data.currRoomClassName + "-" + _self.$data.currRoomName,
+										"title": decodeURI(_self.username)+ "的收付款",
+										"titileTwo": _self.currRoomClassName + "-" + _self.currRoomName,
 										"content": "名称=" +
-											_self.$data.htong +
+											_self.htong +
 											//											"|日期=" +
 											//											_self.form.MissionStartDate +
 											"|金额=" +
-											_self.$data.jine + "元",
+											_self.jine + "元",
 										"fileCount": "0",
-										"url": getUrl() + '/static/newwebstatic/shoufukuan/transfer.html?id=' + response.data.result.id,
+										"url": '/static/newwebstatic/shoufukuan/transfer.html?id=' + response.data.result.id,
 										"colorString": "",
 										"todoViewableMember": "0",
-										"toImId": _self.$data.toImId
+										"toImId": _self.toImId
 											.toString(),
-										"formuserid": userid,
-										"currentRoomImid": _self.$data.currRoomImId,
+										"formuserid": _self.userid,
+										"currentRoomImid": _self.currRoomImId,
 										"chatType": "2",
 										"relation": response.data.result.id,
 										//"score" : "", //评分待办必要参数，设置分数
@@ -863,29 +884,45 @@ import setting from '../../../playform/config.js'
 										"setButton": [{
 											"type": 1, //按钮点击类型 1=请求url 2=打开url
 											"name": "确认",
-											"url": getUrl() + "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.$data.id + "&projectSn=" + _self.$data.projectSn + "&userid=" + userid+"&sendtype=1"
+											"url":"/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&sendtype=1"
 										}, {
 											"type": 1, //按钮点击类型 1=请求url 2=打开url
 											"name": "退回",
-											"url": getUrl() + "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.$data.id + "&projectSn=" + _self.$data.projectSn + "&userid=" + userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
+											"url":"/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
 										}]
 									}
-									console.log(JSON.stringify(todojson))
+									alert(JSON.stringify(todojson))
 									if(type == 2) {
-										layer.close(ludan("提交中", 0, 1))
+										layer.close(push)
 										window.appApi.sendTodo(todojson, function(d) {
 											//											alert(JSON.stringify(d))
 											if(d.code == 200) {
-												ludan("提交成功", 3, 2, function() {
-                                                    appApi.refreshData(2);
-													/*window.appApi.closeNewWindow()*/
+												// ludan("提交成功", 3, 2, function() {
+                                                //     appApi.refreshData(2);
+												// 	/*window.appApi.closeNewWindow()*/
+												// })
+												layer.open({
+													time:2,
+													type:1,
+													title:"提交成功",
+													content:"",
+													end:function(){
+														appApi.refreshData(2);
+													}
 												})
+												
 											}
 
 										})
 									} else {
-										layer.close(ludan("保存中", 0, 1))
-										ludan("保存成功", 3, 2)
+										layer.close(save)
+										layer.open({
+											type:1,
+											time:2,
+											title:"保存成功",
+											content:""
+										})
+										// ludan("保存成功", 3, 2)
 									}
 								} else {
 									//							msg("获取云盘目录信息失败")
@@ -902,13 +939,11 @@ import setting from '../../../playform/config.js'
 					 */
 					getHt: function() {
 						var _self = this
-						this.$http.post("/chart/column/table_w_contract?used=getContract&projectSN=" +
-								_self.$data.projectSn)
+						this.$http.post("/chart/column/table_w_contract?used=getContract&projectSN=58096389-d6bf-487d-8d5c-fb90d0404be8")
 							.then(
 								function(response) {
 									if(response.data.code == 200) {
                                         _self.hetongx = response.data.result;
-                                        console.log(":::::::::::0"+ response.data.result )
                                         
 									} else {
 										//							msg("获取云盘目录信息失败")
@@ -920,84 +955,101 @@ import setting from '../../../playform/config.js'
                         // mui('.mui-off-canvas-wrap').offCanvas().show()
                         this.hetongmove=!this.hetongmove
                         // document.getElementsByClassName("mui-right")[0].className ="mui-right move-left"
-						// console.log(getUrl() + "/chart/column/table_w_contract?used=getContract&projectSN=" + _self.$data.projectSn)
 					},
 					moveimg: function(n) {
 						var _self = this;
-						console.log(n)
-						this.$http.post("/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrimg[n - 1]).then(function(response) {
+						console.log( _self.zrimg)
+						this.$http.post("/sass_api/delete_file?userId=userid&fileId=" + _self.zrimg[n - 1].fileId).then(function(response) {
 							if(response.data.code == 0) {
-								console.log(response.data)
-								ludan("删除成功", 1, 2)
+								// ludan("删除成功", 1, 2)
+								layer.open({
+									time:1,
+									type:1,
+									title:"删除成功",
+									content:''
+
+								})
 							}
 						}).catch(function(error) {
-							ludan(error, 1, 3);
+							// ludan(error, 1, 3);
+							layer.open({
+									time:2,
+									type:1,
+									title:error,
+									content:''
+
+								})
 						})
-						imgid.splice(n - 1, 1)
-						console.log(imgid)
-						console.log(imgid.toString())
-						//						console.log(_self.$data.imgs)
-						_self.$data.imgs.splice(n - 1, 1)
-						//						console.log(_self.$data.imgs)
-						//						console.log(n-1)
-						//						console.log(_self.$data.zrimg)
-						_self.$data.zrimg.splice(n - 1, 1)
-						//						console.log(_self.$data.zrimg)
-						//						console.log(typeof JSON.stringify(_self.$data.zrimg))
-						//						console.log(imgid[1])
+						this.imgid.splice(n - 1, 1)
+						_self.imgs.splice(n - 1, 1)
+						_self.zrimg.splice(n - 1, 1)
 						//						imgid.remove(n-1)
 					},
 					movefj: function(n) {
 						var _self = this;
-						this.$http.post(  "/sass_api/delete_file?userId=userid&fileId=" + _self.$data.zrfujian[n - 1]).then(function(response) {
+						console.log(_self.zrfujian)
+						console.log(n)
+						this.$http.post("/sass_api/delete_file?userId=userid&fileId=" + _self.zrfujian[n-1].fileId).then(function(response) {
 							if(response.data.code == 0) {
-								console.log(response.data)
-								ludan("删除成功", 1, 2)
+								// ludan("删除成功", 1, 2)
+								layer.open({
+									time:1,
+									type:1,
+									title:"删除成功",
+									content:''
+
+								})
+								_self.fujianid.splice(n - 1, 1)
+								_self.fujians.splice(n - 1, 1)
+								_self.zrfujian.splice(n - 1, 1)
 							}
 						}).catch(function(error) {
-							ludan(error, 1, 3);
+							// ludan(error, 1, 3);
+							var error=error
+							layer.open({
+									time:2,
+									type:1,
+									title:error,
+									content:''
+
+								})
 						})
-						fujianid.splice(n - 1, 1)
-						_self.$data.fujians.splice(n - 1, 1)
-						//						console.log(n-1)
-						_self.$data.zrfujian.splice(n - 1, 1)
-						console.log(_self.$data.zrfujian)
-						console.log(typeof JSON.stringify(_self.$data.zrfujian))
-						//						console.log(imgid[1])
+						// this.fujianid.splice(n - 1, 1)
+						// _self.fujians.splice(n - 1, 1)
+						// _self.zrfujian.splice(n - 1, 1)
 						//						imgid.remove(n-1)
 					},
 					hetongmore: function(event) {
                         var _self = this
                         this.hetongmove=false
-						console.log(event)
-						_self.$data.htong = event.contractName
-						_self.$data.contractType = event.contractType
-						_self.$data.companyBuyName = event.companyBuyName
-						_self.$data.companyBuyID = event.companyBuyID
-						_self.$data.companyBuyRoomID = event.companyBuyRoomID
-						_self.$data.companyBuyRoomImID = event.companyBuyRoomImID
-						_self.$data.companySaleName = event.companySaleName
-						_self.$data.companySaleID = event.companySaleID
+						_self.htong = event.contractName
+						_self.contractType = event.contractType
+						_self.companyBuyName = event.companyBuyName
+						_self.companyBuyID = event.companyBuyID
+						_self.companyBuyRoomID = event.companyBuyRoomID
+						_self.companyBuyRoomImID = event.companyBuyRoomImID
+						_self.companySaleName = event.companySaleName
+						_self.companySaleID = event.companySaleID
 
-						_self.$data.contractID = event.contractID
-						_self.$data.companySaleRoomID = event.companySaleRoomID
-						_self.$data.companySaleRoomImID = event.companySaleRoomImID
-						_self.$data.contractID = event.contractID
-						_self.$data.piao = event.fapiaoTitle
-						_self.$data.fapiaoTaxLv = event.fapiaoTaxLv
-						if(_self.$data.companySaleRoomImID != _self.$data.currRoomImId) {
-							_self.$data.toImId
-								.push(_self.$data.companySaleRoomImID);
+						_self.contractID = event.contractID
+						_self.companySaleRoomID = event.companySaleRoomID
+						_self.companySaleRoomImID = event.companySaleRoomImID
+						_self.contractID = event.contractID
+						_self.piao = event.fapiaoTitle
+						_self.fapiaoTaxLv = event.fapiaoTaxLv
+						if(_self.companySaleRoomImID != _self.currRoomImId) {
+							_self.toImId
+								.push(_self.companySaleRoomImID);
 						}
-						if(_self.$data.companyBuyRoomImID != _self.$data.currRoomImId) {
-							_self.$data.toImId
-								.push(_self.$data.companyBuyRoomImID);
+						if(_self.companyBuyRoomImID != _self.currRoomImId) {
+							_self.toImId
+								.push(_self.companyBuyRoomImID);
 						}
 						_self.mask()
 					},
 					jump5: function() {
 						var _self = this
-						if(_self.$data.htong == "") {
+						if(_self.htong == "") {
                             layer.open({
 		                    content:"请选择合同"
 		                    ,skin: 'msg'
@@ -1006,7 +1058,7 @@ import setting from '../../../playform/config.js'
 							// ludan("请选择合同", 2, 1)
 						} else {
 							appApi.hideBack()
-							_self.$data.backicon = 1;
+							_self.backicon = 1;
 						}
 					},
 					jump1: function() {
@@ -1015,12 +1067,16 @@ import setting from '../../../playform/config.js'
 					},
 					//上传文件
 					upfile: function(event) {
-						loading("上传中")
+						// loading("上传中")
+						var load=layer.open({
+							type: 2,
+							title:"上传中",
+						})
 						sessionStorage.removeItem("cunnews")
 						var _self = this
 						var file = document.getElementById(event.target.id).files;
 						var zrid = document.getElementById(event.target.id).getAttribute("id")
-						var url = getUrl() + "/sass_api/upload_file";
+						var url = "/api/sass_api/upload_file";
 						var form = new FormData();
 						var forimg = []
 						var forfile = []
@@ -1036,12 +1092,12 @@ import setting from '../../../playform/config.js'
 									//加载图片获取图片真实宽度和高度
 									var image = new Image();
 									image.onload = function() {
-										width = image.width;
-										height = image.height;
+										var width = image.width;
+										var height = image.height;
 
 									};
 									image.src = data;
-									//									_self.$data.imgs.push({
+									//									_self.imgs.push({
 									//										src: image.src
 									//									})
 									forimg.push({
@@ -1053,13 +1109,12 @@ import setting from '../../../playform/config.js'
 							} else if(zrid == "files") {
 								sessionStorage.setItem("cunnews", "2")
 								var na = file[i].name
-								//								_self.$data.fujians.push({
+								//								_self.fujians.push({
 								//									name: f.name
 								//								})
 								forfile.push({
 									name: f.name
 								})
-								console.log(_self.$data.fujians)
 							}
 							//							reader.readAsDataURL(f);
 
@@ -1070,58 +1125,76 @@ import setting from '../../../playform/config.js'
 							form.append("type", "2");
 						}
 						form.append("module", "contractnote");
-						form.append("userid", userid);
-						xhr = new XMLHttpRequest();
+						form.append("userid", this.userid);
+						var xhr = new XMLHttpRequest();
 						xhr.open("post", url, true);
 						xhr.onload = function(evt) {
 							//请求完成
 							//							var data = JSON.parse(evt.target.responseText);
 							//							if(sessionStorage.getItem("cunnews") == 1) {
 							//								imgid.push(data.result.success)
-							//								_self.$data.zrimg = imgid.toString().split(',')
+							//								_self.zrimg = imgid.toString().split(',')
 							//							} else {
 							//								fujianid.push(data.result.success)
-							//								_self.$data.zrfujian = fujianid.toString().split(',')
-							//								console.log(fujianid.toString())
+							//								_self.zrfujian = fujianid.toString().split(',')
 							//							}
-							layer.close(loading("上传中"))
 						};
 						xhr.onreadystatechange = function(evt) {
-							console.log(xhr)
 							if(xhr.readyState == 4 && xhr.status == 200) {
-								console.log(xhr.responseText);
 								var data = JSON.parse(evt.target.responseText);
 								if(sessionStorage.getItem("cunnews") == 1) {
-									_self.$data.imgs = _self.$data.imgs.concat(forimg)
+									_self.imgs = _self.imgs.concat(forimg)
 									if(data.result.success.indexOf(",") == -1) {
-										imgid.push(data.result.success)
+										// console.log("?????"+JSON.stringify(data.result.success))
+										// _self.imgid.push(data.result.success)
+										_self.imgid=_self.imgid.concat(data.result.success)
 									} else {
-										imgid = imgid.concat(data.result.success.split(","))
+										_self.imgid = _self.imgid.concat(data.result.success.split(","))
 									}
 									//										imgid.push(data.result.success)
-									console.log(imgid)
-									_self.$data.zrimg = imgid.toString().split(',')
+									// _self.zrimg = _self.imgid.toString().split(',')
+									_self.zrimg = _self.imgid
+									console.log( JSON.stringify(_self.imgid)+"......"+_self.zrimg)
 								} else {
 									if(data.result.success.indexOf(",") == -1) {
-										fujianid.push(data.result.success)
+										// _self.fujianid.push(data.result.success)
+										_self.fujianid=_self.fujianid.concat(data.result.success)
 									} else {
-										fujianid = fujianid.concat(data.result.success.split(","))
+										_self.fujianid = _self.fujianid.concat(data.result.success.split(","))
 									}
 									//										fujianid.push(data.result.success)
-									_self.$data.fujians = _self.$data.fujians.concat(forfile)
-									_self.$data.zrfujian = fujianid.toString().split(',')
-									console.log(fujianid.toString())
+									_self.fujians = _self.fujians.concat(forfile)
+									
+									// _self.zrfujian = _self.fujianid.toString().split(',')
+									_self.zrfujian = _self.fujianid
+									// console.log(_self.zrfujian)
 								}
-								ludan("上传成功", 1, 2)
+								// ludan("上传成功", 1, 2)
+								layer.close(load)
+								layer.open({
+									time: 1,
+									type: 1,
+									title:"上传成功",
+									content:''
+								})
 							} else if(xhr.readyState == 4 && xhr.status == 500) {
-								ludan("上传失败", 1, 1)
+								layer.open({
+									time: 2,
+									type: 1,
+									title:"上传失败",
+									content:''
+								})
 							}
 						}
 						xhr.onerror = function(evt) {
-							ludan("请求失败", 1, 1)
+							layer.open({
+									time: 2,
+									type: 2,
+									title:"请求失败",
+									content:''	
+								})
 							//请求失败
 							var data = JSON.parse(evt.target.responseText);
-							console.log("data");
 						};
 						xhr.send(form);
 
@@ -1222,7 +1295,9 @@ import setting from '../../../playform/config.js'
     			}*/
     
     
-    
+    .listdown{
+		background: #fff
+	}
     .add-contain {
     
         opacity: 0;
@@ -1384,4 +1459,11 @@ import setting from '../../../playform/config.js'
         display: none;
         z-index: 8;
     }
+	.step .container-file .oa-contact-avatar .my-list-icon {
+		height: 36px;
+		width: 36px;
+		border-radius: 0;
+		background: url(/static/img/file-type.b8a75d3.png) no-repeat;
+		background-size: 100%;
+	}
 </style>

@@ -67,6 +67,12 @@
 					关于我们
 				</a>
 			</div>
+			<div class="singlebox" @click="addproject">
+				<a class="mui-navigate-right">
+					<!--<span class="my-list-icon label-guanyu"></span>-->
+					收付款
+				</a>
+			</div>
 		</div>
 		
 		<!--遮罩层-->
@@ -123,6 +129,9 @@ export default {
 		},
 		aboutus(){
 			this.$router.push({path:'/aboutUs'});
+		},
+		addproject(){
+			this.$router.push({path:'/static/newwebstatic/shoufukuan/work_content.html'});
 		},
 		deletes(){
 			this.$data.cooke=	window.appApi.getAppCacheSize();
