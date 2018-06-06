@@ -22,6 +22,8 @@ const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
 const shoufukuan = resolve => require(['@/components/myHome/myCenter/shoufukuan'], resolve)
+const transfer_sfk = resolve => require(['@/components/myHome/myCenter/transfer_sfk'], resolve)
+const newInfo = resolve => require(['@/components/myHome/myCenter/newInfo'], resolve)
 
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
@@ -84,8 +86,16 @@ const myHomeConfig = {
           component: myCollect
         },
         {
-          path: '/shoufukuan',
+          path: '/static/newwebstatic/shoufukuan/work_content.html',
           component: shoufukuan
+        },
+        {
+          path: '/static/newwebstatic/shoufukuan/transfer.html',
+          component: transfer_sfk
+        },
+        {
+          path: '/static/newwebstatic/shoufukuan/newInfo.html',
+          component: newInfo
         }
       ]
     },

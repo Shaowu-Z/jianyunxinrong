@@ -42,6 +42,7 @@
 </template>
 
 <script>
+// import setting from "./playform/appApi.js";
 export default {
   data () {
     return {
@@ -52,14 +53,15 @@ export default {
             certType:0,
             pwd:"",
             token:"",//第三方登录用到
-            deviceInfo:{
-                deviceCode:"111111111",
-                deviceModel:"andriod 8",
-                deviceName:"h5",
-                deviceType:1,
-                osType:0,
-                osVersion:"8.0.0"
-            }
+            // deviceInfo:{
+            //     deviceCode:"111111111",
+            //     deviceModel:"andriod 8",
+            //     deviceName:"h5",
+            //     deviceType:1,
+            //     osType:0,
+            //     osVersion:"8.0.0"
+            // }
+            deviceInfo:undefined,
         },
         regParams:{
             certCode:"",
@@ -70,25 +72,50 @@ export default {
         }
     }
   },
+  created(){
+    //   this.loginParams.deviceInfo=getDeviceInfo()
+    //   alert(this.loginParams.deviceInfo)
+  },
+  mounted(){
+    //   function getDeviceInfo() {
+    /*var deviceInfo;
+    //延迟0.5秒，兼容IOS
+    setTimeout(function(){
+        deviceInfo = appApi.getDeviceInfo();
+    },500)
+    return deviceInfo;*/
+     this.loginParams.deviceInfo=appApi.getDeviceInfo()
+     
+    // return appApi.getDeviceInfo();
+    //return {deviceCode:"111111111",deviceName:"h5",deviceModel:"andriod 8",deviceType:1,osVersion:"8.0.0",osType:0}
+// }
+  },
   methods:{
     loginAction(){
         alert(333)
             this.loginParams.certCode = this.$refs.user.value;
             this.loginParams.pwd = this.$refs.pwd.value;
             var _this=this
+            alert(15)
             this.$http.post("/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
+                alert(16)
                 console.log(response);
                 if(rs.code === 0){
                      //登录成功
-                     alert(588)
                     var userInfo = rs.result.userInfo;
+                    var senduserInfo={}
+                    senduserInfo.userInfo=rs.result.userInfo
                     //登录环信
                     window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
                      //保存用户信息
-                    window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
+                    //  alert("保存用户信息"+JSON.stringify(senduserInfo), rs.result.userPwd)
+                    // window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
+                    window.appApi.saveUserInfo(JSON.stringify(senduserInfo), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
-
+                      alert(859633)
+                    //    window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
+                    //  _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
                        try {
                            _this.$http.post("/concats_api/checked_message").then(function (response) {
                                 //debugger;
@@ -101,8 +128,15 @@ export default {
                             console.info("出现异常(继续运行代码):" + e);
                         }
                         
+<<<<<<< HEAD
+                    // _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                    
+                     window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
+                    // window.appApi.goHome('/myHome')
+=======
                     // _this.$router.push({path:'/static/webstatic/work/work_home.html'});
                     window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
+>>>>>>> 50fe096b5e4bc0dddc68c69acea67d1644f5719c
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;
@@ -115,8 +149,8 @@ export default {
                     setThirdInfoForQq(rs.result);
                      //  _this.$router.push({path:'third_bind.vue'});
                 }else{
-                    warm(rs.message);
-                    layer.close(index_);
+                    // warm(rs.message);
+                    // layer.close(index_);
                 }
             }).catch(function (error) {
                 console.info(error);
