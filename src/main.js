@@ -9,7 +9,6 @@ import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import "./playform/alert.js";
 import "./playform/layer.js";
-import "./playform/mui.js";
 import './assets/css/common/mui.less'
 import './assets/css/common/mui.min.less'
 import './assets/css/common/icons-extend.less';
@@ -27,6 +26,7 @@ let http = axios.create({
 })
 Vue.use(http)
 Vue.use(router)
+Vue.use(mui)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http
 Vue.config.productionTip = false

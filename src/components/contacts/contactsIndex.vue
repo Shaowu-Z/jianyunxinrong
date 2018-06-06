@@ -416,7 +416,13 @@ export default {
 		appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
 	},
 	friends(){
-		this.$router.push({path:'/egList'})
+		// this.$router.push({path:'/egList'})
+		// this.$router.push({path:'/static/newwebstatic/gonggao/gonggao.html'})
+		// this.$router.push({path:'/static/webstatic/dish/index.html'})
+		// this.$router.push({path:'/static/webstatic/community/community.html'})
+		// this.$router.push({path:'/static/webstatic/meeting/meetings.html'})
+		// this.$router.push({path:'/static/webstatic/dish/common.html'})
+		this.$router.push({path:'/static/webstatic/roomshare/room_set_mysub.html'})
 	},
 	doShare:function () {
 		var _self = this;
