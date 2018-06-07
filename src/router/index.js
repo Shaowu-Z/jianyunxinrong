@@ -5,7 +5,6 @@ import market from './market'
 import myHome from './myHome'
 import contacts from './contacts'
 import login from './login'
-import project from './project'
 import roomSetting from './roomSetting'
 // import laowu from './laowu'
 // const work = resolve => require(['./work'], resolve)
@@ -31,7 +30,11 @@ export default new Router({
     login,
     roomSetting,
     project,
+<<<<<<< HEAD
     roomSetting
     // laowu
+=======
+    // roomSetting
+>>>>>>> e145ed262e465be37b74ebf6dd3674d37edf4fe7
   ]
 })
