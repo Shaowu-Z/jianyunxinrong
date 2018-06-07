@@ -13,7 +13,7 @@
         </div>
         <section class="mui-content about-info">
             <div class="about-content">
-                <p v-html="notice.noticeContent.replace(/\n|\r\n/g,'<br/>')"></p>
+                <p v-html="notice.noticeContent.replace(/\n|\r\n/g,'<br/>')" class="text"></p>
                 <div class="show-item">
                     <dl class="item publish-container cloud-content">
                         <dt class="label">图片</dt>
@@ -22,7 +22,7 @@
                                 <div v-for="(img,index) in imgs" :key="index">
                                     <li class="img-item">
                                         <div class="img-item-inner">
-                                            <img v-bind:src="img.thumbnailurl" @click="appApi.imgPreview.open(index,app.imgUrl)">
+                                            <img v-bind:src="img.thumbnailurl" @click="appApi.imgPreview.open(index,imgUrl)">
                                         </div>
                                     </li>
                                 </div>
@@ -52,7 +52,7 @@
                         </dd>
                     </dl>
                 </div>
-                <p class="secondary" v-html="notice.createUserName+'&nbsp;'+app.formatDate(notice.createDate)"></p>
+                <p class="secondary text" v-html="notice.createUserName+'&nbsp;'+formatDate(notice.createDate)"></p>
             </div>
         </section>
     </div>
@@ -69,10 +69,12 @@ export default {
             pics : [],
             but_text: "",
             href: window.location.href,
+            param_map:{},
+            user_id:''
         }
     },
     created(){
-        this.param = getParam(this.href);
+        this.param_map = getParam(this.href);
         this.user_id = BackCookie.getCookie("userid");
 		this.getNotice();
     },
@@ -99,12 +101,13 @@ export default {
                     /\//g, '-');
             }
         },
-        getNotice() {
+        getNotice(param_map) {
             var _self = this;
+            console.log(this.param_map);
             var param = {
                 getType: "4",
-                id: param_map.id,
-                userId: user_id,
+                id: this.param_map.id,
+                userId: this.user_id,
             }
             this.$http.post("/notice_api/getNotice", param).then(
                 function(response) {

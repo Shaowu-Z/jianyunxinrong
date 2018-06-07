@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import getParam from '../../../playform/common'
+import {getParam} from '../../../playform/common'
 export default {
     data () {
         return {

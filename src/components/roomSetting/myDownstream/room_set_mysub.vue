@@ -49,7 +49,7 @@
     </div> 
 </template>
 <script>
-import getParam from '../../../playform/common'
+import {getParam} from '../../../playform/common'
 export default {
     data () {
         return {
@@ -71,12 +71,14 @@ export default {
         goBack(){
             this.$router.go(-1)
         },
-        findDownstreamRoom:function (projectSN,roomId) {
+        findDownstreamRoom:function () {
+            var projectSN = this.paramMap.projectSn;
+            var roomId = this.paramMap.isRoomId;
             var _self = this;
             var parame = new FormData();
-            parame.append("projectSN",projectSN)
-            parame.append("roomId",roomId)
-            axios.post(getUrl() + "/pcontact_api/finddownstreamroom", parame).then(function (response) {
+            parame.append("projectSN",projectSN);
+            parame.append("roomId",roomId);
+            this.$http.post("/pcontact_api/finddownstreamroom", parame).then(function (response) {
                 var result=response.data.result;
                 if(response.data.code=="200") {
                     _self.form.roomclass = result.roomclass;
@@ -85,7 +87,7 @@ export default {
                     console.log(_self.form.rooms);
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
                 console.info(error);
             });
         },

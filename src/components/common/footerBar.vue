@@ -30,8 +30,8 @@ export default {
         },
         {
           tabText: '联系人',
-          tabName: 'contacts',
-          routerPath: '/contacts',
+          tabName: '/static/webstatic/contacts/address_list.html',
+          routerPath: '/static/webstatic/contacts/address_list.html',
           index: 0
         },
         {

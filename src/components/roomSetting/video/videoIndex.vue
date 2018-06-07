@@ -46,7 +46,7 @@
 									<p class="secondary">浏览数：<span v-text="item.seeNum"></span></p>
 								</div>
 								<div class="video-footer" style="">
-									<div class="user-info" :data-a="item.userId">
+									<div class="user-info text" :data-a="item.userId">
 										<img class="user-pic" :src="item.headImg">
 										<span class="user-name" v-text="item.userName"></span>
 									</div>
@@ -68,14 +68,28 @@
 </template>
 
 <script>
+import '../../../playform/dropload'
+import {getParam,BackCookie} from '../../../playform/common'
+import setting from '../../../playform/config'
 export default {
     data(){
         return{
-            items:[]
+			items:[],
+			pageParams : {
+				curPage: 1,
+				pageSize: 10,
+				projectSN: '',
+				project:""
+			}
         }
     },
-    created: function() {
-        this.initMui();
+    created() {
+		var map = getParam(window.location.href);
+		var psn = map.projectSN === undefined ? "" : map.projectSN; //当前选择的项目sn
+		var psn = map.projectSn === undefined ? psn : map.projectSn; //当前选择的项目sn
+		var FILTER_KEY = "conditions_" + Number(BackCookie.getCookie("userid"));
+		var share_key = "SHARE_KEY";
+		console.log(111)
         Date.prototype.Format = function(fmt) {
             var o = {
                 "M+": this.getMonth() + 1, //月份
@@ -90,17 +104,18 @@ export default {
             for(var k in o)
                 if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
-        }
+		}
+		this.initMui();
     },
     methods: {
-        hideProject() {
-            document.getElementsByTagName("html")[0].setAttribute("style", "overflow:")
-            document.body.setAttribute("style", "overflow:")
-            document.getElementById("shade").style.display = "none";
-            document.getElementById("add-style").style.display = "none";
-        },
+
         selectProject (type) {
-                hideProject();
+                function hideProject() {
+					document.getElementsByTagName("html")[0].setAttribute("style", "overflow:")
+					document.body.setAttribute("style", "overflow:")
+					document.getElementById("shade").style.display = "none";
+					document.getElementById("add-style").style.display = "none";
+				}
                 if(type == 0){
             //不选择项目
             document.getElementById("upfile").click();
@@ -110,116 +125,22 @@ export default {
                     document.getElementById("upfile").click();
         //			window.appApi.openNewWindow(getPagePath() + "/work/project_list_for_video.html");
                 }
-        },
-		initMui: function() { //初始化mui的分页插件
-			$(function() {
-				$("#video_list").on('click', '.icon-zan', function() { //绑定点赞事件
-					//var a = this.getAttribute("data-a");
-					var a = $(this).attr("data-a");
-					videoApp.clickPraise(a);
-
-				});
-				//
-				$("#video_list").on('click', '.icon-comment', function() { //绑定评论事件
-					var a = $(this).attr("data-a");
-					var v = videoApp.$data.items[a];
-//					v.seeNum = v.seeNum;
-					window.appApi.openVideo(getPagePath() + "/community/community_comment.html?autoComment=1&id="+v.id,v.videoUrl,"视频详情",v.thumbImage);
-
-				});
-				//
-				$("#video_list").on('click', '.icon-share', function() { //绑定更多事件
-					var url = $(this).attr("data-url");
-					var img = $(this).attr("data-img");
-					var name = $(this).attr("data-name");
-					var project = $(this).attr("data-project");
-					if(project == undefined || project == ""){
-						project = "非项目视频"
-					}
-					var logo = getUrl() + "/static/images/app-logo.jpg";
-					if(img == undefined || img == ""){
-						img = logo;
-					}
-					var id = $(this).attr("data-id");
-					localStorage.setItem(share_key,SHARE_OPERATE.VIDEO_SHARE);
-					var shareUrl = getPagePath() + "/community/community_comment.html?id="+id;
-					appApi.shareVideo(0, name + "发布了一段工程项目的形象视频，赶快来看看吧", project, shareUrl, img, url,"视频详情", null);
-				});
-				//
-				$("#video_list").on('click', '.user-info', function() { //绑定头像
-					var a = $(this).attr("data-a");
-					window.appApi.openNewWindow(getPagePath() + "/contacts/eg_details.html?userId=" + a);
-				});
-				$("#video_list").on('click', '.icon-shoucang', function() { //绑定头像
-					var a = $(this).attr("data-a");
-					videoApp.collect(a);
-				});
-				//
-				$("#video_list").on('click', '.video-pic', function() { //绑定视频播放事件
-					
-					var a = $(this).attr("data-a");
-					var v = videoApp.$data.items[a];
-					
-//					v.seeNum = v.seeNum;
-					//更新播放数量
-					var param = new FormData();
-					param.append("id", v.id);
-//					axios.post(getUrl() + "/community/video/seenum", param).then(function (response) {
-////						console.info(response);
-//						
-//					});
-					BackCookie.setCookie("videoUrl", v.videoUrl);
-					window.appApi.openVideo(getPagePath() + "/community/community_comment.html?id="+v.id,v.videoUrl,"视频详情",v.thumbImage);
-					//window.appApi.openNewWindow(getPagePath() + "/community/community_comment.html?autoplay=1&id="+v.id);
-
-				});
-
-				// dropload
-				$('.content').dropload({
-					scrollArea: window,
-					domUp: {
-						domClass: 'dropload-up',
-						domRefresh: '<div class="dropload-refresh"><i class="mui-icon mui-icon-arrowthindown" style="font-size:16px;c"></i>下拉刷新</div>',
-						domUpdate: '<div class="dropload-update"><i class="mui-icon mui-icon-arrowthinup" style="font-size:16px;font-weight:bold"></i> 释放更新</div>',
-						domLoad: '<div class="dropload-load"><i class="mui-spinner" style="width:20px;height:20px;margin-right:5px;vertical-align: middle;"></i>加载中...</div>'
-					},
-					domDown: {
-						domClass: 'dropload-down',
-						domRefresh: '<div class="dropload-refresh"><i class="mui-icon mui-icon-arrowthinup" style="font-size:16px;font-weight:bold"></i>上拉加载  </div>',
-						domLoad: '<div class="dropload-load"><i class="mui-spinner" style="width:20px;height:20px;margin-right:5px;vertical-align: middle;"></i>加载中</div>',
-						domNoData: '<div class="dropload-noData">没有更多数据</div>'
-					},
-					// 下拉刷新
-					loadUpFn: function(me) {
-
-						pageParams.curPage = 1;
-					    videoApp.loadData("up",me);
-
-
-					},
-					// 上拉加载更多
-					loadDownFn: function(me) {
-						videoApp.loadData("down",me);
-					},
-					threshold: 200
-				});
-			});
 		},
 		// 加载数据
 		loadData: function(type,me) {
 			var _self = this;
-			axios.post(getUrl() + "/community/video/find_page",
-				pageParams, {
+			this.$http.post("/community/video/find_page",
+				this.pageParams, {
 					headers: {
 						'Content-Type': 'application/json'
 					},
 				}).then(function(response) {
 					if(type == "up"){
 //						$('.lists').empty();
-                        videoApp.$data.items = [];
+                        this.items = [];
 					}
 				var page = response.data.result;
-				var curPage=pageParams.curPage
+				var curPage=_self.pageParams.curPage
 //				console.log(response);
 //				console.log(videoApp)
 				console.log(page);
@@ -233,7 +154,7 @@ export default {
 				_self.diposeData(page);
 				if(page.list && page.list.length > 0) {
 					// 页数加1
-					pageParams.curPage = pageParams.curPage + 1;
+					_self.pageParams.curPage = _self.pageParams.curPage + 1;
 					
 					// 上拉刷新
 					if(type == "up") {
@@ -252,7 +173,7 @@ export default {
 					// 如果没有数据
 
 				} else {
-					if(pageParams.curPage == 1){
+					if(_self.pageParams.curPage == 1){
 //						alert(type);
 //						alert(2);
 						// 无数据div显示
@@ -299,8 +220,104 @@ export default {
 			});
 
 		},
+		initMui: function(share_key) { //初始化mui的分页插件
+		let _self = this;
+			$(function() {
+				$("#video_list").on('click', '.icon-zan', function() { //绑定点赞事件
+					//var a = this.getAttribute("data-a");
+					var a = $(this).attr("data-a");
+					_self.clickPraise(a);
+
+				});
+				//
+				$("#video_list").on('click', '.icon-comment', function() { //绑定评论事件
+					var a = $(this).attr("data-a");
+					var v = _self.items[a];
+//					v.seeNum = v.seeNum;
+					window.appApi.openVideo(setting.getPagePath() + "/community/community_comment.html?autoComment=1&id="+v.id,v.videoUrl,"视频详情",v.thumbImage);
+
+				});
+				//
+				$("#video_list").on('click', '.icon-share', function() { //绑定更多事件
+					var url = $(this).attr("data-url");
+					var img = $(this).attr("data-img");
+					var name = $(this).attr("data-name");
+					var project = $(this).attr("data-project");
+					if(project == undefined || project == ""){
+						project = "非项目视频"
+					}
+					var logo = "http://java.winfreeinfo.com/static/images/app-logo.jpg";
+					if(img == undefined || img == ""){
+						img = logo;
+					}
+					var id = $(this).attr("data-id");
+					localStorage.setItem(share_key,setting.SHARE_OPERATE.VIDEO_SHARE);
+					var shareUrl = setting.getPagePath() + "/community/community_comment.html?id="+id;
+					appApi.shareVideo(0, name + "发布了一段工程项目的形象视频，赶快来看看吧", project, shareUrl, img, url,"视频详情", null);
+				});
+				//
+				$("#video_list").on('click', '.user-info', function() { //绑定头像
+					var a = $(this).attr("data-a");
+					window.appApi.openNewWindow(setting.getPagePath() + "/contacts/eg_details.html?userId=" + a);
+				});
+				$("#video_list").on('click', '.icon-shoucang', function() { //绑定头像
+					var a = $(this).attr("data-a");
+					_self.collect(a);
+				});
+				//
+				$("#video_list").on('click', '.video-pic', function() { //绑定视频播放事件
+					
+					var a = $(this).attr("data-a");
+					console.log(_self.items)
+					var v = _self.items[a];
+					
+//					v.seeNum = v.seeNum;
+					//更新播放数量
+					var param = new FormData();
+					param.append("id", v.id);
+//					axios.post(getUrl() + "/community/video/seenum", param).then(function (response) {
+////						console.info(response);
+//						
+//					});
+					BackCookie.setCookie("videoUrl", v.videoUrl);
+					window.appApi.openVideo(setting.getPagePath() + "/community/community_comment.html?id="+v.id,v.videoUrl,"视频详情",v.thumbImage);
+					//window.appApi.openNewWindow(getPagePath() + "/community/community_comment.html?autoplay=1&id="+v.id);
+
+				});
+
+				// dropload
+				$('.content').dropload({
+					scrollArea: window,
+					domUp: {
+						domClass: 'dropload-up',
+						domRefresh: '<div class="dropload-refresh"><i class="mui-icon mui-icon-arrowthindown" style="font-size:16px;c"></i>下拉刷新</div>',
+						domUpdate: '<div class="dropload-update"><i class="mui-icon mui-icon-arrowthinup" style="font-size:16px;font-weight:bold"></i> 释放更新</div>',
+						domLoad: '<div class="dropload-load"><i class="mui-spinner" style="width:20px;height:20px;margin-right:5px;vertical-align: middle;"></i>加载中...</div>'
+					},
+					domDown: {
+						domClass: 'dropload-down',
+						domRefresh: '<div class="dropload-refresh"><i class="mui-icon mui-icon-arrowthinup" style="font-size:16px;font-weight:bold"></i>上拉加载  </div>',
+						domLoad: '<div class="dropload-load"><i class="mui-spinner" style="width:20px;height:20px;margin-right:5px;vertical-align: middle;"></i>加载中</div>',
+						domNoData: '<div class="dropload-noData">没有更多数据</div>'
+					},
+					// 下拉刷新
+					loadUpFn: function(me) {
+
+						_self.pageParams.curPage = 1;
+					    _self.loadData("up",me);
+
+
+					},
+					// 上拉加载更多
+					loadDownFn: function(me) {
+						_self.loadData("down",me);
+					},
+					threshold: 200
+				});
+			});
+		},
 		diposeData: function(page) {
-			videoApp.$data.items = videoApp.$data.items.concat(page.list);
+			this.items = this.items.concat(page.list);
 			$("img.lazy").delayLoading({
 						defaultImg:  "",                      // 预加载前显示的图片
 					//	errorImg: defaultImg,                         // 读取图片错误时替换图片(默认：与defaultImg一样)
@@ -321,7 +338,7 @@ export default {
 
 		},
 		clickPraise: function(a) {
-			var v = videoApp.$data.items[a];
+			var v = this.items[a];
 			v.praise = !v.praise;
 			if(v.praise) {
 				v.praiseNum = v.praiseNum + 1;
@@ -333,7 +350,7 @@ export default {
 			var param = new FormData();
 			param.append("id", v.id);
 			param.append("praise", v.praise);
-			axios.post(getUrl() + "/community/video/praise", param).then(function (response) {
+			this.$http.post("/community/video/praise", param).then(function (response) {
 //				console.info(response.data);
 			});
 		},
@@ -345,8 +362,8 @@ export default {
 		},
 		collect:function (a) {
 			var _self = this;
-			var v = videoApp.$data.items[a];
-			axios.get(getUrl() + "/collect/do?id=" + v.id +"&type=5" ).then(function (response) {
+			var v = this.items[a];
+			this.$http.get("/collect/do?id=" + v.id +"&type=5" ).then(function (response) {
 				if (response.data.code == 4001) { // 收藏成功
 					v.collect = true;
 				}else if(response.data.code == 4003){ //取消收藏
@@ -358,7 +375,7 @@ export default {
 				msg(response.data.message);
 			}).catch(function (error) {
 				layer.closeAll();
-				warm("收藏出错")
+				// warm("收藏出错")
 			});
 		}
 	}
@@ -370,7 +387,7 @@ export default {
         height: 44px;
         display: block;
         overflow: hidden;
-        z-index: 9999;
+        z-index: 101;
     }
     body,html{
         position: relative;
@@ -412,7 +429,7 @@ export default {
         position: fixed;
         top: 44px;
         /*height: 50px;*/
-        z-index: 999;
+        z-index: 100;
         width: 100%;
         padding-top: 0;
         overflow: hidden;
@@ -462,7 +479,7 @@ export default {
 
     body {
         -webkit-overflow-scrolling: touch;
-        position: relative;
+        /* position: relative; */
     }
 
     .content {
@@ -486,7 +503,7 @@ export default {
         /*bottom: 0;*/
         /*height: 50px;*/
         overflow: hidden;
-        z-index: 9999;
+        z-index: 100;
     }
 
     .dropload-up>div {

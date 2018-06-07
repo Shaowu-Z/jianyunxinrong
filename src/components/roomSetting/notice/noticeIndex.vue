@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import getParam from '../../../playform/common'
+import {getParam} from '../../../playform/common'
 export default {
     data(){
         return{
@@ -51,9 +51,6 @@ export default {
             notices: [],
             param:{}
         }
-    },
-    created() {
-        this.getNotice(1);
     },
     //过滤器定义区
     filters: {
@@ -77,6 +74,7 @@ export default {
     },
     created(){
         this.param = getParam(this.href);
+        this.getNotice(1);
     },
     //定义方法区
     methods: {
@@ -85,12 +83,15 @@ export default {
         },
         //发布公告
         addNotice() {
-            console.log(this.param);
-            this.$router.push({path:'/static/newwebstatic/gonggao/gonggao_sent.html',query:{param:this.param}})
+            // console.log(this.param);
+            // this.$router.push({path:'/static/newwebstatic/gonggao/gonggao_sent.html',query:{param:this.param}})
+            var param = window.location.href.split("?")[1]
+			window.location.href = "gonggao_sent.html?" + param
         },
         //查看公告
         seeNotice (id){
-            window.location.href="gonggao_detail.html?id="+id;
+            // window.location.href="gonggao_detail.html?id="+id;
+            this.$router.push({path:'/static/newwebstatic/gonggao/gonggao_detail.html',query:{id:id}})
         },
         getNotice(type,event) {
             console.log(event);

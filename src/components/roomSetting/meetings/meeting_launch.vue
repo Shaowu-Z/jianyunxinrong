@@ -106,7 +106,7 @@ export default {
             }*/
             var userIds = "";
             //进行url转码问题
-            var userNames = decodeURIComponent(getCookie("username"))+",";
+            var userNames = decodeURIComponent(BackCookie.getCookie("username"))+",";
             for(var i=0;i<_self.form.users.length;i++){
                 var user = _self.form.users[i];
                 if(i==(_self.form.users.length-1)){
@@ -123,8 +123,8 @@ export default {
             roomdata.append("mMain",_self.form.mMain);//会议名称
             roomdata.append("mStatus","1");//会议状态 1=进行中 2=已结束
             roomdata.append("mOfficeId",projectSN);//办公室ID
-            roomdata.append("mCreateUser",getCookie("userid"));//当前用户=创建者（主持人）
-            roomdata.append("mCreateUserName",getCookie("username"));//当前用户=创建者名称（主持人）
+            roomdata.append("mCreateUser",BackCookie.getCookie("userid"));//当前用户=创建者（主持人）
+            roomdata.append("mCreateUserName",BackCookie.getCookie("username"));//当前用户=创建者名称（主持人）
             roomdata.append("userIds",userIds);
             appApi.showLoading();
             this.$http.post("/pcontact_api/savePMeeting", roomdata).then(function (response) {

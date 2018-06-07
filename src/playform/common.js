@@ -1023,7 +1023,7 @@ function setLoginParams(info_json) {
     localStorage.setItem(login_params_key, JSON.stringify(info_json));
 }
 
-export default function removeThirdInfo() {
+function removeThirdInfo() {
     localStorage.removeItem(third_info_wx_key);
     localStorage.removeItem(third_info_qq_key);
     localStorage.removeItem(cert_type_key);
@@ -1173,4 +1173,4 @@ function getFileType(suffix) {
     }
     return clazz;
 }
-export {Base,BackCookie,removeThirdInfo,getParam}
+export {Base,BackCookie,removeThirdInfo,getParam,setDishSort}

@@ -141,11 +141,11 @@
 			</div>
 		</section>
         <!--遮罩层-->
-		<div class="mui-backdrop" style="display: none; z-index: 999;"></div>
+		<div class="mui-backdrop" style="display: none; z-index: 999;" v-show="show"></div>
 
 		<!--公告类型  -->
 		<div id="noticeType" class="mui-popup mui-popup-in"
-			style="display: none;">
+			v-show="show">
 			<ul class="mui-popup-content mui-table-view eg-table-view">
 				<li class="mui-table-view-cell" @click="selectdType(1)">本群公告</li>
 				<li class="mui-table-view-cell" @click="selectdType(0)">项目公告</li>
@@ -168,6 +168,7 @@ import {getParam,BackCookie} from '../../../playform/common'
 export default {
     data(){
         return{
+            show:false,
             href: window.location.href,
             rooms : [],
             imgs : [],
@@ -180,13 +181,15 @@ export default {
             param:{},
             user_id:'',
             user_icon: '',
+            param_map:{},
         }
     },
     created(){
-        this.param = getParam(this.href);
+        this.param_map = getParam(this.href);
         this.user_id = BackCookie.getCookie("userid");
         this.user_icon = BackCookie.getCookie("user_icon");
         this.user_name = decodeURI(BackCookie.getCookie("username"))
+        console.log(this.param_map,"param_map");
     },
     //过滤器定义区
     filters: {
@@ -213,11 +216,12 @@ export default {
         },
         //点击遮罩层
         mask() {
-            document.getElementsByClassName(".mui-backdrop").css("display", "none")
-            document.getElementsByClassName(".mui-backdrop").animate({
+            
+            $(".mui-backdrop").css("display", "none")
+            $(".mui-backdrop").animate({
                 left : "0%"
             })
-            document.getElementsByClassName("#noticeType").hide();
+            $("#noticeType").hide();
         },
         //打开选择房间页面
         showSelectdRoom(){
@@ -226,8 +230,8 @@ export default {
         //展现公告类型
         showType() {
             if(this.param_map.loginType==1){  //权限控制  管理员才能选择
-                document.getElementsByClassName(".mui-backdrop").show();
-                document.getElementsByClassName("#noticeType").show();
+                $(".mui-backdrop").show();
+                $("#noticeType").show();
             }
         },
         //选择公告类型
@@ -236,9 +240,9 @@ export default {
             var _self = this;
             if (type == 1){
                 _self.typeName = "本群公告"
-                    document.getElementsByClassName("#selectdRoom").slideUp("slow")
+                    $("#selectdRoom").slideUp()
             }else{
-                document.getElementsByClassName("#selectdRoom").slideDown("slow")
+                $("#selectdRoom").slideDown()
                 _self.typeName = "项目公告"
             }
             _self.type = type;
@@ -280,8 +284,8 @@ export default {
                             console.log(response)
                             var content =_self.$data.content.substring(0,20);
                             var todojson = {
-                                "title" : decodeURI(user_name)+"发布的公告",
-                                "titileTwo" : this.param_map.currRoomClassName + "-" + this.param_map.currRoomName,
+                                "title" : decodeURI(_self.user_name)+"发布的公告",
+                                "titileTwo" : _self.param_map.currRoomClassName + "-" + _self.param_map.currRoomName,
                                 "content" : content,
                                 "fileCount" : "0", //_self.$data.imgs.length+_self.$data.pics.length,
                                 "url" : 'http://java.winfreeinfo.com/static/newwebstatic/gonggao/gonggao_detail.html?id='
@@ -290,8 +294,8 @@ export default {
                                 "todoViewableMember" : "0",
                                 "toImId" : param.toImIds
                                         .toString(),
-                                "formuserid" : this.user_id,
-                                "currentRoomImid" : this.param_map.currRoomImId,
+                                "formuserid" : _self.user_id,
+                                "currentRoomImid" : _self.param_map.currRoomImId,
                                 "chatType" : "2",
                                 "relation" : response.data.result.docId,
                                 //"score" : "", //评分待办必要参数，设置分数
@@ -305,11 +309,13 @@ export default {
                                         + response.data.result.id
                                 }]
                             }
+                            console.log(appApi.sendTodo);
                             //alert(JSON.stringify(todojson))
-                            window.appApi.sendTodo(todojson,function(d){
+                            appApi.sendTodo(todojson,function(d){
                                 if(d.code==200){
                                     remin("提交成功",2,function(){
-                                        window.appApi.closeNewWindow()
+                                        appApi.closeNewWindow()
+                                        // this.$router.go(-1)
                                     })
                                 }
                                 
@@ -435,7 +441,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .text{
         text-align: left
     }

@@ -22,7 +22,7 @@
                                 <img src="../../../assets/images/ico_project_memting.jpg"/>
                             </div>
                             <div class="oa-contact-content mui-table-cell">
-                                <h4 class="oa-contact-name"><span class="title mui-ellipsis">{{ meeting.mmain}}</span><span class="secondary date-time">{{meeting.mcreateDate}}</span></h4>
+                                <h4 class="oa-contact-name"><span class="title mui-ellipsis">{{meeting.mmain}}</span><span class="secondary date-time">{{meeting.mcreateDate}}</span></h4>
                                 <p class="oa-contact-email"><span>微承诺:{{meeting.commitmentSize}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>会议纪要:{{meeting.meetingSummarySize}}</span></p>
                                 <!--<p class="oa-contact-email"><span>王建国:项目一期即将完成</span></p>-->
                             </div>
@@ -132,7 +132,8 @@ export default {
         },
         createMeeting:function(projectSN){
             // appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/meeting_launch.html?projectSN='+projectSN);
-            this.$router.push({path:'/static/webstatic/meeting/meeting_launch.html',query:{projectSN:projectSN}});
+            console.log(this.paramMap.projectSn)
+            this.$router.push({path:'/static/webstatic/meeting/meeting_launch.html',query:{projectSN:this.paramMap.projectSn}});
         },
         createMeetingMember:function(projectSN){
             appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/project_contact_select.html?projectSN='+projectSN);

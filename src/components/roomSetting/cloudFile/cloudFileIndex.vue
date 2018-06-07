@@ -33,7 +33,7 @@
 
                     <!--<ul class="mui-table-view mui-table-view-striped">-->
                         <!--<li class="mui-table-view-cell mui-checkbox">-->
-                            <!--<a class="" href="javascript:appApi.openNewWindow(getPagePath()+'/dish/fileSendIndex.html?projectSN='+app.projectId)">-->
+                            <!--<a class="" href="javascript:appApi.openNewWindow(setting.getPagePath()+'/dish/fileSendIndex.html?projectSN='+app.projectId)">-->
                                 <!--<div class="oa-contact-cell mui-table">-->
                                     <!--<div class="oa-contact-avatar mui-table-cell">-->
                                         <!--<span class="my-list-icon label-mail"></span>-->
@@ -161,7 +161,7 @@ export default {
         if(window.location.href.split("?")[1]){
             var arrays = window.location.href.split("?")[1].split("&");
             var map = {};
-            for (i = 0; i < arrays.length; i++) {
+            for (let i = 0; i < arrays.length; i++) {
                 var param = arrays[i].split("=");
                 map[param[0]] = decodeURI(param[1]);
             }
@@ -260,7 +260,7 @@ export default {
 					_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
 				else
 					_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
-				if(!isApp) {
+				if(!appApi.isApp) {
 					_self.$data.showUpload = false;
 				}
 				//_self.$data.showUpload = true;
@@ -589,7 +589,7 @@ export default {
 				//msg("系统目录下不可新建文件夹")
 				return;
 			}
-			appApi.openNewWindow(getPagePath() + "/dish/create_dir.html?pid=" + _self.$data.curInfo.id);
+			appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?pid=" + _self.$data.curInfo.id);
 		},
 		showHeader: function() {
 			if(document.getElementById("pullrefresh"))
@@ -621,9 +621,9 @@ export default {
 			if(type == 1) { /*打开目录*/
                 var url = "";
                 if(_self.$data.roomId!="" && _self.$data.roomId!="undefined" && _self.$data.roomId!=undefined)
-					url = getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
 				else
-					url = getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
 				if(id == _self.$data.sysInfo.id || _self.$data.isSys == true || _self.$data.isSys == "true") {
 					url = url + "&isSys=true";
 				}
@@ -631,7 +631,7 @@ export default {
 					url = url + "&isOpe=false";
 				}
 				if(_self.$data.isShare) {
-					url = getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&isShare=true";
+					url = setting.getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&isShare=true";
 				}
 				window.appApi.openNewWindow(url);
 			} else {
@@ -645,7 +645,7 @@ export default {
 		openDirMini: function(id, isSys, isOpe) {
 			var arrays = window.location.href.split("?")[1].split("&");
 			var map = {};
-			for(i = 0; i < arrays.length; i++) {
+			for(let i = 0; i < arrays.length; i++) {
 				var param = arrays[i].split("=");
 				map[param[0]] = decodeURI(param[1]);
 			}
@@ -653,9 +653,9 @@ export default {
 			var _self = this;
             var url;
             if(_self.$data.roomId!="" && _self.$data.roomId!="undefined" && _self.$data.roomId!=undefined){
-				url = getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&roomId=" + _self.$data.roomId;// + "&roomId=" + _self.$data.roomId
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&roomId=" + _self.$data.roomId;// + "&roomId=" + _self.$data.roomId
             }else{
-				url = getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
             }
             if(isSys) {
 				url = url + "&isSys=true";
@@ -733,9 +733,9 @@ export default {
 		renameItem: function(id, type, name, suffix, status, event) {
 			var _self = this;
 			if(type == 1) {
-				appApi.openNewWindow(getPagePath() + "/dish/rename_dir.html?id=" + id + "&name=" + name);
+				appApi.openNewWindow(setting.getPagePath() + "/dish/rename_dir.html?id=" + id + "&name=" + name);
 			} else {
-				appApi.openNewWindow(getPagePath() + "/dish/rename_file.html?id=" + id + "&name=" + name);
+				appApi.openNewWindow(setting.getPagePath() + "/dish/rename_file.html?id=" + id + "&name=" + name);
 			}
 			_self.$data.showEditBox = false;
 		},
@@ -772,13 +772,13 @@ export default {
 		},
 		moveItem: function(id, type, name, suffix, status, event) {
 			var _self = this;
-			//appApi.openNewWindow(getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
+			//appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
 			_self.$data.showEditBox = false;
 			_self.batchCut([id]);
 		},
 		delItem: function(id, type, name, suffix, status, event) {
 			var _self = this;
-			//appApi.openNewWindow(getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
+			//appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
 			var okFun = function() {
 				var url = "";
 				if(type == 1) {
@@ -823,7 +823,7 @@ export default {
 			_self.$data.showEditBox = false;
 		},
 		itemDetail: function(id, type, name, suffix, status, event,isOpe) {
-			appApi.openNewWindow(getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
+			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
 		},
 		//电子签署 2017.11.21
 		sign:function (id,type,name,suffix,status,event) {
@@ -986,7 +986,7 @@ export default {
 			var html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 				'<input type="file" id="uploadWidget" multiple="multiple" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 				'</form>';
-			if(isApp && isIphoneOs) { //IOS
+			if(appApi.isApp && appApi.isIphoneOs) { //IOS
 				//IOS现在多选有问题，暂先只做单传
 				html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
@@ -1000,7 +1000,7 @@ export default {
 				if(_self.$data.isIndex == 1) {
 					//选择要上传的目录
 					console.info("选择目录");
-					var url = getPagePath() + "/dish/upload_select.html?projectId=" + _self.$data.projectId;
+					var url = setting.getPagePath() + "/dish/upload_select.html?projectId=" + _self.$data.projectId;
 					appApi.openNewWindow(url);
 				} else {
 					_self.uploadCallBack(this);
@@ -1387,7 +1387,7 @@ export default {
 		},
 		downloadFile: function(id, type, name, suffix, event) {
 			var _self = this;
-			if(isApp) {
+			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
 				downloadWidget.src = _self.getFileUrl(id);
@@ -1835,7 +1835,7 @@ export default {
 			itemStr = items.join(",");
 			//批量删除
 			var _self = this;
-			//appApi.openNewWindow(getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
+			//appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
 			var okFun = function() {
 				var url = "/cdish/batch/delete";
 				this.$http.post(url, {
@@ -1937,7 +1937,7 @@ export default {
 					moveType = 0;
 				}
 			}
-			var url = getPagePath() + "/dish/move_select.html?moveItems=" + itemStr + "&projectId=" + _self.$data.projectId + "&moveType=" + moveType;
+			var url = setting.getPagePath() + "/dish/move_select.html?moveItems=" + itemStr + "&projectId=" + _self.$data.projectId + "&moveType=" + moveType;
 			appApi.openNewWindow(url);
 		},
 		getSelectVal: function() {
@@ -1972,11 +1972,11 @@ export default {
 			}
 			itemStr = items.join(",");
 			console.info(itemStr);
-			window.location.href=getPagePath()+"/dish/fileSendCreate.html?ids="+itemStr;
+			window.location.href=setting.getPagePath()+"/dish/fileSendCreate.html?ids="+itemStr;
 
 		},
 		sendFile: function(id){
-			window.location.href=getPagePath()+"/dish/fileSendCreate.html?ids="+id;
+			window.location.href=setting.getPagePath()+"/dish/fileSendCreate.html?ids="+id;
 		},
 		/**
 		 * 分享
@@ -2058,7 +2058,7 @@ export default {
 					 name+='"(等"'+rs.shareSize+'"个文件)，快来看看吧~';
 					 }*/
 					//var share id =
-					var url = getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
+					var url = setting.getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
 					appApi.openNewWindow(url);
 					setTimeout(function() {
 						appApi.resetBack();
@@ -2169,7 +2169,7 @@ export default {
 		},
 		doSearch: function() {
 			var _self = this;
-			appApi.openNewWindow(getPagePath() + "/dish/search.html?projectSN=" + _self.$data.projectId);
+			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.$data.projectId);
 		},
 		collectCheck: function(_id, _type) {
 			var _self = this;

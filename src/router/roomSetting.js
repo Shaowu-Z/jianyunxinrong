@@ -57,7 +57,7 @@ const roomSettingConfig = {
       ]
     },
     {
-      path: '/static/webstatic/community/community.html',
+      path: '/static/webstatic/community/community_main.html',
       component: video,
       children:[
         {
