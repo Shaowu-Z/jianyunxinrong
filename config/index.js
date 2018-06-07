@@ -43,31 +43,29 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    host:"localhost",
+    host:"192.168.0.93",
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // proxyTable:{},
     proxyTable: {
-
-      // '*': {
+      // '*'
+      // : {
       //   target: 'http://java.winfreeinfo.com',
       //   changeOrigin: true,
       //   filter: function (pathname, req) {
       //     return pathname.match('^/concats_api')
       //       || pathname.match('^/pcontact_api')
-      //       || pathname.match('^/notice_api')
       //       || pathname.match('^/user_api');
-      //   }
-      // },
+      //   },
+        
       // },
       "/api": {
         target: "http://java.winfreeinfo.com",
         changeOrigin:true,
         pathRewrite: {"^/api" : ""}
       }
-
     },
     cssSourceMap: false
   },

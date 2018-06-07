@@ -30,7 +30,7 @@ const select_phone_list = resolve => require(['@/components/contacts/select_phon
 const add_manually = resolve => require(['@/components/contacts/add_manually'], resolve)
 
 const contactsConfig = {
-  path: '/static/webstatic/contacts/address_list.html',
+  path: '/contacts',
   component: contacts,
   children: [
     {

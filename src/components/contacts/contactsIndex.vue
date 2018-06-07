@@ -422,8 +422,7 @@ export default {
 		// this.$router.push({path:'/static/webstatic/community/community.html'})
 		// this.$router.push({path:'/static/webstatic/meeting/meetings.html'})
 		// this.$router.push({path:'/static/webstatic/dish/common.html'})
-		// this.$router.push({path:'/static/webstatic/roomshare/room_set_mysub.html'})
-		this.$router.push({path:'/static/webstatic/chatroom/xiangmu_info.html'})
+		this.$router.push({path:'/static/webstatic/roomshare/room_set_mysub.html'})
 	},
 	doShare:function () {
 		var _self = this;

@@ -92,6 +92,7 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty'
   },
+  // vue全局引用jquery
   plugins: [  
     new webpack.optimize.CommonsChunkPlugin('common.js'),  
     new webpack.ProvidePlugin({  

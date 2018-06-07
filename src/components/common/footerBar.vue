@@ -31,7 +31,7 @@ export default {
         {
           tabText: '联系人',
           tabName: 'contacts',
-          routerPath: '/static/webstatic/contacts/address_list.html',
+          routerPath: '/contacts',
           index: 0
         },
         {
