@@ -1,96 +1,119 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title">项目信息</h1>
-            <!--<a class="mui-action-back mui-icon iconfont icon-back"></a>-->
-            <button v-if="isEdit" class="mui-btn mui-btn-nav mui-btn-link mui-pull-right" @click="editProject()">完善信息</button>
+            <button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
+                <span class="mui-icon mui-icon-back"></span>
+            </button>
+            <h1 class="mui-title">登记项目</h1>
         </header>
         <section class="mui-content mycenter-content">
+            <div id="app">
+            <ul class="mui-table-view eg-table-view">
+                <li class="mui-table-view-cell mui-input-row">
+                    <label class='text'>工程全称</label>
+                    <input type="text" name="ProjectName" v-model="form.projectName" value="" placeholder="必填"/>
+                </li>
+                <li class="mui-table-view-cell mui-input-row">
+                    <label class='text'>工程简称</label>
+                    <input type="text" name="ProjectNameShort" v-model="form.projectNameShort" maxlength="10" value="" placeholder="必填"/>
+                </li>
+                <li class="mui-table-view-cell mui-input-row" @click="selectProject()">
+                    <a class="mui-navigate-right" >
+                        <label class='text'>工程类别</label>
+                        <input type="text" name="leibie" v-model="form.leibie" value="" placeholder="请选择" disabled=""/>
+                    </a>
+                </li>
+                <li class="mui-table-view-cell mui-input-row" @click="selectCity()">
+                    <a class="mui-navigate-right" >
+                        <label class='text'>所在地区</label>
+                        <input type="text" name="FullArea" v-model="form.fullArea" value="" placeholder="请选择" disabled=""/>
+                    </a>
+                </li>
+                <li class="mui-table-view-cell mui-input-row">
+                    <label class='text'>工程地点</label>
+                    <input type="text" name="PlaceShenbao" v-model="form.placeShenbao" value="" @click="choicePlace()" placeholder="必填" readonly="readonly" />
+                </li>
+                <li class="mui-table-view-cell mui-input-row" @click="selectType()">
+                    <a class="mui-navigate-right" >
+                        <label>我所在方性质</label>
+                        <input type="text" value="" name="gongChengFangName" v-model="form.gongChengFangName" placeholder="请选择" disabled=""/>
+                    </a>
+                </li>
 
-
-            <ul class="mui-table-view eg-table-view tight-table-view">
-                <li class="mui-table-view-cell">
-                    <label class="text">工程全称</label><span class="con" v-text="project.projectName"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">工程简称</label><span class="con" v-text="project.projectNameShort"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">工程类别</label><span class="con" v-text="project.leibie"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">所在地区</label><span class="con" v-text="project.fullArea"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">工程地点</label><span class="con" v-text="project.placeShenbao"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">协作管理方</label><span class="con" v-text="project.projectManageRoomClassName"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">项目管理员</label><span class="con" v-text="project.projectManager"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">子管理员</label><span class="con" v-text="sonManage"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">建设单位</label><span class="con" v-text="project.companyFinalName"></span>
-                </li>
-            <!-- <li class="mui-table-view-cell">
-                    <label class="text" style="line-height: 1;">社会信用代码<br/>组织机构代码</label><span class="con" v-text="project.companyFinalNashuihao"></span>
-                </li>-->
-                <li class="mui-table-view-cell">
-                    <label class="text">施工单位</label><span class="con" v-text="project.companyShigongName"></span>
-                </li>
-            <!-- <li class="mui-table-view-cell">
-                    <label class="text">信用代码</label><span class="con" v-text="project.companyShigongNashuihao"></span>
-                </li>-->
-                <li class="mui-table-view-cell">
-                    <label class="text">工程造价</label><span class="con" v-text="project.zaojia"></span><span class="mui-badge mui-badge-inverted">(万元)</span>
-
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">建筑面积</label><span class="con" v-text="project.mianji"></span><span class="mui-badge mui-badge-inverted">(平米)</span>
-                </li>
-                <!--<li class="mui-table-view-cell">
-                    <label class="text">计划开工</label><span class="con" v-text="project.missionStartDate"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">计划竣工</label><span class="con" v-text="project.missionEndDate"></span>
-                </li>-->
-                <li class="mui-table-view-cell">
-                    <label class="text">开工日期</label><span class="con" v-text="project.missionStartDate"></span>
-                </li>
-                <li class="mui-table-view-cell">
-                    <label class="text">竣工日期</label><span class="con" v-text="project.missionEndDate"></span>
-                </li>
-            </ul>
-        <div class="module01">
-                <div class="module01-head">工程概况牌</div>
-                <div class="module01-body" style="overflow: hidden;">
-                    <div class="upload-img">
-                        <img class="" @click="stopEvt(event),disposeLogImg(0,fm.imgSmallUrl)" id="img_view" v-show="fm.imgUrl!=''" :src="fm.imgUrl"/>
+                <div id="selectDiv" style="display: none">
+                    <div v-if="form.gongChengFangID=='9'">
+                        <li  class="mui-table-view-cell mui-input-row">
+                            <label>专业</label>
+                            <input type="text" name="roomName" v-model="roomform.roomName" value="" placeholder="必填"/>
+                        </li>
                     </div>
+                        <li  v-if="form.gongChengFangID=='13'" class="mui-table-view-cell mui-input-row">
+                            <label>专业</label>
+                            <input type="text" name="description" v-model="roomform.description" value="" placeholder="必填"/>
+                        </li>
+                    <li   v-if="form.gongChengFangID=='7'" class="mui-table-view-cell mui-input-row">
+                        <label>供应材料</label>
+                        <input type="text" name="description" v-model="roomform.description" value="" placeholder="必填"/>
+                    </li>
+                    <div v-if="form.gongChengFangID!=''&& form.gongChengFangID!='9'">
+                        <li  class="mui-table-view-cell mui-input-row">
+                            <label>公司名称</label>
+                            <input type="text" name="companyName" v-model="roomform.companyName" value="" placeholder="必填"/>
+                        </li>
+                        <li  class="mui-table-view-cell mui-input-row">
+                            <label>信用代码</label>
+                            <input type="text" name="companyCreditCode" v-model="roomform.companyCreditCode" value="" placeholder="选填"/>
+                        </li>
+                    </div>
+
+
                 </div>
+
+            </ul>
+            <div class="btn-box">
+                <button @click="saveProject('save')" class="mui-btn mui-btn-primary mui-btn-block">登记项目</button>
             </div>
-            <!--<div class="publish-container cloud-content">-->
-                <!--<div class="title">附件</div>-->
-                <!--<ul class="mui-table-view mui-table-view-striped container-average">-->
-                    <!--<li v-for="item in fujianList" class="mui-table-view-cell">-->
-                        <!--<div class="oa-contact-cell mui-table">-->
-                            <!--<div class="oa-contact-avatar mui-table-cell">-->
-                                <!--<span class="my-list-icon label class="text"-word"></span>-->
-                            <!--</div>-->
-                            <!--<div class="oa-contact-content mui-table-cell">-->
-                                <!--<h4 class="oa-contact-name" v-text="item.filename">项目需求文档.docx</h4>-->
-                                <!--<p class="oa-contact-email"><span v-text="item.filesize/1024">196.4</span>KB</p>-->
+            <!--<div id="cus_zhiye_popver" class="mui-popover mui-popover-action mui-popover-bottom">-->
+                    <!--<div class="pop-up" >-->
+                        <!--<div class="pop-title">选择组织类型</div>-->
+                        <!--<div class="pop-content select-box col-xs-6 mui-clearfix" style="height:240px;">-->
+                            <!--<div v-for="item in data.zuzhiList" class="mui-input-row mui-radio mui-left">-->
+                                <!--<label v-text="item.roomClassName"></label>-->
+                                <!--<input type="radio"  v-model="data.selectType" name="selecttype" :value="item"/>-->
                             <!--</div>-->
                         <!--</div>-->
-                    <!--</li>-->
-                <!--</ul>-->
+                    <!--<div class="pop-footer btn-contain">-->
+                        <!--<button @click="type_confirm()" type="button" class="mui-btn mui-btn-primary mui-btn-block zrrr">确定</button>-->
+                    <!--</div>-->
+                <!--</div>-->
             <!--</div>-->
 
+                <div id="cus_zhiye_popver" class="mui-popover mui-popover-action mui-popover-bottom">
+                    <div class="pop-up2">
+                        <!--<div class="pop-title">选择组织类型（单选）</div>-->
+                        <div class="pop-content select-box mui-clearfix">
+                            <div id="cus_zhiye_popver_sc" class="mui-scroll-wrapper">
+                                <div class="mui-scroll">
+                                        <div class="s-title" >我的组织类型</div>
+                                        <div class="col-xs-6 mui-clearfix">
+                                            <div class="mui-input-row mui-radio mui-left" v-for="(item,index) in data.zuzhiList" :key="index">
+                                                <div v-if="item.roomClass!='banzu_gaongren'" @click="type_confirm()">
+                                                    <label v-text="item.roomClassName"></label>
+                                                    <input type="radio"  v-model="data.selectType" name="selecttype" :value="item"/>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="pop-footer btn-contain">
+                            <button @click="type_confirm()" type="button" class="mui-btn mui-btn-primary mui-btn-block zrrr">确定</button>
+                        </div>-->
+                    </div>
+                </div>
+
+        </div>
 
         </section>
     </div>
@@ -98,6 +121,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+// import PopPicker from '../../../playform/mui.PopPicker'
 export default {
     data () {
         return {
@@ -205,15 +229,6 @@ export default {
             return regions['provinces'][provinceName]['citiesArr'];
         }
         /**
-        * [getProvince 获取省]
-        * @param  {[Object]} regions [省市区数据]
-        * @return {[Array]}          [省数组]
-        */
-        function getProvince(regions) {
-
-            return regions['provincesArr'];
-        }
-        /**
         * 接收子管理员列表
         * @param ary
         */
@@ -300,6 +315,15 @@ export default {
         }
     },
     methods:{
+        /**
+        * [getProvince 获取省]
+        * @param  {[Object]} regions [省市区数据]
+        * @return {[Array]}          [省数组]
+        */
+        getProvince(regions) {
+
+            return regions['provincesArr'];
+        },
         /**
         * 编辑项目
         */
@@ -453,7 +477,6 @@ export default {
                 if(response.data.code==200){
                     var result=response.data.result;
                     if(result.length>0){
-                        console.log(mui);
                         var picker = new mui.PopPicker();
                         var resulList = [];
                         for(var i=0;i<result.length;i++){
@@ -928,10 +951,5 @@ export default {
 <style scoped>
     .text{
         text-align: left
-    }
-    .mui-fullscreen {
-        position: fixed;
-        z-index: 20;
-        background: rgba(0,0,0,.90);
     }
 </style>

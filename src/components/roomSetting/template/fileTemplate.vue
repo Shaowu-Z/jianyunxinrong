@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav" id="js-head">
-            <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
+            <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" @click="goBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <h1 class="mui-title" >文件模板</h1>

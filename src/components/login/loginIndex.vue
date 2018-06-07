@@ -128,15 +128,11 @@ export default {
                             console.info("出现异常(继续运行代码):" + e);
                         }
                         
-<<<<<<< HEAD
+
                     // _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
                     
                      window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
                     // window.appApi.goHome('/myHome')
-=======
-                    // _this.$router.push({path:'/static/webstatic/work/work_home.html'});
-                    window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
->>>>>>> 50fe096b5e4bc0dddc68c69acea67d1644f5719c
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;
