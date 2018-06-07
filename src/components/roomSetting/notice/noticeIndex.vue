@@ -2,7 +2,7 @@
     <div id="app">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">公告</h1>
-            <button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" @click="goback">
+            <button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goback">
             <a class="mui-action-back mui-icon iconfont icon-back"></a>
         </button>
             <button class="mui-btn mui-btn-link mui-pull-right" style="display: block;"><span @click="addNotice()">发布公告</span></button>
@@ -16,7 +16,7 @@
                 <ul class="mui-table-view table-view-line">
 
                     <div v-for="(notice,index) in notices" :key="index">
-                        <li class="mui-table-view-cell text" @click="seeNotice(notice.id)">
+                        <li class="mui-table-view-cell" @click="seeNotice(notice.id)">
                             <h4 class="oa-title mui-ellipsis-2">{{notice.noticeContent}}</h4>
                             <p class="secondary">{{notice.createDate|formatDate}}</p>
                         </li>
@@ -119,12 +119,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
     body,
     .mui-content {
         background: #ffffff;
-    }
-    .text{
-        text-align: left
     }
 </style>

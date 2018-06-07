@@ -1,9 +1,14 @@
+<!--
+  describe：发布公告
+  created by：张绍武
+  date：2018-06-04
+-->
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">发布公告</h1>
 			<button id="btn-referrer"
-				class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" @click="goback">
+				class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goback">
 				<a class="mui-action-back mui-icon iconfont icon-back"></a>
 			</button>
 			<button style="display: block;"

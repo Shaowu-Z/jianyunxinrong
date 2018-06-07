@@ -1,5 +1,6 @@
 import setting from './config';
 import {Base,BackCookie} from './common';
+import pswipe from '../components/project/js/photoSwipe'
 
 /**
  * app接口

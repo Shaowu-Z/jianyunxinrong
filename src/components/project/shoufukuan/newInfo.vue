@@ -163,7 +163,7 @@
 										<div class="oa-contact-cell mui-table">
 											<div class="oa-contact-avatar mui-table-cell">
 												<!--<span class="my-list-icon label-word"></span>-->
-												<span :class="'my-list-icon '+ common.fileType(n.filename)"></span>
+												<!-- <span :class="'my-list-icon '+ common.fileType(n.filename)"></span> -->
 											</div>
 											<div class="oa-contact-content mui-table-cell">
 												<h4 class="oa-contact-name" v-text="n.filename"></h4>
@@ -195,7 +195,9 @@
 													<span class="txt-statue" v-else-if="item.noteType==3">评论</span>
 													<span class="txt-statue" v-else-if="item.noteType==4">退回</span>
 													<span class="txt-statue" v-else-if="item.noteType==5">签收</span>
-													<span class="secondary mui-pull-right" v-text='(new Date(item.creatDate)).Format("MM.dd hh:mm")'></span>
+													<!-- <span class="secondary mui-pull-right" v-text='(new Date(item.creatDate)).Format("MM.dd hh:mm")'></span> -->
+                                                    <span class="secondary mui-pull-right" v-text='zrrizhi.fnFormat(item.creatDate,"MM.dd hh:mm")'></span>
+                                                    <!-- <span class="secondary mui-pull-right" v-text='rizhi'></span> -->
 												</div>
 												<div class="secondary"><span v-text="item.roomClassName"></span>&nbsp;<span v-text="item.roomName"></span></div>
 												<!-- <div class="txt-content" v-html="item.content.replace(/#.%#/g, '<br/>')"></div> -->
@@ -274,6 +276,8 @@
 </template>
 <script>
 import setting from '../../../playform/config.js'
+import util from '../../../playform/util.js'
+import pswipe from '../js/photoSwipe'
 export default {
     data(){
         return{
@@ -283,7 +287,7 @@ export default {
                     username: setting.getCookie("username"),
                     imgid:[],
                     fujianid:[],
-
+                    zrrizhi:util,
 
 					qingdan: [],
 					title: '',
@@ -314,16 +318,40 @@ export default {
 					noteList: [],
 					fromroomImid: '',
 					fromuserId: '',
-					confirm:''
+                    confirm:'',
+                    rizhi:""
         }
     },
     created: function() {
+        // console.log("//////2222222222222////"+cc.datafo)
+        // alert(nes.nes.cdas(15941165525,"MM.dd hh:mm"))
         appApi.showBack()
         this.initdata()
+        // this.fordata()
         appApi.imgPreview.init();
-        console.log("/?????????s/"+window.location.href)
+        // console.log("/?????????s/"+window.location.href)
     },
     methods: {
+        // fordata:function(mms){
+        //     var fmt=mms
+        //     Date.prototype.Format = function(fmt) {
+        //         var o = {
+        //             "M+": this.getMonth() + 1, //月份
+        //             "d+": this.getDate(), //日
+        //             "h+": this.getHours(), //小时
+        //             "m+": this.getMinutes(), //分
+        //             "s+": this.getSeconds(), //秒
+        //             "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        //             "S": this.getMilliseconds() //毫秒
+        //         };
+        //         if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        //         for(var k in o)
+        //             if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        //         return fmt;
+        //     }
+        //    return new Date(fmt).Format("MM.dd hh:mm")
+        //     // console.log("dadad"+ new Date(15899599999).Format("MM.dd hh:mm"))
+        // },
         initdata: function() {
             var _self = this;
             _self.site_img=[]
@@ -367,6 +395,8 @@ export default {
                     _self.fromuserId = noral.table.userId
                     //日志
                     _self.noteList = data.noteList
+                //    _self.rizhi= nes.nes.cdas(_self.noteList[0].creatDate,"MM.dd hh:mm")
+                    // console.log(">>>>>>>>>>>>>>"+_self.fordata(15899599999,"MM.dd hh:mm"))
                     var attachments
                     if(data.attachments == null) {
                         attachments = []

@@ -14,16 +14,13 @@ const set = resolve => require(['@/components/myHome/setUp/set'], resolve)
 const setting = resolve => require(['@/components/myHome/setting'], resolve)
 const settingIndex = resolve => require(['@/components/myHome/setting/settingIndex'], resolve)
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
-const project = resolve => require(['@/components/myHome/project'], resolve)
+// const project = resolve => require(['@/components/myHome/project'], resolve)
 const aboutUs = resolve => require(['@/components/myHome/setting/aboutUs'], resolve)
 const privacy_policy = resolve => require(['@/components/myHome/setting/privacy_policy'], resolve)
 const serviceAgreement = resolve => require(['@/components/myHome/setting/serviceAgreement'], resolve)
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
-const shoufukuan = resolve => require(['@/components/myHome/myCenter/shoufukuan'], resolve)
-const transfer_sfk = resolve => require(['@/components/myHome/myCenter/transfer_sfk'], resolve)
-const newInfo = resolve => require(['@/components/myHome/myCenter/newInfo'], resolve)
 
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
@@ -33,10 +30,10 @@ const myHomeConfig = {
       path: '',
       component: myHomeIndex
     },
-    {
-      path: '/project',
-      component: project
-    },
+    // {
+    //   path: '/project',
+    //   component: project
+    // },
     {
       path: '/setUp',
       component: setUp,
@@ -85,18 +82,6 @@ const myHomeConfig = {
           path: '/myCollect',
           component: myCollect
         },
-        {
-          path: '/static/newwebstatic/shoufukuan/work_content.html',
-          component: shoufukuan
-        },
-        {
-          path: '/static/newwebstatic/shoufukuan/transfer.html',
-          component: transfer_sfk
-        },
-        {
-          path: '/static/newwebstatic/shoufukuan/newInfo.html',
-          component: newInfo
-        }
       ]
     },
   ]
