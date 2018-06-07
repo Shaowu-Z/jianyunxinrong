@@ -124,8 +124,11 @@ export default {
                             console.info("出现异常(继续运行代码):" + e);
                         }
                         
-                    // _this.$router.push({path:'/static/webstatic/work/work_home.html'});
-                    window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
+
+                    // _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
+                    
+                     window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
+                    // window.appApi.goHome('/myHome')
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;
