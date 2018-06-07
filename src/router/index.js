@@ -30,11 +30,7 @@ export default new Router({
     login,
     roomSetting,
     project,
-<<<<<<< HEAD
     roomSetting
     // laowu
-=======
-    // roomSetting
->>>>>>> e145ed262e465be37b74ebf6dd3674d37edf4fe7
   ]
 })
