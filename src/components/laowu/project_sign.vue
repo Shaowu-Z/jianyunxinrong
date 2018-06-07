@@ -209,7 +209,6 @@ export default {
 			display:block;
 			width: 100%;
 			text-align: center;
-			vertical-align: middle;
 			position: absolute;
 			left: 0;
 			top: 50%;
