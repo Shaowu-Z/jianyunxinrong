@@ -92,14 +92,11 @@ export default {
   },
   methods:{
     loginAction(){
-        alert(333)
             this.loginParams.certCode = this.$refs.user.value;
             this.loginParams.pwd = this.$refs.pwd.value;
             var _this=this
-            alert(15)
             this.$http.post("/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
-                alert(16)
                 console.log(response);
                 if(rs.code === 0){
                      //登录成功
@@ -113,7 +110,6 @@ export default {
                     // window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
                     window.appApi.saveUserInfo(JSON.stringify(senduserInfo), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
-                      alert(859633)
                     //    window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
                     //  _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
                        try {
