@@ -7,8 +7,9 @@
 // import personApprove from '@/components/login/personApprove'
 
 const project = resolve => require(['@/components/project'], resolve)
-const addProject = resolve => require(['@/components/project/add_project'], resolve)
-const shoufukuan = resolve => require(['@/components/project/shoufukuan/shoufukuan'], resolve)
+const shoufukuan = resolve => require(['@/components/project/shoufukuan'], resolve)
+const add_project = resolve => require(['@/components/project/add_project'], resolve)
+const work_content = resolve => require(['@/components/project/shoufukuan/work_content'], resolve)
 const transfer_sfk = resolve => require(['@/components/project/shoufukuan/transfer_sfk'], resolve)
 const newInfo = resolve => require(['@/components/project/shoufukuan/newInfo'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
@@ -23,21 +24,42 @@ const myProjectconfig = {
   component: project,
   children: [
     {
-      path: '/addProject',
-      component: addProject
+      path: '',
+      component: add_project
     },
     {
-      path: '/static/newwebstatic/shoufukuan/work_content.html',
-      component: shoufukuan
-    },
-    {
-      path: '/static/newwebstatic/shoufukuan/transfer.html',
-      component: transfer_sfk
-    },
-    {
-      path: '/static/newwebstatic/shoufukuan/newInfo.html',
-      component: newInfo
+      path: '/shoufukuan',
+      component: shoufukuan,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/shoufukuan/work_content',
+          component: work_content
+        },
+        {
+          path: '/static/newwebstatic/shoufukuan/transfer.html',
+          component: transfer_sfk
+        },
+        {
+          path: '/static/newwebstatic/shoufukuan/newInfo.html',
+          component: newInfo
+        }
+      ]
     }
+    
+    
+    //     {
+    //   path: '/static/newwebstatic/shoufukuan/work_content.html',
+    //   component: shoufukuan
+    // },
+    // {
+    //   path: '/static/newwebstatic/shoufukuan/transfer.html',
+    //   component: transfer_sfk
+    // },
+    // {
+    //   path: '/static/newwebstatic/shoufukuan/newInfo.html',
+    //   component: newInfo
+    // }
   ]
 }
 
