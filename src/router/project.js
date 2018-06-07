@@ -7,9 +7,8 @@
 // import personApprove from '@/components/login/personApprove'
 
 const project = resolve => require(['@/components/project'], resolve)
-const shoufukuan = resolve => require(['@/components/project/shoufukuan'], resolve)
-const add_project = resolve => require(['@/components/project/add_project'], resolve)
-const work_content = resolve => require(['@/components/project/shoufukuan/work_content'], resolve)
+const addProject = resolve => require(['@/components/project/add_project'], resolve)
+const shoufukuan = resolve => require(['@/components/project/shoufukuan/shoufukuan'], resolve)
 const transfer_sfk = resolve => require(['@/components/project/shoufukuan/transfer_sfk'], resolve)
 const newInfo = resolve => require(['@/components/project/shoufukuan/newInfo'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
@@ -24,8 +23,8 @@ const myProjectconfig = {
   component: project,
   children: [
     {
-      path: '',
-      component: add_project
+      path: '/addProject',
+      component: addProject
     },
     {
       path: '/shoufukuan',
