@@ -8,6 +8,7 @@ import axios from 'axios'
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import "./playform/alert.js";
+// import "./playform/regions.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
 import './assets/css/common/mui.min.less'

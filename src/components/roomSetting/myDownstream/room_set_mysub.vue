@@ -2,7 +2,7 @@
     <div id="app">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">我的下游</h1>
-            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left" @click="goBack"></a>
+            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left hide" @click="goBack"></a>
         </header>
         <section class="mui-content">
             <div class="address-list address-project" id="app">
