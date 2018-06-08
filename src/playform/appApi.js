@@ -207,6 +207,13 @@ function nullClick(node) {
 Adaptive.init();
 
 window.appApi = {
+	sUserAgent : navigator.userAgent.toLowerCase(),
+	isIpad : sUserAgent.match(/ipad/i),
+	isIphoneOs : sUserAgent.match(/iphone os/i) || isIpad,
+	isAndroid : sUserAgent.match(/android/i),
+	isApp : sUserAgent.match(/cy/i),
+	isWeixin : sUserAgent.match(/MicroMessenger/i) == 'micromessenger',
+	isTop : window == top,
 	callBackFlag: {
 		HX_LOGIN: "1",
 		LOCATION: "2",

@@ -1173,4 +1173,4 @@ function getFileType(suffix) {
     }
     return clazz;
 }
-export {Base,BackCookie,removeThirdInfo,getParam,setDishSort}
+export {Base,BackCookie,removeThirdInfo,getParam,setDishSort,getDishSort}

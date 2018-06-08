@@ -4,9 +4,9 @@
             <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
-            <h1 class="mui-title" >云文件</h1>
-            <a class="mui-icon mui-icon-search mui-pull-right" onclick="app.doSearch()"></a>
-            <!--<a class="mui-icon iconfont icon-c-upload mui-pull-right js-upload"  onclick="app.uploadFile()"></a>-->
+            <h1 class="mui-title">云文件</h1>
+            <a class="mui-icon mui-icon-search mui-pull-right" onclick="doSearch()"></a>
+            <!--<a class="mui-icon iconfont icon-c-upload mui-pull-right js-upload"  onclick="uploadFile()"></a>-->
         </header>
         <section class="mui-content" id="dish_content" v-show="loadStatus" style="display: none;padding-top: 45px">
             <div class="mui-scroll">
@@ -22,7 +22,7 @@
                                                 </div>
                                                 <div class="oa-contact-content mui-table-cell">
                                                     <h4 class="oa-contact-name"><span v-text="obj.name"></span></h4>
-                                                    <p class="oa-contact-email"><span>{{obj.updateDate | formDate}}</span><span v-text="obj.size"></span></p>
+                                                    <p class="oa-contact-email"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
                                                 </div>
                                             </div>
                                         </a>
@@ -33,7 +33,7 @@
 
                     <!--<ul class="mui-table-view mui-table-view-striped">-->
                         <!--<li class="mui-table-view-cell mui-checkbox">-->
-                            <!--<a class="" href="javascript:appApi.openNewWindow(setting.getPagePath()+'/dish/fileSendIndex.html?projectSN='+app.projectId)">-->
+                            <!--<a class="" href="javascript:appApi.openNewWindow(setting.getPagePath()+'/dish/fileSendIndex.html?projectSN='+projectId)">-->
                                 <!--<div class="oa-contact-cell mui-table">-->
                                     <!--<div class="oa-contact-avatar mui-table-cell">-->
                                         <!--<span class="my-list-icon label-mail"></span>-->
@@ -51,7 +51,7 @@
             </div>
             <!--<div class="upload-btn roll fixed-bottom" v-show="showUpload">-->
                 <!--<span class="title">-->
-                    <!--<span class="mui-icon iconfont icon-c-upload" onclick="app.uploadFile()"></span>-->
+                    <!--<span class="mui-icon iconfont icon-c-upload" onclick="uploadFile()"></span>-->
                 <!--</span>-->
             <!--</div>-->
             <div v-if="firstList.length == 0">
@@ -157,7 +157,7 @@ export default {
             isOpeAll:false//文件操作所有权限
             }
     },
-    created() {
+    mounted() {
         if(window.location.href.split("?")[1]){
             var arrays = window.location.href.split("?")[1].split("&");
             var map = {};
@@ -204,7 +204,7 @@ export default {
         //     })
         // }
         function projectClick(id) {
-            // alert(_self.$data.roomId+"////"+id)
+            // alert(_self.roomId+"////"+id)
             appApi.openNewWindow(getUrl() + "/static/webstatic/dish/create_share.html?header=1&projectSN=" + id);
         }
 		var _self = this;
@@ -212,78 +212,78 @@ export default {
 		var params = getParam(window.location.href);
 		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
             if(params.hasOwnProperty("projectSN"))
-				_self.$data.projectId = params.projectSN; //项目id
+				_self.projectId = params.projectSN; //项目id
 			else
-                _self.$data.projectId = params.projectSn; //项目id
+                _self.projectId = params.projectSn; //项目id
             if(params.hasOwnProperty("teamCode"))
-            	_self.$data.teamCode = params.teamCode;
-            _self.$data.roomId = params.roomId; //房间id
+            	_self.teamCode = params.teamCode;
+            _self.roomId = params.roomId; //房间id
 			if(params.hasOwnProperty("isSys")) {
-				_self.$data.isSys = true;
+				_self.isSys = true;
 			} else {
-				_self.$data.showEdit = true;
+				_self.showEdit = true;
 			}
 			if(params.hasOwnProperty("isOpe")) {
-				_self.$data.isOpe = false;
+				_self.isOpe = false;
 			} else {
-				_self.$data.isOpe = true;
+				_self.isOpe = true;
 			}
 			if(params.hasOwnProperty("isShare")) {
-				_self.$data.isShare = true;
-				_self.$data.pageParams.from = "1";
+				_self.isShare = true;
+				_self.pageParams.from = "1";
 			}
 			if(1 == 1) {
 				_self.showHeader();
 			}
 			if(params.hasOwnProperty("id")) {
 				//显示头部
-				_self.$data.isIndex = 0;
-				_self.$data.id = params.id; //目录id
-				if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
-					_self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
+				_self.isIndex = 0;
+				_self.id = params.id; //目录id
+				if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initData(_self.id, _self.getCurData);//, _self.roomId
 				else
-                    _self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
+                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
 				_self.showHeader();
-				_self.$data.loadStatus = true;
+				_self.loadStatus = true;
 			} else if(params.hasOwnProperty("keyword")) {
 				//搜索
-				_self.$data.pageParams.keyword = params.keyword;
-				_self.$data.pageParams.projectId = _self.$data.projectId;
+				_self.pageParams.keyword = params.keyword;
+				_self.pageParams.projectId = _self.projectId;
 				_self.searchData();
-				_self.$data.loadStatus = true;
+				_self.loadStatus = true;
 			} else {
 				//首目录
 				//不显示头部
 				//数据初始化
-				_self.$data.isIndex = 1;
-                if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
-					_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
+				_self.isIndex = 1;
+                if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
 				else
-					_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
+					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
 				if(!appApi.isApp) {
-					_self.$data.showUpload = false;
+					_self.showUpload = false;
 				}
-				//_self.$data.showUpload = true;
+				//_self.showUpload = true;
 			}
 			_self.uploadInit();
 			_self.downLoadInit();
 		} else if(params.hasOwnProperty("shareId")) {
 			//分享
-			_self.$data.shareId = params.shareId;
+			_self.shareId = params.shareId;
 			var params = {
-				shareId: _self.$data.shareId
+				shareId: _self.shareId
 			};
 			console.info(params);
 			this.$http.post("/cdish/share/detail", params).then(function(response) {
 				if(response.data.code == 0) {
 //					console.info(response.data.result);
 					var rs = response.data.result;
-					_self.$data.status = 1;
-					_self.$data.loadStatus = true;
-					_self.$data.isShare = true;
-					_self.$data.shareInfo = rs;
-					_self.$data.projectId = rs.projectId;
-					_self.$data.shareInfoList = rs.shareItems;
+					_self.status = 1;
+					_self.loadStatus = true;
+					_self.isShare = true;
+					_self.shareInfo = rs;
+					_self.projectId = rs.projectId;
+					_self.shareInfoList = rs.shareItems;
 					_self.downLoadInit();
 				} else {
                     // msg(response.data.message);
@@ -328,6 +328,17 @@ export default {
 		}
     },
     methods: {
+        refreshPage() {
+            if(pullWidget) {
+                pullWidget.pullDownLoading();
+            }
+            if(isIndex == 1) {
+                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
+                    initFirstData(projectId, getFirstData, roomId);//, roomId
+                else
+                    initFirstData(projectId, getFirstData);//, roomId
+            }
+        },
 		initData: function(dirId, callback, rommId) {
 			var _self = this;
 			//获取数据
@@ -335,9 +346,9 @@ export default {
 			if(rommId!="" && rommId!="undefined" && rommId!=undefined)
 				rid = "&roomId=" + rommId;
 			var teamCode = "";
-			if(_self.$data.teamCode!="" && _self.$data.teamCode!="undefined" && _self.$data.teamCode!=undefined)
-                teamCode = "&teamCode=" + _self.$data.teamCode;
-			this.$http.get("/cdish/data?projectId=" + _self.$data.projectId + "&dirId=" + dirId + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
+			if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
+			this.$http.get("/cdish/data?projectId=" + _self.projectId + "&dirId=" + dirId + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
 					if(callback) callback(rs);
@@ -359,8 +370,8 @@ export default {
             if(rommId!="" && rommId!="undefined" && rommId!=undefined)
                 rid = "&roomId=" + rommId;
             var teamCode = "";
-            if(_self.$data.teamCode!="" && _self.$data.teamCode!="undefined" && _self.$data.teamCode!=undefined)
-                teamCode = "&teamCode=" + _self.$data.teamCode;
+            if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
 			this.$http.get("/cdish/data?projectId=" + project_id + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
@@ -389,9 +400,9 @@ export default {
 			var _self = this;
 			/*document.querySelector('.mui-scroll-wrapper' ).addEventListener('scroll', function (e) {
 			 if (scroll.y <-30) {
-			 _self.$data.showUpload = false;
+			 _self.showUpload = false;
 			 } else {
-			 _self.$data.showUpload = true;
+			 _self.showUpload = true;
 			 }
 			 })*/
 			/***********************
@@ -433,19 +444,19 @@ export default {
 		},
 		initPageFun: function() {
 			var _self = this;
-			_self.$data.pageParams.curPage = 1;
+			_self.pageParams.curPage = 1;
 			mui.init();
 			mui.ready(function() {
 				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
 					down: {
 						callback: function() {
 							var self = this;
-							_self.$data.pageParams.curPage = 1;
-							if(_self.$data.isIndex == 1) {
-								if(_self.$data.roomId!="" && _self.$data.roomId!="undefined" && _self.$data.roomId!=undefined)
-									_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
+							_self.pageParams.curPage = 1;
+							if(_self.isIndex == 1) {
+								if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
+									_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
 								else
-									_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
+									_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
 							}
 							_self.loadData(function() {
 								self.endPullDownToRefresh();
@@ -480,26 +491,26 @@ export default {
                         ,time: 1 //2秒后自动关闭
                         ,anim:false
                     });
-				_self.$data.loadStatus = false;
+				_self.loadStatus = false;
 				return;
 			}
-			_self.$data.sorts = rs.sorts;
+			_self.sorts = rs.sorts;
 			/*系统目录start*/
 			if(rs.data.hasOwnProperty("firstList") && rs.data.firstList.length != 0) {
-				/*_self.$data.sysInfo.createTime = _self.formDate(rs.data.sys.updateTime);
-				 _self.$data.sysInfo.id = rs.data.sys.id;
-				 _self.$data.sysInfo.sysName = rs.data.sys.name;
-				 _self.$data.sysInfo.sysSize = rs.data.sys_size;
+				/*_self.sysInfo.createTime = _self.formDate(rs.data.sys.updateTime);
+				 _self.sysInfo.id = rs.data.sys.id;
+				 _self.sysInfo.sysName = rs.data.sys.name;
+				 _self.sysInfo.sysSize = rs.data.sys_size;
 				 /!*系统目录end*!/
-				 _self.$data.firstInfo.createTime = _self.formDate(rs.data.first.updateTime);
-				 _self.$data.firstInfo.id = rs.data.first.id;
-				 _self.$data.firstInfo.name = rs.data.first.name;
-				 _self.$data.firstInfo.size = rs.data.first_size;*/
-				_self.$data.firstList = rs.data.firstList;
+				 _self.firstInfo.createTime = _self.formDate(rs.data.first.updateTime);
+				 _self.firstInfo.id = rs.data.first.id;
+				 _self.firstInfo.name = rs.data.first.name;
+				 _self.firstInfo.size = rs.data.first_size;*/
+				_self.firstList = rs.data.firstList;
 				console.log(rs.data.firstList)
-				_self.$data.loadStatus = true;
+				_self.loadStatus = true;
 			} else {
-				_self.$data.loadStatus = false;
+				_self.loadStatus = false;
                 // msg("当前项目尚未被审核，无法打开云盘")
                 layer.open({
                         content: "当前项目尚未被审核，无法打开云盘"
@@ -509,47 +520,77 @@ export default {
                     });
 			}
 		},
+		formDate: function(value) {
+			var date = new Date(value);
+			var Y = date.getFullYear(),
+				m = date.getMonth() + 1,
+				d = date.getDate(),
+				H = date.getHours(),
+				i = date.getMinutes(),
+				s = date.getSeconds();
+			if(m < 10) {
+				m = '0' + m;
+			}
+			if(d < 10) {
+				d = '0' + d;
+			}
+			if(H < 10) {
+				H = '0' + H;
+			}
+			if(i < 10) {
+				i = '0' + i;
+			}
+			if(s < 10) {
+				s = '0' + s;
+			}
+			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
+			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
+			//<!-- 获取时间格式 2017-01-03 -->
+			//var t = Y + '-' + m + '-' + d;
+			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
+			return t;
+		},
 		getCurData: function(rs) {
 			var _self = this;
 			if(rs.hasOwnProperty("sorts")) {
-				_self.$data.sorts = rs.sorts;
-				_self.$data.projectManageId = rs.projectManageId;
-				_self.$data.curUserId = rs.curUserId;
+				_self.sorts = rs.sorts;
+				_self.projectManageId = rs.projectManageId;
+				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.$data.curInfo.createTime = _self.formDate(rs.updateTime);
-			_self.$data.curInfo.id = rs.id;
-			_self.$data.curInfo.name = rs.name;
-			_self.$data.curInfo.size = rs.size;
-			document.getElementById("js-head-name").innerText = _self.$data.curInfo.name;
-			if (_self.$data.curInfo.name=="图纸及资料"){
+			_self.curInfo.createTime = this.formDate(rs.updateTime);
+			_self.curInfo.id = rs.id;
+			_self.curInfo.name = rs.name;
+			_self.curInfo.size = rs.size;
+			document.getElementById("js-head-name").innerText = _self.curInfo.name;
+			if (_self.curInfo.name=="图纸及资料"){
 				//该系统文件下可以创建文件夹
-                _self.$data.isSys = false;
+                _self.isSys = false;
 			}
-            if (_self.$data.curInfo.name=="临时文件"){
+            if (_self.curInfo.name=="临时文件"){
                 //临时文件放开操作所有权限
-                _self.$data.isOpeAll = true;
+                _self.isOpeAll = true;
             }
 
 			//完善分页参数
-			_self.$data.pageParams.projectId = _self.$data.projectId;
-			_self.$data.pageParams.nodeId = _self.$data.curInfo.id;
+			_self.pageParams.projectId = _self.projectId;
+			_self.pageParams.nodeId = _self.curInfo.id;
 			_self.initPageFun();
 			_self.initSort();
 		},
 		searchData: function(keyword) {
 			var _self = this;
 			if(keyword) {
-				_self.$data.pageParams.keyword = keyword;
+				_self.pageParams.keyword = keyword;
 			}
-			_self.$data.pageParams.curPage = 1;
+			_self.pageParams.curPage = 1;
 			mui.init();
 			mui.ready(function() {
 				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
 					down: {
 						callback: function() {
 							var self = this;
-							_self.$data.pageParams.curPage = 1;
+							_self.pageParams.curPage = 1;
 							_self.loadSearchData(function() {
 								self.endPullDownToRefresh();
 								self.refresh(true);
@@ -574,11 +615,11 @@ export default {
 		},
 		createDir: function() {
 			var _self = this;
-			if(_self.$data.isSys == true || _self.$data.isSys == "true") {
+			if(_self.isSys == true || _self.isSys == "true") {
 				//msg("系统目录下不可新建文件夹")
 				return;
 			}
-			appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?pid=" + _self.$data.curInfo.id);
+			appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?pid=" + _self.curInfo.id);
 		},
 		showHeader: function() {
 			if(document.getElementById("pullrefresh"))
@@ -590,7 +631,8 @@ export default {
 			if(document.getElementById("dish-tab"))
 				document.getElementById("dish-tab").style.top = "44px";
 			if(document.getElementById("js-dish-con"))
-				addClass(document.getElementById("js-dish-con"), "sift-content");
+				// addClass(document.getElementById("js-dish-con"), "sift-content");
+				$("#js-dish-con").addClass('sift-content')
 			if(document.getElementById("dish_content"))
 				document.getElementById("dish_content").style.paddingTop = "44px";
 			//绑定后退事件
@@ -598,35 +640,35 @@ export default {
 		openDir: function(id, type, name, suffix, status, event) {
 			console.info("打开")
 			var _self = this;
-			if(_self.$data.selectMode) {
+			if(_self.selectMode) {
 				return;
 			}
-			console.info(_self.$data.sysInfo.id);
-			_self.$data.editItem.name = name;
-			_self.$data.editItem.id = id;
-			_self.$data.editItem.type = type;
-			_self.$data.editItem.suffix = suffix;
-			_self.$data.editItem.status = status;
+			console.info(_self.sysInfo.id);
+			_self.editItem.name = name;
+			_self.editItem.id = id;
+			_self.editItem.type = type;
+			_self.editItem.suffix = suffix;
+			_self.editItem.status = status;
 			if(type == 1) { /*打开目录*/
                 var url = "";
-                if(_self.$data.roomId!="" && _self.$data.roomId!="undefined" && _self.$data.roomId!=undefined)
-					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
+                if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
 				else
-					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
-				if(id == _self.$data.sysInfo.id || _self.$data.isSys == true || _self.$data.isSys == "true") {
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+				if(id == _self.sysInfo.id || _self.isSys == true || _self.isSys == "true") {
 					url = url + "&isSys=true";
 				}
-				if( _self.$data.isOpe == false || _self.$data.isOpe == "false") {
+				if( _self.isOpe == false || _self.isOpe == "false") {
 					url = url + "&isOpe=false";
 				}
-				if(_self.$data.isShare) {
-					url = setting.getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&isShare=true";
+				if(_self.isShare) {
+					url = setting.getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&isShare=true";
 				}
 				window.appApi.openNewWindow(url);
 			} else {
 				_self.downloadFile(id, type, name, suffix, event)
 			}
-			_self.$data.showEditBox = false;
+			_self.showEditBox = false;
 			event.preventDefault();
 			event.stopPropagation();
 			return;
@@ -641,10 +683,10 @@ export default {
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
             var url;
-            if(_self.$data.roomId!="" && _self.$data.roomId!="undefined" && _self.$data.roomId!=undefined){
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId + "&roomId=" + _self.$data.roomId;// + "&roomId=" + _self.$data.roomId
+            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
             }else{
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.$data.projectId;// + "&roomId=" + _self.$data.roomId
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
             }
             if(isSys) {
 				url = url + "&isSys=true";
@@ -656,23 +698,23 @@ export default {
 		},
 		itemEditShow: function(type) {
 			var _self = this;
-			if(_self.$data.isSys) {
+			if(_self.isSys) {
 				//系统目录
 				if(type == 1) {
-					return !_self.$data.selectMode;
+					return !_self.selectMode;
 				} else {
-					if(_self.$data.selectMode) {
+					if(_self.selectMode) {
 						return false;
 					}
 					return true;
 				}
 			} else {
-				return !_self.$data.selectMode;
+				return !_self.selectMode;
 			}
 		},
 		operateShow: function(type) {
 			var _self = this;
-            if(!_self.$data.isOpe) {
+            if(!_self.isOpe) {
                 //系统目录
                 if(document.getElementById("uoload")!=null)
                     document.getElementById("uoload").style.display = "none";
@@ -692,26 +734,26 @@ export default {
 		itemEdit: function(id, type, name, suffix, status, userId, event) {
 
 			var _self = this;
-			/*if(_self.$data.selectMode){
+			/*if(_self.selectMode){
 			 msg("请先退出批量选择再进行此操作")
 			 return;
 			 }*/
-			_self.$data.showCollect = false;
-			_self.$data.editItem.name = name;
-			_self.$data.editItem.id = id;
-			_self.$data.editItem.type = type;
-			_self.$data.editItem.suffix = suffix;
-			_self.$data.editItem.status = status;
-            _self.$data.editItem.isOpe = _self.$data.isOpe;
-			if(userId == _self.$data.curUserId || _self.$data.projectManageId == _self.$data.curUserId) {
-				_self.$data.editItem.auth = true;
+			_self.showCollect = false;
+			_self.editItem.name = name;
+			_self.editItem.id = id;
+			_self.editItem.type = type;
+			_self.editItem.suffix = suffix;
+			_self.editItem.status = status;
+            _self.editItem.isOpe = _self.isOpe;
+			if(userId == _self.curUserId || _self.projectManageId == _self.curUserId) {
+				_self.editItem.auth = true;
 			} else {
-				_self.$data.editItem.auth = false;
+				_self.editItem.auth = false;
 			}
 			console.info("打开列表")
 			_self.collectCheck(id, type);
 			setTimeout(function() {
-				_self.$data.showEditBox = true;
+				_self.showEditBox = true;
 			}, 200)
 			if(event) {
 				event.preventDefault();
@@ -726,7 +768,7 @@ export default {
 			} else {
 				appApi.openNewWindow(setting.getPagePath() + "/dish/rename_file.html?id=" + id + "&name=" + name);
 			}
-			_self.$data.showEditBox = false;
+			_self.showEditBox = false;
 		},
 		cancelItem: function(id, type, name, suffix, status, event) {
 			//标识作废 或取消作废
@@ -753,7 +795,7 @@ export default {
                         ,anim:false
                     });
 				}
-				_self.$data.showEditBox = false;
+				_self.showEditBox = false;
 			}).catch(function(error) {
 				layer.closeAll();
 				warm("操作失败")
@@ -762,7 +804,7 @@ export default {
 		moveItem: function(id, type, name, suffix, status, event) {
 			var _self = this;
 			//appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?id=" + id + "&name=" + name);
-			_self.$data.showEditBox = false;
+			_self.showEditBox = false;
 			_self.batchCut([id]);
 		},
 		delItem: function(id, type, name, suffix, status, event) {
@@ -809,7 +851,7 @@ export default {
 				qtitle = "删除文件";
 			}
 			_self.dishConfirm(qtitle, qmsg, okFun);
-			_self.$data.showEditBox = false;
+			_self.showEditBox = false;
 		},
 		itemDetail: function(id, type, name, suffix, status, event,isOpe) {
 			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
@@ -828,7 +870,7 @@ export default {
 			}
 			loading("文件签署中，请不要进行任何操作");
 			var _self = this;
-			this.$http.post("/sign/sign",{id:id,projectId:_self.$data.projectId}).then(function (response) {
+			this.$http.post("/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
 				console.info(response.data.result);
 				layer.closeAll();
 				var res = response.data;
@@ -854,52 +896,22 @@ export default {
 		},
 		dishConfirm: function(t, m, f) {
 			var _self = this;
-			_self.$data.delTitle = t;
-			_self.$data.delMsg = m;
-			_self.$data.delFun = f;
-			_self.$data.showDelBox = true;
+			_self.delTitle = t;
+			_self.delMsg = m;
+			_self.delFun = f;
+			_self.showDelBox = true;
 		},
 		dishConfirmOk: function() {
 			var _self = this;
-			_self.$data.showDelBox = false;
-			var fun = _self.$data.delFun;
+			_self.showDelBox = false;
+			var fun = _self.delFun;
 			if(fun && fun instanceof Function) {
 				fun();
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
 		loadData: function(fun) {
 			var _self = this;
-			var pageParams = _self.$data.pageParams;
+			var pageParams = _self.pageParams;
 			this.$http.post("/cdish/list", pageParams).then(function(response) {
 				// console.log(response.data)
 				if(response.data.code == 200) {
@@ -907,13 +919,13 @@ export default {
 					var allPage = rs.result.endPage;
 					if(pageParams.curPage == 1) {
 						//首次 加载一次
-						_self.$data.curList = rs.result.list;
+						_self.curList = rs.result.list;
 						undefined != fun && fun();
 						if(allPage > 1) {
 							document.getElementById("loadMore").style.display = "block";
 						}
 					} else {
-						_self.$data.curList = _self.$data.curList.concat(rs.result.list);
+						_self.curList = _self.curList.concat(rs.result.list);
 						undefined != fun && fun(pageParams.curPage >= allPage);
 					}
 				} else {
@@ -926,30 +938,30 @@ export default {
                         ,anim:false
                     });
 				}
-				//console.log(_self.$data.curList);
-				_self.$data.pageParams.curPage++;
+				//console.log(_self.curList);
+				_self.pageParams.curPage++;
 				_self.initScroll();
-				_self.$data.status = 1;
+				_self.status = 1;
 			}).catch(function(error) {
 				console.log(error);
 			});
 		},
 		loadSearchData: function(fun) {
 			var _self = this;
-			var pageParams = _self.$data.pageParams;
+			var pageParams = _self.pageParams;
 			this.$http.post("/cdish/search", pageParams).then(function(response) {
 				if(response.data.code == 200) {
 					var rs = response.data;
 					var allPage = rs.result.endPage;
 					if(pageParams.curPage == 1) {
 						//首次 加载一次
-						_self.$data.curList = rs.result.list;
+						_self.curList = rs.result.list;
 						undefined != fun && fun();
 						if(allPage > 1) {
 							document.getElementById("loadMore").style.display = "block";
 						}
 					} else {
-						_self.$data.curList = _self.$data.curList.concat(rs.result.list);
+						_self.curList = _self.curList.concat(rs.result.list);
 						undefined != fun && fun(pageParams.curPage >= allPage);
 					}
 				} else {
@@ -963,9 +975,9 @@ export default {
                         ,anim:false
                     });
 				}
-				_self.$data.pageParams.curPage++;
+				_self.pageParams.curPage++;
 				_self.initScroll();
-				_self.$data.status = 1;
+				_self.status = 1;
 			}).catch(function(error) {
 				console.log(error);
 			});
@@ -981,16 +993,16 @@ export default {
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
-						console.log(1111);
-			$("dish_content").insertAdjacentHTML('afterend', html);
-			widget = document.getElementById("uploadWidget");
-			widget.addEventListener("change", function(event) {
+			console.log(document.getElementById("dish_content"));
+			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
+			console.log(jQuery())
+			document.getElementById("uploadWidget").addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
-				if(_self.$data.isIndex == 1) {
+				if(_self.isIndex == 1) {
 					//选择要上传的目录
 					console.info("选择目录");
-					var url = setting.getPagePath() + "/dish/upload_select.html?projectId=" + _self.$data.projectId;
+					var url = setting.getPagePath() + "/dish/upload_select.html?projectId=" + _self.projectId;
 					appApi.openNewWindow(url);
 				} else {
 					_self.uploadCallBack(this);
@@ -1010,9 +1022,9 @@ export default {
 			var _self = this;
 			//添加文件
 			/*var params = {
-			 projectId:_self.$data.curInfo.projectId,
-			 name:_self.$data.name,
-			 parentId:_self.$data.curInfo.id
+			 projectId:_self.curInfo.projectId,
+			 name:_self.name,
+			 parentId:_self.curInfo.id
 			 };*/
 			var formData = new FormData();
 
@@ -1035,11 +1047,11 @@ export default {
 				}
 			}
 
-			formData.append('projectId', _self.$data.projectId);
+			formData.append('projectId', _self.projectId);
 			if(undefined != id) {
 				formData.append('parentId', id);
 			} else {
-				formData.append('parentId', _self.$data.curInfo.id);
+				formData.append('parentId', _self.curInfo.id);
 			}
 			var config = {
 				headers: {
@@ -1369,8 +1381,8 @@ export default {
 			//下载初始化
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
-			$("dish_content").insertAdjacentHTML('afterend', html);
-			downloadWidget = document.getElementById("downloadWidget");
+			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
+			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
 			return getUrl() + "/cdish/file/download?id=" + id;
@@ -1380,17 +1392,18 @@ export default {
 			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
-				downloadWidget.src = _self.getFileUrl(id);
+				document.getElementById("downloadWidget").src = _self.getFileUrl(id);
+
 			}
-			_self.$data.showEditBox = false;
+			_self.showEditBox = false;
 		},
 		initSort: function() {
 			var _self = this;
 			//获取缓存排序方式
 			if(undefined != getDishSort()) {
-				_self.$data.curSort = getDishSort();
+				_self.curSort = getDishSort();
 			}
-			_self.$data.pageParams.sortType = _self.$data.curSort.type;
+			_self.pageParams.sortType = _self.curSort.type;
 		},
 		fileType: function(suffix) {
 			var clazz = "label-";
@@ -1664,23 +1677,23 @@ export default {
 				text: text
 			};
 			setDishSort(val);
-			_self.$data.curSort = val;
-			_self.$data.pageParams.sortType = type;
-			_self.$data.sortShow = false;
+			_self.curSort = val;
+			_self.pageParams.sortType = type;
+			_self.sortShow = false;
 			refreshPage();
 		},
 		goSelectMode: function(e) {
 			var _self = this;
-			if(_self.$data.selectMode) {
+			if(_self.selectMode) {
 				return;
 			}
-			_self.$data.selectMode = true;
-			_self.$data.showEdit = false;
+			_self.selectMode = true;
+			_self.showEdit = false;
 			//监听返回键
 			appApi.stopBack(function() {
-				app.$data.selectMode = false;
+				selectMode = false;
 				appApi.resetBack();
-				app.backSelectMode();
+				backSelectMode();
 			})
 			//监听选中
 			//取消所有多选
@@ -1711,11 +1724,11 @@ export default {
 			console.info(1)
 			var _self = this;
 			console.info(_self.getSelectVal());
-			_self.$data.selectMode = false;
+			_self.selectMode = false;
 			appApi.resetBack(); //使返回键生效
-			_self.$data.selectEdit = false;
-			_self.$data.selectCount = 0;
-			_self.$data.showEdit = true;
+			_self.selectEdit = false;
+			_self.selectCount = 0;
+			_self.showEdit = true;
 			//取消所有多选
 			var obj = document.getElementsByName("selectItem");
 			var select_arr = [];
@@ -1728,30 +1741,30 @@ export default {
 		selectEvent: function(e) {
             console.info(2)
 			var _self = this;
-			_self.$data.selectCount = _self.getSelectVal().length;
+			_self.selectCount = _self.getSelectVal().length;
 			var obj = document.getElementsByName("selectItem");
 			for(var i = 0; i < obj.length; i++) {
 				var c = obj[i];
 				if(c.getAttribute("data-type") == "1" && c.checked) {
-					if(_self.$data.isSys) {
-						_self.$data.canMove = false;
-						_self.$data.canAffrim = false;
+					if(_self.isSys) {
+						_self.canMove = false;
+						_self.canAffrim = false;
 					}
-					_self.$data.canCollect = false;
-					_self.$data.selectHasDir = true;
+					_self.canCollect = false;
+					_self.selectHasDir = true;
 					break
 				} else {
 					//不包含文件夹
-					_self.$data.selectHasDir = false;
-					_self.$data.canMove = true;
-					_self.$data.canAffrim = true;
-					_self.$data.canCollect = true;
+					_self.selectHasDir = false;
+					_self.canMove = true;
+					_self.canAffrim = true;
+					_self.canCollect = true;
 				}
 			}
 		},
 		allSelect: function() { //全选
 			var _self = this;
-			if(_self.$data.selectMode) {
+			if(_self.selectMode) {
 				var obj = document.getElementsByName("selectItem");
 				for(var k in obj) {
 					obj[k].checked = true;
@@ -1759,21 +1772,21 @@ export default {
 				for(var i = 0; i < obj.length; i++) {
 					var c = obj[i];
 					if(c.getAttribute("data-type") == "1") {
-						if(_self.$data.isSys) {
-							_self.$data.canMove = false;
-							_self.$data.canAffrim = false;
+						if(_self.isSys) {
+							_self.canMove = false;
+							_self.canAffrim = false;
 						}
-						_self.$data.selectHasDir = true;
+						_self.selectHasDir = true;
 						break
 					} else {
 						//包含文件夹
-						_self.$data.selectHasDir = false;
-						_self.$data.canMove = true;
-						_self.$data.canAffrim = true;
+						_self.selectHasDir = false;
+						_self.canMove = true;
+						_self.canAffrim = true;
 					}
 				}
                 console.info(3)
-				_self.$data.selectCount = _self.getSelectVal().length;
+				_self.selectCount = _self.getSelectVal().length;
 			}
 		},
 		openSelectEdit: function(e) {
@@ -1802,7 +1815,7 @@ export default {
 			itemStr = items.join(",");
 			//获取收藏状态
 			_self.collectCheck(itemStr)
-			_self.$data.selectEdit = true;
+			_self.selectEdit = true;
 		},
 		batchDel: function() {
 			//msg("功能开发中");
@@ -1907,8 +1920,8 @@ export default {
 			//批量移动
 			var _self = this;
 			var moveType = 0;
-			if(_self.$data.isSys) {
-				if(_self.$data.selectHasDir) {
+			if(_self.isSys) {
+				if(_self.selectHasDir) {
                     // msg("标准目录下文件夹不允许移动");
                     layer.open({
                         content:"标准目录下文件夹不允许移动"
@@ -1921,13 +1934,13 @@ export default {
 					moveType = 1;
 				}
 			} else {
-				if(_self.$data.selectHasDir) {
+				if(_self.selectHasDir) {
 					moveType = 2;
 				} else {
 					moveType = 0;
 				}
 			}
-			var url = setting.getPagePath() + "/dish/move_select.html?moveItems=" + itemStr + "&projectId=" + _self.$data.projectId + "&moveType=" + moveType;
+			var url = setting.getPagePath() + "/dish/move_select.html?moveItems=" + itemStr + "&projectId=" + _self.projectId + "&moveType=" + moveType;
 			appApi.openNewWindow(url);
 		},
 		getSelectVal: function() {
@@ -1989,18 +2002,18 @@ export default {
 			}
 			itemStr = items.join(",");
 			console.info(itemStr);
-			_self.$data.shareItems = itemStr;
-			_self.$data.showEditBox = false;
+			_self.shareItems = itemStr;
+			_self.showEditBox = false;
 			//弹出失效时间
-			_self.$data.shareSetShow = true;
+			_self.shareSetShow = true;
 
 		},
 		itemShare: function(id) {
 			var _self = this;
-			_self.$data.shareItems = id;
-			_self.$data.showEditBox = false;
+			_self.shareItems = id;
+			_self.showEditBox = false;
 			//弹出失效时间
-			_self.$data.shareSetShow = true;
+			_self.shareSetShow = true;
 		},
 		subShare: function() {
 			loading("创建分享中...")
@@ -2023,8 +2036,8 @@ export default {
 				deadTime = null;
 			}
 			var params = {
-				items: _self.$data.shareItems,
-				projectId: _self.$data.projectId,
+				items: _self.shareItems,
+				projectId: _self.projectId,
 				deadTime: deadTime
 			};
 			this.$http.post("/cdish/share", params).then(function(response) {
@@ -2075,7 +2088,7 @@ export default {
 		showAffirmPerson: function() {
 			var _self = this;
 			var formparam = new FormData();
-			formparam.append("projectSN", _self.$data.projectId);
+			formparam.append("projectSN", _self.projectId);
 			// 获取项目信息
 			this.$http.post("/pro_api/get_user_set", formparam).then(function(response) {
 				if(response.data.code == 200) {
@@ -2084,34 +2097,34 @@ export default {
 						var o = result.obj;
 						////1  项目负责人 2 设计师 3 监理员 4 审计人
 						if(undefined != o.userFinalID && o.userFinalID != "") {
-							_self.$data.externalPerson.push({
+							_self.externalPerson.push({
 								type: 1,
 								personId: o.userFinalID,
 								personName: o.companyFinalName
 							})
 						}
 						if(undefined != o.userShejiID && o.userShejiID != "") {
-							_self.$data.externalPerson.push({
+							_self.externalPerson.push({
 								type: 2,
 								personId: o.userShejiID,
 								personName: o.companyShejiName
 							})
 						}
 						if(undefined != o.userJianliID && o.userJianliID != "") {
-							_self.$data.externalPerson.push({
+							_self.externalPerson.push({
 								type: 3,
 								personId: o.userJianliID,
 								personName: o.companyJianliName
 							})
 						}
 						if(undefined != o.userShenjiID && o.userShenjiID != "") {
-							_self.$data.externalPerson.push({
+							_self.externalPerson.push({
 								type: 4,
 								personId: o.userShenjiID,
 								personName: o.companyShenjiName
 							})
 						}
-						if(_self.$data.externalPerson.length == 0) {
+						if(_self.externalPerson.length == 0) {
                             // msg("外部人员均未设置，无法发起文件确认")
                             layer.open({
                                 content:"外部人员均未设置，无法发起文件确认"
@@ -2159,7 +2172,7 @@ export default {
 		},
 		doSearch: function() {
 			var _self = this;
-			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.$data.projectId);
+			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
 		},
 		collectCheck: function(_id, _type) {
 			var _self = this;
@@ -2171,18 +2184,18 @@ export default {
 					if(rs && (rs == true || rs == "true")) {
 						//收藏
 						if(_id.indexOf(",") > -1) {
-							_self.$data.collectStatus = true;
+							_self.collectStatus = true;
 						} else {
-							_self.$data.editItem.collectStatus = true;
+							_self.editItem.collectStatus = true;
 						}
 					} else {
 						if(_id.indexOf(",") > -1) {
-							_self.$data.collectStatus = false;
+							_self.collectStatus = false;
 						} else {
-							_self.$data.editItem.collectStatus = false;
+							_self.editItem.collectStatus = false;
 						}
 					}
-					_self.$data.showCollect = true;
+					_self.showCollect = true;
 				} else {
                     // msg(response.data.message);
                     layer.open({
@@ -2204,15 +2217,15 @@ export default {
 			this.$http.get("/collect/do?id=" + _id + "&type=3").then(function(response) {
 				if(response.data.code == 4001) { // 收藏成功
 					if(_id.indexOf(",") > -1) {
-						_self.$data.collectStatus = true;
+						_self.collectStatus = true;
 					} else {
-						_self.$data.editItem.collectStatus = true;
+						_self.editItem.collectStatus = true;
 					}
 				} else if(response.data.code == 4003) { //取消收藏
 					if(_id.indexOf(",") > -1) {
-						_self.$data.collectStatus = false;
+						_self.collectStatus = false;
 					} else {
-						_self.$data.editItem.collectStatus = false;
+						_self.editItem.collectStatus = false;
 					}
 				} else {
                     // msg(response.data.message);
@@ -2231,25 +2244,12 @@ export default {
                     ,time: 1 //2秒后自动关闭
                     ,anim:false
                 });
-				_self.$data.showEditBox = false;
+				_self.showEditBox = false;
 			}).catch(function(error) {
 				layer.closeAll();
 				warm("查询收藏出错")
 			});
 		}
-	},
-	mounted:{
-		refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
-            }
-            if(app.$data.isIndex == 1) {
-                if(app.$data.roomId!="" && app.$data.roomId!="undefined" && app.$data.roomId!=undefined)
-                    app.initFirstData(app.$data.projectId, app.getFirstData, app.$data.roomId);//, app.$data.roomId
-                else
-                    app.initFirstData(app.$data.projectId, app.getFirstData);//, app.$data.roomId
-            }
-        },
 	}
 }
 </script>

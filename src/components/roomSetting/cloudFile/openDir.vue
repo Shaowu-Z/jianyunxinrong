@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav" id="js-head">
-            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" v-show="showBack">
+            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack" v-if="showBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <div v-if="headerMode == 0">
@@ -353,11 +353,13 @@
 
 <script>
 import setting from '../../../playform/config'
-import {getParam,BackCookie,setDishSort} from '../../../playform/common'
+import {getParam,BackCookie,setDishSort,getDishSort} from '../../../playform/common'
 import mui from '../../../playform/mui'
+import  '../../../playform/mui.pullToRefresh'
 export default {
     data () {
         return {
+			pullWidget: '',
             orixy: '',
             loadStatus: false,
             imageHost: setting.UPLOAD_SERVER_ADDRESS,
@@ -447,125 +449,88 @@ export default {
             affirmId: "",
             isOpeAll:false//文件操作所有权限
             }
-    },
-    created() {
-		if(!appApi.isApp) {
-            this.showBack = true;
-        }
-        if(window.location.href.split("?")[1]){
-            var arrays = window.location.href.split("?")[1].split("&");
-            var map = {};
-            for (let i = 0; i < arrays.length; i++) {
-                var param = arrays[i].split("=");
-                map[param[0]] = decodeURI(param[1]);
-            }
-            if(map.datatype=='pc'){
-                document.getElementsByName("index_return_button")[0].style.display='none';
-            }
-        }
-        // if(location.href.indexOf("search_result.html") == -1) {
-        //     
-
-        //         },
-        //         created: function() {
-        //             var _self = this;
-                    
-        //         },
-        //         methods: {
- 
-        //         }
-        //     })
-        // }
-        function projectClick(id) {
-            // alert(_self.roomId+"////"+id)
-            appApi.openNewWindow(getUrl() + "/static/webstatic/dish/create_share.html?header=1&projectSN=" + id);
-        }
+	},
+    mounted() {
 		var _self = this;
 		//获取参数
 		var params = getParam(window.location.href);
 		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
             if(params.hasOwnProperty("projectSN"))
-				_self.projectId = params.projectSN; //项目id
+				_self.$data.projectId = params.projectSN; //项目id
 			else
-                _self.projectId = params.projectSn; //项目id
+                _self.$data.projectId = params.projectSn; //项目id
             if(params.hasOwnProperty("teamCode"))
-            	_self.teamCode = params.teamCode;
-            _self.roomId = params.roomId; //房间id
+            	_self.$data.teamCode = params.teamCode;
+            _self.$data.roomId = params.roomId; //房间id
 			if(params.hasOwnProperty("isSys")) {
-				_self.isSys = true;
+				_self.$data.isSys = true;
 			} else {
-				_self.showEdit = true;
+				_self.$data.showEdit = true;
 			}
 			if(params.hasOwnProperty("isOpe")) {
-				_self.isOpe = false;
+				_self.$data.isOpe = false;
 			} else {
-				_self.isOpe = true;
+				_self.$data.isOpe = true;
 			}
 			if(params.hasOwnProperty("isShare")) {
-				_self.isShare = true;
-				_self.pageParams.from = "1";
+				_self.$data.isShare = true;
+				_self.$data.pageParams.from = "1";
 			}
 			if(1 == 1) {
 				_self.showHeader();
 			}
 			if(params.hasOwnProperty("id")) {
 				//显示头部
-				_self.isIndex = 0;
-				_self.id = params.id; //目录id
-				if(_self.roomId=="" || _self.roomId=="undefined")
-					_self.initData(_self.id, _self.getCurData);//, _self.roomId
+				_self.$data.isIndex = 0;
+				_self.$data.id = params.id; //目录id
+				if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
+					_self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
 				else
-                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
+                    _self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
 				_self.showHeader();
-				_self.loadStatus = true;
+				_self.$data.loadStatus = true;
 			} else if(params.hasOwnProperty("keyword")) {
 				//搜索
-				_self.pageParams.keyword = params.keyword;
-				_self.pageParams.projectId = _self.projectId;
+				_self.$data.pageParams.keyword = params.keyword;
+				_self.$data.pageParams.projectId = _self.$data.projectId;
 				_self.searchData();
-				_self.loadStatus = true;
+				_self.$data.loadStatus = true;
 			} else {
 				//首目录
 				//不显示头部
 				//数据初始化
-				_self.isIndex = 1;
-                if(_self.roomId=="" || _self.roomId=="undefined")
-					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
+				_self.$data.isIndex = 1;
+                if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
+					_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
 				else
-					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
+					_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
 				if(!appApi.isApp) {
-					_self.showUpload = false;
+					_self.$data.showUpload = false;
 				}
-				//_self.showUpload = true;
+				//_self.$data.showUpload = true;
 			}
 			_self.uploadInit();
 			_self.downLoadInit();
 		} else if(params.hasOwnProperty("shareId")) {
 			//分享
-			_self.shareId = params.shareId;
+			_self.$data.shareId = params.shareId;
 			var params = {
-				shareId: _self.shareId
+				shareId: _self.$data.shareId
 			};
 			console.info(params);
 			this.$http.post("/cdish/share/detail", params).then(function(response) {
 				if(response.data.code == 0) {
 //					console.info(response.data.result);
 					var rs = response.data.result;
-					_self.status = 1;
-					_self.loadStatus = true;
-					_self.isShare = true;
-					_self.shareInfo = rs;
-					_self.projectId = rs.projectId;
-					_self.shareInfoList = rs.shareItems;
+					_self.$data.status = 1;
+					_self.$data.loadStatus = true;
+					_self.$data.isShare = true;
+					_self.$data.shareInfo = rs;
+					_self.$data.projectId = rs.projectId;
+					_self.$data.shareInfoList = rs.shareItems;
 					_self.downLoadInit();
 				} else {
-                    // msg(response.data.message);
-                layer.open({
-                    content: response.data.message
-                    ,skin: 'msg'
-                    ,time: 1 //2秒后自动关闭
-                    ,anim:false
-                });
+					msg(response.data.message);
 				}
 			}).catch(function(error) {
 				layer.closeAll();
@@ -579,7 +544,7 @@ export default {
 					document.getElementById("shade").style.display = "block";
 					document.getElementById("add-style").style.display = "block";
 					if(array) {
-						var ht = '<li class="mui-table-view-cell" @click="javascript:projectClick(\'$projectSN\')">$text</li>';
+						var ht = '<li class="mui-table-view-cell" onclick="javascript:projectClick(\'$projectSN\')">$text</li>';
 						var htmlstr = array.length > 0 ? '' : '<li class="mui-table-view-cell">没有参与的项目</li>';
 						for(var i = 0; i < array.length; i++) {
 							htmlstr += ht.replace("$projectSN", array[i].serialNum).replace("$text", array[i].ProjectName);
@@ -587,13 +552,7 @@ export default {
 						document.getElementById("project_list").innerHTML = htmlstr;
 					}
 				} else {
-                    // msg("系统报错:" + resp.data.message);
-                    layer.open({
-                        content: "系统报错:" + resp.data.message
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
+					msg("系统报错:" + resp.data.message);
 				}
 			}).catch(function(err) {
 				console.log(err);
@@ -601,6 +560,9 @@ export default {
 		}
     },
     methods: {
+		goBack(){
+			this.$router.go(-1)
+		},
 		intoSelect: function() {
 			//进入多选状态 如果在app中 需隐藏返回键
 			this.headerMode = 1;
@@ -723,7 +685,7 @@ export default {
 			_self.pageParams.curPage = 1;
 			// mui.init();
 			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
+				this.pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
 					down: {
 						callback: function() {
 							var self = this;
@@ -735,8 +697,8 @@ export default {
 									_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
 							}
 							_self.loadData(function() {
-								self.endPullDownToRefresh();
-								self.refresh(true);
+								_self.endPullDownToRefresh();
+								_self.refresh(true);
 							});
 						}
 					},
@@ -753,9 +715,9 @@ export default {
 				})
 
 			});
-            mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
-              this.click();
-            });
+            // mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
+            //   this.click();
+            // });
 		},
 		getFirstData: function(rs) {
 			var _self = this;
@@ -832,7 +794,7 @@ export default {
 			_self.pageParams.curPage = 1;
 			mui.init();
 			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
+				this.pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
 					down: {
 						callback: function() {
 							var self = this;
@@ -877,7 +839,7 @@ export default {
 			if(document.getElementById("dish-tab"))
 				document.getElementById("dish-tab").style.top = "44px";
 			if(document.getElementById("js-dish-con"))
-				addClass(document.getElementById("js-dish-con"), "sift-content");
+				$("#js-dish-con").addClass("sift-content");
 			if(document.getElementById("dish_content"))
 				document.getElementById("dish_content").style.paddingTop = "44px";
 			//绑定后退事件
@@ -1030,7 +992,7 @@ export default {
                         ,time: 1 //2秒后自动关闭
                         ,anim:false
                     });
-					refreshPage();
+					_self.refreshPage();
 				} else {
                     // msg(response.data.message);
                     layer.open({
@@ -1073,7 +1035,7 @@ export default {
                             ,time: 1 //2秒后自动关闭
                             ,anim:false
                         });
-						refreshPage();
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 					} else {
                         // msg(response.data.message);
@@ -1269,8 +1231,7 @@ export default {
 					'</form>';
 			}
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			widget = document.getElementById("uploadWidget");
-			widget.addEventListener("change", function(event) {
+			document.getElementById("uploadWidget").addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
 				if(_self.isIndex == 1) {
@@ -1370,10 +1331,13 @@ export default {
 				console.info("imageBase64====" + formData.imageBase64);
                 // var params = getParam(window.location.href);
                 // var roomId = params.roomId*1;
-                // formData.append('roomId', roomId);
+				// formData.append('roomId', roomId);
+
 				this.$http.post("/cdish/file/upload", formData, config).then(function(res) {
 					layer.closeAll();
+					console.log(res);
 					if(res.data.code == 0) {
+										console.log(res);
 						var rs = res.data.result;
 						if(rs.fail_num != 0) {
                             // msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
@@ -1393,8 +1357,8 @@ export default {
                                 ,anim:false
                             });
 						}
-						widget.value = "";
-						refreshPage();
+						document.getElementById("uploadWidget").value = "";
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 						if(undefined != id) {
 							_self.openDirMini(id, isSys);
@@ -1656,7 +1620,7 @@ export default {
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			downloadWidget = document.getElementById("downloadWidget");
+			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
 			return getUrl() + "/cdish/file/download?id=" + id;
@@ -1666,7 +1630,7 @@ export default {
 			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
-				downloadWidget.src = _self.getFileUrl(id);
+				document.getElementById("downloadWidget").src = _self.getFileUrl(id);
 			}
 			_self.showEditBox = false;
 		},
@@ -1953,7 +1917,7 @@ export default {
 			this.curSort = val;
 			this.pageParams.sortType = type;
 			this.sortShow = false;
-			refreshPage();
+			_self.refreshPage();
 		},
 		goSelectMode: function(e) {
 			var _self = this;
@@ -2138,7 +2102,7 @@ export default {
                             });
 						}
 						//msg("已成功删除" + response.data.result + "个文件或者文件夹");
-						refreshPage();
+						_self.refreshPage();
 					} else {
                         // msg(response.data.message);
                         layer.open({
@@ -2159,10 +2123,10 @@ export default {
 			_self.backSelectMode();
 		},
 		refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
+            if(this.pullWidget) {
+                this.pullWidget.pullDownLoading();
             }
-            if(isIndex == 1) {
+            if(this.isIndex == 1) {
                 if(roomId!="" && roomId!="undefined" && roomId!=undefined)
                     initFirstData(projectId, getFirstData, roomId);//, roomId
                 else
