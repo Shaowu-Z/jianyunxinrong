@@ -2,12 +2,12 @@
     <div id="app">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">我的下游</h1>
-            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left" @click="goBack"></a>
+            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left hide" @click="goBack"></a>
         </header>
         <section class="mui-content">
             <div class="address-list address-project" id="app">
                 <ul  v-for="(roomclass,index) in form.roomclass" :key="index" class="mui-table-view address-item">
-                    <li  class="mui-table-view-cell mui-collapse fold-title">
+                    <li  class="mui-table-view-cell mui-collapse fold-title" @click="showhide">
                         <a class="mui-navigate-right" href="javascript:void(0)">
                         <div class="mui-slider-cell">
                             <div class="oa-contact-cell mui-table">
@@ -23,7 +23,7 @@
                         </div>
                         </a>
 
-                        <ul v-for="(room,index) in form.rooms" :key="index" class="mui-table-view mui-table-view-chevron sub-chevron adaptive-chevron">
+                        <ul v-for="(room,index) in form.rooms" :key="index" class="mui-table-view mui-table-view-chevron sub-chevron adaptive-chevron" :class="{'block' : show === true}">
                             <li v-if="room.roomclass==roomclass.roomclass" class="mui-table-view-cell">
 
                                 <div class="mui-slider-cell">
@@ -33,8 +33,8 @@
                                         </div>-->
                                         <div class="oa-contact-content mui-table-cell">
                                             <h4 class="oa-contact-name">{{room.roomname}}  <span class="num">（{{room.roomsize}}人）</span></h4>
-                                            <p v-if="room.shareNames!=''" class="oa-contact-email">已共享:&nbsp;&nbsp;{{room.shareNames}}</p>
-                                            <p v-if="room.shareNames==''" class="oa-contact-email">无共享</p>
+                                            <p v-if="room.shareNames!=''" class="oa-contact-email text">已共享:&nbsp;&nbsp;{{room.shareNames}}</p>
+                                            <p v-if="room.shareNames==''" class="oa-contact-email text">无共享</p>
                                         </div>
                                     </div>
                                 </div>
@@ -53,6 +53,7 @@ import {getParam} from '../../../playform/common'
 export default {
     data () {
         return {
+            show: false,
             form:{
                 rooms: {},
                 roomclass: {}
@@ -62,18 +63,21 @@ export default {
     },
     created() {
         this.paramMap= getParam(window.location.href);
-        var projectSN = this.paramMap.projectSn;
-        var roomId = this.paramMap.isRoomId;
         //获取所有下游组织数据
         this.findDownstreamRoom();
     },
     methods:{
+        showhide(){
+            console.log(this.show)
+            this.show = !this.show
+        },
         goBack(){
             this.$router.go(-1)
         },
         findDownstreamRoom:function () {
             var projectSN = this.paramMap.projectSn;
-            var roomId = this.paramMap.isRoomId;
+            let roomId = this.paramMap.isRoomId;
+            console.log(roomId);
             var _self = this;
             var parame = new FormData();
             parame.append("projectSN",projectSN);
@@ -91,10 +95,12 @@ export default {
                 console.info(error);
             });
         },
-        setroomshaer:function(shaerroomid,roomId){
+        setroomshaer:function(shaerroomid){
+            let roomId = this.paramMap.isRoomId;
             //alert(roomId);//主id
             // alert(shaerroomid);//设置共享的id
-            appApi.openNewWindow(getUrl()+'/static/webstatic/roomshare/room_set_shaer.html?roomId='+roomId+"&shaerroomid="+shaerroomid);
+            // appApi.openNewWindow(getUrl()+'/static/webstatic/roomshare/room_set_shaer.html?roomId='+roomId+"&shaerroomid="+shaerroomid);
+            this.$router.push({path:'/static/webstatic/roomshare/room_set_shaer.html',query:{roomId:roomId,shaerroomid:shaerroomid}})
         }
 
     },
@@ -106,6 +112,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .block{
+        display: block!important;
+    }
 </style>

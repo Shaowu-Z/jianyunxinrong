@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <header class="mui-bar mui-bar-nav" id="js-head" style="display: none">
+        <header class="mui-bar mui-bar-nav" id="js-head">
             <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
@@ -8,7 +8,7 @@
             <a class="mui-icon mui-icon-search mui-pull-right" onclick="app.doSearch()"></a>
             <!--<a class="mui-icon iconfont icon-c-upload mui-pull-right js-upload"  onclick="app.uploadFile()"></a>-->
         </header>
-        <section class="mui-content" id="dish_content" v-show="loadStatus" style="display: none;padding-top: 0px">
+        <section class="mui-content" id="dish_content" v-show="loadStatus" style="display: none;padding-top: 45px">
             <div class="mui-scroll">
                 <div id="js-dish-con" class="cloud-content">
                     <div v-if="firstList.length != 0 && loadStatus">
@@ -328,17 +328,6 @@ export default {
 		}
     },
     methods: {
-        refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
-            }
-            if(app.$data.isIndex == 1) {
-                if(app.$data.roomId!="" && app.$data.roomId!="undefined" && app.$data.roomId!=undefined)
-                    app.initFirstData(app.$data.projectId, app.getFirstData, app.$data.roomId);//, app.$data.roomId
-                else
-                    app.initFirstData(app.$data.projectId, app.getFirstData);//, app.$data.roomId
-            }
-        },
 		initData: function(dirId, callback, rommId) {
 			var _self = this;
 			//获取数据
@@ -992,7 +981,8 @@ export default {
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
-			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
+						console.log(1111);
+			$("dish_content").insertAdjacentHTML('afterend', html);
 			widget = document.getElementById("uploadWidget");
 			widget.addEventListener("change", function(event) {
 				//上传文件
@@ -1379,7 +1369,7 @@ export default {
 			//下载初始化
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
-			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
+			$("dish_content").insertAdjacentHTML('afterend', html);
 			downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
@@ -2247,6 +2237,19 @@ export default {
 				warm("查询收藏出错")
 			});
 		}
+	},
+	mounted:{
+		refreshPage() {
+            if(pullWidget) {
+                pullWidget.pullDownLoading();
+            }
+            if(app.$data.isIndex == 1) {
+                if(app.$data.roomId!="" && app.$data.roomId!="undefined" && app.$data.roomId!=undefined)
+                    app.initFirstData(app.$data.projectId, app.getFirstData, app.$data.roomId);//, app.$data.roomId
+                else
+                    app.initFirstData(app.$data.projectId, app.getFirstData);//, app.$data.roomId
+            }
+        },
 	}
 }
 </script>
