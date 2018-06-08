@@ -3,7 +3,7 @@
 
        <header class="mui-bar mui-bar-nav">
 
-	<h1 class="mui-title">上工打卡</h1>
+	<h1 @click="cc" class="mui-title">上工打卡</h1>
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
@@ -109,14 +109,14 @@
     </template>
 
 <script>
-import projectign from "./project_sign.js"
+import project_sign from "./project_sign.js"
+import laowu_common from "./laowu_common.js"
 export default {
     data(){
         return {
             form:{
             id:"",
             userId:"",
-            project_sign:projectign,
             userName:"",
             gpsAddress:"",//gps当前位置
             gpsLl:"",//gps当前坐标
@@ -165,8 +165,8 @@ export default {
         }
     },
     created:function(){
-        console.log($("header").text())    
-        console.log( projectign.app().app)
+     project_sign.axios=this.$http
+     project_sign._self=this
        
     },
      methods:{
@@ -174,6 +174,8 @@ export default {
             this.$router.go(-1);
         },
         cc(){
+           alert(laowu_common.userId)
+         project_sign.initData()
            console.log($("header").text())
         }
     },

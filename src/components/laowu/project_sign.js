@@ -1,81 +1,30 @@
 /**
  * 拍照打卡
+ * auth panzhenfei 
+ * 2018.6.7
  */
-var projectign={
-    app(){
-    var app = new Vue({
-        el: "#app",
-        data: { //数据
-            form: {
-                id: "",
-                userId: "",
-                userName: "",
-                gpsAddress: "",//gps当前位置
-                gpsLl: "",//gps当前坐标
-                projectSN: "",
-                projectName: "",
-                confirmPhone: "",
-                confirmId: "",
-                confirmName: "",
-                projectNameDetail: "",
-                projectSNDetail: "",
-                dateStr: "",
-                clockAddress: "",//项目地址
-                clockLl: "",//项目坐标
-                img_url: "",//项目图片
-                remindTime: "",//提醒期限
-                remindName: "",//提醒期限
-            },
-            reqWorkParamsVO: {
-                userId: "",
-                confirmId: "",
-                queryTime: "",
-                queryType: "",
-                loginType: "",
-            },
-            data: {
-                todayList: [],
-                lastDayList: [],
-                dayList: [],
-                timeList: [],
-                photoList: [],
+import laowu_common from "./laowu_common.js"
+var project_sign={
+    
+        initData: function () {
 
-            },
-            longaddress: "",//长地址
-            shortAddress: "",//短地址
-            latitudeAndLongitude: "",//坐标
-            rangegps: "",//距离上次打卡坐标位置
-            rangegpsStatus: "",//距离上次打卡坐标位置
-            select_time: "",
-            select_time_name: "",
-            projectList: [],
-            imgurl: UPLOAD_SERVER_ADDRESS,
-            nearRecord: false,
-            nearZuobiao: "",//最近打卡记录的坐标
-            nearAddress: "",//最近打卡记录的地址
-            nearclockDate: "",//最近打卡记录的日期
-        },
-
-        created: function () {
+            var _self=this._self;
+            var axios=this.axios;
+            laowu_common._self=project_sign._self;
+            laowu_common.axios=project_sign.axios;
+            var userId=laowu_common.userId;
+            var userName=laowu_common.userName;
+            var dataType=laowu_common.dataType;
             appApi.imgPreview.init();
-            var _self = this;
             _self.form.userId = userId;
             _self.form.userName = userName;
             if (dataType == 'sign') {
-                _self.loadCation();
-                findRoomData();
-                setTimeout(function () {
-                    setTimeout(function () {
-                        _self.loadlocalProjectInfo();
-                        _self.loadAttRecords();//查询最近两天打卡记录
-                        setTimeout(function () {
-                            _self.loadNearRecord();//查询最近一次打卡记录
-                        }, 50)
-                    }, 50)
-                    setTimeout(function () {
-                        showAppDiv();
-                    }, 350)
-                }, 800)
+                laowu_common.findRoomData();
+                project_sign.loadCation();
+                project_sign.loadlocalProjectInfo();
+                this.loadAttRecords();//查询最近两天打卡记录
+                project_sign.loadNearRecord();//查询最近一次打卡记录
+                project_sign.showAppDiv();
 
             } else if (dataType == 'todosign') {
                 _self.loadCation();
@@ -114,11 +63,10 @@ var projectign={
 
             }
 
-
         },
-        methods: {
+    
             loadCation: function () {//加载定位信息
-                var _self = this;
+                var _self=project_sign._self
                 window.appApi.getLocation();
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
@@ -133,9 +81,8 @@ var projectign={
                 }
             },
             loadlocalProjectInfo: function () {//默认显示当前房间的项目信息
-                var _self = this;
-                var project = findProjectData();//加载项目
-                var projectImg = findProjectImg();//加载项目图片
+                var project = laowu_common.findProjectData();//加载项目
+                var projectImg = laowu_common.findProjectImg();//加载项目图片
                 console.log("项目图片", projectImg)
                 setTimeout(function () {
                     var item = {};
@@ -265,7 +212,10 @@ var projectign={
                 });
             },
             loadAttRecords: function () {//查询打卡记录
+                alert(1)
                 var _self = this;
+                var loginType=laowu_common.loginType
+                console.log(this)
                 if (!loginType) {
                     loginType = "0";
                 }
@@ -505,7 +455,6 @@ var projectign={
                 });
             },
             loadRemind: function () {//加载提醒日期
-                alert(2)
                 var _self = this;
                 var form = new FormData();
                 form.append("userId", userId)
@@ -535,91 +484,89 @@ var projectign={
                 appApi.share(8, userName + "邀请您创建新项目", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
             },
 
-        }
-    });
+            /*拍照确认后执行*/
+            confirmFile:function() {
 
-    },
-/*拍照确认后执行*/
- confirmFile() {
+                alert(1)
+                var imgFile = document.getElementById("imgFile").value;
+                if (imgFile == null || imgFile == "") {
+                warm("照片不能为空");
+                return;
+                }
 
-    alert(1)
-    var imgFile = document.getElementById("imgFile").value;
-    if (imgFile == null || imgFile == "") {
-        warm("照片不能为空");
-        return;
-    }
-
-    loading("请稍后...")
-    var imgFile = document.getElementById("imgFile");
-    //拍照角度矫正
-    var file = selectFileImage(imgFile);
-    setTimeout(function () {
-        var recordJson = JSON.stringify(app.form);
-        var formData = new FormData();
-        // var file = imgFile.files['0'];
-        formData.append("recordJson", recordJson);
-        if (!file) {
-            fileBase64 = "";
-        }
-        formData.append("fileName", fileBase64)
-        formData.append("file", file);
-        axios.post(getUrl() + "/project_work_api/sign_add", formData).then(function (response) {
-            if (response.data.code == 200) {
-                msg("打卡成功");
+                loading("请稍后...")
+                var imgFile = document.getElementById("imgFile");
+                //拍照角度矫正
+                var file = selectFileImage(imgFile);
                 setTimeout(function () {
-                    app.data.todayList = [];
-                    app.data.lastDayList = [];
-                    app.loadAttRecords();//查询最近两天打卡记录
-                }, 50)
-                closeLayer();
-            } else {
-                msg("打卡错误！")
-                closeLayer();
+                var recordJson = JSON.stringify(app.form);
+                var formData = new FormData();
+                // var file = imgFile.files['0'];
+                formData.append("recordJson", recordJson);
+                if (!file) {
+                    fileBase64 = "";
+                }
+                formData.append("fileName", fileBase64)
+                formData.append("file", file);
+                axios.post(getUrl() + "/project_work_api/sign_add", formData).then(function (response) {
+                    if (response.data.code == 200) {
+                        msg("打卡成功");
+                        setTimeout(function () {
+                            app.data.todayList = [];
+                            app.data.lastDayList = [];
+                            app.loadAttRecords();//查询最近两天打卡记录
+                        }, 50)
+                        closeLayer();
+                    } else {
+                        msg("打卡错误！")
+                        closeLayer();
+                    }
+                })
+
+                }, 800);
+
+
+            },
+
+            /**
+             * 设置项目
+             * @param item
+             */
+            setProject:function(item, type) {
+
+                hideWarning();
+                app.form.projectSN = item.serialNum;
+                app.form.projectSNDetail = item.serialNum;
+                app.form.projectName = item.projectName;
+                app.form.projectNameDetail = item.projectName;
+                app.form.confirmId = item.owerId;
+                app.form.confirmUserId = item.owerId;
+                app.form.confirmName = item.nickName;
+                app.form.confirmPhone = item.cellphone;
+                app.form.img_url = item.img_url;
+                if (!item.gps) {
+                    app.rangegps = "";
+                } else {
+                    app.rangegps = item.gps;
+                }
+
+                //重新设置项目ID和工长ID
+                projectId = item.serialNum;
+                gongzhangId = item.owerId;
+                if (item.place) {
+                    app.form.clockAddress = item.place;
+                }
+                if (item.placeZuobiao) {
+                    app.form.clockLl = item.placeZuobiao;
+                }
+                if (type == 1) {
+                    setTimeout(function () {
+                        app.loadAttRecords();//查询最近两天打卡记录
+                    }, 50)
+                }
+
             }
-        })
+ 
+         }
 
-    }, 800);
-
-  
-}
-
-/**
- * 设置项目
- * @param item
- */
-// function setProject(item, type) {
-//
-//     hideWarning();
-//     app.form.projectSN = item.serialNum;
-//     app.form.projectSNDetail = item.serialNum;
-//     app.form.projectName = item.projectName;
-//     app.form.projectNameDetail = item.projectName;
-//     app.form.confirmId = item.owerId;
-//     app.form.confirmUserId = item.owerId;
-//     app.form.confirmName = item.nickName;
-//     app.form.confirmPhone = item.cellphone;
-//     app.form.img_url = item.img_url;
-//     if (!item.gps) {
-//         app.rangegps = "";
-//     } else {
-//         app.rangegps = item.gps;
-//     }
-//
-//     //重新设置项目ID和工长ID
-//     projectId = item.serialNum;
-//     gongzhangId = item.owerId;
-//     if (item.place) {
-//         app.form.clockAddress = item.place;
-//     }
-//     if (item.placeZuobiao) {
-//         app.form.clockLl = item.placeZuobiao;
-//     }
-//     if (type == 1) {
-//         setTimeout(function () {
-//             app.loadAttRecords();//查询最近两天打卡记录
-//         }, 50)
-//     }
-
- }
-// }
-export default projectign
+export default project_sign
