@@ -22,7 +22,7 @@
                                                 </div>
                                                 <div class="oa-contact-content mui-table-cell">
                                                     <h4 class="oa-contact-name"><span v-text="obj.name"></span></h4>
-                                                    <p class="oa-contact-email"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
+                                                    <p class="oa-contact-email text"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
                                                 </div>
                                             </div>
                                         </a>

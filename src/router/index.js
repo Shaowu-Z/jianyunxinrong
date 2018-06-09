@@ -8,6 +8,8 @@ import login from './login'
 import roomSetting from './roomSetting'
 import project from './project'
 import laowu from './laowu'
+import chatroom from './chatroom'
+import functions from './functions'
 // const work = resolve => require(['./work'], resolve)
 // const market = resolve => require(['./market'], resolve)
 // const myHome = resolve => require(['./myHome'], resolve)
@@ -31,6 +33,8 @@ export default new Router({
     login,
     roomSetting,
     project,
-    laowu
+    laowu,
+    chatroom,
+    functions
   ]
 })
