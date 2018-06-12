@@ -22,12 +22,13 @@
 				<!--<span >立即切换到最近的项目</span>-->
 			<!--</p>-->
 			</div>
-			<ul class="mui-table-view group-list " @click="openProjectList()">
+			<ul class="mui-table-view group-list " @click="project_sign.openProjectList()">
 				<li class="mui-table-view-cell">
 					<!--<a class="mui-navigate-right">-->
 						<div class="oa-contact-cell mui-table">
 							<div class="oa-contact-avatar mui-table-cell">
-								<img v-if="form.img_url!=undefined && form.img_url!='undefined'" v-bind:src=form.img_url>
+								<!-- <img v-if="form.img_url!=undefined && form.img_url!='undefined'" v-bind:src=form.img_url> -->
+								<img :src="imgbase"/>
 								<!-- <img v-if="form.img_url==undefined || form.img_url=='undefined'" src="../../images/defualt.png"> -->
 							</div>
 							<div class="oa-contact-content mui-table-cell">
@@ -52,7 +53,7 @@
 				<span class="mui-icon mui-icon-camera"></span>
 				<span class="txt">点击打卡</span>
 			</span>
-		<input style="display: none" id="imgFile" name="file" type="file" accept="image/jpeg,image/x-png" capture="camera" value="" class="a-upload"   onchange="confirmFile();"/>
+		<input style="display: none" id="imgFile" name="file" type="file" accept="image/jpeg,image/x-png" capture="camera" value="" class="a-upload"   v-on:change="project_sign.confirmFile();"/>
 	</div>
 		<div class="xunafu">
 		<div class="location-gps"><span class="mui-icon iconfont icon-location"></span>
@@ -69,7 +70,7 @@
 			<li v-for="(item,index) in data.todayList" :key="index" class="mui-table-view-cell">
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell sign-img">
-						<img @click="stopEvt(event),disposeLogImgMutil(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
+						<img @click="openImg(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
 					</div>
 					<div class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name sign-time" v-text="item.title"></h4>
@@ -87,7 +88,7 @@
 			<li  v-for="(item,index) in data.lastDayList" :key="index" class="mui-table-view-cell">
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell sign-img">
-						<img @click="stopEvt(event),disposeLogImgMutil(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
+						<img @click="openImg(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
 					</div>
 					<div class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name sign-time" v-text="item.title"></h4>
@@ -110,9 +111,11 @@
 
 <script>
 import project_sign from  "./project_sign.js"
+import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
 export default {
     data(){
         return {
+			imgbase:"../../../static/images/defualt.png",
             project_sign:project_sign,
             form:{
             id:"",
@@ -165,7 +168,7 @@ export default {
         }
     },
     created:function(){
-	project_sign._self=this;
+	 project_sign._self=this;
      project_sign.initVue()
      project_sign.initData()
      
@@ -174,7 +177,12 @@ export default {
      methods:{
         goback(){
             this.$router.go(-1);
-        },
+		},
+		openImg:function(index,ary){
+			console.log("ary",ary)
+			
+			disposeLogImgMutil(index,ary);
+		},
       
     },
     mounted(){
@@ -218,6 +226,12 @@ export default {
 		.sign-btn-con .txt{
 			font-size: 17px;
 			color:#fff;
+		}
+		.oa-contact-email,.item-deal,.location-gps,.mui-content-padded{
+			text-align: left
+		}
+		.sign-btn{
+			padding: 0
 		}
 	</style>
 

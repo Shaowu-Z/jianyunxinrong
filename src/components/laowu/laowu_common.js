@@ -1,7 +1,7 @@
 /**
  * 配置常用参数
  * auth panzhenfei
- * 2018.6.7
+ * 2018.6.7 
  */
 var opt = {"type": "date", "beginYear": 2000, "endYear": parseInt(new Date().getFullYear())+10};
 //引入外部js
@@ -349,7 +349,7 @@ var laowu_common={
         var list=[];
         $.ajax({
             type: "post",
-            url: getUrl()+"/project_work_api/find_laour_member",
+            url: "/api/project_work_api/find_laour_member",
             async: false,
             data: {
                 "userId":userId,
@@ -635,11 +635,11 @@ var laowu_common={
     var lat2 = l2Arr[1];
     var lng2 = l2Arr[0];
 
-    var radLat1 = getRad(lat1);
-    var radLat2 = getRad(lat2);
+    var radLat1 = laowu_common.getRad(lat1);
+    var radLat2 = laowu_common.getRad(lat2);
 
     var a = radLat1 - radLat2;
-    var b = getRad(lng1) - getRad(lng2);
+    var b = laowu_common.getRad(lng1) - laowu_common.getRad(lng2);
 
     var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
     s = s * EARTH_RADIUS;
@@ -655,7 +655,16 @@ var laowu_common={
 
     var PI = Math.PI;
     return d * PI / 180.0;
-}
+},
+loading:function(label){
+
+    layer.open({
+        type:2,
+        title:label,
+        content:""
+            })
+},
+
 
 }
 export default laowu_common

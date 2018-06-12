@@ -1,4 +1,5 @@
 import setting from './config';
+import  './appApi.js'
 var BackCookie = {
     // 设置cookie
     setCookie: function (name, value, isEscape) {
@@ -1173,4 +1174,28 @@ function getFileType(suffix) {
     }
     return clazz;
 }
-export {Base,BackCookie,removeThirdInfo,getParam,setDishSort,getDishSort}
+/**
+ * 显示单张照片
+ * @param index
+ * @param longurl 图片链接
+ */
+function disposeLogImg(index, longurl) {
+    var imgsData = [];
+    imgsData.push(longurl);
+    appApi.imgPreview.open(index, imgsData);
+}
+
+/**
+ * 显示多张照片，可以左右滑动切换
+ * @param index
+ * @param ary 图片链接数组
+ */
+ function disposeLogImgMutil(index, ary) {
+     
+    appApi.imgPreview.open(index, ary);
+}
+
+function stopEvt(e) {
+    e.stopPropagation();//阻止点击事件向上冒泡
+}
+export {Base,BackCookie,removeThirdInfo,getParam,setDishSort,getDishSort,disposeLogImg,disposeLogImgMutil}
