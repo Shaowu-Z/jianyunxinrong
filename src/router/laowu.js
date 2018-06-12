@@ -1,5 +1,5 @@
 const laowu = resolve => require(['@/components/laowu'], resolve)
-const project_sign = resolve => require(['@/components/laowu/project_sign'], resolve)
+const sign = resolve => require(['@/components/laowu/sign'], resolve)
 
 const laowuConfig = {
   path: '/laowu',
@@ -7,7 +7,7 @@ const laowuConfig = {
   children: [
     {
       path: '/static/webstatic/new_laowu/project_sign.html',
-      component: project_sign
+      component: sign
     }
   ]
 }
