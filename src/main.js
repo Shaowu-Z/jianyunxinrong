@@ -15,6 +15,9 @@ import './assets/css/common/icons-extend.less';
 import './assets/css/common/common.less';
 import './assets/css/common/style.less';
 import './assets/css/common/layer.less';
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+
 
 let http = axios.create({
   baseURL: '/api',
@@ -27,6 +30,7 @@ let http = axios.create({
 Vue.use(http)
 Vue.use(router)
 Vue.use(mui)
+Vue.use(MintUI)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http
 Vue.config.productionTip = false

@@ -1465,7 +1465,6 @@ window.appApi = {
                     err && err(JSON.parse(xhr.alertresponseText));
                 }
             };*/
-
 		if(isApp && isIphoneOs) { //IOS
 			// ios未实现 未处理
 		} else if(isApp && isAndroid) {
@@ -1476,12 +1475,12 @@ window.appApi = {
 				xhr = new ActiveXObject();
 			}
 
-			xhr.open('post', '/sass_api/send_todo');
+			xhr.open('post', 'http://java.winfreeinfo.com/sass_api/send_todo');
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
+					alert(xhr.status)
 					if(xhr.status == 200) {
-						//					console.log(xhr.responseText);
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
 
@@ -1556,6 +1555,7 @@ window.appApi = {
 
 	},
 	openProjectContactSelectPage: function(projectSn, title, beforeSelectId, selectType, isMultipe, isShowMe) {
+
 		/**
 	* 选择项目联系人  公司
  	* @param projectSn  项目SN
@@ -1820,7 +1820,6 @@ var setTextFromClipResult = function(result, iosIfrObjStrT) {
  * @param latitudeAndLongitude
  */
 var setLocationResult = function(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
-
 	// if (typeof appApi.callBackFun == "function") {
 	//     var CONTENT = {};
 	//     CONTENT.longaddress = address;

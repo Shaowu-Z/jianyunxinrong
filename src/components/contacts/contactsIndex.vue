@@ -20,7 +20,7 @@
 				<span class="mui-icon iconfont icon-search"></span>加入企(事)业组织
 			</a>
 		</li>
-		<li class="mui-table-view-cell" :click="sweepQrCode"><span class="mui-icon iconfont icon-personadd"></span>扫码加建云好友</li>
+		<li class="mui-table-view-cell" style="position: relative;" @click="sweepQrCode"><span class="mui-icon iconfont icon-personadd" style="position:absolute,left:14px"></span>扫码加建云好友</li>
 		<!--<li class="mui-table-view-cell" onclick="appApi.openNewWindow(pagepath+'/contacts/phone_list.html')">添加好友</li>-->
 	</ul>
 </div>
@@ -383,6 +383,7 @@ export default {
 		this.$router.push({path:'/phoneList'})
 	},
 	sweepQrCode(){
+		console.log(111);
 		window.appApi.sweepQrCode();
 	},
     clickshow(submenu) {
@@ -416,13 +417,13 @@ export default {
 		appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
 	},
 	friends(){
-		// this.$router.push({path:'/egList'})
+		this.$router.push({path:'/egList'})
 		// this.$router.push({path:'/static/newwebstatic/gonggao/gonggao.html'})
 		// this.$router.push({path:'/static/webstatic/dish/index.html'})
 		// this.$router.push({path:'/static/webstatic/community/community.html'})
 		// this.$router.push({path:'/static/webstatic/meeting/meetings.html'})
 		// this.$router.push({path:'/static/webstatic/dish/common.html'})
-		this.$router.push({path:'/static/webstatic/roomshare/room_set_mysub.html'})
+		// this.$router.push({path:'/static/webstatic/roomshare/room_set_mysub.html'})
 	},
 	doShare:function () {
 		var _self = this;

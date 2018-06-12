@@ -170,6 +170,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+import '../../../playform/alert'
 export default {
     data(){
         return{
@@ -319,10 +320,17 @@ export default {
                             //alert(JSON.stringify(todojson))
                             appApi.sendTodo(todojson,function(d){
                                 if(d.code==200){
-                                    remin("提交成功",2,function(){
-                                        appApi.closeNewWindow()
-                                        // this.$router.go(-1)
-                                    })
+                                    layer.open({
+                                        content: '提交成功'
+                                        ,skin: 'msg'
+                                        ,time: 1 //2秒后自动关闭
+                                        ,anim:false
+                                    });
+                                    appApi.closeNewWindow()
+                                    // alert.remin("提交成功",2,function(){
+                                        
+                                    //     // this.$router.go(-1)
+                                    // })
                                 }
                                 
                             })
