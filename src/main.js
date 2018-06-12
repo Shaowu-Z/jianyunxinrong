@@ -7,7 +7,6 @@ import router from './router'
 import axios from 'axios'
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
-import Mint from 'mint-ui';
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
@@ -28,7 +27,6 @@ let http = axios.create({
 Vue.use(http)
 Vue.use(router)
 Vue.use(mui)
-Vue.use(Mint);
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http
 Vue.config.productionTip = false
