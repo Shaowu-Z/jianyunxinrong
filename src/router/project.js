@@ -12,6 +12,7 @@ const shoufukuan = resolve => require(['@/components/project/shoufukuan'], resol
 const work_content = resolve => require(['@/components/project/shoufukuan/work_content'], resolve)
 const transfer_sfk = resolve => require(['@/components/project/shoufukuan/transfer_sfk'], resolve)
 const newInfo = resolve => require(['@/components/project/shoufukuan/newInfo'], resolve)
+const ttp = resolve => require(['@/components/project/shoufukuan/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
 // const backpwd = resolve => require(['@/components/login/backpwd'], resolve)
@@ -33,7 +34,7 @@ const myProjectconfig = {
       children: [
         
         {
-          path: '/static/newwebstatic/shoufukuan/work_content',
+          path: '/static/newwebstatic/shoufukuan/work_content.html',
           component: work_content
         },
         {
@@ -43,6 +44,10 @@ const myProjectconfig = {
         {
           path: '/static/newwebstatic/shoufukuan/newInfo.html',
           component: newInfo
+        },
+        {
+          path: '/static/newwebstatic/shoufukuan/ttp.html',
+          component: ttp
         }
       ]
     }

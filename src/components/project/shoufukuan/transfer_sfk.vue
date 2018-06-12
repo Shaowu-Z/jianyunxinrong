@@ -66,7 +66,7 @@ export default {
                             if(_self.$data.creatorId==_self.userid){ //判断当前人是否是录入人
                                 history.replaceState(null, null,"work_content.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                                 // location.replace(''); //加载新url页面
-                                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newInfo.html', query: { id: _self.$route.query.id }})
+                                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/work_content.html', query: { id: _self.$route.query.id }})
 //											window.location.replace(getUrl()+"/static/newwebstatic/lianxi/work_content.html?id="+this.$route.query.id)
                             }else{
                                 history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
