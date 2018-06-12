@@ -23,7 +23,7 @@
                             </div>
                             <div class="oa-contact-content mui-table-cell">
                                 <h4 class="oa-contact-name"><span class="title mui-ellipsis">{{meeting.mmain}}</span><span class="secondary date-time">{{meeting.mcreateDate}}</span></h4>
-                                <p class="oa-contact-email"><span>微承诺:{{meeting.commitmentSize}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>会议纪要:{{meeting.meetingSummarySize}}</span></p>
+                                <p class="oa-contact-email text"><span>微承诺:{{meeting.commitmentSize}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>会议纪要:{{meeting.meetingSummarySize}}</span></p>
                                 <!--<p class="oa-contact-email"><span>王建国:项目一期即将完成</span></p>-->
                             </div>
                         </div>
@@ -42,6 +42,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -51,14 +52,15 @@ export default {
             },
             data:{
             },
-            param:{}
+            param:{},
+            projectSN:'',
         }
     },
     created() {
         this.paramMap = getParam(window.location.href);
-        var projectSN=this.paramMap.projectSn;
-        if(!projectSN){
-            projectSN=this.paramMap.projectSN;
+        this.projectSN=this.paramMap.projectSN
+        if(!this.projectSN){
+            this.projectSN=this.paramMap.projectSN;
         }
         var userstatus=this.paramMap.status;
         var method=this.paramMap.method;
@@ -66,12 +68,12 @@ export default {
         this.findPMeetingList();
     },
     methods:{
-        findPMeetingList (projectSN,userstatus) {
+        findPMeetingList (userstatus) {
             var _self = this;
             console.log("查询会议列表");
             var parame = new FormData();
             var userId = BackCookie.getCookie("userid")
-            parame.append("roomId",projectSN)
+            parame.append("roomId",this.projectSN)
             if(userstatus==null){
                 userstatus = 1;
             }
@@ -130,13 +132,13 @@ export default {
 
 
         },
-        createMeeting:function(projectSN){
+        createMeeting:function(){
             // appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/meeting_launch.html?projectSN='+projectSN);
             console.log(this.paramMap.projectSn)
             this.$router.push({path:'/static/webstatic/meeting/meeting_launch.html',query:{projectSN:this.paramMap.projectSn}});
         },
-        createMeetingMember:function(projectSN){
-            appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/project_contact_select.html?projectSN='+projectSN);
+        createMeetingMember:function(){
+            appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/project_contact_select.html?projectSN='+this.projectSN);
         },
         saveMeeting:function(){
             //初始化房间
@@ -158,8 +160,7 @@ export default {
             });
         },
         showMeetingInfo:function(mId){
-            // appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/meeting_info.html?mId='+mId+"&"+window.location.href.split("?")[1]);
-            this.$router.push({path:'/static/webstatic/meeting/meeting_info.html',query:{mId:this.$route.query.mId,loginType:this.$route.query.loginType}});
+            appApi.openNewWindow('/static/webstatic/meeting/meeting_info.html?mId='+mId+"&"+window.location.href.split("?")[1]);
         }
     }
 }

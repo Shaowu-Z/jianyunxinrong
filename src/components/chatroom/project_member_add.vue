@@ -172,14 +172,14 @@ export default {
         selectUser () {//选择工人
             var _self=this;
             setTimeout(function () {
-                _self.data.selectIdList=_self.getSelectVal();
-                document.getElementById("selectSize").innerHTML=_self.data.selectIdList.length;
+                _self.selectIdList=_self.getSelectVal();
+                document.getElementById("selectSize").innerHTML=_self.selectIdList.length;
             },200)
 
         },
         cancel () {//取消选中
             var _self=this;
-            _self.data.selectIdList=[];
+            _self.selectIdList=[];
             _self.selectSize=0;
         },
         getSelectVal() {//选择工人
@@ -187,7 +187,7 @@ export default {
             //获取所有返回的值
             var obj = document.getElementsByName("selectItem");
             var select_arr = [];
-            _self.data.selectUserList=[];
+            _self.selectUserList=[];
             for(var k in obj) {
                 if(obj[k].checked && undefined != obj[k].value){
                     var userobj=new Object();
@@ -199,7 +199,6 @@ export default {
                     _self.data.selectUserList.push(userobj);
                     select_arr.push(obj[k].value);
                 }
-
             }
             console.info(select_arr);
             return select_arr;

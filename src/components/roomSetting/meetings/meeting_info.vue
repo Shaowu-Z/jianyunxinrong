@@ -63,6 +63,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -76,14 +77,18 @@ export default {
             data:{
 
             },
+            mId:'',
+            projectSN:'',
+            userId:'',
         }
     },
     created() {
-        var paramMap= getParam(window.location.href);
-        var mId=paramMap.mId;
-        var projectSN=paramMap.projectSn;
+        var paramMap = getParam(window.location.href);
+        console.log(paramMap,1111111111);
+        this.mId=paramMap.mId;
+        this.projectSN=paramMap.projectSn;
         var method=paramMap.method;
-        var userId = BackCookie.getCookie("userid");
+        this.userId = BackCookie.getCookie("userid");
         //初始化会议列表
         this.findPMeetingInfo();
         //查询房间信息
@@ -92,11 +97,11 @@ export default {
         this.selectRoomMember();
     },
     methods:{
-        findPMeetingInfo:function (mId) {//查询会议详情
+        findPMeetingInfo:function () {//查询会议详情
             var _self = this;
             console.log("查询会议详情");
             var parame = new FormData();
-            parame.append("mId",mId)
+            parame.append("mId",this.mId)
             this.$http.post("/pcontact_api/findMeetingInfoById", parame).then(function (response) {
                 if (response.data.code == 0) {
                     var result = response.data.result;
@@ -137,32 +142,45 @@ export default {
                     }
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: error
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
 
     },
-        selectRoomById:function(mId){
+        selectRoomById:function(){
             var _self = this;
             var formdata=new FormData();
-            formdata.append("roomId",mId);
+            console.log(this.mId);
+            formdata.append("roomId",this.mId);
             console.log(formdata);
             this.$http.post("/pcontact_api/getroominfo", formdata).then(function (response) {
                 if(response.data.code==0){
                     _self.form.roomClass = response.data.result;
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: error
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
 
         },
-        selectRoomMember:function(mId,projectSN){//查询房间成员
+        selectRoomMember:function(){//查询房间成员
             var _self = this;
             var formdata=new FormData();
-            formdata.append("roomId",mId);
+            formdata.append("roomId",this.mId);
             formdata.append("memberType","12");
-            formdata.append("projectSn",projectSN);
+            formdata.append("projectSn",this.projectSN);
             this.$http.post("/pcontact_api/findRoomUsers", formdata).then(function (response) {
                 if(response.data.code==0){
                     var result=response.data.result;
@@ -170,24 +188,30 @@ export default {
                     _self.form.roomMember = result;
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: error
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
         },
-        seeMeeting:function(see,mId){
+        seeMeeting:function(see){
             var _self = this;
             if(see=="go"){
                 //先判断当前用户是否是成员。
                 var isUser = false;
                 for(var i=0;i<_self.form.roomMember.length;i++){
-                    if(_self.form.roomMember[i].userId==userId){
+                    if(_self.form.roomMember[i].userId==this.userId){
                         isUser= true;
                     }
                 }
                 if(!isUser){//当前用户不存在当前会议室，需要先将用户加入进会议室和环信群组中
                     var formdata=new FormData();
-                    formdata.append("userIds",userId);
-                    formdata.append("roomId",mId);
+                    formdata.append("userIds",this.userId);
+                    formdata.append("roomId",this.mId);
                     loading("请稍后...");
                     this.$http.post("/pcontact_api/addvisitors", formdata).then(function (response) {
                         setTimeout(function(){
@@ -201,7 +225,13 @@ export default {
                 }
             }else if(see=="see"){
                 //appApi.openNewWindow(getUrl()+'/static/webstatic/meeting/meetingsChatRecord.html?mId='+mId);
-                msg("攻城狮正在努力攻击。。。敬请期待")
+                // msg("攻城狮正在努力攻击。。。敬请期待")
+                layer.open({
+                    content: '攻城狮正在努力攻击。。。敬请期待'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
             }
         },
         createMeetingHuiyi:function(){//添加会议纪要
@@ -212,10 +242,10 @@ export default {
             var _self = this;
             appApi.openNewWindow(getUrl()+'/static/newwebstatic/huiyijiyao/transfer.html?id='+_self.form.jiyaoInfo.id)
         },
-        findHuiyijiyao:function(mId){//查询会议纪要
+        findHuiyijiyao:function(){//查询会议纪要
             var _self = this;
             var formdata = new FormData();
-            formdata.append("meetingId",mId)
+            formdata.append("meetingId",this.mId)
             this.$http.post("/pcontact_api/findHuiyijiyao", formdata).then(function (response) {
                 if(response.data.code==0){
                     var result=response.data.result;
@@ -227,7 +257,13 @@ export default {
                     }
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: error
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
         }

@@ -5,7 +5,7 @@
             <span class="mui-icon mui-icon-back"></span>联系人
         </button>
         <h1 class="mui-title">建云好友</h1>
-        <button onclick="appApi.openNewWindow(pagepath+'/contacts/phone_list.html')" class="mui-btn mui-btn-link mui-pull-right">添加好友</button>
+        <button @click="tianjia" class="mui-btn mui-btn-link mui-pull-right">添加好友</button>
     </header>
 <section class="mui-content" id="eg_list">
 	<div id='list' class="mui-indexed-list address-list">
@@ -38,7 +38,7 @@
 								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group" v-text="item.first"></li>
 							</div>
 							<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item">
-								<a @click="pagepath(items,index1)">
+								<a @click="pagepaths(items,index1)">
 									<div class="mui-slider-cell">
 										<div class="oa-contact-cell mui-table">
 											<div class="oa-contact-avatar mui-table-cell">
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import setting from '../../playform/config'
 export default {
     data(){
         return{
@@ -73,7 +74,11 @@ export default {
         }
     },
     methods:{
-		pagepath(items,index1){
+		tianjia(){
+			// appApi.openNewWindow(setting.pagepath+'/phone_list')
+			this.$router.push({path:'/phoneList'});
+		},
+		pagepaths(items,index1){
 			console.log(items[index1])
 			this.$router.push({path:'/eg_details',query:{type:'f',userId:items[index1].friendsUserId}});
 		},
