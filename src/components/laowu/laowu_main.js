@@ -879,21 +879,12 @@ var laowu_main = {
             + "&gongzhongName=" + gongzhongName
             + "&userId=" + userId
             + "&type=" + type;
-            var url='/static/new_laowu/project_normal_config.html';
-            _self.$router.push({path:url,query:{param:param}})
-       // appApi.openNewWindow(pagepath + '/new_laowu/project_normal_config.html' + param);
+           var url='/static/webstatic/new_laowu/project_normal_config.html';
+        //    _self.$router.push({path:url,query:{param:param}})
+            var pagepath="http://192.168.0.33:8100";
+       appApi.openNewWindow(pagepath + url+param);
     },
-    setNormalData: function (obj) {
-        app.form.datePrice = obj.datePrice;
-        app.form.datePriceName = obj.datePrice + "(元)";//日工资（名称）
-        app.form.workNormalHour = obj.workNormalHour;//正常上班时长（标准）
-        app.form.workNormalHourName = obj.workNormalHour + time_name;//上班时长（标准）名称
-        app.form.overNormalHour = obj.overNormalHour;//加班时长（标准）
-        app.form.overNormalHourName = obj.overNormalHour + time_name;//加班时长（标准）名称
-        app.form.gongzhongId = obj.gongzhongId;
-        app.form.gongzhongName = obj.gongzhongName;
-        setMoney(1);//计算金额
-    },
+   
     setNormalmultiData: function (obj) {
         var ary = app.data.selectUserList;
         for (var i = 0; i < ary.length; i++) {
@@ -1084,6 +1075,19 @@ function toDecimal2(x) {
         s += '0';
     }
     return s;
+}
+
+ function setNormalData(obj) {
+     alert(obj)
+    app.form.datePrice = obj.datePrice;
+    app.form.datePriceName = obj.datePrice + "(元)";//日工资（名称）
+    app.form.workNormalHour = obj.workNormalHour;//正常上班时长（标准）
+    app.form.workNormalHourName = obj.workNormalHour + time_name;//上班时长（标准）名称
+    app.form.overNormalHour = obj.overNormalHour;//加班时长（标准）
+    app.form.overNormalHourName = obj.overNormalHour + time_name;//加班时长（标准）名称
+    app.form.gongzhongId = obj.gongzhongId;
+    app.form.gongzhongName = obj.gongzhongName;
+    setMoney(1);//计算金额
 }
 
 

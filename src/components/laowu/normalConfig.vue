@@ -5,7 +5,7 @@
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
-	<h1 class="mui-title">设置工资标准</h1>
+	<h1 class="mui-title">设置工资标准1是是是</h1>
 </header>
 
 <div class=" fixed-bottom">
@@ -19,14 +19,25 @@
 		<li class="mui-table-view-cell mui-input-row" >
 				<a class="mui-navigate-right">
 				<label>上班标准<small>*</small></label>
-        <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
-				<!-- <input type="text" name="workHourName" value="" readonly="readonly" placeholder="请输入(必填)" v-model="form.workHourName"/> -->
+				<input type="text" name="workHourName"  readonly="readonly" placeholder="请输入(必填)" v-model="form.workHourName" @click.stop="databot(1)"/>
+        <mt-popup v-model="work_popupVisible" position="bottom" class="picker-slot-center">
+          <mt-picker value-key="text" :slots="slots" :showToolbar='true' :defaultIndex="1"  @change="onValuesChange" >
+            <mt-button  size="small" @click.native="cancalClick">取消</mt-button>
+            <mt-button type="primary" size="small" @click.native="handleClick(1)">确定</mt-button>
+          </mt-picker>
+          </mt-popup>
 				</a>
 			</li>
-			<li class="mui-table-view-cell mui-input-row" @click="selectTime(2)">
+			<li class="mui-table-view-cell mui-input-row" >
 				<a class="mui-navigate-right">
 				<label>加班标准<small>*</small></label>
-				<input type="text" name="overHourName" value="" readonly="readonly" placeholder="请输入(必填)" v-model="form.overHourName"/>
+				<input type="text" name="overHourName" value="" readonly="readonly" placeholder="请输入(必填)" v-model="form.overHourName" @click.stop="databot(2)"/>
+          <mt-popup v-model="over_popupVisible" position="bottom" class="picker-slot-center">
+          <mt-picker value-key="text" :slots="slots" :showToolbar='true' :defaultIndex="1"  @change="onValuesChange" >
+            <mt-button  size="small" @click.native="cancalClick">取消</mt-button>
+            <mt-button type="primary" size="small" @click.native="handleClick(2)">确定</mt-button>
+          </mt-picker>
+          </mt-popup>
 				</a>
 			</li>
 			<li class="mui-table-view-cell mui-input-row" @click="openGongZhongList">
@@ -42,6 +53,9 @@
 		</ul>
 
 	</section>
+
+ 
+
    
    
   </div>
@@ -50,9 +64,12 @@
 <script>
 import laowu_common from "./laowu_common.js";
 import { Picker } from 'mint-ui';
+import { Popup } from 'mint-ui';
+import { Button } from 'mint-ui';
 export default {
   data() {
     return {
+      
       form: {
         workHour: "", //正常上班几个时长算一个工(ID)
         workHourName: "", //正常上班几个时长算一个工(名称)
@@ -62,12 +79,17 @@ export default {
         moneyName: "", //每日工资(名称)
         gongzhongId: "",
         gongzhongName: "",
-        userId: ""
+        userId: "",
+        
       },
       data: {
         timeList: []
       },
-         slots:[{values: ['年假', '事假', '病假', '婚假', '其他']}]  
+      pickervalues:'',
+      timeType:"",
+      work_popupVisible:false,
+      over_popupVisible:false,
+      slots:[]
     };
   },
   created: function() {
@@ -103,11 +125,55 @@ export default {
     _self.showTimeLists();
   },
   methods: {
-     onValuesChange(picker, values) {
-      if (values[0] > values[1]) {
-        picker.setSlotValue(1, values[0]);
-      }
+    cancalClick:function(){//取消
+        this.work_popupVisible=false
+        this.over_popupVisible=false
     },
+    handleClick:function(type){//确定
+    
+    console.log(this.pickervalues)
+        if(this.pickervalues){
+         if(this.timeType==1){
+          this.form.workHourName=this.pickervalues.value+laowu_common.time_name;
+          this.form.workHour=this.pickervalues.value;
+          }else if(this.timeType==2){
+          this.form.overHourName=this.pickervalues.value+laowu_common.time_name;
+          this.form.overHour=this.pickervalues.value;
+          }
+       
+        }else{
+          if(this.timeType==1){
+            this.form.workHourName=this.data.timeList[0].value+laowu_common.time_name;
+            this.form.workHour=this.data.timeList[0].value;
+          }else{
+            this.form.overHourName=this.data.timeList[0].value+laowu_common.time_name;
+            this.form.overHour=this.data.timeList[0].value;
+          }
+        }
+        this.work_popupVisible=false
+        this.over_popupVisible=false
+       
+    },
+    databot:function(type){
+      if(type==1){
+        this.work_popupVisible=true
+        this.over_popupVisible=false
+      }else{
+        this.over_popupVisible=true
+        this.work_popupVisible=false
+      }
+      
+      this.timeType=type;
+      this.selectTime(type)
+    },
+     onValuesChange(picker, values) {
+      
+       if(values.length>0){
+        this.pickervalues=values[0];
+       }
+        
+    },
+    
       showTimeLists:function () {//加载时间列表
                 var _self=this;
                 var obj=new Object();
@@ -115,16 +181,25 @@ export default {
                 _self.$http.post("/project_work_api/find_base_cfg",obj).then(function (response) {
                     if(response.data.code==200){
                         var result=response.data.result;
+                        var values=[];
                         if(result.length>0){
                             for (var i=0;i<result.length;i++){
                                 var obj=new Object();
                                 obj.text=result[i].baseName;
                                 obj.value=result[i].baseId;
                                 if(result[i].baseId!=0){
-                                    _self.$data.data.timeList.push(obj);
+                                    values.push(obj);
+                                   
                                 }
 
                             }
+                             _self.data.timeList=values;
+                             var solts=new Object();
+                             solts.values=values;
+                             solts.defaultIndex=0
+                             solts.value=values[0].text,
+                             solts.valueKey=values[0].value,
+                            _self.slots.push(solts)
                         }
 
                     }else {
@@ -137,72 +212,61 @@ export default {
             },
              selectTime:function (type) {//选择时间列表
                 var _self=this;
-                var index=0;//显示时间的下标
+                var selectindex=0;//显示时间的下标
                 var select_time=0;//当前时间值
                 if(type==1){
                     select_time=_self.form.workHour;
                 }else if(type==2){
                     select_time=_self.form.overHour;
                 }
+                
                 //获取当前时间选中的下标
-                var picker = new mui.PopPicker();
-                if(_self.$data.data.timeList.length>0){
+                if(_self.$data.data.timeList.length>0 && select_time){
                     for(var i=0;i<_self.$data.data.timeList.length;i++){
                         if(_self.$data.data.timeList[i].value==select_time){
-                           index=i;
+                           selectindex=i;
                            break;
                         }
                     }
                 }
-
-                picker.pickers[0].setSelectedIndex(index);//设置默认值得下标和内容。
-                picker.setData(_self.$data.data.timeList);
-                picker.show(function (selectItems) {
-                    if (type==1){
-                        _self.form.workHourName=selectItems[0].value+time_name;
-                        _self.form.workHour=selectItems[0].value;
-                    }else if (type==2){
-                        _self.form.overHourName=selectItems[0].value+time_name;
-                        _self.form.overHour=selectItems[0].value;
-                    }
-
-
-                })
-
+                 _self.slots[0].defaultIndex=selectindex;
+         
             },
             saveData:function() {/*返回到记工页面*/
                 var _self = this;
                 var form = _self.form;
+                // console.log(form)
+                // return
                 if(!_self.form.workHour){
-                    _self.popup('上班标准不能为空');
+                    alert('上班标准不能为空');
                     return;
                 }
                 if(!_self.form.overHour){
-                    _self.popup('加班标准不能为空');
+                    alert('加班标准不能为空');
                     return;
                 }
-                if(!_self.form.gongzhongName){
-                    _self.popup('工种不能为空');
-                    return;
-                }
+                // if(!_self.form.gongzhongName){
+                //     alert('工种不能为空');
+                //     return;
+                // }
                 if(!_self.form.money){
-                    _self.popup('工资标准不能为空');
+                    alert('工资标准不能为空');
                     return;
                 }
-                if(!checkMoney(_self.form.money)){//金额格式校验
+                if(!laowu_common.checkMoney(_self.form.money)){//金额格式校验
                     return;
                 }
                 setTimeout(function(){
                     var obj=new Object();
-                    obj.datePrice=app.form.money;
-                    obj.workNormalHour=app.form.workHour;
-                    obj.overNormalHour=app.form.overHour;
-                    obj.gongzhongId=app.form.gongzhongId;
-                    obj.gongzhongName=app.form.gongzhongName;
-                    if(type==1){
+                    obj.datePrice=_self.form.money;
+                    obj.workNormalHour=_self.form.workHour;
+                    obj.overNormalHour=_self.form.overHour;
+                    obj.gongzhongId=_self.form.gongzhongId;
+                    obj.gongzhongName=_self.form.gongzhongName;
+                    if(laowu_common.type==1){
                         appApi.broadcast("setNormalData("+JSON.stringify(obj)+")");//返回上一页并设置标准工资页面
                     }else {
-                         obj.userId=app.form.userId;
+                         obj.userId=_self.form.userId;
                         appApi.broadcast("setNormalmultiData("+JSON.stringify(obj)+")");//返回上一页并设置标准工资页面
                     }
                     appApi.closeNewWindow();
@@ -220,3 +284,42 @@ export default {
   }
 };
 </script>
+
+<style>
+  @import "../../assets/css/common/mint";
+  .picker-slot-center{
+    width: 100%;
+  }
+  .mint-popup .mint-button .mint-button-text{
+    width: 100%;
+    padding: 0; 
+  }
+  .mint-popup .mint-button{
+    margin: 6px;
+  }
+  .mint-popup .mint-button:nth-child(1){
+    float: left;
+    left: 6px;
+  }
+  .mint-popup .mint-button:nth-child(2){
+    float: right;
+  }
+  .picker-center-highlight:before{
+    background-color: #aaa
+  }
+  .picker-center-highlight:after{
+    background-color: #aaa
+  }
+  .picker{
+    clear: both;
+  }
+  .picker-items{
+   width: 100%;
+   background-color: #ddd;
+  }
+  .picker-toolbar {
+    height: 45px;
+     background-color: #eee;
+  }
+</style>
+
