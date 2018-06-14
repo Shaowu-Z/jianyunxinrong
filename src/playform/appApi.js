@@ -1771,6 +1771,7 @@ var setVersionInfoResult = function(result, iosIfrObjStrT) {
 //获取公司回调
 
 var setProjectContactSelectResult = function(result, iosIfrObjStrT) {
+	alert(1111)
 	var CONTENT = {};
 	CONTENT.result = result;
 	if(iosIfrObjStrT) {

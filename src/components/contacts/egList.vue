@@ -8,7 +8,7 @@
         <button @click="tianjia" class="mui-btn mui-btn-link mui-pull-right">添加好友</button>
     </header>
 <section class="mui-content" id="eg_list">
-	<div id='list' class="mui-indexed-list address-list">
+	<div id='list' class="mui-indexed-lists address-list">
 		<div class="singlebox mui-singlebox text">
 			<a @click="newFriends" class="mui-navigate-right">新的好友</a>
 		</div>
@@ -331,5 +331,13 @@ export default {
 	@import '../../assets/css/common/mui.indexedList.css';
 	.text{
 		text-align: left
+	}
+	.mui-indexed-lists{
+		position: relative;
+		border-top: solid 1px #e3e3e3;
+		border-bottom: solid 1px #e3e3e3;
+		overflow: hidden;
+		/* background-color: #fafafa; */
+		cursor: default;
 	}
 </style>

@@ -188,7 +188,7 @@ export default {
             this.$router.push({path:'/groupAddress',query:{teamId:this.teamId}})
         },
         goBack(){
-            this.$router.push({path:'/contacts'})
+            this.$router.push({path:'/static/webstatic/contacts/address_list.html'})
         },
         hide_shade(){
             this.jsTeamDiv = false;
@@ -199,6 +199,7 @@ export default {
             window.appApi.openNewWindow(url);
         },
         jsTeam () {
+            let self = this
             layer.open({
                 content: '解散后，该团队的所有数据将被清除，请谨慎操作。确定要解散团队？',
                 icon: 1
@@ -208,8 +209,8 @@ export default {
                     var layerId = "layui-m-layer"+index;
                     document.getElementById(layerId).setAttribute("style","display:none;");
 
-                    app.jsTeamDiv = true;
-                    app.shade = true;
+                    self.jsTeamDiv = true;
+                    self.shade = true;
                     //remin("请输入密码!",2);
                     /*var param = {deleteType:"1",friendsUserId:userId};
                         axios.post(getUrl()+"/concats_api/delete_friend",param).then(function (response){
@@ -223,7 +224,7 @@ export default {
         },
         dissolutionTeam () {
             var pwd = document.getElementById("pwd").value;
-            var param = {teamId:teamId,teamName:this.none.teamName,password:pwd};
+            var param = {teamId:this.teamId,teamName:this.none.teamName,password:pwd};
             this.$http.post("/concats_api/delete_team",param).then(function (response){
                 var resp = response.data;
                 if(resp.code==400){
@@ -235,10 +236,10 @@ export default {
                     });
                     return;
                 }
-                remin("团队已解散!",2);
+                // remin("团队已解散!",2);
                 window.appApi.closeNewWindow();
             }).catch(function (error) {
-                remin("团队解散失败,请联系管理员!",2);
+                // remin("团队解散失败,请联系管理员!",2);
             });
         }
     }

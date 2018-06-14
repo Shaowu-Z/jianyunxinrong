@@ -5,7 +5,7 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
-            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right" href="#popover-more">批量操作</a>
+            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">批量操作</a>
         </header>
 
 
