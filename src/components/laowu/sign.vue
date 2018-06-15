@@ -110,7 +110,7 @@
     </template>
 
 <script>
-//  setLocationResult()
+
 import project_sign from  "./js/project_sign.js"
 import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
 export default {
