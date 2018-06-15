@@ -42,17 +42,17 @@
                     <a class="mui-navigate-right" >
                         <label class="text">我所在方性质</label>
                         <input type="text" value="" name="gongChengFangName" v-model="form.gongChengFangName" placeholder="请选择" readonly="readonly" @click.stop="selectProject(2)"/>
-                        <mt-popup v-model="tow_popupVisible" position="bottom" class="picker-slot-center col-xs-6 mui-clearfix">
+                        <mt-popup v-model="tow_popupVisible" position="bottom" class="picker-slot-center col-xs-6 mui-clearfix" @change="onValuesChange">
                             <p>我的组织类型<span style="border-bottom:1px solid,display:block,width:100px,height:10px;"></span></p>
-                            <div v-for="(item,index) in slots1[0].values" :key="index" class="mui-input-row mui-radio mui-left">
-                                    <input type="radio" name="selecttype">
-                                    <label  v-text="item.roomClassName"></label>
+                            <div v-for="(item,index) in slots1[0].values" :key="index" class="mui-input-row mui-radio mui-left" @click="handleClicks(item)">
+                                    <input type="radio" name="selecttype"  style="position: absolute;top: 13px;">
+                                    <label v-text="item.roomClassName" style="width: 140px;"></label>
                             </div> 
                         </mt-popup>
                     </a>
                 </li>
 
-                <div id="selectDiv" style="display: none">
+                <div id="selectDiv">
                     <div v-if="form.gongChengFangID=='9'">
                         <li class="mui-table-view-cell mui-input-row">
                             <label class="text">专业</label>
@@ -100,16 +100,16 @@
                 <!--</div>-->
             <!--</div>-->
 
-                <div id="cus_zhiye_popver" class="mui-popover mui-popover-action mui-popover-bottom">
+                <!-- <div id="cus_zhiye_popver" class="mui-popover mui-popover-action mui-popover-bottom">
                     <div class="pop-up2">
-                        <!--<div class="pop-title">选择组织类型（单选）</div>-->
-                        <div class="pop-content select-box mui-clearfix">
+                        <div class="pop-title">选择组织类型（单选）</div>-->
+                        <!-- <div class="pop-content select-box mui-clearfix">
                             <div id="cus_zhiye_popver_sc" class="mui-scroll-wrapper">
                                 <div class="mui-scroll">
                                         <div class="s-title" >我的组织类型</div>
                                         <div class="col-xs-6 mui-clearfix">
                                             <div class="mui-input-row mui-radio mui-left" v-for="(item,index) in data.zuzhiList" :key="index">
-                                                <div v-if="item.roomClass!='banzu_gaongren'" @click="type_confirm()">
+                                                <div v-if="item.roomClass!='banzu_gaongren'" @click="type_confirm(item.roomClassName)">
                                                     <label v-text="item.roomClassName"></label>
                                                     <input type="radio"  v-model="data.selectType" name="selecttype" :value="item"/>
                                                 </div>
@@ -118,12 +118,12 @@
                                         </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!--<div class="pop-footer btn-contain">
                             <button @click="type_confirm()" type="button" class="mui-btn mui-btn-primary mui-btn-block zrrr">确定</button>
                         </div>-->
-                    </div>
-                </div>
+                    <!-- </div>
+                </div> -->
         </section>
     </div>
 </template>
@@ -296,16 +296,17 @@ export default {
          if(this.timeType==1){
             this.form.leibie=this.pickervalues.value
             console.log(this.form.leibie);
-          }else if(this.timeType==2){
-            this.form.gongChengFangName=this.pickervalues.value
-          }else{
-              
           }
        
         }
         this.one_popupVisible=false
-        this.tow_popupVisible=false
 
+        },
+        handleClicks:function(n){
+            this.form.gongChengFangName = n.roomClassName;
+            this.form.gongChengFangID = n.classId;
+            this.tow_popupVisible=false
+            console.log(this.form);
         },
         onValuesChange(picker, values) {
             if(values.length>0){
