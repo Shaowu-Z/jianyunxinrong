@@ -7,12 +7,8 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import setting from "./playform/appApi.js";
-<<<<<<< HEAD
-// import mui from "./playform/mui.js";
-=======
 import mui from "./playform/mui.js";
 // import mui from "mui";
->>>>>>> 941ea035f16984eceb4087c30e0fb69a1970fe47
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
@@ -36,12 +32,9 @@ let http = axios.create({
 })
 Vue.use(http)
 Vue.use(router)
-<<<<<<< HEAD
 // Vue.use(mui)
-=======
 Vue.use(mui)
 Vue.use(Mint)
->>>>>>> 941ea035f16984eceb4087c30e0fb69a1970fe47
 Vue.use(MintUI)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http
