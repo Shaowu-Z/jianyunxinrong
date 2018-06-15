@@ -996,7 +996,7 @@ export default {
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
-			console.log(document.getElementById("dish_content"));
+			console.log(document.getElementById("dish_content",11111111111111111));
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
 			console.log(jQuery())
 			document.getElementById("uploadWidget").addEventListener("change", function(event) {

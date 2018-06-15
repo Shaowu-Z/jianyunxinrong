@@ -17,7 +17,7 @@
       <ul class="mui-table-view group-list list-clearance">
         <div v-if="items.length>0" v-for="(item,index) in items" :key="index">
           <li class="mui-table-view-cell item top">
-            <a class="mui-navigate-right" :href="['javascript:appApi.openNewWindow(pagepath+\'/mycenter/enterprise_home.html?teamId='+item.id+'&teamCode='+item.teamCode+'&tagName='+item.tagName+'\')']">
+            <a class="mui-navigate-right" @click="enterprise(item)">
               <div class="oa-contact-content mui-table-cell">
                 <h4 class="oa-contact-name" v-text="item.teamName"></h4>
                 <p class="oa-contact-email mui-clearfix"><span class="mui-pull-le ft">项目数量：<span class="data" v-text="item.projectNum"></span></span></p>
@@ -40,6 +40,7 @@
 
 <script>
 import {BackCookie} from '../../../playform/common.js'
+import setting from '../../../playform/config.js'
 export default {
   data () {
     return {
@@ -71,7 +72,6 @@ export default {
       var formparam = new FormData();
       formparam.append("userId",BackCookie.getCookie("userid"))
       this.$http.post("/concats_api/query_team_list_info",formparam).then(function (response) {
-        console.log(1111);
         _self.$data.items = response.data.result;
         console.log("结果",response.data.result)
       }).catch(function (error) {
@@ -79,6 +79,9 @@ export default {
       });
   },
   methods:{
+    enterprise(item){
+      this.$router.push({path:'/mycenter/enterprise_home.html',query:{teamId:item.id,teamCode:item.teamCode,tagName:item.tagName}})
+    },
     hide_shade: function(){
         this.jsTeamDiv = false;
         this.shade = false;

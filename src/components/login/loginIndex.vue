@@ -132,11 +132,11 @@ export default {
                 }else if(rs.code == 1002){
                     //未实名认证
                     _this.loginParams=rs.result;
-                    _this.$router.push({path:'personApprove.vue'});
+                    _this.$router.push({path:'/personApprove'});
                 }else if(rs.code == 1049){
                      //微信未被注册
                      setThirdInfoForWx(rs.result);
-                    //  _this.$router.push({path:'third_bind.vue'});
+                    //  _this.$router.push({path:'/third_bind.vue'});
                 }else if(rs.code == 1050){
                     setThirdInfoForQq(rs.result);
                      //  _this.$router.push({path:'third_bind.vue'});

@@ -2,11 +2,17 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import $ from 'jquery'
 import Vue from 'vue'
+import Mint from 'mint-ui';
 import App from './App'
 import router from './router'
 import axios from 'axios'
 import setting from "./playform/appApi.js";
+<<<<<<< HEAD
 // import mui from "./playform/mui.js";
+=======
+import mui from "./playform/mui.js";
+// import mui from "mui";
+>>>>>>> 941ea035f16984eceb4087c30e0fb69a1970fe47
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
@@ -15,6 +21,7 @@ import './assets/css/common/icons-extend.less';
 import './assets/css/common/common.less';
 import './assets/css/common/style.less';
 import './assets/css/common/layer.less';
+import './assets/css/common/mint.css';
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
@@ -29,7 +36,12 @@ let http = axios.create({
 })
 Vue.use(http)
 Vue.use(router)
+<<<<<<< HEAD
 // Vue.use(mui)
+=======
+Vue.use(mui)
+Vue.use(Mint)
+>>>>>>> 941ea035f16984eceb4087c30e0fb69a1970fe47
 Vue.use(MintUI)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http

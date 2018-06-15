@@ -91,6 +91,7 @@ export default {
             setTimeout(function () {
                 _self.test();
             },100)
+            // this.createMeetingMember()
     },
     methods:{
         saveMeeting:function () {

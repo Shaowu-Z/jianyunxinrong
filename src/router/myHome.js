@@ -11,6 +11,7 @@ const myHome = resolve => require(['@/components/myHome'], resolve)
 const myHomeIndex = resolve => require(['@/components/myHome/homeIndex'], resolve)
 const setUp = resolve => require(['@/components/myHome/setUp'], resolve)
 const set = resolve => require(['@/components/myHome/setUp/set'], resolve)
+const enterprise_home = resolve => require(['@/components/myHome/setUp/enterprise_home'], resolve)
 const setting = resolve => require(['@/components/myHome/setting'], resolve)
 const settingIndex = resolve => require(['@/components/myHome/setting/settingIndex'], resolve)
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
@@ -41,6 +42,10 @@ const myHomeConfig = {
         {
           path: '/',
           component: set
+        },
+        {
+          path: '/mycenter/enterprise_home.html',
+          component: enterprise_home
         }
       ]
     },

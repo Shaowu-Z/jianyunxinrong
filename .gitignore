@@ -16,7 +16,18 @@ selenium-debug.log
 *.njsproj
 *.sln
 package.json
+<<<<<<< HEAD
 config/index.js
 src/main.js
 
 
+=======
+package-lock.json
+build/webpack.base.conf.js
+config/dev.env.js
+config/index.js
+src/components/project/base.txt
+src/components/project/js/area.js
+src/components/project/js/comment_zr.vue
+src/playform/mui.js
+>>>>>>> 941ea035f16984eceb4087c30e0fb69a1970fe47

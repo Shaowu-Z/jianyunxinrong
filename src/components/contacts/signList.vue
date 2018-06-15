@@ -13,7 +13,7 @@
                 <input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
             </div>-->
             <ul class="mui-table-view invita-list" >
-                <li class="mui-table-view-cell" v-for="(item,index) in items" :key="index">
+                <li class="mui-table-view-cell" v-for="(item,index) in items" :key="index" @click="openNewWindow(index)">
                     <!--<div class="oa-contact-cell mui-table">
                         <div class="oa-contact-avatar mui-table-cell">
                             <img :src="item.avatar | getImageUrl">
@@ -75,6 +75,9 @@ export default {
         }
     },
     methods:{
+        openNewWindow(index){
+            this.$router.push({path:'/signListsave',query:{sealType:this.type,opType:1,teamId:this.items[index].id}})
+        },
         goback(){
             this.$router.go(-1)
         },

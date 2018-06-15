@@ -54,6 +54,7 @@ if(!isTop) {
 // console.info(window.top.contentWindow);
 
 window.Adaptive = {
+
 	init: function() {
 		let DEVICE_FLAG;
 		// 返回键
@@ -1476,7 +1477,7 @@ window.appApi = {
 				xhr = new ActiveXObject();
 			}
 
-			xhr.open('post', 'http://java.winfreeinfo.com/sass_api/send_todo');
+			xhr.open('post', '/api/sass_api/send_todo');
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
@@ -1770,8 +1771,7 @@ var setVersionInfoResult = function(result, iosIfrObjStrT) {
 }
 
 //获取公司回调
-
-var setProjectContactSelectResult = function(result, iosIfrObjStrT) {
+ window.setProjectContactSelectResult = function(result, iosIfrObjStrT) {
 	var CONTENT = {};
 	CONTENT.result = result;
 	if(iosIfrObjStrT) {

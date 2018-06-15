@@ -1,0 +1,15 @@
+1、在引用danjuApi.js时候  created{} 里面声明：danjuApi.vue = this;danjuApi.initVue();
+2、单据的文件夹：{
+        收发件 lianxi
+        收付款 shoufukuan
+        微承诺 chengnuo
+        合同   hetong
+        发票   fapiao
+        收获   shouhuo
+        工单   gongdan
+    }
+   录单页面（work_content || newCreat） 
+   查看页面（newInfo）
+   中转页面（transfer）
+   评论页面（ttp）
+   跳转的网址/static/newwebstatic/'文件夹'/xx.html

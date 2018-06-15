@@ -21,6 +21,7 @@
 
 <script>
 import {getParam} from '../../../playform/common'
+import { Toast } from 'mint-ui';
 export default {
     data () {
         return {
@@ -74,7 +75,12 @@ export default {
 			}
 			_self.status = true;
 			if(_self.name == ""){
-				warm("请输入文件名")
+				// warm("请输入文件名")
+				Toast({
+					message: '请输入文件名',
+					position: 'center',
+					duration: 1000
+				});
 				_self.status = false;
 				return;
 			}
@@ -87,6 +93,7 @@ export default {
 				// roomId:_self.curInfo.roomId
 			};
 			this.$http.post("/cdish/dir/add",params).then(function (response) {
+				console.log(response);
 				if (response.data.code == 0) {
                     //所有页面刷新
 					if(appApi.isApp){
@@ -109,7 +116,12 @@ export default {
 			}
 			_self.status = true;
 			if(_self.name == ""){
-				warm("请输入文件名")
+				// warm("请输入文件名")
+				Toast({
+					message: '请输入文件名',
+					position: 'center',
+					duration: 1000
+				});
 				_self.status = false;
 				return;
 			}
