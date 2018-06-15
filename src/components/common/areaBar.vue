@@ -24,7 +24,7 @@ import { Picker } from "mint-ui";
 import myaddress from "../project/js/city";
 
 export default {
-  name: "",
+  name: "areaBar",
   components: {
     "mt-picker": Picker
   },

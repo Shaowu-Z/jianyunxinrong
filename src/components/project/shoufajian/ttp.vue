@@ -17,19 +17,23 @@
                 </a>
             </li>
         </ul> -->
-        <data-bar :title="returntitle"></data-bar>
+        <area-bar :title="returntitle"></area-bar>
+        <data-bar ></data-bar>
+
     </div>
 
 </template>
 <script>
 import { Picker } from 'mint-ui';
 import myaddress from "../js/city";
+import areaBar from "../../common/areaBar"
 import dataBar from "../../common/dataBar"
     export default {
       name: '',
         components: {
             'mt-picker': Picker,
-            dataBar
+            areaBar,
+            dataBar,
         },
         props: {},
         data () {
