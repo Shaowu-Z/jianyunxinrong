@@ -2,11 +2,13 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import $ from 'jquery'
 import Vue from 'vue'
+import Mint from 'mint-ui';
 import App from './App'
 import router from './router'
 import axios from 'axios'
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
+// import mui from "mui";
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
@@ -31,6 +33,7 @@ let http = axios.create({
 Vue.use(http)
 Vue.use(router)
 Vue.use(mui)
+Vue.use(Mint)
 Vue.use(MintUI)
 // Vue.prototype.$http = axios
 Vue.prototype.$http = http

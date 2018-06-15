@@ -44,20 +44,20 @@ export default {
                 if(userid == _self.creatorId) { //查询人是录单人
                     history.replaceState(null, null, "newCreat.html?id=" + +_self.$route.query.id + _self.urlcan) //h5  替换当前页面url（手机上url替换但是页面没变）
                     // location.replace(''); //加载新url页面
-                    _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
+                    _self.$router.replace({ path: '/static/newwebstatic/lianxi/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
                 } else {
                     history.replaceState(null, null, "newInfo.html?id=" + +_self.$route.query.id + _self.urlcan) //h5  替换当前页面url（手机上url替换但是页面没变）
                     // location.replace('');
-                    _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
+                    _self.$router.replace({ path: '/static/newwebstatic/lianxi/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
                 }
             } else if(_self.confirm == 1) {
                 history.replaceState(null, null, "newInfo.html?id=" + +_self.$route.query.id + _self.urlcan) //h5  替换当前页面url（手机上url替换但是页面没变）
                 // location.replace('')
-                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
+                _self.$router.replace({ path: '/static/newwebstatic/lianxi/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
             } else {
                 history.replaceState(null, null, "newInfo.html?id=" + +_self.$route.query.id) //h5  替换当前页面url（手机上url替换但是页面没变）
                 // location.replace(''); //加载新url页面
-                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
+                _self.$router.replace({ path: '/static/newwebstatic/lianxi/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
             }
         },
         initData: function(){
@@ -108,23 +108,23 @@ export default {
                             if(_self.creatorId==_self.userid){ //判断当前人是否是录入人
                                 history.replaceState(null, null,"work_content.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                                 // location.replace(''); //加载新url页面
-                                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/work_content.html', query: { id: _self.$route.query.id }})
+                                _self.$router.replace({ path: '/static/newwebstatic/lianxi/work_content.html', query: { id: _self.$route.query.id }})
 //											window.location.replace(getUrl()+"/static/newwebstatic/lianxi/work_content.html?id="+this.$route.query.id)
                             }else{
                                 history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                                 // location.replace(''); //加载新url页面
-                                 _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newInfo.html', query: { id: _self.$route.query.id }})
+                                 _self.$router.replace({ path: '/static/newwebstatic/lianxi/newInfo.html', query: { id: _self.$route.query.id }})
                             }
                         }else{
                             history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                                 // location.replace(''); //加载新url页面
-                                _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newInfo.html', query: { id: _self.$route.query.id }})
+                                _self.$router.replace({ path: '/static/newwebstatic/lianxi/newInfo.html', query: { id: _self.$route.query.id }})
 //										window.location.replace(getUrl()+"/static/newwebstatic/lianxi/newInfo.html?id="+this.$route.query.id)
                         }
                     }else{
                             history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                             // location.replace(''); //加载新url页面
-                            _self.$router.replace({ path: '/static/newwebstatic/shoufukuan/newInfo.html', query: { id: _self.$route.query.id }})
+                            _self.$router.replace({ path: '/static/newwebstatic/lianxi/newInfo.html', query: { id: _self.$route.query.id }})
 //									 window.location.replace(getUrl()+"/static/newwebstatic/lianxi/newInfo.html?id="+this.$route.query.id)
 
                     }

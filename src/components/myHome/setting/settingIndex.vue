@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import shareBar from './share.vue'
+import shareBar from './share'
 export default {
 	components:{
 		shareBar
