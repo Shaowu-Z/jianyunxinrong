@@ -62,10 +62,11 @@
 </template>
 
 <script>
-import laowu_common from "./laowu_common.js";
+import laowu_common from "./js/laowu_common.js";
 import { Picker } from 'mint-ui';
 import { Popup } from 'mint-ui';
 import { Button } from 'mint-ui';
+var app=null
 export default {
   data() {
     return {
@@ -92,9 +93,11 @@ export default {
       slots:[]
     };
   },
+
   created: function() {
     //vue实例完成后调用的方法，有点类似与jq中的$(function(){})
     var _self = this;
+    app=this;
     var paramMap=laowu_common.paramMap;
     var time_name=laowu_common.time_name;
     var money = paramMap.datePrice;
@@ -168,9 +171,9 @@ export default {
     },
      onValuesChange(picker, values) {
       
-       if(values.length>0){
+      // if(values.length>0){
         this.pickervalues=values[0];
-       }
+      // }
         
     },
     
@@ -235,8 +238,6 @@ export default {
             saveData:function() {/*返回到记工页面*/
                 var _self = this;
                 var form = _self.form;
-                // console.log(form)
-                // return
                 if(!_self.form.workHour){
                     alert('上班标准不能为空');
                     return;
@@ -245,10 +246,10 @@ export default {
                     alert('加班标准不能为空');
                     return;
                 }
-                // if(!_self.form.gongzhongName){
-                //     alert('工种不能为空');
-                //     return;
-                // }
+                if(!_self.form.gongzhongName){
+                    alert('工种不能为空');
+                    return;
+                }
                 if(!_self.form.money){
                     alert('工资标准不能为空');
                     return;
@@ -274,15 +275,18 @@ export default {
                 },100);
             },
         openGongZhongList: function() {
-          location.href = "/static/webstatic/new_laowu/gongzhong_list.html";
+          var url = "/static/webstatic/new_laowu/gongzhong_list.html";
+          appApi.openNewWindow(url);
         },
-         setGongZhong:function(data) {
+        
+  }
+};
+
+    window.setGongZhong=function(data) {
         app.form.gongzhongId=data.gongzhongId;
         app.form.gongzhongName=data.gongzhongName;
 
         }
-  }
-};
 </script>
 
 <style>

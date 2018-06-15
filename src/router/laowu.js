@@ -5,6 +5,7 @@ const sign = resolve => require(['@/components/laowu/sign'], resolve)
 const projectList = resolve => require(['@/components/laowu/projectList'], resolve)
 const normalConfig = resolve => require(['@/components/laowu/normalConfig'], resolve)
 const gongZhong = resolve => require(['@/components/laowu/gongZhong'], resolve)
+const gongRenList = resolve => require(['@/components/laowu/gongRenList'], resolve)
 const dianGongGongRen = resolve => require(['@/components/laowu/dianGongGongRen'], resolve)
 const dianGongGongZhang = resolve => require(['@/components/laowu/dianGongGongZhang'], resolve)
 const dianGongDetail = resolve => require(['@/components/laowu/dianGongDetail'], resolve)
@@ -38,6 +39,10 @@ const laowuConfig = {
     {
       path: '/static/webstatic/new_laowu/gongzhong_list.html',//工种列表
       component: gongZhong
+    },
+    {
+      path: '/static/webstatic/new_laowu/gongren_list.html',//工种列表
+      component: gongRenList
     },
     {
       path: '/static/webstatic/new_laowu/project_diangong_gongren.html',//点工--工人
