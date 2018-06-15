@@ -469,7 +469,7 @@ export default {
             Toast({
                 message: content,
                 position: 'bottom',
-                duration: 5000
+                duration: 1000
             });
         },
         selectProject (type) {//工程类别
@@ -1037,7 +1037,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .picker-slot-center{
     width: 100%;
   }

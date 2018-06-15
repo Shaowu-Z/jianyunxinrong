@@ -34,6 +34,7 @@ var laowu_main = {
         var recordType=laowu_common.recordType;
         var dataType=laowu_common.dataType;
         var loginType=laowu_common.loginType;
+        alert("测试"+laowu_common.loginType)
         var date=laowu_common.date;
         var mutil=laowu_common.mutil;
         _self.loginType = loginType;//登陆类型
@@ -431,19 +432,22 @@ var laowu_main = {
 
     },
     openGongrenList: function (recordType) {//选择工人列表
-        var _self = this;
         var date = _self.form.createTimeStr;
+        var roomId=laowu_common.roomId;
+        var recordType=laowu_common.recordType;
+        var projectId=laowu_common.projectId;
         var selectUserIdList = [];
+      
         if (_self.data.selectUserList.length > 0) {
             for (var i = 0; i < _self.data.selectUserList.length; i++) {
                 selectUserIdList.push(_self.data.selectUserList[i].userId);
             }
-            appApi.openNewWindow(pagepath + '/new_laowu/gongren_list.html?recordType=' + recordType + '&date=' + date + '&param=' + JSON.stringify(selectUserIdList) + "&roomId=" + roomId + "&projectId=" + projectId);
+            appApi.openNewWindow('/static/webstatic/new_laowu/gongren_list.html?recordType=' + recordType + '&date=' + date + '&param=' + JSON.stringify(selectUserIdList) + "&roomId=" + roomId + "&projectId=" + projectId);
         } else {
-            appApi.openNewWindow(pagepath + '/new_laowu/gongren_list.html?recordType=' + recordType + '&date=' + date + "&roomId=" + roomId + "&projectId=" + projectId);
+            appApi.openNewWindow('/static/webstatic/new_laowu/gongren_list.html?recordType=' + recordType + '&date=' + date + "&roomId=" + roomId + "&projectId=" + projectId);
         }
 
-        setMoney(2);//计算金额
+        laowu_main.setMoney(2);//计算金额
     },
 
     tongBuNormal: function (normal) {//获取最新工资标准
@@ -463,12 +467,14 @@ var laowu_main = {
         }, 100)
     },
     checkNormal: function () {//校验工资标准
-        var _self = this;
+        var gongrenId=laowu_common.gongrenId;
+        var gongzhangId=laowu_common.gongzhangId;
+        var projectId=laowu_common.projectId;
         _self.checkNormalFlag = true;
         _self.normalParams.userId = gongrenId;
         _self.normalParams.gongzhangId = gongzhangId;
         _self.normalParams.projectId = projectId;
-        axios.post(getUrl() + "/project_work_api/find_normal_cfg", _self.normalParams).then(function (response) {
+        axios.post("/project_work_api/find_normal_cfg", _self.normalParams).then(function (response) {
             if (response.data.code == 200) {
                 var flag = false;
                 var result = response.data.result;
@@ -491,21 +497,21 @@ var laowu_main = {
                             //     _self.tongBuNormal(normal);
                             // },100)
                             setTimeout(function () {
-                                _self.saveRecord(true);
+                                laowu_main.saveRecord(true);
                             }, 100)
                         }, function () {//不需要同步，则直接保存
                             setTimeout(function () {
-                                _self.saveRecord();
+                                laowu_main.saveRecord();
                             }, 100)
                         }, "取消", "确认");
                     } else {//无差异直接保存
                         setTimeout(function () {
-                            _self.saveRecord();
+                            laowu_main.saveRecord();
                         }, 100)
                     }
                 } else {//没有工资标准，第一次加入项目不需要校验，直接保存
                     setTimeout(function () {
-                        _self.saveRecord();
+                        laowu_main.saveRecord();
                     }, 100)
                 }
             } else {
@@ -518,88 +524,88 @@ var laowu_main = {
         });
     },
     saveData: function () { //记单人\编辑单据
-
-        var _self = this;
+    var recordType=laowu_common.recordType;
+    var loginType=laowu_common.loginType;
 
         if (!recordType) {
-            msg("未找到记账类型recordType")
+            alert("未找到记账类型recordType")
             return
         }
 
         if (!_self.form.userId) {
-            _self.popup('未获取到当前操作的人员信息');
+            alert('未获取到当前操作的人员信息');
             return;
         }
         if (!_self.form.projectId) {
-            _self.popup('项目不能为空');
+            alert('项目不能为空');
             return;
         }
         if (!_self.form.createTimeStr) {
-            _self.popup('日期不能为空');
+            alert('日期不能为空');
             return;
         }
         if (!_self.form.gongzhangName) {
-            _self.popup('工长不能为空');
+            alert('工长不能为空');
             return;
         }
         if (recordType == 1) {
 
-            if (!_self.form.workNormalHour) {
-                _self.popup('标准工资上班时长不能为空');
-                return;
-            }
-            if (!_self.form.overNormalHour) {
-                _self.popup('标准工资加班时长不能为空');
-                return;
-            }
-            if (!_self.form.datePrice) {
-                _self.popup('日工资不能为空');
-                return;
-            }
-            if (!_self.form.gongzhongName) {
-                _self.popup('工种不能为空');
-                return;
-            }
+            // if (!_self.form.workNormalHour) {
+            //     alert('标准工资上班时长不能为空');
+            //     return;
+            // }
+            // if (!_self.form.overNormalHour) {
+            //     alert('标准工资加班时长不能为空');
+            //     return;
+            // }
+            // if (!_self.form.datePrice) {
+            //     alert('日工资不能为空');
+            //     return;
+            // }
+            // if (!_self.form.gongzhongName) {
+            //     alert('工种不能为空');
+            //     return;
+            // }
             if (!_self.form.workHour) {
-                _self.popup('上班时长不能为空');
+                alert('上班时长不能为空');
                 return;
             }
             if ((!_self.form.score || _self.form.score == 0) && loginType == 1) {
-                _self.popup('请给工人评分');
+                alert('请给工人评分');
                 return;
             }
             //校验工资标准,只提示一次，用户操作之后不再提示
-            _self.checkNormal();
+            laowu_main.checkNormal();
 
         } else if (recordType == 2) {
             if (!_self.form.fenxiangName) {
-                _self.popup('分项不能为空');
+                alert('分项不能为空');
                 return;
             }
             if (!_self.form.price) {
-                _self.popup('单价不能为空');
+                alert('单价不能为空');
                 return;
             }
             if (!_self.form.number) {
-                _self.popup('数量不能为空');
+                alert('数量不能为空');
                 return;
             }
             if (!_self.form.unit) {
-                _self.popup('单位不能为空');
+                alert('单位不能为空');
                 return;
             }
             if ((!_self.form.score || _self.form.score == 0) && loginType == 1) {
-                _self.popup('请给工人评分');
+                alert('请给工人评分');
                 return;
             }
             this.form.numberName = this.form.number + "  " + this.form.unit + "";
-            _self.saveRecord();
+            laowu_main.saveRecord();
         } else if (recordType == 3 || recordType == 4) {
             if (!_self.form.money) {
-                _self.popup('金额不能为空');
+                alert('金额不能为空');
                 return;
             }
-            _self.saveRecord();
+            laowu_main.saveRecord();
         }
 
     },
@@ -608,8 +614,13 @@ var laowu_main = {
         if (!normalFlag) {//注意，如果未传值过来，一定要设置为空，否则后台会判断错误
             normalFlag = "";
         }
-        var _self = this;
-        loading("正在保存,请稍后...");
+        var saveType=laowu_common.saveType;
+        var userId=laowu_common.userId;
+        var userName=laowu_common.userName;
+        var loginType=laowu_common.loginType;
+        alert(loginType)
+        var recordType=laowu_common.recordType;
+        console.log("正在保存,请稍后...");
         if (saveType == 'save' || saveType == 'update') {
             if (saveType == 'save') {
                 _self.form.operateStatus = "0";//新增记录）——操作状态为0
@@ -617,39 +628,43 @@ var laowu_main = {
             userName = encodeURIComponent(userName);//编码
             var param = "&saveType=" + saveType + "&userId=" + userId + "&userName=" + userName + "&identityType=" + loginType + "&normalFlag=" + normalFlag;
 
-            axios.post(getUrl() + "/project_work_api/update_record?type=update" + param, _self.form).then(function (response) {
+            console.log("表单",_self.form)
+            return
+            axios.post("/project_work_api/update_record?type=update" + param, _self.form).then(function (response) {
                 if (response.data.code == 200) {
-                    msg("保存成功!");
-                    closeWindow();
+                    alert("保存成功!");
+                    laowu_common.closeWindow();
                     appApi.broadcast("reloadData()");//返回上一页并设置标准工资页面
                 } else {
-                    msg("保存错误!")
+                    alert("保存错误!")
                 }
-                closeLayer();
+                laowu_common.closeLayer();
             }).catch(function (error) {
                 console.info(error);
                 closeLayer();
             });
         } else {
             _self.form.operateStatus = "0";//新增记录——操作状态为0
-            axios.post(getUrl() + "/project_work_api/save_record", _self.form).then(function (response) {
+            console.log("表单",_self.form)
+            return
+            axios.post("/project_work_api/save_record", _self.form).then(function (response) {
                 if (response.data.code == 200) {
                     if (recordType == 1 || recordType == 2) {
-                        msg("记工完成");
+                        alert("记工完成");
                     } else {
-                        msg("记账完成");
+                        alert("记账完成");
                     }
-                    closeWindow();
+                    laowu_common.closeWindow();
                 } else if (response.data.code == 201) {
                     if (recordType == 1 || recordType == 2) {
-                        msg("记工错误")
+                        alert("记工错误")
                     } else {
-                        msg("记账错误")
+                        alert("记账错误")
                     }
-                    closeLayer();
+                    laowu_common.closeLayer();
                 } else if (response.data.code == 202) {
-                    msg("您在" + _self.form.createTimeStr + "已有一笔记工");
-                    closeLayer();
+                    alert("您在" + _self.form.createTimeStr + "已有一笔记工");
+                    laowu_common.closeLayer();
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -663,69 +678,69 @@ var laowu_main = {
         var _self = this;
 
         if (!_self.form.userId) {
-            _self.popup('未获取到当前操作的人员信息');
+            alert('未获取到当前操作的人员信息');
             return;
         }
         if (!_self.form.projectId) {
-            _self.popup('项目不能为空');
+            alert('项目不能为空');
             return;
         }
         if (!_self.form.createTimeStr) {
-            _self.popup('日期不能为空');
+            alert('日期不能为空');
             return;
         }
         if (!_self.form.gongzhangName) {
-            _self.popup('工长不能为空');
+            alert('工长不能为空');
             return;
         }
         var ary = _self.data.selectUserList;
         if (ary.length <= 0) {
-            _self.popup('记工工人不能为空');
+            alert('记工工人不能为空');
             return;
         }
         if (type == 1) {
             for (var i = 0; i < ary.length; i++) {
                 if (ary[i].datePrice == null || !ary[i].datePrice) {
-                    _self.popup('工人' + ary[i].userName + ',工资标准没有完善');
+                    alert('工人' + ary[i].userName + ',工资标准没有完善');
                     return;
                 }
                 if (ary[i].pingfen == null || !ary[i].pingfen) {
-                    _self.popup('工人' + ary[i].userName + ',还没有评分哦');
+                    alert('工人' + ary[i].userName + ',还没有评分哦');
                     return;
                 }
             }
             if (!_self.form.workHour) {
-                _self.popup('上班时长不能为空');
+                alert('上班时长不能为空');
                 return;
             }
         } else if (type == 2) {
             for (var i = 0; i < ary.length; i++) {
                 if (ary[i].pingfen == null || !ary[i].pingfen) {
-                    _self.popup('工人' + ary[i].userName + ',还没有评分哦');
+                    alert('工人' + ary[i].userName + ',还没有评分哦');
                     return;
                 }
                 ary[i].money = toDecimal2(_self.form.money);//计算每个工人的包工金额
             }
             if (!_self.form.fenxiangName) {
-                _self.popup('分项不能为空');
+                alert('分项不能为空');
                 return;
             }
             if (!_self.form.price) {
-                _self.popup('单价不能为空');
+                alert('单价不能为空');
                 return;
             }
             if (!_self.form.number) {
-                _self.popup('数量不能为空');
+                alert('数量不能为空');
                 return;
             }
             if (!_self.form.unit) {
-                _self.popup('单位不能为空');
+                alert('单位不能为空');
                 return;
             }
             this.form.numberName = this.form.number + "  " + this.form.unit + "";
         } else if (type == 3) {
             if (!_self.form.money) {
-                _self.popup('借支金额不能为空');
+                alert('借支金额不能为空');
                 return;
             }
             for (var i = 0; i < ary.length; i++) {
@@ -733,7 +748,7 @@ var laowu_main = {
             }
         } else if (type == 4) {
             if (!_self.form.money) {
-                _self.popup('结算金额不能为空');
+                alert('结算金额不能为空');
                 return;
             }
             for (var i = 0; i < ary.length; i++) {
@@ -839,6 +854,7 @@ var laowu_main = {
         var gongzhongId = "";
         var gongzhongName = "";
         var userId = "";
+        var money=0;
         if (type == 1) {//工人设置单人工资标准
             datePrice = app.form.datePrice;//日工资
             workNormalHour = app.form.workNormalHour;//正常上班几个小时算一个工
@@ -867,10 +883,9 @@ var laowu_main = {
             if (user.pingfen != null) {
                 pingfen = user.pingfen;//工种名称
             }
-            if (user.money != null) {
-                money = user.money;//工种名称
-            }
+            
         }
+        
         //地址栏传递标准工资参数
         var param = "?datePrice=" + datePrice
             + "&workNormalHour=" + workNormalHour
@@ -880,48 +895,11 @@ var laowu_main = {
             + "&userId=" + userId
             + "&type=" + type;
            var url='/static/webstatic/new_laowu/project_normal_config.html';
-        //    _self.$router.push({path:url,query:{param:param}})
-            var pagepath="http://192.168.0.33:8100";
-       appApi.openNewWindow(pagepath + url+param);
+    
+       appApi.openNewWindow(url+param);
     },
    
-    setNormalmultiData: function (obj) {
-        var ary = app.data.selectUserList;
-        for (var i = 0; i < ary.length; i++) {
-            if (app.data.selectUserList[i].userId == obj.userId) {//根据用户ID设置对应的用户工资标准
-                app.data.selectUserList[i].datePrice = obj.datePrice;
-                app.data.selectUserList[i].datePriceName = obj.datePrice + "(元)";//日工资（名称）
-                app.data.selectUserList[i].workNormalHour = obj.workNormalHour;//正常上班时长
-                app.data.selectUserList[i].workNormalHourName = obj.workNormalHour + time_name;//上班时长（标准）名称
-                app.data.selectUserList[i].overNormalHour = obj.overNormalHour;//加班时长
-                app.data.selectUserList[i].overNormalHourName = obj.overNormalHour + time_name;//加班时长（标准）名称
-                app.data.selectUserList[i].gongzhongId = obj.gongzhongId;
-                app.data.selectUserList[i].gongzhongName = obj.gongzhongName;
-                break;
-            }
-        }
-        setMoney(2);//计算金额
-    },
-    setNormalDataFromGongrenList: function (objList) {
-        if (recordType != 1) {
-            app.data.selectUserList = [];
-        }
-        setTimeout(function () {
-            if (objList.length > 0) {
-                for (var i = 0; i < objList.length; i++) {
-                    app.data.selectUserList.push(objList[i]);
-                }
-            }
-            if (recordType == 1) {
-                setMoney(2);//计算金额
-            } else if (recordType == 2) {
-                setBaoGongMoney();
-            } else if (recordType == 3 || recordType == 4) {
-                setJiZhangMoney();
-            }
-        }, 100)
-
-    },
+ 
     setNumberData: function (obj) {
         if (obj.unit) {
             app.form.unit = obj.unit;
@@ -1077,17 +1055,64 @@ function toDecimal2(x) {
     return s;
 }
 
- function setNormalData(obj) {
-     alert(obj)
-    app.form.datePrice = obj.datePrice;
-    app.form.datePriceName = obj.datePrice + "(元)";//日工资（名称）
-    app.form.workNormalHour = obj.workNormalHour;//正常上班时长（标准）
-    app.form.workNormalHourName = obj.workNormalHour + time_name;//上班时长（标准）名称
-    app.form.overNormalHour = obj.overNormalHour;//加班时长（标准）
-    app.form.overNormalHourName = obj.overNormalHour + time_name;//加班时长（标准）名称
-    app.form.gongzhongId = obj.gongzhongId;
-    app.form.gongzhongName = obj.gongzhongName;
-    setMoney(1);//计算金额
+window.setNormalDataFromGongrenList=function (objList) {
+   
+    var app=_self;
+    var recordType=laowu_common.recordType;
+    if (recordType != 1) {
+        app.data.selectUserList = [];
+    }
+    setTimeout(function () {
+       
+        if (objList.length > 0) {
+            for (var i = 0; i < objList.length; i++) {
+                app.data.selectUserList.push(objList[i]);
+            }
+        }
+        if (recordType == 1) {
+            laowu_main.setMoney(2);//计算金额
+        } else if (recordType == 2) {
+            laowu_main.setBaoGongMoney();
+        } else if (recordType == 3 || recordType == 4) {
+            laowu_main.setJiZhangMoney();
+        }
+    }, 100)
+
+}
+
+
+
+window.setNormalmultiData=function (obj) {
+    var app=_self
+    var ary = app.data.selectUserList;
+    for (var i = 0; i < ary.length; i++) {
+        if (app.data.selectUserList[i].userId == obj.userId) {//根据用户ID设置对应的用户工资标准
+            app.data.selectUserList[i].datePrice = obj.datePrice;
+            app.data.selectUserList[i].datePriceName = obj.datePrice + "(元)";//日工资（名称）
+            app.data.selectUserList[i].workNormalHour = obj.workNormalHour;//正常上班时长
+            app.data.selectUserList[i].workNormalHourName = obj.workNormalHour + laowu_common.time_name;//上班时长（标准）名称
+            app.data.selectUserList[i].overNormalHour = obj.overNormalHour;//加班时长
+            app.data.selectUserList[i].overNormalHourName = obj.overNormalHour + laowu_common.time_name;//加班时长（标准）名称
+            app.data.selectUserList[i].gongzhongId = obj.gongzhongId;
+            app.data.selectUserList[i].gongzhongName = obj.gongzhongName;
+            break;
+        }
+    }
+   
+    laowu_main.setMoney(2);//计算金额
+},
+
+ window.setNormalData=function (obj) {
+     
+    _self.form.datePrice = obj.datePrice;
+    _self.form.datePriceName = obj.datePrice + "(元)";//日工资（名称）
+    _self.form.workNormalHour = obj.workNormalHour;//正常上班时长（标准）
+    _self.form.workNormalHourName = obj.workNormalHour + laowu_common.time_name;//上班时长（标准）名称
+    _self.form.overNormalHour = obj.overNormalHour;//加班时长（标准）
+    _self.form.overNormalHourName = obj.overNormalHour + laowu_common.time_name;//加班时长（标准）名称
+    _self.form.gongzhongId = obj.gongzhongId;
+    _self.form.gongzhongName = obj.gongzhongName;
+    laowu_main.setMoney(1);//计算金额
 }
 
 

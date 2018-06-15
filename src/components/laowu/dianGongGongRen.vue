@@ -7,7 +7,7 @@
 	<h1 class="mui-title">记点工</h1>
 </header>
 
-<div class="fixed-bottom" v-if="save_type=='update'||save_type=='save'">
+<div class="fixed-bottom main-left" v-if="save_type=='update'||save_type=='save'">
         <div class="mui-table mui-text-center">
             <div class="mui-table-cell" id="save_div"><button type="button" class="mui-btn mui-btn-primary" @click="saveData()">保存</button></div>
             <div class="mui-table-cell"  id="delete_div" ><button type="button" class="mui-btn" @click="deleteObj(form.id)">删除</button></div>
@@ -132,7 +132,7 @@
 
 <script>
 import { DatetimePicker } from "mint-ui";
-import laowu_main from "./laowu_main.js";
+import laowu_main from "./js/laowu_main.js";
 export default {
   data() {
     return {
@@ -234,6 +234,9 @@ export default {
     },
     openNormalHtml:function(user, type){
       laowu_main.openNormalHtml(user, type);
+    },
+    saveData:function(){
+      laowu_main.saveData()
     }
   }
 };

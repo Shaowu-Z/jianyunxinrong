@@ -234,6 +234,7 @@ window.appApi = {
 		// alert(m);
 		eval(m);
 	},
+	
 	/**
 	 * 分享
 	 * @param (int )shareType -1 不包括建云 0=所有平台类型，1=微信QQ好友，2=微信好友 3=微信朋友圈 4=QQ 5=QQ空间  6，7=微信QQ好友
@@ -1819,17 +1820,7 @@ var setTextFromClipResult = function(result, iosIfrObjStrT) {
  * @param address
  * @param latitudeAndLongitude
  */
-var setLocationResult = function(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
-	// if (typeof appApi.callBackFun == "function") {
-	//     var CONTENT = {};
-	//     CONTENT.longaddress = address;
-	//     CONTENT.latitudeAndLongitude = latitudeAndLongitude;
-	//     CONTENT.shortAddress = shortAddress;
-	//     appApi.callBackFun(appApi.callBackFlag.LOCATION, CONTENT);
-	//
-	// }
-	// console(address, latitudeAndLongitude);
-
+window.setLocationResult = function(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
 	var CONTENT = {};
 	CONTENT.longaddress = address;
 	CONTENT.latitudeAndLongitude = latitudeAndLongitude;
@@ -1959,3 +1950,34 @@ var getQRCodeResult = function(str) {
  * @param isSys 是否为标准目录
  */
 var uploadTarget = function(id, isSys) {}
+
+/**
+ * 当前Web窗口设置返回值给前一个Web窗口
+*1.在当前窗口调用原生接口设置返回值
+*2.原生接口会把当前窗口关闭,且在前一个web窗口调用js,将数据回传给前一个页面
+*3.注意此接口仅使用于前后2个web窗口,而不是同一个窗口的2个web页面
+* @param {str=json}
+ **/
+window.getBackResult=function(str){
+
+	if(isApp && isIphoneOs) { //IOS
+		iosSetBackResult(str)
+
+	} else if(isApp && isAndroid) { //addroid
+		
+		window.webactivity.setBackResult(str)
+	
+
+	} else {
+		console.info("请在app中调用");
+	}
+}
+
+
+/**
+ * 
+ * @param {接收上个页面返回的数据} str 
+ */
+window.setBackResult=function(data){
+	alert("接受123"+data)
+}
