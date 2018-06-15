@@ -6,6 +6,7 @@ const viewTheDetails = resolve => require(['@/components/roomSetting/notice/view
 const cloudFile = resolve => require(['@/components/roomSetting/cloudFile'], resolve)
 const cloudFileIndex = resolve => require(['@/components/roomSetting/cloudFile/cloudFileIndex'], resolve)
 const openDir = resolve => require(['@/components/roomSetting/cloudFile/openDir'], resolve)
+const create_dir = resolve => require(['@/components/roomSetting/cloudFile/create_dir'], resolve)
 const video = resolve => require(['@/components/roomSetting/video'], resolve)
 const videoIndex = resolve => require(['@/components/roomSetting/video/videoIndex'], resolve)
 const videoComment = resolve => require(['@/components/roomSetting/video/videoComment'], resolve)
@@ -53,6 +54,10 @@ const roomSettingConfig = {
         {
           path: '/static/webstatic/dish/open_dir.html',
           component: openDir
+        },
+        {
+          path: '/static/webstatic/dish/create_dir.html',
+          component: create_dir
         },
       ]
     },

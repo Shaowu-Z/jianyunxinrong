@@ -3,15 +3,23 @@
  * auth panzhenfei 
  * 2018.6.7
  */
-import laowu_common from "./laowu_common.js"
+import laowu_common from"./laowu_common.js"
+import image_retate from '../../playform/image_retate.js'
+import util from '../../playform/util.js'
+var _self=null;
+var axios=null;
+
 var project_sign={
     
+        initVue:function(){//初始化vue引用和http请求，并定义全局变量方便使用
+            _self=this._self;
+            axios=_self.$http;
+             laowu_common._self=_self;
+             laowu_common.initVue();
+           
+        },
+    
         initData: function () {
-
-            var _self=this._self;
-            var axios=this.axios;
-            laowu_common._self=project_sign._self;
-            laowu_common.axios=project_sign.axios;
             var userId=laowu_common.userId;
             var userName=laowu_common.userName;
             var dataType=laowu_common.dataType;
@@ -22,9 +30,12 @@ var project_sign={
                 laowu_common.findRoomData();
                 project_sign.loadCation();
                 project_sign.loadlocalProjectInfo();
-                this.loadAttRecords();//查询最近两天打卡记录
-                project_sign.loadNearRecord();//查询最近一次打卡记录
-                project_sign.showAppDiv();
+                project_sign.loadAttRecords();//查询最近两天打卡记录
+                
+                setTimeout(function () {
+                    project_sign.loadNearRecord();//查询最近一次打卡记录
+                },50)
+                laowu_common.showAppDiv();
 
             } else if (dataType == 'todosign') {
                 _self.loadCation();
@@ -45,7 +56,8 @@ var project_sign={
                 }, 500)
 
             } else if (dataType == 'projectlist') {
-                _self.findProjectList();
+               
+                project_sign.findProjectList();
 
             } else if (dataType == 'chart') {//组合查询根据记录docid查询打卡记录
                 _self.loadAttRecordById();
@@ -80,76 +92,72 @@ var project_sign={
                     }
                 }
             },
+            
             loadlocalProjectInfo: function () {//默认显示当前房间的项目信息
-                var project = laowu_common.findProjectData();//加载项目
-                var projectImg = laowu_common.findProjectImg();//加载项目图片
-                console.log("项目图片", projectImg)
-                setTimeout(function () {
+                    var project=laowu_common.findProjectData();//加载项目if*
+                    var projectImg = laowu_common.findProjectImg();//加载项目图片
                     var item = {};
-                    item.serialNum = projectId;
+                    item.serialNum = laowu_common.projectId;
                     if (projectImg) {
                         item.img_url = projectImg.img_url;
                     }
-                    item.projectName = projectName;
-                    item.cellphone = gongzhangPhone;
-                    item.nickName = gongzhangName;
-                    item.owerId = gongzhangId;
+                    
+                    item.projectName = laowu_common.projectName;
+                    item.cellphone = laowu_common.gongzhangPhone;
+                    item.nickName = laowu_common.gongzhangName;
+                    item.owerId = laowu_common.gongzhangId;
                     item.place = project.place;//项目地址
                     item.placeZuobiao = project.placeZuobiao;//项目坐标
-                    setProject(item, 0);
-                }, 50)
-
-            },
+                    this.setProject(item, 0);      
+               },
             selectProject: function (project) {//选择项目
                 appApi.closeNewWindow();
                 appApi.broadcast("setProject(" + JSON.stringify(project) + ",1)");
             },
             sign: function () {//打卡拍照前进行校验
-                var _self = this;
+                var dataType=laowu_common.dataType;
                 if (!_self.form.projectSN) {
-                    msg("项目ID不能为空")
+                    // msg("项目ID不能为空")
                     return
                 }
                 if (dataType == 'todosign' || dataType == 'sign') {//从房间进来
-                    _self.loadNearRecord();//查询打卡记录
-                    setTimeout(function () {
-                        //  console.log("最近坐标",_self.nearZuobiao)
+                    project_sign.loadNearRecord();//查询打卡记录
+                     console.log("最近坐标",_self.nearZuobiao)
                         var localZuobiao = _self.form.gpsLl;
-                        //alert(localZuobiao)
                         if (!localZuobiao) {//默认坐标
-                            msg("当前没有坐标，无法计算距离位置")
+                           // msg("当前没有坐标，无法计算距离位置")
                             //localZuobiao = "113.9488800000,22.5550400000";
-                            // localZuobiao = "113.954971,22.560108";
+                             localZuobiao = "113.954971,22.560108";
                             //113.95518,22.560106
 
                         }
                         if (localZuobiao) {
                             if (_self.nearRecord) {//有打卡记录的则校验坐标
                                 //校验打卡坐标
-                                var count = getGreatCircleDistance(localZuobiao, _self.nearZuobiao);
+                                var count = laowu_common.getGreatCircleDistance(localZuobiao, _self.nearZuobiao);
                                 if (count > 500) {//距离大于500则提示
                                     showWarning();
                                     //_self.nearclockDate
                                     confirmLayer("您的位置与离上次打卡的位置较远，请确认在该工地上工吗？", function () {//确定
                                         layer.closeAll();
                                         setTimeout(function () {
-                                            _self.openSign();//打卡
+                                            project_sign.openSign();//打卡
                                         }, 10)
                                     }, function () {
-                                        _self.openProjectList();
+                                        project_sign.openProjectList();
                                     }, "切换项目", "继续打卡");
                                 } else {
-                                    _self.openSign();//打卡
+                                    project_sign.openSign();//打卡
                                 }
                             } else {
-                                _self.openSign();//打卡
+                                project_sign.openSign();//打卡
                             }
 
                         } else {
-                            msg("gps定位异常！")
-                            _self.openSign();//打卡
+                            // msg("gps定位异常！")
+                            project_sign.openSign();//打卡
                         }
-                    }, 600);
+                    
 
                 } else {//房间外面
 
@@ -157,22 +165,23 @@ var project_sign={
             },
             openSign: function () {
                 //设置参数切换前置摄像头
-                if (isApp && isAndroid) {
+                if (appApi.isApp && appApi.isAndroid) {
                     window.webactivity.setInputType(3, 0, true, 0);
                 }
                 document.getElementById("imgFile").click();
             },
             findProjectList: function () {//查询所有参与过的项目
+                var localgps=laowu_common.localgps;
                 if (!localgps) {//默认坐标
-                    msg("当前没有坐标，无法计算距离位置")
+                    //alert("当前没有坐标，无法计算距离位置")
                     //  localgps = "113.9488800000,22.5550400000";
                 }
-                this.projectList = findWithMeList();
-                var list = this.projectList;
+                _self.projectList = laowu_common.findWithMeList();
+                var list = _self.projectList;
                 if (localgps && list.length > 0) {
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].gps) {
-                            var count = getGreatCircleDistance(localgps, list[i].gps);
+                            var count = laowu_common.getGreatCircleDistance(localgps, list[i].gps);
                             console.log("距离", count)
                             if (count > 0) {
                                 var juli = count.toFixed(2);
@@ -185,50 +194,57 @@ var project_sign={
                         }
                     }
                 }
+                console.log(_self.projectList)
             },
             existProject: function (project) {//离开项目或回到项目
-                var self = this;
+                var _self = this;
                 var formData = new FormData();
-                formData.append("userId", userId);
+                formData.append("userId", laowu_common.userId);
                 formData.append("confirmId", project.owerId);
                 formData.append("projectId", project.serialNum);
                 formData.append("saveType", project.type);
-                axios.post(getUrl() + "/project_work_api/update_project_exist", formData).then(function (response) {
+                axios.post("/project_work_api/update_project_exist", formData).then(function (response) {
                     if (response.data.code == 200) {
                         //重新获取数据刷新页面
-                        self.projectList = findWithMeList();
+                        _self.projectList = laowu_common.findWithMeList();
                         if (project.type == 1) {
-                            msg("项目已关闭上工提醒")
+                            // msg("项目已关闭上工提醒")
                         } else {
-                            msg("项目已启动上工提醒")
+                            // msg("项目已启动上工提醒")
                         }
 
 
                     } else {
-                        msg("设置错误!")
+                        // msg("设置错误!")
                     }
                 }).catch(function (error) {
                     console.info(error);
                 });
             },
             loadAttRecords: function () {//查询打卡记录
-                alert(1)
-                var _self = this;
+              
                 var loginType=laowu_common.loginType
-                console.log(this)
                 if (!loginType) {
                     loginType = "0";
                 }
-                _self.reqWorkParamsVO.confirmId = gongzhangId;//工长ID
-                _self.reqWorkParamsVO.userId = userId;//当前登陆ID
-                _self.reqWorkParamsVO.projectId = projectId;//当前登陆ID
-                _self.reqWorkParamsVO.queryTime = date;//当前登陆ID
-                _self.reqWorkParamsVO.loginType = loginType;//当前登陆ID
-                _self.reqWorkParamsVO.queryType = 'sign';//当前登陆ID
-                axios.post(getUrl() + "/project_work_api/find_att_record_mutil_day", this.reqWorkParamsVO).then(function (response) {
+                // _self.reqWorkParamsVO.confirmId = laowu_common.gongzhangId;//工长ID
+                // _self.reqWorkParamsVO.userId = laowu_common.userId;//当前登陆ID
+                // _self.reqWorkParamsVO.projectId = laowu_common.projectId;//当前登陆ID
+                // _self.reqWorkParamsVO.queryTime = laowu_common.date;//当前登陆ID
+                // _self.reqWorkParamsVO.loginType = loginType;//当前登陆ID
+                // _self.reqWorkParamsVO.queryType = 'sign';//当前登陆ID
+                var formData=new FormData();
+                formData.append("confirmId",laowu_common.gongzhangId)
+                formData.append("userId",laowu_common.userId)
+                formData.append("projectId",laowu_common.projectId)
+                formData.append("queryTime",laowu_common.date)
+                formData.append("loginType",loginType)
+                formData.append("queryType",'sign')
+               // console.log("参数",_self.reqWorkParamsVO)
+                axios.post("/project_work_api/find_att_record_mutil_day",formData).then(function (response) {
                     if (response.data.code == 200) {
 
-                        var result = response.data.result;
+                        var result = response.data.result;  
                         console.log("打卡记录", result.todayList.length);
                         console.log("打卡记录", result.lastDayList.length);
                         if (result != null) {
@@ -237,26 +253,23 @@ var project_sign={
 
                             //===============今日==============
                             if (!result.todayList || result.todayList.length < 1) {
-                                showtodayWarning();
+                                laowu_common.showtodayWarning();
                             }
                             if (result.todayList && result.todayList.length > 0) {
                                 for (var i = 0; i < result.todayList.length; i++) {
-                                    _self.data.photoList.push(result.todayList[i].smallImgUrl);
+                                    _self.data.photoList.push(result.todayList[i].smallImg);
                                 }
                             }
                             //===============昨日==============
                             if (!result.lastDayList || result.lastDayList.length < 1) {
-                                showlastdayWarning();
+                                laowu_common.showlastdayWarning();
                             }
                             if (result.lastDayList && result.lastDayList.length > 0) {
                                 for (var i = 0; i < result.lastDayList.length; i++) {
-                                    _self.data.photoList.push(result.lastDayList[i].smallImgUrl);
+                                    _self.data.photoList.push(result.lastDayList[i].smallImg);
                                 }
                             }
 
-                            // setTimeout(function () {
-                            //     initImgPreview();
-                            // },10)
                         } else {
                             console.log("未查询到打卡记录!")
                         }
@@ -265,63 +278,78 @@ var project_sign={
                     console.info(error);
                 });
             },
-            loadNearRecord: function () {//查询最近一次打卡记录
-
-                var _self = this;
+           
+             loadNearRecord: function () {//查询最近一次打卡记录
+                
+                var loginType=laowu_common.loginType
                 if (!loginType) {
                     loginType = "0";
                 }
+                console.log(_self.form)
                 if (!_self.form.projectSN) {
-                    msg("获取最近一次打开记录时出差，项目ID不能为空")
+                    // msg("获取最近一次打开记录时出差，项目ID不能为空")
                     return
                 }
-                _self.reqWorkParamsVO.loginType = loginType;
-                _self.reqWorkParamsVO.userId = userId;//当前登陆ID
-                _self.reqWorkParamsVO.confirmId = _self.form.confirmId;
-                _self.reqWorkParamsVO.projectId = _self.form.projectSN;
-                _self.reqWorkParamsVO.queryType = 'near';//当前登陆ID
-                axios.post(getUrl() + "/project_work_api/find_att_record_mutil_day", this.reqWorkParamsVO).then(function (response) {
-                    if (response.data.code == 200) {
-                        localgps = _self.form.gpsLl;
-                        if (!localgps) {//默认坐标
-                            msg("当前没有坐标，无法计算距离位置")
-                            return
-                        }
-                        var result = response.data.result;
-                        if (result.length > 0) {
-                            _self.nearRecord = true;
-                            _self.nearAddress = result[0].gpsAddress;
-                            _self.nearZuobiao = result[0].gpsLl;
-                            if (result[0].gpsLl) {
-                                var count = getGreatCircleDistance(localgps, result[0].gpsLl);
-                                count = count.toFixed(2);
-                                if (count > 500) {
-                                    _self.rangegpsStatus = 1;
-                                } else {
-                                    _self.rangegpsStatus = 0;
-                                }
-                                // console.log("距离",count)
-                                if (count >= 1000) {
-                                    _self.rangegps = (count / 1000).toFixed(2) + "公里";
-                                } else {
-                                    _self.rangegps = count + "米";
-                                }
+               
+                $.ajax({
+                    type: "post",
+                    url: "/api/project_work_api/find_nearest_record",
+                    async: false,
+                    data:{
+                        confirmId:laowu_common.gongzhangId,
+                        userId:laowu_common.userId,
+                        projectId:laowu_common.projectId,
+                        loginType:loginType,
+                        queryType:'near'
+                    },
+                    datatype: "json",
+                    success: function(data) {
+                        if (data.code == 200) {
+                            laowu_common.localgps = _self.form.gpsLl;
+                            if (!laowu_common.localgps) {//默认坐标
+                                //msg("当前没有坐标，无法计算距离位置")
+                              //  return
                             }
-                            var clock = new Date(result[0].clockDate).Format("yyyy-MM-dd");
-                            _self.nearclockDate = clock;
-                        } else {//没有查询到最近的打卡记录
-                            hideWarning();
-                            _self.nearRecord = false;
-                            _self.nearAddress = "";//最近打卡记录的地址
-                            _self.nearZuobiao = "";//最近打卡记录的坐标
-                            _self.nearclockDate = "";//最近打卡记录的日期
-                            _self.rangegps = "";
-                            _self.rangegpsStatus = "";
+                            var result = data.result;
+                            console.log("最近",result)
+                            if (result.length > 0) {
+                                _self.nearRecord = true;
+                                _self.nearAddress = result[0].gpsAddress;
+                                _self.nearZuobiao = result[0].gpsLl;
+                                if (result[0].gpsLl) {
+                                    var count = laowu_common.getGreatCircleDistance(laowu_common.localgps, result[0].gpsLl);
+                                    count = count.toFixed(2);
+                                    if (count > 500) {
+                                        _self.rangegpsStatus = 1;
+                                    } else {
+                                        _self.rangegpsStatus = 0;
+                                    }
+                                     console.log("距离",count)
+                                    if (count >= 1000) {
+                                        _self.rangegps = (count / 1000).toFixed(2) + "公里";
+                                    } else {
+                                        _self.rangegps = count + "米";
+                                    }
+                                }
+                                var clock = util.fnFormat(new Date(result[0].clockDate),"yyyy-MM-dd");
+                                
+                                _self.nearclockDate = clock;
+                            } else {//没有查询到最近的打卡记录
+                                laowu_common.hideWarning();
+                                _self.nearRecord = false;
+                                _self.nearAddress = "";//最近打卡记录的地址
+                                _self.nearZuobiao = "";//最近打卡记录的坐标
+                                _self.nearclockDate = "";//最近打卡记录的日期
+                                _self.rangegps = "";
+                                _self.rangegpsStatus = "";
+                            }
                         }
+                    },
+                    error: function() {
+                        console.log("err")
                     }
-                }).catch(function (error) {
-                    console.info(error);
                 });
+
             },
             loadAttRecordById: function () {//根据ID查询打卡记录
                 var _self = this;
@@ -330,7 +358,7 @@ var project_sign={
                 formData.append("queryType", "new_chart");
                 formData.append("docId", docId);
                 formData.append("type", "gongren");
-                axios.post(getUrl() + "/attendance_api/findRecordList_by_userId", formData).then(function (response) {
+                axios.post("/attendance_api/findRecordList_by_userId", formData).then(function (response) {
                     if (response.data.code == 0) {
                         var result = response.data.result;
                         //new Date(result.dateConfirm).Format("yyyy-MM-dd");
@@ -362,23 +390,23 @@ var project_sign={
                 var _self = this;
                 var obj = new Object();
                 obj.type = 3;
-                axios.post(getUrl() + "/project_work_api/find_base_cfg", obj).then(function (response) {
+                axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
                     if (response.data.code == 200) {
                         var result = response.data.result;
                         if (result.length > 0) {
                             _self.$data.data.timeList = result;
                         } else {
-                            msg("未查询到时间列表!")
+                            // msg("未查询到时间列表!")
                         }
                     } else {
-                        msg("查询时间列表出错!")
+                        // msg("查询时间列表出错!")
                     }
                 }).catch(function (error) {
                     console.info(error);
                 });
             },
             openProjectList: function () {//打开项目列表
-                var url = "/static/webstatic/new_laowu/project_list.html?dataType=projectlist&localgps=" + this.form.gpsLl;
+                var url = "/static/webstatic/new_laowu/project_list.html?dataType=projectlist&localgps=" + _self.form.gpsLl;
                 appApi.openNewWindow(url);
             },
             openRemind: function () {//打卡提醒设置
@@ -402,7 +430,7 @@ var project_sign={
             setRemind: function () { //确定提醒日期
 
                 if (!this.form.remindTime) {
-                    msg("请选择提醒时间")
+                    // msg("请选择提醒时间")
                     return;
                 }
                 setTimeout(function () {
@@ -413,14 +441,14 @@ var project_sign={
             updateReadStaus: function () {//更新待办查看状态
                 var _self = this;
                 var form = new FormData();
-                form.append("userId", userId)
+                form.append("userId", laowu_common.userId)
                 form.append("queryType", "readStatus")
                 form.append("name", userName)
-                axios.post(getUrl() + "/project_work_api/update_quertz", form).then(function (response) {
+                axios.post("/project_work_api/update_quertz", form).then(function (response) {
                     if (response.data.code == 200) {
                         // msg("状态更新完成")
                     } else {
-                        msg("待办阅读状态更新出错!")
+                        // msg("待办阅读状态更新出错!")
                     }
                 }).catch(function (error) {
                     console.info(error);
@@ -429,29 +457,29 @@ var project_sign={
             delayRemind: function (queryTime) {//更新提醒期限，如果还没有记录则自动创建。
                 var _self = this;
                 var form = new FormData();
-                form.append("userId", userId);
+                form.append("userId", laowu_common.userId);
                 form.append("queryType", "remindTime");
                 form.append("name", userName)
                 form.append("queryTime", queryTime);//提醒时间类型，按天提醒或按时分秒提醒  day表示按天提醒；hour表示按时分秒提醒
-                axios.post(getUrl() + "/project_work_api/update_quertz", form).then(function (response) {
+                axios.post("/project_work_api/update_quertz", form).then(function (response) {
                     if (response.data.code == 200) {
                         if (queryTime == 'day') {
-                            msg("今日不再提醒上工")
+                            // msg("今日不再提醒上工")
                         } else if (queryTime == 'hour') {
-                            msg("推迟一个小时提醒上工")
+                            // msg("推迟一个小时提醒上工")
                         }
                         setTimeout(function () {
                             appApi.closeNewWindow();
                         }, 2500)
 
                     } else if (response.data.code == 202) {
-                        msg("设置失败，请先启动项目提醒!")
+                        // msg("设置失败，请先启动项目提醒!")
                     } else {
-                        msg("保存出错!")
+                        // msg("保存出错!")
                     }
                 }).catch(function (error) {
                     console.info(error);
-                    msg("保存出错!")
+                    // msg("保存出错!")
                 });
             },
             loadRemind: function () {//加载提醒日期
@@ -462,7 +490,7 @@ var project_sign={
                 form.append("projectId", projectId)
                 form.append("confirmId", gongzhangId)
                 form.append("queryType", "remindTime")
-                axios.post(getUrl() + "/project_work_api/find_quertz", form).then(function (response) {
+                axios.post("/project_work_api/find_quertz", form).then(function (response) {
                     if (response.data.code == 200) {
                         var result = response.data.result;
                         _self.form.remindTime = result.todoDays;
@@ -472,54 +500,55 @@ var project_sign={
                             _self.form.remindName = "每天";
                         }
                     } else {
-                        msg("查询出错!")
+                        // msg("查询出错!")
                     }
                 }).catch(function (error) {
                     console.info(error);
                 });
             },
             goShare: function () {
-                var url = getUrl() + "/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
-                var logo = getUrl() + "/static/images/app-logo.jpg";
+                var url = "/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
+                var logo = "/static/images/app-logo.jpg";
                 appApi.share(8, userName + "邀请您创建新项目", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
             },
 
             /*拍照确认后执行*/
             confirmFile:function() {
 
-                alert(1)
+                
                 var imgFile = document.getElementById("imgFile").value;
                 if (imgFile == null || imgFile == "") {
                 warm("照片不能为空");
                 return;
                 }
 
-                loading("请稍后...")
+                laowu_common.loading("请稍后...")
                 var imgFile = document.getElementById("imgFile");
                 //拍照角度矫正
-                var file = selectFileImage(imgFile);
+                var file = image_retate.selectFileImage(imgFile);
                 setTimeout(function () {
-                var recordJson = JSON.stringify(app.form);
+                var recordJson = JSON.stringify(_self.form);
                 var formData = new FormData();
                 // var file = imgFile.files['0'];
                 formData.append("recordJson", recordJson);
                 if (!file) {
-                    fileBase64 = "";
+                    image_retate.fileBase64 = "";
                 }
-                formData.append("fileName", fileBase64)
+                formData.append("fileName", image_retate.fileBase64)
                 formData.append("file", file);
-                axios.post(getUrl() + "/project_work_api/sign_add", formData).then(function (response) {
+                console.log("提交",recordJson)
+                axios.post("/project_work_api/sign_add", formData).then(function (response) {
                     if (response.data.code == 200) {
-                        msg("打卡成功");
+                        alert("打卡成功");
                         setTimeout(function () {
-                            app.data.todayList = [];
-                            app.data.lastDayList = [];
-                            app.loadAttRecords();//查询最近两天打卡记录
+                            _self.data.todayList = [];
+                            _self.data.lastDayList = [];
+                            project_sign.loadAttRecords();//查询最近两天打卡记录
                         }, 50)
-                        closeLayer();
+                        laowu_common.closeLayer();
                     } else {
-                        msg("打卡错误！")
-                        closeLayer();
+                        alert("打卡错误！")
+                        laowu_common.closeLayer();
                     }
                 })
 
@@ -533,8 +562,9 @@ var project_sign={
              * @param item
              */
             setProject:function(item, type) {
-
-                hideWarning();
+                var app=_self;
+                console.log("item",item)
+                //hideWarning();
                 app.form.projectSN = item.serialNum;
                 app.form.projectSNDetail = item.serialNum;
                 app.form.projectName = item.projectName;
@@ -551,8 +581,8 @@ var project_sign={
                 }
 
                 //重新设置项目ID和工长ID
-                projectId = item.serialNum;
-                gongzhangId = item.owerId;
+                laowu_common.projectId = item.serialNum;
+                laowu_common.gongzhangId = item.owerId;
                 if (item.place) {
                     app.form.clockAddress = item.place;
                 }
@@ -561,7 +591,7 @@ var project_sign={
                 }
                 if (type == 1) {
                     setTimeout(function () {
-                        app.loadAttRecords();//查询最近两天打卡记录
+                        project_sign.loadAttRecords();//查询最近两天打卡记录
                     }, 50)
                 }
 

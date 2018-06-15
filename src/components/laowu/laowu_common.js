@@ -1,16 +1,16 @@
 /**
  * 配置常用参数
  * auth panzhenfei
- * 2018.6.7
+ * 2018.6.7 
  */
 var opt = {"type": "date", "beginYear": 2000, "endYear": parseInt(new Date().getFullYear())+10};
-
+//引入外部js
 import {getParam} from '../../playform/common.js'  
 import setting from '../../playform/config.js'
 var project={};
 var projectImg={};
 var paramMap= getParam(window.location.href);//获取地址栏参数
-//alert(window.location.href)
+var date=null;//初始化当前日期
 var time_name="小时算一个工";
 var gongzhangId=null
 var gongzhangName=null;
@@ -69,6 +69,8 @@ if(paramMap.confirmName){//默认从链接获取
     confirmName=paramMap.confirmName;
 }
 var confirmPhone=null;
+
+//定义全局变量
 var _self=null;
 var axios=null;
 
@@ -77,7 +79,7 @@ var axios=null;
 
 var laowu_common={
 
-
+     
      project:project,
      projectImg:projectImg,
      paramMap:paramMap,//获取地址栏参数
@@ -97,26 +99,32 @@ var laowu_common={
      localgps:localgps,
      type:type,//判断是多人还是单人
      roomId:roomId,
-     saveType:paramMap.saveType,//记录类型;//保存类型，add(默认新增)、save(创建关联单据)、del(删除)、update(修改自己的单据)、edit(修改自己的)
-     userName:decodeURI(setting.getCookie("username")),
-     userId:setting.getCookie("userid"),
-     //date:laowu_commongetNowFormatDate(),//初始化当前日期
-     projectId:paramMap.projectSN,
-     projectSN:paramMap.projectSN,
-     projectSn:paramMap.projectSN,
-     projectName:paramMap.projectName,//默认从链接获取
-     confirmId:paramMap.confirmId,
-     confirmName:paramMap.confirmName,
+     saveType:saveType,//记录类型;//保存类型，add(默认新增)、save(创建关联单据)、del(删除)、update(修改自己的单据)、edit(修改自己的)
+     userName:userName,
+     userId:userId,
+     date:date,//初始化当前日期
+     projectId:projectId,
+     projectSN:projectSN,
+     projectSn:projectSn,
+     projectName:projectName,//默认从链接获取
+     confirmId:confirmId,
+     confirmName:confirmName,
      confirmPhone:confirmPhone,
+     
 
+     initVue:function(){//初始化vue引用和http请求，并定义全局变量方便使用
+       
+       _self=laowu_common._self;
+       axios=_self.$http;
+       laowu_common.date=laowu_common.getNowFormatDate();
+       
+    },
 
 
 /**
  * 加载房间信息
  */
  findRoomData:function() {
-     _self=laowu_common._self;
-     axios=laowu_common.axios;
     console.log("加载房间信息...")
     if(dataType=="tododetail"||dataType=="todoview"||dataType=="todosign"||dataType=='todowork'){//从待办入口进来，房间ID参数不一样
         if(paramMap.roomId==null||paramMap.roomId==""||paramMap.roomId=="null"){
@@ -137,40 +145,42 @@ var laowu_common={
             roomId=paramMap.isRoomId;//获取房间ID
         }
     }
-    var formdata=new FormData();
-    formdata.append("roomId",roomId)
-    formdata.append("userId",userId)
-    axios.post("/pcontact_api/getroommember",formdata).then(function (response) {
-        if(response.data.code==0){
-            var result=response.data.result;
-            console.log("房间信息加载完成...",result)
+    
+    $.ajax({
+        type: "post",
+        url: "/api/pcontact_api/getroommember",
+        async: false,
+        data: {
+            "roomId":roomId,
+            "userId":userId
+        },
+        datatype: "json",
+        success: function(data) {
+           var result=data.result;
             if(result){
-                projectId=result.projectSn;
-                projectSn=result.projectSn;
-                projectSN=result.projectSn;
-                projectName=result.projectName;
+                laowu_common.projectId=result.projectSn;
+                laowu_common.projectSn=result.projectSn;
+                laowu_common.projectSN=result.projectSn;
+                laowu_common.projectName=result.projectName;
                 if(result.memberType==1){//房主
-                    loginType=1;
-                    gongzhangId=userId;
-                    gongzhangName=userName;
+                    laowu_common.loginType=1;
+                    laowu_common.gongzhangId=userId;
+                    laowu_common.gongzhangName=userName;
                 }else {//如果是工人记工，则需要查询房主信息（工长信息）
-                    loginType=0;
+                    laowu_common.oginType=0;
                     laowu_common.findroomuserlist(1);//加载房间成员信息
-                    gongrenId=userId;
-                    gongrenName=userName;
-                   // gongrenPhone=paramMap.currUserPhone;//工人手机号
+                    laowu_common.gongrenId=userId;
+                    laowu_common.gongrenName=userName;
                 }
+                
 
             }
-
-        }else {
-           // msg("房间信息加载失败！")
-            console.log("房间信息加载失败...")
+        },
+        error: function() {
+            console.log("err")
         }
-    }).catch(function (error) {
-       // msg(error)
-        console.info(error);
-    });
+    })
+
 },
 
 
@@ -179,43 +189,58 @@ var laowu_common={
  * @param memberType
  */
  findroomuserlist:function(memberType) {//查询房间成员
-    var formdata=new FormData();
-    formdata.append("roomId",roomId)
-    formdata.append("memberType",memberType);
-    axios.post("/pcontact_api/findroomuserlist",formdata).then(function (response) {
-        if(response.data.code==0){
-            var result=response.data.result;
+
+    $.ajax({
+        type: "post",
+        url: "/api/pcontact_api/findroomuserlist",
+        async: false,
+        data: {
+            "roomId":roomId,
+            "memberType":memberType
+        },
+        datatype: "json",
+        success: function(data) {
+            var result=data.result;
             console.log("加载房间成员...",result)
             if(result.length>0){
                 if(memberType==1){
-                    gongzhangId= result[0].userId;
-                    gongzhangName= result[0].nickName;
-                    gongzhangPhone= result[0].cellPhone;
+                    laowu_common.gongzhangId= result[0].userId;
+                    laowu_common.gongzhangName= result[0].nickName;
+                    laowu_common.gongzhangPhone= result[0].cellPhone;
                 }
             }
-
+        },
+        error: function() {
+            console.log("err")
         }
-    }).catch(function (error) {
-        msg(error)
-        console.info(error);
     });
+
+    
 },
 
 /**
  * 根据项目ID查询项目详细信息
  */
  findProjectData:function() {
-    var formdata=new FormData();
-    formdata.append("projectSN",projectId)
-    formdata.append("usedType",'xiaolanmu');
-    axios.post("/chart/column/table_swprojectinfo?used=getinfo",formdata).then(function (response) {
-        project=response.data.result;
-
-    }).catch(function (error) {
-        msg(error)
-        console.info(error);
+  
+    $.ajax({
+        type: "post",
+        url: "/api/chart/column/table_swprojectinfo?used=getinfo",
+        async: false,
+        data: {
+            "projectSN":projectId,
+            "usedType":'xiaolanmu'
+        },
+        datatype: "json",
+        success: function(data) {
+            project=data.result;
+        },
+        error: function() {
+            console.log("err")
+        }
     });
-    return project;
+
+     return project;
 },
 
 /**
@@ -228,7 +253,6 @@ var laowu_common={
     formdata.append("usedType",'xiaolanmu');
     axios.post("/chart/column/w_swprojectimg?used=getPro",formdata).then(function (response) {
         projectImg=response.data.result[0];
-        console.log("img",response)
 
     }).catch(function (error) {
         msg(error)
@@ -325,7 +349,7 @@ var laowu_common={
         var list=[];
         $.ajax({
             type: "post",
-            url: getUrl()+"/project_work_api/find_laour_member",
+            url: "/api/project_work_api/find_laour_member",
             async: false,
             data: {
                 "userId":userId,
@@ -424,6 +448,7 @@ var laowu_common={
     //  + " " + date.getHours() + seperator2 + date.getMinutes()
     //  + seperator2 + date.getSeconds();
     //返回日期
+  
     var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
 
     return currentdate;
@@ -610,11 +635,11 @@ var laowu_common={
     var lat2 = l2Arr[1];
     var lng2 = l2Arr[0];
 
-    var radLat1 = getRad(lat1);
-    var radLat2 = getRad(lat2);
+    var radLat1 = laowu_common.getRad(lat1);
+    var radLat2 = laowu_common.getRad(lat2);
 
     var a = radLat1 - radLat2;
-    var b = getRad(lng1) - getRad(lng2);
+    var b = laowu_common.getRad(lng1) - laowu_common.getRad(lng2);
 
     var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
     s = s * EARTH_RADIUS;
@@ -630,7 +655,16 @@ var laowu_common={
 
     var PI = Math.PI;
     return d * PI / 180.0;
-}
+},
+loading:function(label){
+
+    layer.open({
+        type:2,
+        title:label,
+        content:""
+            })
+},
+
 
 }
 export default laowu_common

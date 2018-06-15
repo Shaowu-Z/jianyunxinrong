@@ -3,7 +3,7 @@
 
        <header class="mui-bar mui-bar-nav">
 
-	<h1 @click="cc" class="mui-title">上工打卡</h1>
+	<h1  class="mui-title">上工打卡</h1>
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
@@ -22,12 +22,13 @@
 				<!--<span >立即切换到最近的项目</span>-->
 			<!--</p>-->
 			</div>
-			<ul class="mui-table-view group-list " @click="openProjectList()">
+			<ul class="mui-table-view group-list " @click="project_sign.openProjectList()">
 				<li class="mui-table-view-cell">
 					<!--<a class="mui-navigate-right">-->
 						<div class="oa-contact-cell mui-table">
 							<div class="oa-contact-avatar mui-table-cell">
-								<img v-if="form.img_url!=undefined && form.img_url!='undefined'" v-bind:src=form.img_url>
+								<!-- <img v-if="form.img_url!=undefined && form.img_url!='undefined'" v-bind:src=form.img_url> -->
+								<img :src="imgbase"/>
 								<!-- <img v-if="form.img_url==undefined || form.img_url=='undefined'" src="../../images/defualt.png"> -->
 							</div>
 							<div class="oa-contact-content mui-table-cell">
@@ -48,11 +49,11 @@
 		<a class="item" @click="delayRemind('day')">今日不上工<span class="mui-icon mui-icon-arrowright"></span></a>
 	</p>
 	<div class="sign-btn">
-			<span @click="sign();" class="title">
+			<span @click="project_sign.sign();" class="title">
 				<span class="mui-icon mui-icon-camera"></span>
 				<span class="txt">点击打卡</span>
 			</span>
-		<input style="display: none" id="imgFile" name="file" type="file" accept="image/jpeg,image/x-png" capture="camera" value="" class="a-upload"   onchange="confirmFile();"/>
+		<input style="display: none" id="imgFile" name="file" type="file" accept="image/jpeg,image/x-png" capture="camera" value="" class="a-upload"   v-on:change="project_sign.confirmFile();"/>
 	</div>
 		<div class="xunafu">
 		<div class="location-gps"><span class="mui-icon iconfont icon-location"></span>
@@ -69,7 +70,7 @@
 			<li v-for="(item,index) in data.todayList" :key="index" class="mui-table-view-cell">
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell sign-img">
-						<img @click="stopEvt(event),disposeLogImgMutil(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
+						<img @click="openImg(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
 					</div>
 					<div class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name sign-time" v-text="item.title"></h4>
@@ -87,7 +88,7 @@
 			<li  v-for="(item,index) in data.lastDayList" :key="index" class="mui-table-view-cell">
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell sign-img">
-						<img @click="stopEvt(event),disposeLogImgMutil(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
+						<img @click="openImg(0,data.photoList)" class="" v-bind:src="item.photoAddress" />
 					</div>
 					<div class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name sign-time" v-text="item.title"></h4>
@@ -109,11 +110,13 @@
     </template>
 
 <script>
-import project_sign from "./project_sign.js"
-import laowu_common from "./laowu_common.js"
+import project_sign from  "./project_sign.js"
+import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
 export default {
     data(){
         return {
+			imgbase:"../../../static/images/defualt.png",
+            project_sign:project_sign,
             form:{
             id:"",
             userId:"",
@@ -133,6 +136,7 @@ export default {
             img_url:"",//项目图片
             remindTime:"",//提醒期限
             remindName:"",//提醒期限
+            
         },
         reqWorkParamsVO:{
             userId:"",
@@ -157,7 +161,6 @@ export default {
         select_time:"",
         select_time_name:"",
         projectList:[],
-        //imgurl:UPLOAD_SERVER_ADDRESS,
         nearRecord:false,
         nearZuobiao:"",//最近打卡记录的坐标
         nearAddress:"",//最近打卡记录的地址
@@ -165,19 +168,22 @@ export default {
         }
     },
     created:function(){
-     project_sign.axios=this.$http
-     project_sign._self=this
+	 project_sign._self=this;
+     project_sign.initVue()
+     project_sign.initData()
+     
        
     },
      methods:{
         goback(){
             this.$router.go(-1);
-        },
-        cc(){
-           alert(laowu_common.userId)
-         project_sign.initData()
-           console.log($("header").text())
-        }
+		},
+		openImg:function(index,ary){
+			console.log("ary",ary)
+			
+			disposeLogImgMutil(index,ary);
+		},
+      
     },
     mounted(){
 
@@ -220,6 +226,12 @@ export default {
 		.sign-btn-con .txt{
 			font-size: 17px;
 			color:#fff;
+		}
+		.oa-contact-email,.item-deal,.location-gps,.mui-content-padded{
+			text-align: left
+		}
+		.sign-btn{
+			padding: 0
 		}
 	</style>
 

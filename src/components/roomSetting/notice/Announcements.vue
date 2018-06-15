@@ -8,7 +8,7 @@
         <header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">发布公告</h1>
 			<button id="btn-referrer"
-				class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goback">
+				class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" @click="goback">
 				<a class="mui-action-back mui-icon iconfont icon-back"></a>
 			</button>
 			<button style="display: block;"
@@ -170,6 +170,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+import '../../../playform/alert'
 export default {
     data(){
         return{
@@ -234,6 +235,7 @@ export default {
         },
         //展现公告类型
         showType() {
+            console.log(this.param_map.loginType)
             if(this.param_map.loginType==1){  //权限控制  管理员才能选择
                 $(".mui-backdrop").show();
                 $("#noticeType").show();
@@ -318,10 +320,17 @@ export default {
                             //alert(JSON.stringify(todojson))
                             appApi.sendTodo(todojson,function(d){
                                 if(d.code==200){
-                                    remin("提交成功",2,function(){
-                                        appApi.closeNewWindow()
-                                        // this.$router.go(-1)
-                                    })
+                                    layer.open({
+                                        content: '提交成功'
+                                        ,skin: 'msg'
+                                        ,time: 1 //2秒后自动关闭
+                                        ,anim:false
+                                    });
+                                    appApi.closeNewWindow()
+                                    // alert.remin("提交成功",2,function(){
+                                        
+                                    //     // this.$router.go(-1)
+                                    // })
                                 }
                                 
                             })

@@ -9,7 +9,7 @@
 
 
 	<section class="mui-content" id="phone_list">
-		<div id='list' class="mui-indexed-list address-list">
+		<div id='list' class="mui-indexed-lists address-list">
 			<div class="mui-indexed-list-search mui-input-row mui-search">
 				<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
 			</div>
@@ -359,4 +359,12 @@ export default {
 
 <style scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
+	.mui-indexed-lists{
+		position: relative;
+		border-top: solid 1px #e3e3e3;
+		border-bottom: solid 1px #e3e3e3;
+		overflow: hidden;
+		/* background-color: #fafafa; */
+		cursor: default;
+	}
 </style>

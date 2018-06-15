@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav" id="js-head">
-            <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
+            <button id="btn-referrer" name="index_return_button" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <h1 class="mui-title" >文件模板</h1>
@@ -66,7 +66,7 @@
 
 <script>
 import setting from '../../../playform/config'
-import mui from '../../../playform/mui'
+import {getParam,BackCookie} from '../../../playform/common'
 export default {
     data () {
         return {
@@ -78,7 +78,9 @@ export default {
             uploadStatus: 0,
             showUpload: true,
             projectId: "", //项目id
-            rooId:"",
+			rooId:"",
+			roomId:'',
+            teamCode:"",
             pageParams: {
                 projectId: "",
                 pageSize: 20,
@@ -108,7 +110,7 @@ export default {
             },
             firstList: [],
             isSys: false,
-            isPC: false,
+            isOpe: true,
             canMove: true,
             canShare: true,
             canAffirm: true,
@@ -133,7 +135,8 @@ export default {
                 suffix: "",
                 status: 0,
                 collectStatus: false,
-                auth: false
+                auth: false,
+                isOpe:false
             },
             showEditBox: false,
             showEdit: false,
@@ -151,129 +154,240 @@ export default {
             shareInfo: {},
             shareInfoList: [],
             /*确认相关参数*/
-            affirmId: ""
+            affirmId: "",
+            isOpeAll:false//文件操作所有权限
             }
     },
-    mounted(){
-        // 日期月份/天的显示，如果是1位数，则在前面加上'0'
-        function getFormatDate(arg) {
-            if(arg == undefined || arg == '') {
-                return '';
-            }
-
-            var re = arg + '';
-            if(re.length < 2) {
-                re = '0' + re;
-            }
-
-            return re;
-        }
-        function addDate(date, days) {
-            if(days == undefined || days == '') {
-                days = 1;
-            }
-
-            date.setDate(date.getDate() + days);
-            return date;
-        }
-        function uploadTarget(id, isSys) {
-            if(widget) {
-                app.uploadCallBack(widget, id, isSys);
-            }
-        }
-        function refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
-            }
-            if(app.$data.isIndex == 1) {
-                app.initFirstData(app.$data.projectId, app.getFirstData);//, app.$data.roomId
-            }
-        }
+    mounted() {
         if(window.location.href.split("?")[1]){
             var arrays = window.location.href.split("?")[1].split("&");
             var map = {};
-            for (i = 0; i < arrays.length; i++) {
+            for (let i = 0; i < arrays.length; i++) {
                 var param = arrays[i].split("=");
                 map[param[0]] = decodeURI(param[1]);
             }
-            if(map.datatype=='admin'){
+            if(map.datatype=='pc'){
                 document.getElementsByName("index_return_button")[0].style.display='none';
             }
         }
+        // if(location.href.indexOf("search_result.html") == -1) {
+        //     var curHead = new Vue({
+        //         el: "#js-head",
+        //         data: {
+        //             headerMode: 0, //为1的时候在多选状态
+        //             showBack: false,
+        //             keyword: ""
+        //         },
+        //         created: function() {
+        //             var _self = this;
+        //             if(!isApp) {
+        //                 _self.showBack = true;
+        //             }
+        //         },
+        //         methods: {
+        //             intoSelect: function() {
+        //                 //进入多选状态 如果在app中 需隐藏返回键
+        //                 var _self = this;
+        //                 _self.headerMode = 1;
+        //                 _self.showBack = false;
+        //                 appApi.hideBack();
+        //             },
+        //             backSelect: function() {
+        //                 var _self = this;
+        //                 _self.headerMode = 0;
+        //                 if(!isApp) {
+        //                     _self.showBack = true;
+        //                 } else {
+        //                     appApi.showBack();
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
         function projectClick(id) {
+            // alert(_self.roomId+"////"+id)
             appApi.openNewWindow(getUrl() + "/static/webstatic/dish/create_share.html?header=1&projectSN=" + id);
         }
-    },
-    created(){
-        ('formDate', function(value) { //value为13位的时间戳
-            return app.formDate(value);
-        });
-        ("longtouch", function(el, binding) {
-            var oDiv = el,
-                value = binding.value,
-                x = 0,
-                y = 0,
-                z = 0,
-                timer = null;
-            oDiv.addEventListener("touchstart", function(e) {
-                if(e.touches.length > 1) {
-                    return false;
-                }
-                z = 0;
-                timer = setTimeout(function() {
-                    app.goSelectMode(e);
-                    z = 1;
-                }, 500);
-                x = e.touches[0].clientX;
-                y = e.touches[0].clientY;
-                //e.preventDefault();
-            }, false);
-            document.addEventListener("touchmove", function(e) {
-                if(x != e.touches[0].clientX || y != e.touches[0].clientY) {
-                    clearTimeout(timer);
-                    return false;
-                }
-            }, false);
-            document.addEventListener("touchend", function(ev) {
-                if(z != 1) {
-                    clearTimeout(timer);
-                    x = 0;
-                    y = 0;
-                    //return false;
-                } else {
-                    x = 0;
-                    y = 0;
-                    z = 0;
-                    app.goSelectMode(ev);
-                }
-            }, false);
-        })
+		var _self = this;
+		//获取参数
+		var params = getParam(window.location.href);
+		console.log(params);
+		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
+            if(params.hasOwnProperty("projectSN"))
+				_self.projectId = params.projectSN; //项目id
+			else
+                _self.projectId = params.projectSn; //项目id
+            if(params.hasOwnProperty("teamCode"))
+            	_self.teamCode = params.teamCode;
+            _self.roomId = params.roomId; //房间id
+			if(params.hasOwnProperty("isSys")) {
+				_self.isSys = true;
+			} else {
+				_self.showEdit = true;
+			}
+			if(params.hasOwnProperty("isOpe")) {
+				_self.isOpe = false;
+			} else {
+				_self.isOpe = true;
+			}
+			if(params.hasOwnProperty("isShare")) {
+				_self.isShare = true;
+				_self.pageParams.from = "1";
+			}
+			if(1 == 1) {
+				_self.showHeader();
+			}
+			if(params.hasOwnProperty("id")) {
+				//显示头部
+				_self.isIndex = 0;
+				_self.id = params.id; //目录id
+				if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initData(_self.id, _self.getCurData);//, _self.roomId
+				else
+                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
+				_self.showHeader();
+				_self.loadStatus = true;
+			} else if(params.hasOwnProperty("keyword")) {
+				//搜索
+				_self.pageParams.keyword = params.keyword;
+				_self.pageParams.projectId = _self.projectId;
+				_self.searchData();
+				_self.loadStatus = true;
+			} else {
+				//首目录
+				//不显示头部
+				//数据初始化
+				_self.isIndex = 1;
+                if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
+				else
+					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
+				if(!appApi.isApp) {
+					_self.showUpload = false;
+				}
+				//_self.showUpload = true;
+			}
+			_self.uploadInit();
+			_self.downLoadInit();
+		} else if(params.hasOwnProperty("shareId")) {
+			//分享
+			_self.shareId = params.shareId;
+			var params = {
+				shareId: _self.shareId
+			};
+			console.info(params);
+			this.$http.post("/cdish/share/detail", params).then(function(response) {
+				if(response.data.code == 0) {
+//					console.info(response.data.result);
+					var rs = response.data.result;
+					_self.status = 1;
+					_self.loadStatus = true;
+					_self.isShare = true;
+					_self.shareInfo = rs;
+					_self.projectId = rs.projectId;
+					_self.shareInfoList = rs.shareItems;
+					_self.downLoadInit();
+				} else {
+                    // msg(response.data.message);
+                layer.open({
+                    content: response.data.message
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
+				}
+			}).catch(function(error) {
+				layer.closeAll();
+				warm("查看分享失败")
+			});
+		} else if(params.hasOwnProperty("affirmId")) {} else {
+			//选择项目
+			this.$http.get("/work_api/projectname").then(function(resp) {
+				if(resp.data.code == 0) {
+					var array = resp.data.result;
+					document.getElementById("shade").style.display = "block";
+					document.getElementById("add-style").style.display = "block";
+					if(array) {
+						var ht = '<li class="mui-table-view-cell" onclick="javascript:projectClick(\'$projectSN\')">$text</li>';
+						var htmlstr = array.length > 0 ? '' : '<li class="mui-table-view-cell">没有参与的项目</li>';
+						for(var i = 0; i < array.length; i++) {
+							htmlstr += ht.replace("$projectSN", array[i].serialNum).replace("$text", array[i].ProjectName);
+						}
+						document.getElementById("project_list").innerHTML = htmlstr;
+					}
+				} else {
+                    // msg("系统报错:" + resp.data.message);
+                    layer.open({
+                        content: "系统报错:" + resp.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+				}
+			}).catch(function(err) {
+				console.log(err);
+			})
+		}
     },
     methods: {
-        goBack(){
-            this.$router.go(-1);
+        refreshPage() {
+            if(pullWidget) {
+                pullWidget.pullDownLoading();
+            }
+            if(isIndex == 1) {
+                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
+                    initFirstData(projectId, getFirstData, roomId);//, roomId
+                else
+                    initFirstData(projectId, getFirstData);//, roomId
+            }
         },
 		initData: function(dirId, callback, rommId) {
 			var _self = this;
 			//获取数据
-			this.$http.get("/cdish/common?dirId=" + dirId).then(function(response) {// + "&roomId=" + rommId
+			var rid = "";
+			if(rommId!="" && rommId!="undefined" && rommId!=undefined)
+				rid = "&roomId=" + rommId;
+			var teamCode = "";
+			if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
+			this.$http.get("/cdish/data?projectId=" + _self.projectId + "&dirId=" + dirId + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
 					if(callback) callback(rs);
 				} else {
-					msg("获取云盘目录信息失败")
+                    // msg("获取云盘目录信息失败")
+                    layer.open({
+                        content: "获取云盘目录信息失败"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 			})
 		},
 		initFirstData: function(project_id, callback, rommId) {
 			var _self = this;
 			//获取数据
-			this.$http.get("/cdish/common?projectId=" + project_id).then(function(response) {// + "&roomId=" + rommId
+            var rid = "";
+            if(rommId!="" && rommId!="undefined" && rommId!=undefined)
+                rid = "&roomId=" + rommId;
+            var teamCode = "";
+            if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
+			this.$http.get("/cdish/common?projectId=" + project_id + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
-					if(callback) callback(rs);
+					if(callback){
+                        callback(rs);
+					}
 				} else {
-					msg("获取云盘信息失败")
+                    // msg("获取云盘信息失败")
+                    layer.open({
+                        content: "获取云盘目录信息失败"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 			})
 		},
@@ -341,7 +455,10 @@ export default {
 							var self = this;
 							_self.pageParams.curPage = 1;
 							if(_self.isIndex == 1) {
-								_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
+								if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
+									_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
+								else
+									_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
 							}
 							_self.loadData(function() {
 								self.endPullDownToRefresh();
@@ -368,8 +485,15 @@ export default {
 		},
 		getFirstData: function(rs) {
 			var _self = this;
+			console.log(rs.data);
 			if(rs.data.hasOwnProperty("code")) {
-				msg(rs.data.message);
+                // msg(rs.data.message);
+                layer.open({
+                        content: rs.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				_self.loadStatus = false;
 				return;
 			}
@@ -386,11 +510,48 @@ export default {
 				 _self.firstInfo.name = rs.data.first.name;
 				 _self.firstInfo.size = rs.data.first_size;*/
 				_self.firstList = rs.data.firstList;
+				console.log(rs.data.firstList)
 				_self.loadStatus = true;
 			} else {
 				_self.loadStatus = false;
-				msg("当前项目尚未被审核，无法打开云盘")
+                // msg("当前项目尚未被审核，无法打开云盘")
+                layer.open({
+                        content: "当前项目尚未被审核，无法打开云盘"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 			}
+		},
+		formDate: function(value) {
+			var date = new Date(value);
+			var Y = date.getFullYear(),
+				m = date.getMonth() + 1,
+				d = date.getDate(),
+				H = date.getHours(),
+				i = date.getMinutes(),
+				s = date.getSeconds();
+			if(m < 10) {
+				m = '0' + m;
+			}
+			if(d < 10) {
+				d = '0' + d;
+			}
+			if(H < 10) {
+				H = '0' + H;
+			}
+			if(i < 10) {
+				i = '0' + i;
+			}
+			if(s < 10) {
+				s = '0' + s;
+			}
+			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
+			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
+			//<!-- 获取时间格式 2017-01-03 -->
+			//var t = Y + '-' + m + '-' + d;
+			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
+			return t;
 		},
 		getCurData: function(rs) {
 			var _self = this;
@@ -400,11 +561,20 @@ export default {
 				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.curInfo.createTime = _self.formDate(rs.updateTime);
+			_self.curInfo.createTime = this.formDate(rs.updateTime);
 			_self.curInfo.id = rs.id;
 			_self.curInfo.name = rs.name;
 			_self.curInfo.size = rs.size;
 			document.getElementById("js-head-name").innerText = _self.curInfo.name;
+			if (_self.curInfo.name=="图纸及资料"){
+				//该系统文件下可以创建文件夹
+                _self.isSys = false;
+			}
+            if (_self.curInfo.name=="临时文件"){
+                //临时文件放开操作所有权限
+                _self.isOpeAll = true;
+            }
+
 			//完善分页参数
 			_self.pageParams.projectId = _self.projectId;
 			_self.pageParams.nodeId = _self.curInfo.id;
@@ -454,19 +624,6 @@ export default {
 			}
 			appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?pid=" + _self.curInfo.id);
 		},
-        operateShow: function() {
-            var _self = this;
-            if(_self.isSys) {
-                //系统目录
-                if(document.getElementById("uoload")!=null)
-	                document.getElementById("uoload").style.display = "none";
-                return false;
-            } else {
-                if(document.getElementById("uoload")!=null)
-	                document.getElementById("uoload").style.display = "";
-                return true;
-            }
-        },
 		showHeader: function() {
 			if(document.getElementById("pullrefresh"))
 				document.getElementById("pullrefresh").style.top = "84px";
@@ -477,7 +634,8 @@ export default {
 			if(document.getElementById("dish-tab"))
 				document.getElementById("dish-tab").style.top = "44px";
 			if(document.getElementById("js-dish-con"))
-				addClass(document.getElementById("js-dish-con"), "sift-content");
+				// addClass(document.getElementById("js-dish-con"), "sift-content");
+				$("#js-dish-con").addClass('sift-content')
 			if(document.getElementById("dish_content"))
 				document.getElementById("dish_content").style.paddingTop = "44px";
 			//绑定后退事件
@@ -495,9 +653,16 @@ export default {
 			_self.editItem.suffix = suffix;
 			_self.editItem.status = status;
 			if(type == 1) { /*打开目录*/
-				var url = setting.getPagePath() + "/dish/open_common.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+                var url = "";
+                if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+				else
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
 				if(id == _self.sysInfo.id || _self.isSys == true || _self.isSys == "true") {
 					url = url + "&isSys=true";
+				}
+				if( _self.isOpe == false || _self.isOpe == "false") {
+					url = url + "&isOpe=false";
 				}
 				if(_self.isShare) {
 					url = setting.getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&isShare=true";
@@ -511,18 +676,26 @@ export default {
 			event.stopPropagation();
 			return;
 		},
-		openDirMini: function(id, isSys) {
+		openDirMini: function(id, isSys, isOpe) {
 			var arrays = window.location.href.split("?")[1].split("&");
 			var map = {};
-			for(i = 0; i < arrays.length; i++) {
+			for(let i = 0; i < arrays.length; i++) {
 				var param = arrays[i].split("=");
 				map[param[0]] = decodeURI(param[1]);
 			}
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
-			var url = setting.getPagePath() + "/dish/open_common.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
-			if(!_self.isPC) {
+            var url;
+            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
+            }else{
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+            }
+            if(isSys) {
 				url = url + "&isSys=true";
+			}
+			if(!isOpe){
+                url = url + "&isOpe=false";
 			}
 			window.appApi.openNewWindow(url);
 		},
@@ -542,7 +715,27 @@ export default {
 				return !_self.selectMode;
 			}
 		},
+		operateShow: function(type) {
+			var _self = this;
+            if(!_self.isOpe) {
+                //系统目录
+                if(document.getElementById("uoload")!=null)
+                    document.getElementById("uoload").style.display = "none";
+                // return false;
+            } else {
+                if(document.getElementById("uoload")!=null)
+                    document.getElementById("uoload").style.display = "";
+                // return true;
+            }
+            // 现在只要是文件都有操作权限
+			if (type==1){
+				return false;
+			}else {
+                return true;
+			}
+		},
 		itemEdit: function(id, type, name, suffix, status, userId, event) {
+
 			var _self = this;
 			/*if(_self.selectMode){
 			 msg("请先退出批量选择再进行此操作")
@@ -554,6 +747,7 @@ export default {
 			_self.editItem.type = type;
 			_self.editItem.suffix = suffix;
 			_self.editItem.status = status;
+            _self.editItem.isOpe = _self.isOpe;
 			if(userId == _self.curUserId || _self.projectManageId == _self.curUserId) {
 				_self.editItem.auth = true;
 			} else {
@@ -582,15 +776,27 @@ export default {
 		cancelItem: function(id, type, name, suffix, status, event) {
 			//标识作废 或取消作废
 			var _self = this;
-			var url = "/cdish/file/cancel";
+			var url ="/cdish/file/cancel";
 			this.$http.post(url, {
 				id: parseInt(id)
 			}).then(function(response) {
 				if(response.data.code == 0) {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content: response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 					refreshPage();
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content: response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				_self.showEditBox = false;
 			}).catch(function(error) {
@@ -610,19 +816,31 @@ export default {
 			var okFun = function() {
 				var url = "";
 				if(type == 1) {
-					url = "/cdish/dir/delete";
+					url ="/cdish/dir/delete";
 				} else {
-					url = "/cdish/file/delete";
+					url ="/cdish/file/delete";
 				}
 				this.$http.post(url, {
 					id: parseInt(id)
 				}).then(function(response) {
 					if(response.data.code == 0) {
-						msg("删除成功");
+                        // msg("删除成功");
+                        layer.open({
+                            content: "删除成功"
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                            ,anim:false
+                        });
 						refreshPage();
 						appApi.broadcast("refreshPage()");
 					} else {
-						msg(response.data.message);
+                        // msg(response.data.message);
+                        layer.open({
+                                content: response.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
 					layer.closeAll();
@@ -638,24 +856,36 @@ export default {
 			_self.dishConfirm(qtitle, qmsg, okFun);
 			_self.showEditBox = false;
 		},
-		itemDetail: function(id, type, name, suffix, status, event) {
-			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id)
+		itemDetail: function(id, type, name, suffix, status, event,isOpe) {
+			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
 		},
 		//电子签署 2017.11.21
 		sign:function (id,type,name,suffix,status,event) {
 			if(suffix!='.pdf'){
-				msg("暂只支持PDF文件的签章!");
+                // msg("暂只支持PDF文件的签章!");
+                layer.open({
+                        content:"暂只支持PDF文件的签章!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				return;
 			}
 			loading("文件签署中，请不要进行任何操作");
 			var _self = this;
-			this.$http.post(getUrl()+"/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
+			this.$http.post("/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
 				console.info(response.data.result);
 				layer.closeAll();
 				var res = response.data;
                 if(res.code==200){
 
                     msg("签署成功!");
+                    layer.open({
+                        content:"签署成功!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
                     window.location.reload();
 
                 }
@@ -682,40 +912,11 @@ export default {
 				fun();
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
 		loadData: function(fun) {
 			var _self = this;
 			var pageParams = _self.pageParams;
 			this.$http.post("/cdish/list", pageParams).then(function(response) {
+				// console.log(response.data)
 				if(response.data.code == 200) {
 					var rs = response.data;
 					var allPage = rs.result.endPage;
@@ -732,7 +933,13 @@ export default {
 					}
 				} else {
 					undefined != fun && fun(true);
-					msg("系统出了点小状况，请稍后再试");
+                    // msg("系统出了点小状况，请稍后再试");
+                    layer.open({
+                        content:"系统出了点小状况，请稍后再试!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				//console.log(_self.curList);
 				_self.pageParams.curPage++;
@@ -763,7 +970,13 @@ export default {
 				} else {
 //					alert(1)
 					undefined != fun && fun(true);
-					msg("系统出了点小状况，请稍后再试");
+                    // msg("系统出了点小状况，请稍后再试");
+                    layer.open({
+                        content:"系统出了点小状况，请稍后再试!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				_self.pageParams.curPage++;
 				_self.initScroll();
@@ -777,15 +990,16 @@ export default {
 			var html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 				'<input type="file" id="uploadWidget" multiple="multiple" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 				'</form>';
-			if(isApp && isIphoneOs) { //IOS
+			if(appApi.isApp && appApi.isIphoneOs) { //IOS
 				//IOS现在多选有问题，暂先只做单传
 				html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
+			console.log(document.getElementById("dish_content",11111111111111111));
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			widget = document.getElementById("uploadWidget");
-			widget.addEventListener("change", function(event) {
+			console.log(jQuery())
+			document.getElementById("uploadWidget").addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
 				if(_self.isIndex == 1) {
@@ -891,10 +1105,22 @@ export default {
 					if(res.data.code == 0) {
 						var rs = res.data.result;
 						if(rs.fail_num != 0) {
-							msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
+                            // msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
+                            layer.open({
+                                content:"已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						} else {
 							console.log(res)
-							msg("已上传成功" + rs.success_num + "个文件");
+                            // msg("已上传成功" + rs.success_num + "个文件");
+                            layer.open({
+                                content:"已上传成功" + rs.success_num + "个文件"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						}
 						widget.value = "";
 						refreshPage();
@@ -903,10 +1129,22 @@ export default {
 							_self.openDirMini(id, isSys);
 						}
 					} else {
-						msg(res.data.message);
+                        // msg(res.data.message);
+                        layer.open({
+                                content:res.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
-					msg("上传出错");
+                    // msg("上传出错");
+                    layer.open({
+                                content:"上传出错"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
                     layer.closeAll();
                 });
 			}, 800);
@@ -1147,17 +1385,18 @@ export default {
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			downloadWidget = document.getElementById("downloadWidget");
+			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
-			return "/cdish/file/download?id=" + id;
+			return getUrl() + "/cdish/file/download?id=" + id;
 		},
 		downloadFile: function(id, type, name, suffix, event) {
 			var _self = this;
-			if(isApp) {
+			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
-				downloadWidget.src = _self.getFileUrl(id);
+				document.getElementById("downloadWidget").src = _self.getFileUrl(id);
+
 			}
 			_self.showEditBox = false;
 		},
@@ -1179,90 +1418,189 @@ export default {
 				case ".txt":
 					clazz += "txt";
 					break;
+                case ".TXT":
+                    clazz += "txt";
+                    break;
 				case ".doc":
 					clazz += "word";
 					break;
+                case ".DOC":
+                    clazz += "word";
+                    break;
 				case ".docm":
 					clazz += "word";
 					break;
+                case ".DOCM":
+                    clazz += "word";
+                    break;
 				case ".dotx":
 					clazz += "word";
 					break;
+                case ".DOTX":
+                    clazz += "word";
+                    break;
 				case ".dotm":
 					clazz += "word";
 					break;
+                case ".DOTM":
+                    clazz += "word";
+                    break;
 				case ".docx":
 					clazz += "word";
+                    break;
+                case ".DOCX":
+                    clazz += "word";
                     break;
 				case ".rtf":
 					clazz += "word";
 					break;
+                case ".RTF":
+                    clazz += "word";
+                    break;
 				case ".pdf":
 					clazz += "pdf";
 					break;
+                case ".PDF":
+                    clazz += "pdf";
+                    break;
 				case ".xls":
 					clazz += "excel";
 					break;
+                case ".XLS":
+                    clazz += "excel";
+                    break;
 				case ".ppt":
 					clazz += "ppt";
 					break;
+                case ".PPT":
+                    clazz += "ppt";
+                    break;
 				case ".pptx":
 					clazz += "ppt";
 					break;
+                case ".PPTX":
+                    clazz += "ppt";
+                    break;
 				case ".xlsx":
 					clazz += "excel";
 					break;
+                case ".XLSX":
+                    clazz += "excel";
+                    break;
 				case ".xlsm":
 					clazz += "excel";
 					break;
+                case ".XLSM":
+                    clazz += "excel";
+                    break;
 				case ".xltx":
 					clazz += "excel";
 					break;
+                case ".XLTX":
+                    clazz += "excel";
+                    break;
 				case ".xltm":
 					clazz += "excel";
 					break;
+                case ".XLTM":
+                    clazz += "excel";
+                    break;
 				case ".xlsb":
 					clazz += "excel";
 					break;
+                case ".XLSB":
+                    clazz += "excel";
+                    break;
 				case ".xlam":
 					clazz += "excel";
 					break;
+                case ".XLAM":
+                    clazz += "excel";
+                    break;
 				case ".rm":
 					clazz += "video";
 					break;
+                case ".RM":
+                    clazz += "video";
+                    break;
 				case ".rmvb":
 					clazz += "video";
 					break;
+                case ".RMVB":
+                    clazz += "video";
+                    break;
 				case ".wmv":
 					clazz += "video";
 					break;
+                case ".WMV":
+                    clazz += "video";
+                    break;
 				case ".avi":
 					clazz += "video";
 					break;
+                case ".AVI":
+                    clazz += "video";
+                    break;
 				case ".mp4":
 					clazz += "video";
 					break;
+                case ".MP4":
+                    clazz += "video";
+                    break;
 				case ".3gp":
 					clazz += "video";
 					break;
+                case ".3GP":
+                    clazz += "video";
+                    break;
 				case ".mkv":
 					clazz += "video";
 					break;
+                case ".MKV":
+                    clazz += "video";
+                    break;
 				case ".navi":
 					clazz += "video";
 					break;
+                case ".NAVI":
+                    clazz += "video";
+                    break;
 				case ".mov":
 					clazz += "video";
 					break;
+                case ".MOV":
+                    clazz += "video";
+                    break;
 				case ".asf":
 					clazz += "video";
 					break;
+                case ".ASF":
+                    clazz += "video";
+                    break;
 				case ".png":
+					clazz += "img";
+					break;
+				case ".jpg":
+					clazz += "img";
+					break;
+				case ".jpeg":
 					clazz += "img";
 					break;
 				case ".gif":
 					clazz += "img";
 					break;
+                case ".JPEG":
+                    clazz += "img";
+                    break;
+                case ".PNG":
+                    clazz += "img";
+                    break;
+                case ".JPG":
+                    clazz += "img";
+                    break;
+                case ".GIF":
+                    clazz += "img";
+                    break;
 				case ".zip":
 					clazz += "zip";
 					break;
@@ -1275,27 +1613,60 @@ export default {
 				case ".z":
 					clazz += "zip";
 					break;
-				case ".apk":
+                case ".ZIP":
+                    clazz += "zip";
+                    break;
+                case ".RAR":
+                    clazz += "zip";
+                    break;
+                case ".ARJ":
+                    clazz += "zip";
+                    break;
+                case ".Z":
+                    clazz += "zip";
+                    break;
+                case ".apk":
+                    clazz += "apk";
+                    break;
+				case ".APK":
 					clazz += "apk";
 					break;
 				case ".mmap":
 					clazz += "mmap";
 					break;
+                case ".MMAP":
+                    clazz += "mmap";
+                    break;
 				case ".mpg":
 					clazz += "mpg";
 					break;
+                case ".MPG":
+                    clazz += "mpg";
+                    break;
 				case ".csv":
 					clazz += "csv";
 					break;
+                case ".CSV":
+                    clazz += "csv";
+                    break;
 				case ".mpp":
 					clazz += "mpp";
 					break;
+                case ".MPP":
+                    clazz += "mpp";
+                    break;
 				case ".html":
 					clazz += "html";
 					break;
+                case ".HTML":
+                    clazz += "html";
+                    break;
 				case ".dwg":
 					clazz += "dwg";
 					break;
+                case ".DWG":
+                    clazz += "dwg";
+                    break;
 				default:
 					clazz += "unkown";
 					break;
@@ -1323,9 +1694,9 @@ export default {
 			_self.showEdit = false;
 			//监听返回键
 			appApi.stopBack(function() {
-				app.selectMode = false;
+				selectMode = false;
 				appApi.resetBack();
-				app.backSelectMode();
+				backSelectMode();
 			})
 			//监听选中
 			//取消所有多选
@@ -1457,7 +1828,13 @@ export default {
             console.info(5)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要删除的文件或者文件夹");
+                // msg("请选择要删除的文件或者文件夹");
+                layer.open({
+                                content:"请选择要删除的文件或者文件夹"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 				return;
 			}
 			loading("删除中..")
@@ -1474,14 +1851,32 @@ export default {
 						layer.closeAll();
 						var rs = response.data.result;
 						if(rs.fail_num != 0) {
-							msg("已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！");
+                            // msg("已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！");
+                            layer.open({
+                                content:"已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						} else {
-							msg("已成功删除" + rs.success_num + "项");
+                            // msg("已成功删除" + rs.success_num + "项");
+                            layer.open({
+                                content:"已成功删除" + rs.success_num + "项"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						}
 						//msg("已成功删除" + response.data.result + "个文件或者文件夹");
 						refreshPage();
 					} else {
-						msg(response.data.message);
+                        // msg(response.data.message);
+                        layer.open({
+                                content:response.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
 					layer.closeAll();
@@ -1494,7 +1889,13 @@ export default {
 			_self.backSelectMode();
 		},
 		batchCopy: function() {
-			msg("功能开发中");
+            // msg("功能开发中");
+            layer.open({
+                content:"功能开发中"
+                ,skin: 'msg'
+                ,time: 1 //2秒后自动关闭
+                ,anim:false
+            });
 		},
 		batchCut: function(ids) {
 			//移动
@@ -1508,7 +1909,13 @@ export default {
 				items = _self.getSelectVal();
 			}
 			if(items.length == 0) {
-				msg("请选择要移动的文件或者文件夹");
+                // msg("请选择要移动的文件或者文件夹");
+                layer.open({
+                    content:"请选择要移动的文件或者文件夹"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			//loading("移动中..")
@@ -1518,7 +1925,13 @@ export default {
 			var moveType = 0;
 			if(_self.isSys) {
 				if(_self.selectHasDir) {
-					msg("标准目录下文件夹不允许移动");
+                    // msg("标准目录下文件夹不允许移动");
+                    layer.open({
+                        content:"标准目录下文件夹不允许移动"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 					return;
 				} else {
 					moveType = 1;
@@ -1554,7 +1967,13 @@ export default {
             console.info(7)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要发送的文件");
+                // msg("请选择要发送的文件");
+                layer.open({
+                    content:"请选择要发送的文件"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1575,7 +1994,13 @@ export default {
             console.info(8)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要分享的文件或者文件夹");
+                // msg("请选择要分享的文件或者文件夹");
+                layer.open({
+                    content:"请选择要分享的文件或者文件夹"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1619,12 +2044,19 @@ export default {
 				deadTime: deadTime
 			};
 			this.$http.post("/cdish/share", params).then(function(response) {
+				console.log(response);
 				if(response.data.code == 0) {
 					console.info(response.data.result);
 					var rs = response.data.result;
 					console.info("创建分享成功");
-					msg("分享创建成功");
-					/*var url = "/share/detail?shareId=" + rs.shareId;
+                    // msg("分享创建成功");
+                    layer.open({
+                        content:"分享创建成功"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+					/*var url = getUrl() + "/share/detail?shareId=" + rs.shareId;
 					 var name = 'Hi，我正在使用建云信融，给大家分享"'+rs.shareName;
 					 if(rs.shareSize = 1){
 					 name+='"，快来看看吧~';
@@ -1639,9 +2071,17 @@ export default {
 						history.go(0);
 					}, 1000)
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content:response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
-				layer.closeAll();
+				setTimeout(function () {
+                    layer.closeAll();
+                },1000)
 			}).catch(function(error) {
 				layer.closeAll();
 				warm("创建分享出错")
@@ -1688,7 +2128,13 @@ export default {
 							})
 						}
 						if(_self.externalPerson.length == 0) {
-							msg("外部人员均未设置，无法发起文件确认")
+                            // msg("外部人员均未设置，无法发起文件确认")
+                            layer.open({
+                                content:"外部人员均未设置，无法发起文件确认"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						} else {
 							//显示外部人员列表
 						}
@@ -1699,7 +2145,13 @@ export default {
 			});
 		},
 		batchAffirm: function() {
-			msg("功能开发中");
+            // msg("功能开发中");
+            layer.open({
+                content:"功能开发中"
+                ,skin: 'msg'
+                ,time: 1 //2秒后自动关闭
+                ,anim:false
+            });
 		},
 		batchCollect: function() {
 			var _self = this,
@@ -1708,7 +2160,13 @@ export default {
             console.info(9)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要收藏的文件");
+                // msg("请选择要收藏的文件");
+                layer.open({
+                    content:"请选择要收藏的文件"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1742,7 +2200,13 @@ export default {
 					}
 					_self.showCollect = true;
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content:response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				layer.closeAll();
 			}).catch(function(error) {
@@ -1767,10 +2231,22 @@ export default {
 						_self.editItem.collectStatus = false;
 					}
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content:response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				layer.closeAll();
-				msg(response.data.message);
+                // msg(response.data.message);
+                layer.open({
+                    content:response.data.message
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				_self.showEditBox = false;
 			}).catch(function(error) {
 				layer.closeAll();

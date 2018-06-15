@@ -11,7 +11,7 @@
 				</li>
 			</ul>
 			<div class="publish-container">
-				<div class="title">添加群聊成员</div>
+				<div class="title text">添加群聊成员</div>
 				<ul class="mui-table-view mui-table-view-striped container-average">
 
 					<li v-for="(user,index) in form.users" :key="index" class="mui-table-view-cell">
@@ -79,20 +79,22 @@ export default {
             },
             data:{
             },
+            projectSN: '',
         }
     },
     created:function() {
         this.paramMap = getParam(window.location.href);
-        var projectSN=this.paramMap.projectSn;
+        this.projectSN=this.paramMap.projectSN;
         var method=this.paramMap.method;
         var pagepath=setting.getPagePath()
             var _self = this;
             setTimeout(function () {
                 _self.test();
             },100)
+            // this.createMeetingMember()
     },
     methods:{
-        saveMeeting:function (projectSN) {
+        saveMeeting:function () {
             var _self = this;
             var roomdata=new FormData();
             /*if(_self.form.mMain==null||_self.form.mMain==""){
@@ -122,13 +124,14 @@ export default {
             }
             roomdata.append("mMain",_self.form.mMain);//会议名称
             roomdata.append("mStatus","1");//会议状态 1=进行中 2=已结束
-            roomdata.append("mOfficeId",projectSN);//办公室ID
+            roomdata.append("mOfficeId",this.projectSN);//办公室ID
             roomdata.append("mCreateUser",BackCookie.getCookie("userid"));//当前用户=创建者（主持人）
             roomdata.append("mCreateUserName",BackCookie.getCookie("username"));//当前用户=创建者名称（主持人）
             roomdata.append("userIds",userIds);
             appApi.showLoading();
             this.$http.post("/pcontact_api/savePMeeting", roomdata).then(function (response) {
                 var roomClass = response.data.result;
+                console.log(response,'返回数据');
                 setTimeout(function () {
                     appApi.broadcast("reLoad()"); //刷新页面
                     appApi.closeNewWindow();
@@ -153,7 +156,16 @@ export default {
             var _self = this;
             _self.form.users.remove(val);
         },
-        createMeetingMember:function(projectSN){
+        meetingMember:function(CONTENT){
+
+            var _self = this;
+            var result = CONTENT;
+            var users = result["result"];
+            _self.form.users = JSON.parse(users);
+            // alert(_self.form.users[0].nickName);
+            // window.location.reload();
+        },
+        createMeetingMember:function(){
             var _self = this;
             var userIds = "";
             if( _self.form.users!=null&&_self.form.users.length>0){
@@ -165,26 +177,17 @@ export default {
                     }
                 }
             }
-            appApi.openProjectContactSelectPage(projectSN,'',userIds,1,true,false);
+            appApi.openProjectContactSelectPage(this.projectSN,'',userIds,1,true,false); 
             appApi.callBackFun = function(callFlag, CONTENT) {
                 if(callFlag == appApi.callBackFlag.GONGSI) {
-                    app.meetingMember(CONTENT);
+                    _self.meetingMember(CONTENT);
                 }
-            }
+            } 
         },
-        meetingMember:function(CONTENT){
-
-            var _self = this;
-            var result = CONTENT;
-            var users = result["result"];
-            _self.form.users = JSON.parse(users);
-            // alert(_self.form.users[0].nickName);
-            // window.location.reload();
-        },
-        test:function(projectSN){
+        test:function(){
             var formdata=new FormData();
             var obj=new Object();
-            obj.serialNum=projectSN;
+            obj.serialNum=this.projectSN;
             formdata.append("json",JSON.stringify(obj));
             this.$http.post("/project_room_api/find_project",formdata).then(function (response) {
                 if(response.data.code==200){

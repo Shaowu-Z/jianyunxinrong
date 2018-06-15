@@ -208,6 +208,13 @@ function nullClick(node) {
 Adaptive.init();
 
 window.appApi = {
+	sUserAgent : navigator.userAgent.toLowerCase(),
+	isIpad : sUserAgent.match(/ipad/i),
+	isIphoneOs : sUserAgent.match(/iphone os/i) || isIpad,
+	isAndroid : sUserAgent.match(/android/i),
+	isApp : sUserAgent.match(/cy/i),
+	isWeixin : sUserAgent.match(/MicroMessenger/i) == 'micromessenger',
+	isTop : window == top,
 	callBackFlag: {
 		HX_LOGIN: "1",
 		LOCATION: "2",
@@ -1473,8 +1480,8 @@ window.appApi = {
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
+					alert(xhr.status)
 					if(xhr.status == 200) {
-						//					console.log(xhr.responseText);
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
 
@@ -1549,6 +1556,7 @@ window.appApi = {
 
 	},
 	openProjectContactSelectPage: function(projectSn, title, beforeSelectId, selectType, isMultipe, isShowMe) {
+
 		/**
 	* 选择项目联系人  公司
  	* @param projectSn  项目SN
@@ -1812,7 +1820,6 @@ var setTextFromClipResult = function(result, iosIfrObjStrT) {
  * @param latitudeAndLongitude
  */
 var setLocationResult = function(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
-
 	// if (typeof appApi.callBackFun == "function") {
 	//     var CONTENT = {};
 	//     CONTENT.longaddress = address;

@@ -3,7 +3,7 @@
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">设置共享</h1>
             
-            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left" @click="goBack"></a>
+            <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left hide" @click="goBack"></a>
             <button class="mui-btn mui-btn-link mui-pull-right" @click="saveroomshaer()">保存</button>
         </header>
         <section class="mui-content" id="app">
@@ -70,8 +70,8 @@ export default {
         findroomnoshaer (roomId) {
             var _self = this;
             var parame = new FormData();
-            parame.append("thisRoomId",roomId)
-            parame.append("newRoomId",paramMap.shaerroomid)
+            parame.append("thisRoomId",this.paramMap.roomId)
+            parame.append("newRoomId",this.paramMap.shaerroomid)
             this.$http.post("/pcontact_api/findroomnoshaer", parame).then(function (response) {
                 var result=response.data.result;
                 if(response.data.code=="200") {
@@ -81,7 +81,13 @@ export default {
                     console.log(_self.form.rooms);
                 }
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: 'error'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
         },
@@ -95,18 +101,30 @@ export default {
         saveroomshaer(roomId){
             this.checkRoomIds = this.checkRoomIds.substring(0, this.checkRoomIds.lastIndexOf(','));
             var parame = new FormData();
-            parame.append("roomId",roomId)
-            parame.append("setRoomId",paramMap.shaerroomid)
+            parame.append("roomId",this.paramMap.roomId)
+            parame.append("setRoomId",this.paramMap.shaerroomid)
             parame.append("setRoomIds",this.checkRoomIds)
             this.$http.post("/pcontact_api/saveroomshaer", parame).then(function (response) {
                 //关闭当前页面并刷新数据
-                msg("共享成功!");
+                // msg("共享成功!");
+                layer.open({
+                    content: '共享成功!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 setTimeout(function () {
                     appApi.broadcast("reLoad()"); //刷新页面
                     appApi.closeNewWindow();
                 },200)
             }).catch(function (error) {
-                msg(error)
+                // msg(error)
+                layer.open({
+                    content: 'error'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                 console.info(error);
             });
         }

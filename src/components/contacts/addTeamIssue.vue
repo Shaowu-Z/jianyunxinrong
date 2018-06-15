@@ -43,7 +43,7 @@
                 </li>
                 <li class="mui-table-view-cell text">
                     <a class="mui-navigate-right">上传证书照片
-                        <span class="mui-badge mui-badge-inverted badge-file">
+                        <span class="mui-badge mui-badge-inverted badge-file" style="z-index:0;">
                             <img class="img-upload" style="width: 33px;display: none" id="img_view" v-show="fm.issueUrl!=''" :src="fm.issueUrl"/>
                             <button class="mui-btn">上传照片</button>
                             <input type="file" id="upfile" value="" accept="image/png,image/gif,image/jpeg" v-on:change="selectCertImg(this)" class="input-file">
@@ -59,10 +59,12 @@
                 </div>
             </div>
         </section>
+        <mt-datetime-picker v-model="pickerVisible" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日"></mt-datetime-picker>
     </div>
 </template>
 
 <script>
+import { Toast,DatetimePicker  } from 'mint-ui';
 export default {
     data(){
         return{
@@ -167,7 +169,12 @@ export default {
                 }
             }
             if (!uploadStatus && add_issue.fm.issueUrl == "") {
-                msg("请上传证书照片");
+                // msg("请上传证书照片");
+                Toast({
+                    message: '请上传证书照片',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return false;
             }
             return true;
@@ -179,7 +186,12 @@ export default {
                 if(document.getElementsByName(key) && document.getElementsByName(key)[0]){
                     var m = document.getElementsByName(key)[0].getAttribute("placeholder"); //获取提示信息
                     if(m){
-                        msg(m);
+                        // msg(m);
+                        Toast({
+                            message: m,
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return false;
                     }else{
                         return true;
@@ -198,9 +210,19 @@ export default {
                 //校验成功，异步提交数据
                 axios.post(getUrl() + "/app_team_rz/save_issue", add_issue.fm).then(function (response) {
                     if (response.data.code != 0) {
-                        msg(add_issue.oper + "资质失败,请重试")
+                        // msg(add_issue.oper + "资质失败,请重试")
+                        Toast({
+                            message: add_issue.oper + "资质失败,请重试",
+                            position: 'bottom',
+                            duration: 1000
+                        });
                     } else {
-                        msg(add_issue.oper + "成功！");
+                        // msg(add_issue.oper + "成功！");
+                        Toast({
+                            message: add_issue.oper + "成功！",
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         setTimeout(function () {
                             goToList();
                         }, 2000)
@@ -245,7 +267,12 @@ export default {
 						_self.image_host = response.result.image_host;
 						_self.showBox = true;
 					}else{
-						msg("获取资质信息失败！请稍后重试");
+                        // msg("获取资质信息失败！请稍后重试");
+                        Toast({
+                            message: "获取资质信息失败！请稍后重试",
+                            position: 'bottom',
+                            duration: 1000
+                        });
 					}
 				},function(error){
 					console.info(error);
@@ -260,12 +287,22 @@ export default {
 			if(confirm("确认要删除此资质吗？")){
 				axios.get(getUrl() + "/app_team_rz/remove_issue?issueId=" + id + "&teamId=" + _self.fm.teamId).then(function (response) {
 					if (response.data.code == 0) {
-						msg("已成功删除此资质");
+                        // msg("已成功删除此资质");
+                        Toast({
+                            message: "已成功删除此资质",
+                            position: 'bottom',
+                            duration: 1000
+                        });
 						setTimeout(function () {
 							goToList();
 						}, 1500)
 					} else {
-						msg(response.data.message);
+                        // msg(response.data.message);
+                        Toast({
+                            message: response.data.message,
+                            position: 'bottom',
+                            duration: 1000
+                        });
 					}
 				}).catch(function (error) {
 					console.info(error);

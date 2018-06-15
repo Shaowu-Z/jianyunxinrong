@@ -28,6 +28,8 @@ const team_create = resolve => require(['@/components/contacts/team_create'], re
 const team_search = resolve => require(['@/components/contacts/team_search'], resolve)
 const select_phone_list = resolve => require(['@/components/contacts/select_phone_list'], resolve)
 const add_manually = resolve => require(['@/components/contacts/add_manually'], resolve)
+const batchOpeMember = resolve => require(['@/components/contacts/batchOpeMember'], resolve)
+const test = resolve => require(['@/components/contacts/test'], resolve)
 
 const contactsConfig = {
   path: '/static/webstatic/contacts/address_list.html',
@@ -116,6 +118,14 @@ const contactsConfig = {
     {
       path:'/add_manually',
       component: add_manually
+    },
+    {
+      path:'/batchOpeMember',
+      component: batchOpeMember
+    },
+    {
+      path:'/test',
+      component: test
     },
   ]
 }

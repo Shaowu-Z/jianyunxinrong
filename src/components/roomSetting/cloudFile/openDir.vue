@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav" id="js-head">
-            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide" v-show="showBack">
+            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack" v-if="showBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <div v-if="headerMode == 0">
@@ -39,103 +39,105 @@
                             <a class="search-inner" href="javascript:;" @tap="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
                         </div>
                         <div v-if="curList.length != 0 && status == 1">
-                            <ul class="mui-table-view mui-table-view-striped">
-                                <div v-for="(obj,index) in curList" :key="index">
-                                    <li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
-                                        <a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
-                                            <div class="oa-contact-cell mui-table">
-                                                <div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
-                                                    <input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
-                                                </div>
-                                                <div class="oa-contact-avatar mui-table-cell">
-                                                    <div v-if="obj.type==1">
-                                                        <span class="my-list-icon label-folder"></span>
-                                                    </div>
-                                                    <div v-else>
-                                                    <span :class="'my-list-icon ' + fileType(obj.suffix)"  >
-                                                        <div  v-if="obj.thumbnail != null ">
-                                                            <img v-bind:src="obj.thumbnail" >
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                        </div>
-                                                    </span>
-                                                    </div>
-                                                </div>
-                                                <div class="oa-contact-content mui-table-cell">
-                                                    <h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
-                                                    <p class="oa-contact-email">
-                                                        <span v-text="obj.createName"></span>
-                                                        <span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
-                                                        <span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
-                                                        <span>{{obj.updateDate | formDate}}</span>
-                                                        <span v-text="obj.size"></span>
+							<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">	
+								<ul class="mui-table-view mui-table-view-striped">
+									<div v-for="(item,index) in curList" :key="index">
+										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
+											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
+												<div class="oa-contact-cell mui-table">
+													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
+														<input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
+													</div>
+													<div class="oa-contact-avatar mui-table-cell">
+														<div v-if="obj.type==1">
+															<span class="my-list-icon label-folder"></span>
+														</div>
+														<div v-else>
+														<span :class="'my-list-icon ' + fileType(obj.suffix)"  >
+															<div  v-if="obj.thumbnail != null ">
+																<img v-bind:src="obj.thumbnail" >
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+															</div>
+														</span>
+														</div>
+													</div>
+													<div class="oa-contact-content mui-table-cell">
+														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
+														<p class="oa-contact-email">
+															<span v-text="obj.createName"></span>
+															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
+															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
+															<span>{{obj.updateDate | formDate}}</span>
+															<span v-text="obj.size"></span>
 
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
-                                        </a>
-                                        <!--<button v-show="itemEditShow(obj.type) && operateShow()"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>-->
-                                        <button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
-                                    </li>
-                                    <li v-else class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
-                                        <a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
-                                            <div class="oa-contact-cell mui-table">
-                                                <div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
-                                                    <input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
-                                                </div>
-                                                <div class="oa-contact-avatar mui-table-cell">
-                                                    <div v-if="obj.type==1">
-                                                        <span class="my-list-icon label-folder"></span>
-                                                    </div>
-                                                    <div v-else>
-                                                    <span :class="'my-list-icon ' + fileType(obj.suffix)"  >
-                                                        <div  v-if="obj.thumbnail != null ">
-                                                            <img v-bind:src="obj.thumbnail" >
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                        </div>
-                                                    </span>
-                                                    </div>
-                                                </div>
-                                                <div class="oa-contact-content mui-table-cell">
-                                                    <h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
-                                                    <p class="oa-contact-email">
-                                                        <span v-text="obj.createName"></span>
-                                                        <span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
-                                                        <span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
-                                                        <span>{{obj.updateDate | formDate}}</span>
-                                                        <span v-text="obj.size"></span>
+														</p>
+													</div>
+												</div>
+												<!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
+											</a>
+											<!--<button v-show="itemEditShow(obj.type) && operateShow()"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>-->
+											<button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
+										</li>
+										<li v-else class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
+											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
+												<div class="oa-contact-cell mui-table">
+													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
+														<input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
+													</div>
+													<div class="oa-contact-avatar mui-table-cell">
+														<div v-if="obj.type==1">
+															<span class="my-list-icon label-folder"></span>
+														</div>
+														<div v-else>
+														<span :class="'my-list-icon ' + fileType(obj.suffix)"  >
+															<div  v-if="obj.thumbnail != null ">
+																<img v-bind:src="obj.thumbnail" >
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+															</div>
+														</span>
+														</div>
+													</div>
+													<div class="oa-contact-content mui-table-cell">
+														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
+														<p class="oa-contact-email">
+															<span v-text="obj.createName"></span>
+															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
+															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
+															<span>{{obj.updateDate | formDate}}</span>
+															<span v-text="obj.size"></span>
 
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
-                                        </a>
-                                        <button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
-                                    </li>
-                                </div>
-                            </ul>
+														</p>
+													</div>
+												</div>
+												<!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
+											</a>
+											<button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
+										</li>
+									</div>
+								</ul>
+							</mt-loadmore>
                         </div>
                         <div id="loadMore" style="display: none" class="mui-pull-bottom-tips"><div class="mui-pull-bottom-wrapper"><span class="mui-pull-loading"></span></div></div>
                     </div>
@@ -353,11 +355,14 @@
 
 <script>
 import setting from '../../../playform/config'
-import {getParam,BackCookie,setDishSort} from '../../../playform/common'
+import {getParam,BackCookie,setDishSort,getDishSort} from '../../../playform/common'
 import mui from '../../../playform/mui'
+// import  '../../../playform/mui.pullToRefresh'
+import { Loadmore } from 'mint-ui'
 export default {
     data () {
         return {
+			pullWidget: '',
             orixy: '',
             loadStatus: false,
             imageHost: setting.UPLOAD_SERVER_ADDRESS,
@@ -447,125 +452,91 @@ export default {
             affirmId: "",
             isOpeAll:false//文件操作所有权限
             }
-    },
-    created() {
-		if(!appApi.isApp) {
-            this.showBack = true;
-        }
-        if(window.location.href.split("?")[1]){
-            var arrays = window.location.href.split("?")[1].split("&");
-            var map = {};
-            for (let i = 0; i < arrays.length; i++) {
-                var param = arrays[i].split("=");
-                map[param[0]] = decodeURI(param[1]);
-            }
-            if(map.datatype=='pc'){
-                document.getElementsByName("index_return_button")[0].style.display='none';
-            }
-        }
-        // if(location.href.indexOf("search_result.html") == -1) {
-        //     
-
-        //         },
-        //         created: function() {
-        //             var _self = this;
-                    
-        //         },
-        //         methods: {
- 
-        //         }
-        //     })
-        // }
-        function projectClick(id) {
-            // alert(_self.roomId+"////"+id)
-            appApi.openNewWindow(getUrl() + "/static/webstatic/dish/create_share.html?header=1&projectSN=" + id);
-        }
+	},
+    mounted() {
+		function reLoad() {
+			window.location.reload();
+		}
 		var _self = this;
 		//获取参数
 		var params = getParam(window.location.href);
 		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
             if(params.hasOwnProperty("projectSN"))
-				_self.projectId = params.projectSN; //项目id
+				_self.$data.projectId = params.projectSN; //项目id
 			else
-                _self.projectId = params.projectSn; //项目id
+                _self.$data.projectId = params.projectSn; //项目id
             if(params.hasOwnProperty("teamCode"))
-            	_self.teamCode = params.teamCode;
-            _self.roomId = params.roomId; //房间id
+            	_self.$data.teamCode = params.teamCode;
+            _self.$data.roomId = params.roomId; //房间id
 			if(params.hasOwnProperty("isSys")) {
-				_self.isSys = true;
+				_self.$data.isSys = true;
 			} else {
-				_self.showEdit = true;
+				_self.$data.showEdit = true;
 			}
 			if(params.hasOwnProperty("isOpe")) {
-				_self.isOpe = false;
+				_self.$data.isOpe = false;
 			} else {
-				_self.isOpe = true;
+				_self.$data.isOpe = true;
 			}
 			if(params.hasOwnProperty("isShare")) {
-				_self.isShare = true;
-				_self.pageParams.from = "1";
+				_self.$data.isShare = true;
+				_self.$data.pageParams.from = "1";
 			}
 			if(1 == 1) {
 				_self.showHeader();
 			}
 			if(params.hasOwnProperty("id")) {
 				//显示头部
-				_self.isIndex = 0;
-				_self.id = params.id; //目录id
-				if(_self.roomId=="" || _self.roomId=="undefined")
-					_self.initData(_self.id, _self.getCurData);//, _self.roomId
+				_self.$data.isIndex = 0;
+				_self.$data.id = params.id; //目录id
+				if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
+					_self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
 				else
-                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
+                    _self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
 				_self.showHeader();
-				_self.loadStatus = true;
+				_self.$data.loadStatus = true;
 			} else if(params.hasOwnProperty("keyword")) {
 				//搜索
-				_self.pageParams.keyword = params.keyword;
-				_self.pageParams.projectId = _self.projectId;
+				_self.$data.pageParams.keyword = params.keyword;
+				_self.$data.pageParams.projectId = _self.$data.projectId;
 				_self.searchData();
-				_self.loadStatus = true;
+				_self.$data.loadStatus = true;
 			} else {
 				//首目录
 				//不显示头部
 				//数据初始化
-				_self.isIndex = 1;
-                if(_self.roomId=="" || _self.roomId=="undefined")
-					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
+				_self.$data.isIndex = 1;
+                if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
+					_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
 				else
-					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
+					_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
 				if(!appApi.isApp) {
-					_self.showUpload = false;
+					_self.$data.showUpload = false;
 				}
-				//_self.showUpload = true;
+				//_self.$data.showUpload = true;
 			}
 			_self.uploadInit();
 			_self.downLoadInit();
 		} else if(params.hasOwnProperty("shareId")) {
 			//分享
-			_self.shareId = params.shareId;
+			_self.$data.shareId = params.shareId;
 			var params = {
-				shareId: _self.shareId
+				shareId: _self.$data.shareId
 			};
 			console.info(params);
 			this.$http.post("/cdish/share/detail", params).then(function(response) {
 				if(response.data.code == 0) {
 //					console.info(response.data.result);
 					var rs = response.data.result;
-					_self.status = 1;
-					_self.loadStatus = true;
-					_self.isShare = true;
-					_self.shareInfo = rs;
-					_self.projectId = rs.projectId;
-					_self.shareInfoList = rs.shareItems;
+					_self.$data.status = 1;
+					_self.$data.loadStatus = true;
+					_self.$data.isShare = true;
+					_self.$data.shareInfo = rs;
+					_self.$data.projectId = rs.projectId;
+					_self.$data.shareInfoList = rs.shareItems;
 					_self.downLoadInit();
 				} else {
-                    // msg(response.data.message);
-                layer.open({
-                    content: response.data.message
-                    ,skin: 'msg'
-                    ,time: 1 //2秒后自动关闭
-                    ,anim:false
-                });
+					msg(response.data.message);
 				}
 			}).catch(function(error) {
 				layer.closeAll();
@@ -579,7 +550,7 @@ export default {
 					document.getElementById("shade").style.display = "block";
 					document.getElementById("add-style").style.display = "block";
 					if(array) {
-						var ht = '<li class="mui-table-view-cell" @click="javascript:projectClick(\'$projectSN\')">$text</li>';
+						var ht = '<li class="mui-table-view-cell" onclick="javascript:projectClick(\'$projectSN\')">$text</li>';
 						var htmlstr = array.length > 0 ? '' : '<li class="mui-table-view-cell">没有参与的项目</li>';
 						for(var i = 0; i < array.length; i++) {
 							htmlstr += ht.replace("$projectSN", array[i].serialNum).replace("$text", array[i].ProjectName);
@@ -587,20 +558,61 @@ export default {
 						document.getElementById("project_list").innerHTML = htmlstr;
 					}
 				} else {
-                    // msg("系统报错:" + resp.data.message);
-                    layer.open({
-                        content: "系统报错:" + resp.data.message
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
+					msg("系统报错:" + resp.data.message);
 				}
 			}).catch(function(err) {
 				console.log(err);
 			})
 		}
-    },
+		
+		
+		// function loadData () {
+		// 	console.log(111);
+		// 	var _self = this;
+		// 	var pageParams = _self.pageParams;
+		// 	this.$http.post("/cdish/list", pageParams).then(function(response) {
+		// 		// console.log(response.data)
+		// 		if(response.data.code == 200) {
+		// 			var rs = response.data;
+		// 			var allPage = rs.result.endPage;
+		// 			if(pageParams.curPage == 1) {
+		// 				//首次 加载一次
+		// 				_self.curList = rs.result.list;
+		// 				undefined != fun && fun();
+		// 				if(allPage > 1) {
+		// 					document.getElementById("loadMore").style.display = "block";
+		// 				}
+		// 			} else {
+		// 				_self.curList = _self.curList.concat(rs.result.list);
+		// 				undefined != fun && fun(pageParams.curPage >= allPage);
+		// 			}
+		// 		} else {
+		// 			undefined != fun && fun(true);
+        //             // msg("系统出了点小状况，请稍后再试");
+        //             layer.open({
+        //                 content:"系统出了点小状况，请稍后再试!"
+        //                 ,skin: 'msg'
+        //                 ,time: 1 //2秒后自动关闭
+        //                 ,anim:false
+        //             });
+		// 		}
+		// 		//console.log(_self.curList);
+		// 		_self.pageParams.curPage++;
+		// 		_self.initScroll();
+		// 		_self.status = 1;
+		// 	}).catch(function(error) {
+		// 		console.log(error);
+		// 	});
+		// }
+	},
     methods: {
+		loadTop() {
+		// 加载更多数据
+		this.$refs.loadmore.onTopLoaded();
+		},
+		goBack(){
+			this.$router.go(-1)
+		},
 		intoSelect: function() {
 			//进入多选状态 如果在app中 需隐藏返回键
 			this.headerMode = 1;
@@ -667,8 +679,8 @@ export default {
 		},
 		initScroll: function() {
 			//阻尼系数
-			var deceleration = mui.os.ios ? 0.003 : 0.0009;
-			var scroll = mui('.mui-scroll-wrapper').scroll({
+			// var deceleration = mui.os.ios ? 0.003 : 0.0009;
+			var scroll = $('.mui-scroll-wrapper').scroll({
 				bounce: false,
 				indicators: true, //是否显示滚动条
 				deceleration: deceleration
@@ -723,37 +735,8 @@ export default {
 			_self.pageParams.curPage = 1;
 			// mui.init();
 			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							_self.pageParams.curPage = 1;
-							if(_self.isIndex == 1) {
-								if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
-									_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
-								else
-									_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
-							}
-							_self.loadData(function() {
-								self.endPullDownToRefresh();
-								self.refresh(true);
-							});
-						}
-					},
-					up: {
-						auto: true,
-						contentrefresh: '正在加载...',
-						callback: function() {
-							var self = this;
-							_self.loadData(function(bool) {
-								self.endPullUpToRefresh(bool);
-							});
-						}
-					}
-				})
-
 			});
-            mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
+            $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
               this.click();
             });
 		},
@@ -832,30 +815,8 @@ export default {
 			_self.pageParams.curPage = 1;
 			mui.init();
 			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							_self.pageParams.curPage = 1;
-							_self.loadSearchData(function() {
-								self.endPullDownToRefresh();
-								self.refresh(true);
-							});
-						}
-					},
-					up: {
-						auto: true,
-						contentrefresh: '正在加载...',
-						callback: function() {
-							var self = this;
-							_self.loadSearchData(function(bool) {
-								self.endPullUpToRefresh(bool);
-							});
-						}
-					}
-				})
 			});
-            mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
+            $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
                 this.click();
             });
 		},
@@ -877,7 +838,7 @@ export default {
 			if(document.getElementById("dish-tab"))
 				document.getElementById("dish-tab").style.top = "44px";
 			if(document.getElementById("js-dish-con"))
-				addClass(document.getElementById("js-dish-con"), "sift-content");
+				$("#js-dish-con").addClass("sift-content");
 			if(document.getElementById("dish_content"))
 				document.getElementById("dish_content").style.paddingTop = "44px";
 			//绑定后退事件
@@ -1030,7 +991,7 @@ export default {
                         ,time: 1 //2秒后自动关闭
                         ,anim:false
                     });
-					refreshPage();
+					_self.refreshPage();
 				} else {
                     // msg(response.data.message);
                     layer.open({
@@ -1073,7 +1034,7 @@ export default {
                             ,time: 1 //2秒后自动关闭
                             ,anim:false
                         });
-						refreshPage();
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 					} else {
                         // msg(response.data.message);
@@ -1184,43 +1145,6 @@ export default {
 			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
 			return t;
 		},
-		loadData: function(fun) {
-			var _self = this;
-			var pageParams = _self.pageParams;
-			this.$http.post("/cdish/list", pageParams).then(function(response) {
-				// console.log(response.data)
-				if(response.data.code == 200) {
-					var rs = response.data;
-					var allPage = rs.result.endPage;
-					if(pageParams.curPage == 1) {
-						//首次 加载一次
-						_self.curList = rs.result.list;
-						undefined != fun && fun();
-						if(allPage > 1) {
-							document.getElementById("loadMore").style.display = "block";
-						}
-					} else {
-						_self.curList = _self.curList.concat(rs.result.list);
-						undefined != fun && fun(pageParams.curPage >= allPage);
-					}
-				} else {
-					undefined != fun && fun(true);
-                    // msg("系统出了点小状况，请稍后再试");
-                    layer.open({
-                        content:"系统出了点小状况，请稍后再试!"
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
-				}
-				//console.log(_self.curList);
-				_self.pageParams.curPage++;
-				_self.initScroll();
-				_self.status = 1;
-			}).catch(function(error) {
-				console.log(error);
-			});
-		},
 		loadSearchData: function(fun) {
 			var _self = this;
 			var pageParams = _self.pageParams;
@@ -1269,8 +1193,7 @@ export default {
 					'</form>';
 			}
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			widget = document.getElementById("uploadWidget");
-			widget.addEventListener("change", function(event) {
+			document.getElementById("uploadWidget").addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
 				if(_self.isIndex == 1) {
@@ -1370,10 +1293,13 @@ export default {
 				console.info("imageBase64====" + formData.imageBase64);
                 // var params = getParam(window.location.href);
                 // var roomId = params.roomId*1;
-                // formData.append('roomId', roomId);
+				// formData.append('roomId', roomId);
+
 				this.$http.post("/cdish/file/upload", formData, config).then(function(res) {
 					layer.closeAll();
+					console.log(res);
 					if(res.data.code == 0) {
+										console.log(res);
 						var rs = res.data.result;
 						if(rs.fail_num != 0) {
                             // msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
@@ -1393,8 +1319,8 @@ export default {
                                 ,anim:false
                             });
 						}
-						widget.value = "";
-						refreshPage();
+						document.getElementById("uploadWidget").value = "";
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 						if(undefined != id) {
 							_self.openDirMini(id, isSys);
@@ -1656,7 +1582,7 @@ export default {
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			downloadWidget = document.getElementById("downloadWidget");
+			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
 			return getUrl() + "/cdish/file/download?id=" + id;
@@ -1666,7 +1592,7 @@ export default {
 			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
-				downloadWidget.src = _self.getFileUrl(id);
+				document.getElementById("downloadWidget").src = _self.getFileUrl(id);
 			}
 			_self.showEditBox = false;
 		},
@@ -1953,7 +1879,7 @@ export default {
 			this.curSort = val;
 			this.pageParams.sortType = type;
 			this.sortShow = false;
-			refreshPage();
+			_self.refreshPage();
 		},
 		goSelectMode: function(e) {
 			var _self = this;
@@ -2138,7 +2064,7 @@ export default {
                             });
 						}
 						//msg("已成功删除" + response.data.result + "个文件或者文件夹");
-						refreshPage();
+						_self.refreshPage();
 					} else {
                         // msg(response.data.message);
                         layer.open({
@@ -2159,10 +2085,10 @@ export default {
 			_self.backSelectMode();
 		},
 		refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
+            if(this.pullWidget) {
+                this.pullWidget.pullDownLoading();
             }
-            if(isIndex == 1) {
+            if(this.isIndex == 1) {
                 if(roomId!="" && roomId!="undefined" && roomId!=undefined)
                     initFirstData(projectId, getFirstData, roomId);//, roomId
                 else

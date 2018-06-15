@@ -5,7 +5,7 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
-            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right" href="#popover-more">批量操作</a>
+            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right" @click="showhide">批量操作</a>
         </header>
         <section class="mui-content" id="admin_list">
             <!--div class="mui-indexed-list-search mui-input-row mui-search">
@@ -24,12 +24,13 @@
                 </ul>
             </div>
         </section>
-        <div id="popover-more" class="mui-popover top-menu">
-            <div class="mui-popover-arrow"></div>
+        <div :class="{'mui-backdrop mui-active' : show == true}" @click="showhide"></div>
+        <div id="popover-more" class="mui-popover top-menu" :class="{'show' : this.show === true}">
+            <div class="mui-popover-arrow" style="left: 154px;"></div>  
             <ul class="mui-table-view">
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/batchOpeMember.html?type=8&teamId='+window.location.href.split('?')[1].split('=')[1])"><span class="mui-icon iconfont icon-piliang-add"></span>批量增加管理员</a>
+                <li class="mui-table-view-cell"><a @click="add"><span class="mui-icon iconfont icon-piliang-add"></span>批量增加管理员</a>
                 </li>
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/batchOpeMember.html?type=9&teamId='+window.location.href.split('?')[1].split('=')[1])"><span class="mui-icon iconfont icon-piliang-delete"></span>批量删除管理员</a>
+                <li class="mui-table-view-cell"><a @click="edit"><span class="mui-icon iconfont icon-piliang-delete"></span>批量删除管理员</a>
                 </li>
             </ul>
         </div>
@@ -42,7 +43,8 @@ export default {
         return{
             add_type:false,
 			shade:false,
-			items:[]
+            items:[],
+            show:false,
         }
     },
     created: function () {
@@ -57,11 +59,22 @@ export default {
         });
     },
     methods:{
+        showhide(){
+            this.show = !this.show
+        },
         goBack(){
             this.$router.go(-1)
         },
         hide_shade:function () {
             this.shade=true;
+        },
+        add(){
+            // '/static/webstatic/contacts/batchOpeMember.html?type=8&teamId='+window.location.href.split('?')[1].split('=')[1])
+            this.$router.push({path:'/batchOpeMember',query:{type:8,teamId:this.$route.query.teamId}});
+        },
+        edit(){
+            //  '/static/webstatic/contacts/batchOpeMember.html?type=9&teamId='+window.location.href.split('?')[1].split('=')[1])
+            this.$router.push({path:'/batchOpeMember',query:{type:9,teamId:this.$route.query.teamId}});
         }
     },
     filters: {
@@ -73,6 +86,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .show{
+        opacity: 1!important;
+        display: block;
+        right: 5px;
+        top: 55px;
+    }
 </style>

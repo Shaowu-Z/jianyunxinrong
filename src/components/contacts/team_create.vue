@@ -10,7 +10,7 @@
         </div>
         <div id="team_create" class="mui-page">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
-                <button type="button" id="btn-referrer" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <button type="button" id="btn-referrer" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click='goBack'>
                     <span class="mui-icon mui-icon-left-nav"></span>联系人
                 </button>
                 <h1 class="mui-center mui-title">登记企(事)业组织</h1>
@@ -23,10 +23,10 @@
             <section class="mui-page-content">
                 <div class="mui-scroll-wrapper">
                     <div class="mui-scroll">
-                        <ul class="mui-table-view eg-table-view eg-detail-list">
+                        <ul class="mui-table-view eg-table-view eg-detail-list" style="margin-top:44px">
                             <li class="mui-table-view-cell">
-                                <a class="mui-navigate-right">组织类型:<span class="mui-badge mui-badge-inverted">
-                                    <select name="teamType" id="teamType" v-model="teamType" onchange="app.selectTeamType(this.value)" style="font-size: 16px;margin-bottom: 0;">
+                                <a class="mui-navigate-right text">组织类型:<span class="mui-badge mui-badge-inverted">
+                                    <select name="teamType" id="teamType" v-model="teamType" @click="selectTeamType(this.value)" style="font-size: 16px;margin-bottom: 0;">
                                         <!--<option class="mui-badge mui-badge-inverted" value="0">请选择</option>-->
                                         <option value="1">企业</option>
                                         <option value="2">政府/事业单位</option>
@@ -35,12 +35,12 @@
                                 </span></a>
                             </li>
                             <li class="mui-table-view-cell mui-input-row">
-                                <label>组织名称</label>
+                                <label class="text">组织名称</label>
                                 <input id="team_name_id" type="text" placeholder="不少于3个字" v-model="team_name"/>
                             </li>
 
                             <li class="mui-table-view-cell mui-input-row">
-                                <label id="label_code" style="white-space: normal;">社会信用代码</label>
+                                <label class="text" id="label_code" style="white-space: normal;">社会信用代码</label>
                                 <input type="text" v-model="creditCode" :placeholder="authph_1"/>
                             </li>
 
@@ -66,7 +66,7 @@
                         <h5 class="mui-content-padded">管理员授权认证</h5>-->
                         <ul class="mui-table-view eg-table-view">
                             <li class="mui-table-view-cell">
-                                <a class="mui-navigate-right" href="#manage_auth">管理员授权认证函<span class="mui-badge mui-badge-inverted">
+                                <a class="mui-navigate-right text" @click="showhide">管理员授权认证函<span class="mui-badge mui-badge-inverted">
                                     <template v-if="accreditImg == ''">
                                         待上传
                                     </template>
@@ -178,16 +178,16 @@
             <!--专业结束-->
 
         </div>
-        <div id="manage_auth" class="mui-page">
+        <div id="manage_auth" class="mui-page" v-show="show">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
-                <button type="button" id="btn-back" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
+                <button type="button" id="btn-back" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click="hideshow">
                     <span class="mui-icon mui-icon-left-nav"></span>返回
                 </button>
                 <h1 class="mui-center mui-title">管理员授权</h1>
             </div>
             <div class="fixed-bottom">
                 <div class="mui-table mui-text-center">
-                    <div class="mui-table-cell"><button type="button" onclick="viewApi.back();" class="mui-btn mui-btn-primary">保存</button></div>
+                    <div class="mui-table-cell"><button type="button" @click="viewApi.back();" class="mui-btn mui-btn-primary">保存</button></div>
                 </div>
             </div>
             <section class="mui-page-content">
@@ -214,7 +214,7 @@
                                 </div>
                                 <div class="upload-btn mui-text-center">
                                     <button class="mui-btn mui-btn-success">拍照/上传照片</button>
-                                    <input type="file" value="" class="input-file" accept="image/png,image/gif,image/jpeg" onclick="window.appApi.openCamera(3,0,1);" onchange="selectCertImg(this)">
+                                    <input type="file" value="" class="input-file" accept="image/png,image/gif,image/jpeg" @click="selectCertImg(this)">
                                 </div>
                             </div>
                         </div>
@@ -258,6 +258,7 @@ export default {
             authph_2:"必须与证件上一致(必填)",
             authph_3:"法人代表姓名(必填)",
             accreditImg:"",
+            show:false,
             members:[
                 //{memberName:"1", phoneNumber:"1"},
                 //{}
@@ -321,11 +322,89 @@ export default {
         });
 
     },
+    mounted(){
+
+    },
     methods:{
+        teamNameCheck(name,type) {
+            if(name.length<3){
+                // msg();
+                layer.open({
+                    content: "请输入最少三个字的组织名称!"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
+                return false;
+            }
+            if(type == 3 || type=="3"){
+                var not = ["公司","有限公司","有限责任公司","股份有限公司","集团","集团有限公司","集团公司"];
+                for(var i =0 ; i < not.length ; i++){
+                    if(name.indexOf(not[i])>-1){
+                        // msg();
+                        layer.open({
+                            content: '非企业或者政府事业单位的组织名称不允许含有："' + not[i] + '"字样'
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                            ,anim:false
+                        });
+                        return false;
+                    }
+                }
+            }
+            var flag = false;
+            //判断是否有重名
+            $.ajax({
+                url: "http://java.winfreeinfo.com/concats_api/check_team_name",
+                type: 'post',
+                async:false,
+                dataType: 'json',
+                contentType:"application/json",
+                data:JSON.stringify({teamName:name}),
+                success: function(data){
+                    if(data.code == 0){
+                        flag = true;
+                    }else{
+                        setTimeout(function () {
+                            layer.closeAll();
+                        },1500);
+                        // msg();
+                        layer.open({
+                            content: data.message
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                            ,anim:false
+                        });
+                    }
+                }
+            });
+            return flag;
+        },
+        selectCertImg (that) {
+            try {
+                lrz(that.files[0], {
+                    width: 800,
+                    height: 600
+                }).then(function (rst) {
+                    uploadStatus = true;
+                    app.$data.accreditImg = rst.base64;
+                    document.getElementById("uploadImg").style.backgroundImage =  "url('" + rst.base64 + "')";
+                })
+            }catch (e){
+                alert(e)
+            }
+        },
+        showhide(){
+            this.show = !this.show
+        },
+        hideshow(){
+            this.show = !this.show
+        },
         goBack(){
             this.$router.go(-1)
         },
         selectTeamType:function (val) {
+            console.log(e);
             var _self = this;
             if(val == 1){
                 //document.getElementById("org_code").style.display="none";//企业时隐藏
@@ -499,15 +578,27 @@ export default {
             console.log("====="+this.team_name);
             var team_name_value = document.getElementById("team_name_id").value;
 	        if(this.teamType==undefined || this.teamType==0){
-		        msg("请选择组织类型!");
+                // msg("请选择组织类型!");
+                layer.open({
+                    content: '请选择组织类型!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 		        return
 	        }
-	       if(!teamNameCheck(team_name_value,this.teamType)){
+	       if(!this.teamNameCheck(team_name_value,this.teamType)){
 	            return;
            }
             if(this.teamType == 1) {
                 if(this.creditCode == ""){
-                    msg("请填写社会信用代码");
+                    // msg("请填写社会信用代码");
+                    layer.open({
+                    content: '请填写社会信用代码!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                     return;
                 }
                 /*if(this.orgCode == ""){
@@ -521,7 +612,13 @@ export default {
             }
             if(this.teamType == 2) {
                 if(this.creditCode == ""){
-                    msg("请填写社会信用代码或组织机构代码");
+                    // msg("请填写社会信用代码或组织机构代码");
+                    layer.open({
+                    content: '请填写社会信用代码或组织机构代码!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
                     return;
                 }
             }
@@ -535,7 +632,13 @@ export default {
                 //return;
 	        }
 	        if(this.accreditImg =="") {
-		        msg("请上传管理员授权认证函");
+                // msg("请上传管理员授权认证函");
+                layer.open({
+                    content: '请上传管理员授权认证函!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 		        return;
 	        }
 	        var subCreate = function () {
@@ -576,7 +679,13 @@ export default {
                     },1500)
 		        } else {
 			        layer.closeAll();
-			        msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content: response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 		        }
 	        }).catch(function (error) {
 		        alert("创建失败，请联系管理员!");
