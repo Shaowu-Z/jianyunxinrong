@@ -19,4 +19,5 @@ package.json
 config/index.js
 package-lock.json
 src/main.js
+package-lock.json
 
