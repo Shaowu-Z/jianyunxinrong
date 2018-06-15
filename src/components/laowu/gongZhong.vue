@@ -146,9 +146,9 @@ body {
 }
 
 .mui-indexed-list-inner {
-  -webkit-transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  -webkit-perspective: 1000;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  perspective: 1000;
 }
 .address-list {
   padding-top: 44px;
