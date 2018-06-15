@@ -8,11 +8,19 @@
 
 const project = resolve => require(['@/components/project'], resolve)
 const addProject = resolve => require(['@/components/project/add_project'], resolve)
+//收付款
 const shoufukuan = resolve => require(['@/components/project/shoufukuan'], resolve)
 const work_content = resolve => require(['@/components/project/shoufukuan/work_content'], resolve)
 const transfer_sfk = resolve => require(['@/components/project/shoufukuan/transfer_sfk'], resolve)
 const newInfo = resolve => require(['@/components/project/shoufukuan/newInfo'], resolve)
 const ttp = resolve => require(['@/components/project/shoufukuan/ttp'], resolve)
+//收发件
+const shoufajian = resolve => require(['@/components/project/shoufajian'], resolve)
+const newCreat_lianxi = resolve => require(['@/components/project/shoufajian/newCreat'], resolve)
+const transfer_lianxi = resolve => require(['@/components/project/shoufajian/transfer'], resolve)
+const newInfo_lianxi = resolve => require(['@/components/project/shoufajian/newInfo'], resolve)
+const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
+
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
 // const backpwd = resolve => require(['@/components/login/backpwd'], resolve)
@@ -48,6 +56,29 @@ const myProjectconfig = {
         {
           path: '/static/newwebstatic/shoufukuan/ttp.html',
           component: ttp
+        }
+      ]
+    },
+    {
+      path: '/shoufajian',
+      component: shoufajian,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/lianxi/newCreat.html',
+          component: newCreat_lianxi
+        },
+        {
+          path: '/static/newwebstatic/lianxi/transfer.html',
+          component: transfer_lianxi
+        },
+        {
+          path: '/static/newwebstatic/lianxi/newInfo.html',
+          component: newInfo_lianxi
+        },
+        {
+          path: '/static/newwebstatic/lianxi/ttp.html',
+          component: ttp_lianxi
         }
       ]
     }

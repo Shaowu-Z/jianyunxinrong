@@ -1,7 +1,7 @@
 <template>
     <div>
 		<header class="mui-bar mui-bar-nav">
-			<h1 class="mui-title">收付款</h1>
+			<h1 class="mui-title" v-text="title"></h1>
 			<!--<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">-->
 				<a  class="mui-action-back mui-icon iconfont icon-back" @click="danjuApi.goBack" ></a>
 			<!--</button>-->
@@ -86,7 +86,10 @@ export default {
       closewindow: "",
       cunnews: "",
       input11: "",
-      ceshi: ""
+      ceshi: "",
+      todo_title:"",
+      url:"",
+      title:''
     };
   },
   created: function() {
@@ -94,7 +97,8 @@ export default {
     danjuApi.vue = this;
     danjuApi.initVue()
     appApi.hideBack();
-
+    this.sort()
+    // console.log(_self.test_danju("shoufukuans"))
     //					this.initData();
     var getTime = new Date();
     var nowTime = getTime.toLocaleDateString();
@@ -126,6 +130,26 @@ export default {
   },
   // 在 `methods` 对象中定义方法
   methods: {
+    test_danju:function(n){
+      var patt1 = new RegExp(n);
+      return patt1.test(window.location.href)
+    },    
+    sort:function(){
+      var _self=this
+      if(_self.test_danju("lianxi")){
+        _self.todo_title="收发件退回:" + _self.$route.query.title
+        _self.url="lianxi"
+        _self.title="收发件"
+      }else if(_self.test_danju("shoufukuan")){
+        _self.todo_title="收付款退回:" + _self.$route.query.title + "的收付款",
+        _self.url="shoufukuan"
+        _self.title="收付款"
+      }else if(_self.test_danju("chengnuo")){
+        _self.todo_title="微承诺退回:" + _self.$route.query.title + "的微承诺",
+        _self.url="chengnuo"
+        _self.title="微承诺"
+      }
+    },
     back: function() {
       var _self = this;
       if (_self.closewindow == 1) {
@@ -210,7 +234,7 @@ export default {
               //											"fileCount": imgid.length+fujianid.length,
               fileCount: 0,
               url:
-                +"/static/newwebstatic/shoufukuan/transfer.html?id=" +
+                +"/static/newwebstatic/"+_self.url+"/transfer.html?id=" +
                 _self.$route.query.id,
               colorString: "",
               todoViewableMember: "0",

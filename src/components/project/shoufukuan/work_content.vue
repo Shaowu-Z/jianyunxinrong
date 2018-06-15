@@ -50,7 +50,7 @@
     
                 <header class="mui-bar mui-bar-nav">
     
-                    <h1 class="mui-title" ref='title_name'>收付款</h1>
+                    <h1 class="mui-title" ref='title_name' name="收付款">收付款</h1>
     
                     <a class="mui-action-back mui-icon iconfont icon-back" style="display: none;" v-show="backicon!=0" @click="back"></a>
     
@@ -76,7 +76,7 @@
                                       @confirm="danjuApi.handleConfirm"
                                       >
   
-        </mt-datetime-picker>
+                                </mt-datetime-picker>
                                     <!-- <input type="text" name="receiptDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
     
                                 </li>
@@ -161,7 +161,7 @@
     
                                             </div>
     
-                                            <span class="btn-roll btn-delete" @click="moveimg(number+1)"></span>
+                                            <span class="btn-roll btn-delete" @click="danjuApi.moveimg(number+1)"></span>
     
                                         </li>
     
@@ -185,7 +185,7 @@
     
                                         <li class="mui-table-view-cell" v-for="(img,number) in fujians" :key="number">
     
-                                            <span class="btn-roll btn-delete" @click="movefj(number+1)"></span>
+                                            <span class="btn-roll btn-delete" @click="danjuApi.movefj(number+1)"></span>
     
                                             <div class="oa-contact-cell mui-table">
     
@@ -219,11 +219,11 @@
     
                                 <div class="mui-table mult-btn-box">
     
-                                    <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="initData(1)">保&nbsp;&nbsp;存</button></div>
+                                    <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="danjuApi.initData(1)">保&nbsp;&nbsp;存</button></div>
     
                                     <div class="mui-table-cell space"></div>
     
-                                    <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="initData(2)">提&nbsp;&nbsp;交</button></div>
+                                    <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="danjuApi.initData(2)">提&nbsp;&nbsp;交</button></div>
     
                                 </div>
     
@@ -267,21 +267,21 @@ export default {
 
       // urlnews: urlnews,
 
-      cfgid: this.$route.query.cfgid,
+      pa_cigid: this.$route.query.cfgid,
 
-      projectSn: this.$route.query.projectSn,
+      pa_projectsn: this.$route.query.projectSn,
 
-      isRoomId: this.$route.query.isRoomId,
+      pa_isroomid: this.$route.query.isRoomId,
 
-      isRoomName: this.$route.query.isRoomName,
+      pa_isroomname: this.$route.query.isRoomName,
 
       currRoomName: this.$route.query.currRoomName,
 
       currRoomImId: this.$route.query.currRoomImId,
 
       currRoomClassName: this.$route.query.currRoomClassName,
-
-      projectName: this.$route.query.projectName,
+      pa_isRoomCreditCode: this.$route.query.isRoomCreditCode,
+      pa_projectName: this.$route.query.projectName,
 
       // nes: neshref,
 
@@ -488,7 +488,6 @@ export default {
     _self.form.MissionStartDate = formDate(printTime);
 
     _self.dateShenqing = formDate(printTime);
-
     //获取合同
 
     if (this.$route.query.id != undefined) {
@@ -506,6 +505,7 @@ export default {
       };
       this.$http.post("/contract/get_content", param).then(function(response) {
         if (response.data.code == 200) {
+          console.log(response)
           var norl = JSON.parse(response.data.result.noralJson);
           var cont = JSON.parse(response.data.result.contentJson);
           var data = response.data.result;
@@ -523,9 +523,9 @@ export default {
           //提交信息
           _self.id = paramMap.id;
           _self.cfgid = norl.table.id;
-          _self.projectSn = norl.table.projectid;
-          _self.isRoomId = norl.table.roomid;
-          _self.isRoomName = norl.table.roomname;
+          _self.pa_projectsn = norl.table.projectid;
+          _self.pa_isRoomId = norl.table.roomid;
+          _self.pa_isRoomName = norl.table.roomname;
 
           _self.currRoomImId = norl.currRoomImId;
           _self.currRoomClassName = norl.currRoomClassName;
@@ -534,7 +534,7 @@ export default {
 
           _self.fapiaoTaxLv = norl.tablefields.fapiaoTaxLv;
           _self.piao = norl.tablefields.fapiaoTitle;
-          _self.projectName = norl.tablefields.projectName;
+          _self.pa_projectName = norl.tablefields.projectName;
           _self.companyBuyID = norl.tablefields.companyBuyID;
           _self.companyBuyRoomID = norl.tablefields.companyBuyRoomID;
           _self.companySaleID = norl.tablefields.companySaleID;
@@ -917,6 +917,7 @@ export default {
     },
     hetongmore: function(event) {
       var _self = this;
+      console.log(event)
       this.hetongmove = false;
       _self.htong = event.contractName;
       _self.contractType = event.contractType;
@@ -1102,7 +1103,7 @@ export default {
 <style>
 @import "../../../assets/css/common/mint";
 body {
-  background: #efeff4;
+  background: #efeff4;  
 }
 
 .mui-off-canvas-right {

@@ -54,6 +54,7 @@ if(!isTop) {
 // console.info(window.top.contentWindow);
 
 window.Adaptive = {
+
 	init: function() {
 		let DEVICE_FLAG;
 		// 返回键
@@ -1761,8 +1762,7 @@ var setVersionInfoResult = function(result, iosIfrObjStrT) {
 }
 
 //获取公司回调
-
-var setProjectContactSelectResult = function(result, iosIfrObjStrT) {
+ window.setProjectContactSelectResult = function(result, iosIfrObjStrT) {
 	var CONTENT = {};
 	CONTENT.result = result;
 	if(iosIfrObjStrT) {

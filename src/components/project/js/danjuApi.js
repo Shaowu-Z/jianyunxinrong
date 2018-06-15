@@ -178,9 +178,8 @@ var danjuApi={
 	 * @param {Object} suffix
 	 */
 	upfile: function(event) {
-		// fileType()
 		// loading("上传中")
-		// sessionStorage.removeItem("cunnews")
+		sessionStorage.removeItem("cunnews")
 		// var _self = this
 		var file = document.getElementById(event.target.id).files;
 		var zrid = document.getElementById(event.target.id).getAttribute("id")
@@ -188,12 +187,14 @@ var danjuApi={
 		var form = new FormData();
 		var forimg = []
 		var forfile = []
+		var imgName = [];
 		for(var i = 0; i < file.length; i++) {
 			form.append("file", file[i]);
 			//读取图片数据
 			var f = document.getElementById(event.target.id).files[i];
 			var imgtype = f.type.split('/')[0]
 			if(zrid == "file") {
+				imgName.push(file[i].name);
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					var data = e.target.result;
@@ -204,6 +205,7 @@ var danjuApi={
 						var height = image.height;
 
 					};
+
 					image.src = data;
 					forimg.push({
 						src: image.src
@@ -217,11 +219,11 @@ var danjuApi={
 				forfile.push({
 					name: f.name
 				})
-				console.log(_self.fujians)
+				console.log(_self.$data.fujians)
 			}
 
 		}
-		_self.imgsrc = forimg
+		_self.$data.imgsrc = forimg
 		if(sessionStorage.getItem("cunnews") == 1) {
 			form.append("type", "1");
 		} else {
@@ -239,49 +241,24 @@ var danjuApi={
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				console.log(xhr.responseText);
 				var data = JSON.parse(evt.target.responseText);
-				// if(sessionStorage.getItem("cunnews") == 1) {
-				// 	_self.imgs = _self.imgs.concat(forimg)
-				// 	if(data.result.success.indexOf(",") == -1) {
-				// 		imgid.push(data.result.success)
-				// 	} else {
-				// 		imgid = imgid.concat(data.result.success.split(","))
-				// 	}
-				//
-				// 	//										imgid.push(data.result.success)
-				 //    console.log(imgid)
-				// 	_self.zrimg = imgid.toString().split(',')
-				// } else {
-				// 	if(data.result.success.indexOf(",") == -1) {
-				// 		fujianid.push(data.result.success)
-				// 	} else {
-				// 		fujianid = fujianid.concat(data.result.success.split(","))
-				// 	}
-				//
-				// 	//										fujianid.push(data.result.success)
-				// 	_self.fujians = _self.fujians.concat(forfile)
-				// 	_self.zrfujian = fujianid.toString().split(',')
-				// 	console.log(fujianid.toString())
-				// }
 				var rtnfiles = data.result.success;
 				if(sessionStorage.getItem("cunnews") == 1) {
-					_self.imgs = _self.imgs.concat(rtnfiles)
+					_self.$data.imgs = _self.$data.imgs.concat(rtnfiles)
 					for(var i=0;i<rtnfiles.length;i++){
 						_self.imgid.push(rtnfiles[i].fileId);
 					}
-					console.log(_self.imgid)
-					if(_self.imgid){
-						_self.zrimg = _self.imgid.toString().split(',')
+					if(_self.imgid.toString()){
+						_self.$data.zrimg = _self.imgid.toString().split(',')
 					}
-
 				} else {
 					for(var i=0;i<rtnfiles.length;i++){
 						_self.fujianid.push(rtnfiles[i].fileId);
 					}
-					_self.fujians = _self.fujians.concat(forfile)
-					if(_self.fujianid){
-						_self.zrfujian = _self.fujianid.toString().split(',')
+					_self.$data.fujians = _self.$data.fujians.concat(forfile)
+					if(_self.fujianid.toString()){
+						_self.$data.zrfujian = _self.fujianid.toString().split(',')
 					}
-					console.log(_self.fujianid.toString())
+
 				}
 				// ludan("上传成功", 1, 1)
 			} else if(xhr.readyState == 4 && xhr.status == 500) {
@@ -291,9 +268,10 @@ var danjuApi={
 		xhr.onerror = function(evt) {
 			//请求失败
 			var data = JSON.parse(evt.target.responseText);
-			ludan("请求失败", 1, 1)
+			// ludan("请求失败", 1, 1)
 			console.log("data");
 		};
+		console.log(_self.imgid)
 		xhr.send(form);
 
 	},
@@ -303,8 +281,9 @@ var danjuApi={
 	*/
 	moveimg:function(n){
 		// var _self=danjuApi.vue;
-		console.log(_self.zrimg)
-		_self.$http.post("/sass_api/delete_file?userId="+_self.userid+"&fileId=" + _self.zrimg[n-1]).then(function(response) {
+		console.log(">>"+n)
+		console.log(_self.imgid)
+		_self.$http.post("/sass_api/delete_file?userId="+_self.userid+"&fileId=" + _self.imgid[n-1]).then(function(response) {
 			if(response.data.code == 0) {
 				console.log(response.data)
 				// ludan("删除成功",1,2)
@@ -325,7 +304,7 @@ var danjuApi={
 				})
 		})
 		_self.imgs.splice(n-1,1)
-//						console.log(n-1)
+		_self.imgid.splice(n - 1, 1)
 		_self.zrimg.splice(n-1,1)
 		console.log("///////////////"+_self.zrimg)
 		console.log(typeof JSON.stringify(_self.zrimg))
@@ -339,11 +318,10 @@ var danjuApi={
 
 
 		// var _self = danjuApi.vue;
-		console.log("附件"+ _self.zrfujian[n - 1])
 		_self.$http
 		  .post(
 			"/sass_api/delete_file?userId="+_self.userid+"&fileId=" +
-			  _self.zrfujian[n - 1]
+			  _self.fujianid[n - 1]
 		  )
 		  .then(function(response) {
 			if (response.data.code == 0) {
@@ -367,7 +345,7 @@ var danjuApi={
 			});
 		  });
 		_self.fujians.splice(n - 1, 1);
-		//						console.log(n-1)
+		_self.fujianid.splice(n - 1, 1)
 		_self.zrfujian.splice(n - 1, 1);
 		console.log(_self.zrfujian);
 		console.log(typeof JSON.stringify(_self.zrfujian));
@@ -464,7 +442,7 @@ var danjuApi={
 		}
 		//获取数据
 		// var _self = this;
-		console.log(_self.pa_cigid)
+		// console.log(_self.pa_cigid)
 		var fjid
 		if(_self.attachmentIds == '') {
 			_self.attachmentIds = ''
@@ -486,78 +464,193 @@ var danjuApi={
 			_self.confirm = '1';
 			_self.postType = '1';
 		}
-		console.log(_self.$refs.title_name)
-		if(_self.title_name=="收付款")
+		console.log("//////////"+_self.contractType)
+
+
+
+		if(n==1){
+			//使用单据状态判断，无法满足需求。2018-5-21新增字段postType(提交保存状态)0=保存 1=提交
+			_self.$data.confirm = '0';
+		}else{
+			_self.$data.confirm = '1';
+			_self.$data.postType = '1';
+		}
+		//收付款
+		if (_self.jine == "") {
+			_self.jine = 0;
+		}
+		var contractName,contractType,companySaleName,companySaleID,companySaleRoomID,companyBuyName,companyBuyID,companyBuyRoomID,
+		money,htTotal,fapiaoTitle,fapiaoTaxLv,name,type,toimid,htTotal,fapiaoTitle,fapiaoTaxLv,dateShenqing
+		if(_self.$refs.title_name.innerText=="收付款"){
+			contractName= _self.htong
+			contractType= _self.contractType
+			companySaleName= _self.companySaleName
+			companySaleID= _self.companySaleID
+			companySaleRoomID= _self.companySaleRoomID
+			companyBuyName= _self.companyBuyName
+			companyBuyID= _self.companyBuyID
+			companyBuyRoomID= _self.companyBuyRoomID
+			toimid=_self.companyBuyRoomImID
+			money= parseFloat(_self.jine)
+			dateShenqing= _self.dateShenqing
+			htTotal= _self.jine
+			fapiaoTitle= _self.piao
+			fapiaoTaxLv= _self.fapiaoTaxLv
+		}else if(_self.$refs.title_name.innerText=="收发件"){
+			companySaleName= _self.pa_isroomname
+			companySaleID= _self.pa_isRoomCreditCode
+			companySaleRoomID= _self.pa_isroomid
+			companyBuyName= _self.nowCompanyname.toString()
+			companyBuyID= _self.nowCompanyid.toString()
+			companyBuyRoomID= _self.nowCompanyroomid.toString()
+			dateShenqing=_self.form.MissionStartDate
+			name= _self.title
+			type= _self.yewu
+			toimid=_self.nowCompanyroomimid.toString()
+		}
 		var tablefields = {
 			userName: _self.username,
 			userID: _self.userid,
-			dateShenqing: _self.shenqing + " " + _self.nowtime,
+			dateShenqing: dateShenqing + " " + _self.nowtime,
 			projectName: _self.pa_projectName,
 			projectSN: _self.pa_projectsn,
-			companySaleName: _self.pa_isroomname,
-			companySaleID: _self.pa_isRoomCreditCode,
-			companySaleRoomID: _self.pa_isroomid,
-			companyBuyName: _self.nowCompanyname.toString(),
-			companyBuyID: _self.nowCompanyid.toString(),
-			companyBuyRoomID: _self.nowCompanyroomid.toString(),
-			name: _self.title,
-			type: _self.yewu,
+			companySaleName: companySaleName,
+			contractName: contractName,
+			companySaleID: companySaleID,
+			companySaleRoomID: companySaleRoomID,
+			companyBuyName: companyBuyName,
+			companyBuyID: companyBuyID,
+			companyBuyRoomID: companyBuyRoomID,
+			name: name,
+			type: type,
+			money:money,
+			htTotal: htTotal,
+        	fapiaoTitle:fapiaoTitle,
+       		fapiaoTaxLv: fapiaoTaxLv,
+			contractType:contractType,
 			dateFasheng: _self.form.MissionStartDate + " " + _self.nowtime,
-			beizhu: _self.beizhuzhuan,
+			beizhu: _self.beizhu,
 			confirmStatus: "", //确认状态
 
 			confirmPersonName: "",
 			confirmPersonID: "",
 		}
+
+
+
+
+
+
 		if(_self.id != '') {
 			tablefields["id"] = _self.id
 		}
 		var param = {
+			uid: _self.userid,
 			table: {
+				
 				id: _self.pa_cigid,
 				projectid: _self.pa_projectsn,
 				roomid: _self.pa_isroomid,
 				roomname: _self.pa_isroomname,
-				userId: userid,
+				userId: _self.userid,
 				//								uid:'10395'
 			},
 			confirm: _self.confirm,
 			postType: _self.postType ,
 			attachment: fjid + _self.attachmentIds,
-			toroomimid: _self.nowCompanyroomimid.toString(),
-			gongsialllei: _self.nowCompany,
+			toroomimid: toimid,
+			// gongsialllei: _self.nowCompany,
 			currRoomImId: _self.currRoomImId,
 			curRoomName: _self.currRoomClassName,
 			roomid: _self.pa_isroomid,
-			toImid: _self.nowCompanyroomimid.toString(),
+			toImid: toimid,
 			imgs: _self.imgurl,
 			imgid: _self.zrimg,
 			fujians: _self.fujians,
 			fjid: _self.zrfujian,
 			tablefields: tablefields,
 			subtablefields: [],
-			createRoomId:paramMap.currRoomId,
+			createRoomId:_self.$route.query.currRoomId,
 		}
-		_self.attachmentIds = ''
+		// _self.attachmentIds = ''
 		console.log(param)
+		alert(JSON.stringify(param))
 		_self.$http.post("/contract/save", param).then(function(response) {
 			if(response.data.code == 200) {
+				console.log(response.data)
 				_self.first = 1
 				_self.id = response.data.result.id
-				var succname = []
-				var faliename = []
-				if(n == 1) {
-					layer.close(ludan("提交中",0,1))
-					app.sendtodo()
+				// var succname = []
+				// var faliename = []
+				if(n == 2) {
+					alert(5896)
+					// layer.clsose(ludan("提交中",0,1))
+					danjuApi.sendtodo(toimid)
 				} else {
-					layer.close(ludan("保存中",0,1))
-					ludan("保存成功", 2, 2)
+					// layer.close(ludan("保存中",0,1))
+					// ludan("保存成功", 2, 2)
 				}
 			} else {
-				ludan("保存失败", 2, 1)
+				// ludan("保存失败", 2, 1)
 			}
 		}).catch(function(error) {
-			ludan(error, 2, 1);
+			// ludan(error, 2, 1);
+		})
+	},
+	//推送单据到房间 和代办
+	sendtodo: function(toimid) {
+		// var _self = this
+		var titletype = encodeURIComponent(encodeURIComponent("收发件"));
+		var title = encodeURIComponent(encodeURIComponent(_self.title));
+		var todo_title,todo_content,todo_url
+		if(_self.$refs.title_name.innerText=="收付款"){
+			todo_title=decodeURI(_self.username) + "的收付款"
+			todo_content="名称=" + _self.htong + "|金额=" + _self.jine +"元"
+			todo_url="/static/newwebstatic/shoufukuan/transfer.html?id="
+		}else if(_self.$refs.title_name.innerText=="收发件"){
+			todo_title=decodeURI(_self.username) + "的收发件：" + _self.title
+			todo_content="类别=" + _self.yewu + "|日期=" + _self.form.MissionStartDate
+			todo_url="/static/newwebstatic/lianxi/transfer.html?id="
+		}
+
+		console.log()
+		var todojson = {
+			"title":todo_title,
+			"titileTwo": _self.currRoomClassName + "-" + _self.pa_isroomname,
+			"content": todo_content,
+			"fileCount": "0",
+			"url":  todo_url + _self.id,
+			"colorString": "",
+			"todoViewableMember": "0",
+			"toImId": toimid,
+			"formuserid": _self.userid,
+			"currentRoomImid": _self.currRoomImId,
+			"chatType": "2",
+			"relation": _self.id,
+			"score": "", //评分待办必要参数，设置分数
+			"todoType": "3", //1评分待办，生成带有确认按钮待办，生成带有确认拒绝待办，必要参数
+			"setButton": [{
+				"type": 1, //按钮点击类型 1=请求url 2=打开url
+				"name": "确认",
+				"url":  "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.pa_projectsn+"&sendtype=1"+"&titletype="+titletype,
+			}, {
+				"type": 1, //按钮点击类型 1=请求url 2=打开url
+				"name": "退回",
+				"url":  "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.pa_projectsn+"&title="+title+"&titletype="+titletype+"&sendtype=1",
+			}]
+
+		}
+		console.log(todojson)
+		window.appApi.sendTodo(todojson, function(d) {
+			if(d.code == 200) {
+				// ludan("提交成功", 2, 2, function() {
+					appApi.refreshData(2);
+					// setTimeout(function(){window.location.reload(),200})
+				// })
+			}else{
+				// ludan(d, 2, 3)
+			}
+
 		})
 	}
 
