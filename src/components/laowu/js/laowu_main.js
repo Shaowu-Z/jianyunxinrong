@@ -34,7 +34,6 @@ var laowu_main = {
         var recordType=laowu_common.recordType;
         var dataType=laowu_common.dataType;
         var loginType=laowu_common.loginType;
-        alert("测试"+laowu_common.loginType)
         var date=laowu_common.date;
         var mutil=laowu_common.mutil;
         _self.loginType = loginType;//登陆类型

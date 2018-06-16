@@ -7,7 +7,7 @@
 	<h1 class="mui-title">记点工</h1>
 </header>
 
-<div class="fixed-bottom main-left" v-if="save_type=='update'||save_type=='save'">
+<div class="fixed-bottom" v-if="save_type=='update'||save_type=='save'">
         <div class="mui-table mui-text-center">
             <div class="mui-table-cell" id="save_div"><button type="button" class="mui-btn mui-btn-primary" @click="saveData()">保存</button></div>
             <div class="mui-table-cell"  id="delete_div" ><button type="button" class="mui-btn" @click="deleteObj(form.id)">删除</button></div>
@@ -26,10 +26,11 @@
 				<label>工长<small>*</small></label>
 				<input type="text" name="gongzhangName" readonly="readonly" value=""  placeholder="请选择工长" v-model="form.gongzhangName"/>
 			</li>
-			<li v-if="save_type==''||save_type==null" class="mui-table-view-cell mui-input-row" @click="selectDate('s')">
+			<li v-if="save_type==''||save_type==null" class="mui-table-view-cell mui-input-row"   >
 				<a class="mui-navigate-right">
 					<label>日期<small>*</small></label>
-					<input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期">
+          <data-bar :datanow='form.createTimeStr' @upup="change"></data-bar>
+				<!-- <input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期"> -->
 				</a>
 			</li>
 			<li v-else class="mui-table-view-cell mui-input-row" >
@@ -58,7 +59,7 @@
                 </a>
             </li>
 
-			<li class="mui-table-view-cell mui-input-row" @click="open_time_popver(1)">
+			<li class="mui-table-view-cell mui-input-row" >
 				<a class="mui-navigate-right">
 				<label>上班时长<small>*</small></label>
 				<input type="text" name="workHourName" readonly="readonly" value="" placeholder="请选择时长" v-model="form.workHourName"/>
@@ -131,9 +132,14 @@
 </template>
 
 <script>
+import Picker from "mint-ui"
 import { DatetimePicker } from "mint-ui";
 import laowu_main from "./js/laowu_main.js";
+import dataBar from "../common/dataBar"
 export default {
+  name: '',
+  components: { dataBar},
+  props: {},
   data() {
     return {
       form: {
@@ -229,6 +235,9 @@ export default {
     laowu_main.initData();
   },
   methods: {
+    change(msg) {
+      this.form.createTimeStr=msg;
+    },
     openPicker: function() {
       this.$refs.picker.open();
     },
@@ -303,6 +312,9 @@ export default {
   line-height: 51px;
 }
 .main-left{
+  text-align:left
+}
+.fixed-bottom{
   text-align:left
 }
 </style>

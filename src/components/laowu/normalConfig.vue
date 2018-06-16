@@ -5,7 +5,7 @@
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
-	<h1 class="mui-title">设置工资标准1是是是</h1>
+	<h1 class="mui-title">设置工资标准</h1>
 </header>
 
 <div class=" fixed-bottom">
