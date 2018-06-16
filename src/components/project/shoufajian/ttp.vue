@@ -28,7 +28,6 @@ import { Picker } from 'mint-ui';
 import myaddress from "../js/city";
 import areaBar from "../../common/areaBar"
 import dataBar from "../../common/dataBar"
-import tipApi from "../js/tipApi"
     export default {
       name: '',
         components: {
@@ -95,12 +94,7 @@ import tipApi from "../js/tipApi"
             }
         },
         created() {
-            var _self=this
-            // tipApi.makeSure("这是美容","取消","确认",function(){
-            //     _self.aa()
-            // },function(){
-            //     alert("取消")
-            // })
+
         },
         methods: {
               childValue:function(val){

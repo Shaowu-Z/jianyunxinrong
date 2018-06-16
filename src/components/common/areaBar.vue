@@ -9,11 +9,7 @@
                     <mt-popup
                         v-model="popupVisible"
                         position="bottom">
-                    <mt-picker v-if="type==1" :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
-                        <mt-button size="small" @click.native="makepass">取消</mt-button>
-                        <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
-                    </mt-picker>
-                    <mt-picker v-if="type==2" :slots="solt" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                    <mt-picker :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
                         <mt-button size="small" @click.native="makepass">取消</mt-button>
                         <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
                     </mt-picker>
@@ -39,8 +35,6 @@ export default {
   },
   data() {
     return {
-      solt:this.shuju,
-      type:this.areatype,
       popupVisible: false,
       showToolbar: [],
       myAddressSlots: [
@@ -81,9 +75,7 @@ export default {
       area: ""
     };
   },
-  created() {
-    console.log(this.type)
-  },
+  created() {},
   methods: {
     onMyAddressChange(picker, values) {
       var _self = this;

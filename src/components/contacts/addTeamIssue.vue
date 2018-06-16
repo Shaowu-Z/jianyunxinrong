@@ -125,7 +125,6 @@ export default {
             return url;
         },
         selectCertImg (that) {
-            console.log(that,111111111111111)
             try {
                 var imgUrl = this.getObjectURL(document.getElementById("upfile").files[0]);
                 console.log(document.getElementById("upfile").files[0])
