@@ -358,10 +358,9 @@ var laowu_main = {
         });
     },
     showUnitLists: function () {//加载单位列表
-        var _self = this;
         var obj = new Object();
         obj.type = 2;
-        axios.post(getUrl() + "/project_work_api/find_base_cfg", obj).then(function (response) {
+        axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
             if (response.data.code == 200) {
                 var result = response.data.result;
                 console.log("单位", result)
