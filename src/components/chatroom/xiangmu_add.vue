@@ -32,6 +32,7 @@
                     <a class="mui-navigate-right" >
                         <label class="text">所在地区</label>
                         <input type="text" name="FullArea" v-model="form.fullArea" value="" placeholder="请选择" readonly="readonly"/>
+                        <data-Bar :title="City"></data-Bar>
                     </a>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
@@ -131,6 +132,7 @@
 <script>
 import regions from '../../playform/regions' 
 import { Picker,Popup,Toast  } from 'mint-ui';
+import dataBar from '../common/dataBar'
 export default {
     data () {
         return {
@@ -196,7 +198,8 @@ export default {
             pickervalues:'',
             value:[],
             timeType:'',
-            address:0, 
+            address:0,
+            City:'所在地区' 
         }
     },
     created() {
@@ -937,10 +940,10 @@ export default {
             appApi.openNewWindow(pagepath+'/chatroom/project_member_list.html?projectSN='+projectSN+"&method=list&project="+project);
         },
         choicePlace:function(){//工程地点选择 - 打开百度地图选择地点
-            //window.appApi.getLocation();  //获取当前位置
+            window.appApi.getLocation();  //获取当前位置
             var _self=this;
-            if(isApp && isIphoneOs) {
-                appApi.showAddress(1,"",0,0);
+            if(appApi.isApp && appApi.isIphoneOs) {
+                appApi.showAddress(1,"",0,0);   
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
                         setTimeout(function () {
@@ -951,7 +954,8 @@ export default {
                         }, 50)
                     }
                 }
-            } else if(isApp && isAndroid) {
+            } else if(appApi.isApp && appApi.isAndroid) {
+                
                 window.webactivity.openBaiduMapPage(1,"",0,0);
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
@@ -967,7 +971,7 @@ export default {
                 console.info("设备不支持获取位置信息");
                 return "设备不支持获取位置信息";
             }
-            },
+        },
         formDate(value) {
             var date = new Date(value);
             Y = date.getFullYear(),
