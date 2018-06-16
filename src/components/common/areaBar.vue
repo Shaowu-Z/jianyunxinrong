@@ -9,7 +9,11 @@
                     <mt-popup
                         v-model="popupVisible"
                         position="bottom">
-                    <mt-picker :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                    <mt-picker v-if="type==1" :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                        <mt-button size="small" @click.native="makepass">取消</mt-button>
+                        <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
+                    </mt-picker>
+                    <mt-picker v-if="type==2" :slots="slot" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
                         <mt-button size="small" @click.native="makepass">取消</mt-button>
                         <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
                     </mt-picker>
@@ -35,8 +39,10 @@ export default {
   },
   data() {
     return {
+      type:this.areatype,
       popupVisible: false,
       showToolbar: [],
+      slot:this.shuju,
       myAddressSlots: [
         {
           flex: 1,

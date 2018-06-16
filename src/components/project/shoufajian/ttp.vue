@@ -51,8 +51,8 @@ import dataBar from "../../common/dataBar"
                     ]
                     
                 ,
-                areatype:"2",
-                returntitle:"时间"
+                areatype:"1",
+                returntitle:"时间2"
             //     popupVisible:false,
             //     showToolbar:[
                     
