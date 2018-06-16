@@ -140,14 +140,14 @@
                                                                     <div class="oa-contact-input mui-table-cell">
                                                                         <div v-if="selectArr.contains(item.userId +'')">
                                                                             <div v-if="myId == item.friendsUserId || thirdUserId == item.friendsUserId">
-                                                                                <input type="checkbox" checked="checked" disabled="disabled" onchange="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                                <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
                                                                             </div>
                                                                             <div v-else>
-                                                                                <input type="checkbox" checked="checked" onchange="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                                <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
                                                                             </div>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" onchange="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                            <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="oa-contact-avatar mui-table-cell">
@@ -155,7 +155,7 @@
                                                                     </div>
                                                                     <div class="oa-contact-content mui-table-cell">
                                                                         <h4 class="oa-contact-name" v-text="item.name"></h4>
-                                                                        <p class="oa-contact-email" v-text="item.phone"></p>
+                                                                        <p class="oa-contact-email text" v-text="item.phone"></p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -206,7 +206,7 @@
                 </div>
             </div>
         </div>
-        <div id="select_children" class="mui-page">
+        <div id="select_children" class="mui-page" style="display:none">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left hide">
@@ -263,7 +263,7 @@
                                                         <div v-else>
                                                             <input type="checkbox" onchange="selEvent(this)" data-type="dept" :value="item.deptId" class="member-select"/>
                                                         </div>-->
-                                                        <input type="checkbox" onchange="selEvent(this)" data-type="dept" :value="item.deptId" class="dept-select"/>
+                                                        <input type="checkbox" @change="selEvent(this)" data-type="dept" :value="item.deptId" class="dept-select"/>
                                                     </div>
                                                     <div class="oa-contact-content mui-table-cell">
                                                         <h4 class="oa-contact-name" v-text="item.deptName"></h4>
@@ -286,14 +286,14 @@
                                                                 <div class="oa-contact-input mui-table-cell">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
                                                                         <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -301,7 +301,7 @@
                                                                 </div>
                                                                 <div class="oa-contact-content mui-table-cell">
                                                                     <h4 class="oa-contact-name" v-text="item.memberName"></h4>
-                                                                    <p class="oa-contact-email" v-text="item.phoneNumber"></p>
+                                                                    <p class="oa-contact-email text" v-text="item.phoneNumber"></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -323,7 +323,7 @@
                 </div>
             </div>
         </div>
-        <div id="select_project" class="mui-page">
+        <div id="select_project" class="mui-page" style="display:none">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
@@ -378,7 +378,7 @@
                                                     </div>
                                                     <div class="oa-contact-content mui-table-cell">
                                                         <h4 class="oa-contact-name" v-text="item.roomClassName"></h4>
-                                                        <p class="oa-contact-email"><span v-text="item.roomName"></span>（<span v-text="item.roomMembers.items.length"></span>）人</p>
+                                                        <p class="oa-contact-email text"><span v-text="item.roomName"></span>（<span v-text="item.roomMembers.items.length"></span>）人</p>
                                                     </div>
                                                 </div>
                                             </a>
@@ -405,7 +405,7 @@
                                                                     </div>
                                                                     <div class="oa-contact-content mui-table-cell mui-col-xs-9">
                                                                         <h4 class="oa-contact-name" v-text="it.roomName"></h4>
-                                                                        <p class="oa-contact-email"><span v-text="it.ownerName"></span>（<span v-text="it.roomMembers.items.length"></span>）人</p>
+                                                                        <p class="oa-contact-email text"><span v-text="it.ownerName"></span>（<span v-text="it.roomMembers.items.length"></span>）人</p>
                                                                     </div>
                                                                 </div>
                                                             </a>
@@ -430,14 +430,14 @@
                                                                 <div class="oa-contact-input mui-table-cell">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
                                                                         <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" onchange="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -445,7 +445,7 @@
                                                                 </div>
                                                                 <div class="oa-contact-content mui-table-cell">
                                                                     <h4 class="oa-contact-name" v-text="item.nickName"></h4>
-                                                                    <p class="oa-contact-email" v-text="item.cellPhone"></p>
+                                                                    <p class="oa-contact-email text" v-text="item.cellPhone"></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -739,8 +739,9 @@ export default {
             param.append("userId", "");
             setTimeout(function(){
                 _self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
-                    console.log(_self,'底层');
-                    _self.friendsList = _self.convertData(response.data.result);
+                    // console.log(_self,'底层');
+                    _self.friendsList = convertData(response.data.result);
+                    console.log(response.data.result)
                     _self.updated();
                 }).catch(function (error) {
                     console.info(error);
@@ -802,36 +803,36 @@ export default {
             // });
 
             window.onload=function(){
-            //     viewApi = mui('#app').view({
-            //         defaultPage: '#select_member',
-            //         goEvent:function (target) {
-            //             //用于点击跳转事件
-            //             if (target.hash == "#select_children") {
-            //                 var obj = {teamId:target.getAttribute("data-team-id"),teamName:target.getAttribute("data-team-name"),deptId:target.getAttribute("data-dept-id"),deptName:target.getAttribute("data-dept-name"),type:2}
-            //                 historyArr.push(obj);
-            //                 var _self = capp;
-            //                 _self.navList = historyArr;
-            //                 initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
-            //                 appApi.hideBack();
-            //             }else if(target.hash == "#select_project"){
-            //                 var obj = {teamId:target.getAttribute("data-project-id"),teamName:target.getAttribute("data-project-name"),type:1}
-            // //				console.log(JSON.stringify(obj))
-            // //				historyArr.push(obj);
-            //                 var _self = project;
-            // //				_self.$data.navList = historyArr;
-            //                 _self.getProjectMembers(obj.teamId, obj.teamName);
-            //                 appApi.hideBack();
-            //             }else{
-            //                 historyArr = new Array();
-            //             }
-            //         },
-            //         backEvent:function (target) {
-            //             if (target.id == "select_member") {
-            //                 historyArr = new Array();
-            //                 appApi.showBack();
-            //             }
-            //         }
-            //     });
+                viewApi = $('#app').view({
+                    defaultPage: '#select_member',
+                    goEvent:function (target) {
+                        //用于点击跳转事件
+                        if (target.hash == "#select_children") {
+                            var obj = {teamId:target.getAttribute("data-team-id"),teamName:target.getAttribute("data-team-name"),deptId:target.getAttribute("data-dept-id"),deptName:target.getAttribute("data-dept-name"),type:2}
+                            historyArr.push(obj);
+                            var _self = capp;
+                            _self.navList = historyArr;
+                            initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
+                            appApi.hideBack();
+                        }else if(target.hash == "#select_project"){
+                            var obj = {teamId:target.getAttribute("data-project-id"),teamName:target.getAttribute("data-project-name"),type:1}
+            //				console.log(JSON.stringify(obj))
+            //				historyArr.push(obj);
+                            var _self = project;
+            //				_self.$data.navList = historyArr;
+                            _self.getProjectMembers(obj.teamId, obj.teamName);
+                            appApi.hideBack();
+                        }else{
+                            historyArr = new Array();
+                        }
+                    },
+                    backEvent:function (target) {
+                        if (target.id == "select_member") {
+                            historyArr = new Array();
+                            appApi.showBack();
+                        }
+                    }
+                });
             
                 this.view = this.viewApi.view;
                 (function($) {
@@ -912,25 +913,25 @@ export default {
                 /**
                 * 必须选人
                 */
-                if(selectArr.length<=1){
+                if(this.selectArr.length<=1){
                     return;
                 }
                 var l;
                 var selectUserIdsEvy = "";
-                if(selectArr.length==2){
+                if(this.selectArr.length==2){
                     l = loading("请稍等...");
-                    for(var i=0;i<selectArr.length;i++){
-                        if(selectArr[i]!=this.userId){
-                            selectUserIdsEvy=selectArr[i];
+                    for(var i=0;i<this.selectArr.length;i++){
+                        if(this.selectArr[i]!=this.userId){
+                            selectUserIdsEvy=this.selectArr[i];
                         }
                     }
                 }else{
                     l= loading("创建中，请稍等");
-                    for(var i=0;i<selectArr.length;i++){
-                        if(i==selectArr.length-1){
-                            selectUserIdsEvy+=selectArr[i];
+                    for(var i=0;i<this.selectArr.length;i++){
+                        if(i==this.selectArr.length-1){
+                            selectUserIdsEvy+=this.selectArr[i];
                         }else{
-                            selectUserIdsEvy+=selectArr[i]+",";
+                            selectUserIdsEvy+=this.selectArr[i]+",";
                         }
                     }
                 }
@@ -946,7 +947,7 @@ export default {
                     /**
                     * 选了一个人进入单聊页面
                     */
-                    if(selectArr.length==2){
+                    if(this.selectArr.length==2){
                         window.appApi.openChat(mList[0].imId,mList[0].imageHost,mList[0].nickName,1);
                         setTimeout(function(){
                             layer.close(l);
@@ -1231,6 +1232,7 @@ export default {
             //     }
             // });
             function selEvent(target) {
+                console.log(1111);
                 var type = target.getAttribute("data-type");
                 var value = target.value;
                 if(type == "user"){
@@ -1258,15 +1260,15 @@ export default {
             function selectInArr(bool,val) {
                 val = val + "";
                 if(bool){
-                    if(!selectArr.contains(val)){
-                        selectArr.push(val);
+                    if(!this.selectArr.contains(val)){
+                        this.selectArr.push(val);
                     }
                 }else{
                     if(this.userId != val){ //自己不能删除
-                        selectArr.remove(val);
+                        this.selectArr.remove(val);
                     }
                 }
-                var count = selectArr.length;
+                var count = this.selectArr.length;
                 var text = count ? "完成(" + count + ")" : "完成";
                 var btn = jQuery(".ok-btn");
                 btn.text(text);
@@ -1279,7 +1281,7 @@ export default {
                         btn.addClass("mui-disabled");
                     }
                 }
-                this.selArr = selectArr;
+                this.selArr = this.selectArr;
 
             }
             /*---------------选择成员-----------------*/

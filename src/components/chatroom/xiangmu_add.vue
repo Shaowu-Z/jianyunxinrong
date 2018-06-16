@@ -29,11 +29,7 @@
                     </a>
                 </li>
                 <li class="mui-table-view-cell mui-input-row" @click="selectCity()">
-                    <a class="mui-navigate-right" >
-                        <label class="text">所在地区</label>
-                        <input type="text" name="FullArea" v-model="form.fullArea" value="" placeholder="请选择" readonly="readonly"/>
-                        <data-Bar :title="City"></data-Bar>
-                    </a>
+                        <area-Bar :title="City"></area-Bar>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
                     <label class="text">工程地点</label>
@@ -132,8 +128,12 @@
 <script>
 import regions from '../../playform/regions' 
 import { Picker,Popup,Toast  } from 'mint-ui';
-import dataBar from '../common/dataBar'
+import areaBar from '../common/areaBar'
 export default {
+    components: {
+        'mt-picker': Picker,
+        areaBar,
+    },
     data () {
         return {
             form:{
@@ -350,54 +350,56 @@ export default {
         },
 
         selectCity:function () {//选择市区
-            var _self=this;
-            // 初始化省市区
-            var province = this.getProvince(regions);
-            var picker = []
-            // new mui.PopPicker({
-            //     layer: 3
-            // });
-            var dataAry=[];
-            if(province.length>0){
-                for (var i=0;i<province.length;i++){//遍历所有的省份
-                    var provinceobj=new Object();
-                    provinceobj.value=i;
-                    provinceobj.text=province[i];
-                    if(_self.form.province==province[i]){
-                        picker.pickers[0].setSelectedIndex(i);
-                    }
-                    provinceobj.children=[];
-                    var city = this.getCity(regions, province[i]);//获取市
-                    if(city.length>0){
-                        for(var j=0;j<city.length;j++){//遍历所有的市
-                            var cityobj=new Object();
-                            cityobj.value=j;
-                            cityobj.text=city[j];
-                            if(_self.form.city==city[j]){
-                                picker.pickers[1].setSelectedIndex(j);
-                            }
-                            cityobj.children=[];
-                            provinceobj.children.push(cityobj);//添加市
-                            var area = this.getArea(regions, province[i],city[j]);//获取对应的区
-                            if(area.length>0){
-                                for(var k=0;k<area.length;k++){//遍历区
-                                    var areaobj=new Object();
-                                    areaobj.value=j;
-                                    areaobj.text=area[k];
-                                    if(_self.form.area==area[k]){
-                                        picker.pickers[2].setSelectedIndex(k);
-                                    }
-                                    cityobj.children.push(areaobj);//添加区
-                                }
-                            }
-                        }
-                    }
+        
+        console.log(this.$refs.start)
+            // var _self=this;
+            // // 初始化省市区
+            // var province = this.getProvince(regions);
+            // var picker = []
+            // // new mui.PopPicker({
+            // //     layer: 3
+            // // });
+            // var dataAry=[];
+            // if(province.length>0){
+            //     for (var i=0;i<province.length;i++){//遍历所有的省份
+            //         var provinceobj=new Object();
+            //         provinceobj.value=i;
+            //         provinceobj.text=province[i];
+            //         if(_self.form.province==province[i]){
+            //             picker.pickers[0].setSelectedIndex(i);
+            //         }
+            //         provinceobj.children=[];
+            //         var city = this.getCity(regions, province[i]);//获取市
+            //         if(city.length>0){
+            //             for(var j=0;j<city.length;j++){//遍历所有的市
+            //                 var cityobj=new Object();
+            //                 cityobj.value=j;
+            //                 cityobj.text=city[j];
+            //                 if(_self.form.city==city[j]){
+            //                     picker.pickers[1].setSelectedIndex(j);
+            //                 }
+            //                 cityobj.children=[];
+            //                 provinceobj.children.push(cityobj);//添加市
+            //                 var area = this.getArea(regions, province[i],city[j]);//获取对应的区
+            //                 if(area.length>0){
+            //                     for(var k=0;k<area.length;k++){//遍历区
+            //                         var areaobj=new Object();
+            //                         areaobj.value=j;
+            //                         areaobj.text=area[k];
+            //                         if(_self.form.area==area[k]){
+            //                             picker.pickers[2].setSelectedIndex(k);
+            //                         }
+            //                         cityobj.children.push(areaobj);//添加区
+            //                     }
+            //                 }
+            //             }
+            //         }
                     
-                    dataAry.push(provinceobj);//添加所有的省市区
-                    this.City = provinceobj
-                    console.log(provinceobj);
-                }
-            }
+            //         dataAry.push(provinceobj);//添加所有的省市区
+            //         this.City = provinceobj
+            //         console.log(provinceobj);
+            //     }
+            // }
             // picker.setData(dataAry);//设置数据到控件显示
 
             /*picker.pickers[0].setSelectedIndex(1);
