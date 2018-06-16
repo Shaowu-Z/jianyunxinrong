@@ -73,4 +73,27 @@ import { Toast } from "mint-ui";
     #databox{
         float: left
     }
+.mint-datetime-confirm{
+        width: auto;
+    height: auto;
+    padding: 0 10px;
+    margin: 3px 0;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 6px;
+    background: #26a2ff;
+    color: #fff;
+}
+.mint-datetime-cancel{
+        width: auto;
+    height: auto;
+    color: #aaa;
+    padding: 0 10px;
+    margin: 3px 0;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 6px;
+}
 </style>
