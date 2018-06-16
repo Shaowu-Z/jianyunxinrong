@@ -206,7 +206,7 @@
                 </div>
             </div>
             </div>
-            <div id="select_children" class="mui-page">
+            <div id="select_children" class="mui-page" style="display:none">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
@@ -323,7 +323,7 @@
                 </div>
             </div>
         </div>
-        <div id="select_children" class="mui-page">
+        <div id="select_children" class="mui-page" style="display:none">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
@@ -338,7 +338,7 @@
                     <div class="mui-scroll">
                         <section class="mui-content">
                             <div id="dept_head" class="group-header">
-                                <div id="select_children_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
+                                <div id="select_children_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted" style="display:none">
                                     <div id="children_scroll" class="mui-scroll">
                                         <div class="mui-control-item selected">
                                             联系人 &gt;
@@ -440,7 +440,7 @@
                 </div>
             </div>
         </div>
-        <div id="select_project" class="mui-page">
+        <div id="select_project" class="mui-page" style="display:none">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
@@ -589,6 +589,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../playform/common'
+import mui from '../../playform/mui'
 export default {
     data () {
         return {
@@ -859,7 +860,9 @@ export default {
         param.append("userId", "");
         setTimeout(function(){
 	        _self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
-	            _self.friendsList = this.convertData(response.data.result);
+                
+                _self.friendsList = convertData(response.data.result);
+                console.log(_self.friendsList)
 	            _self.updated();
 	        }).catch(function (error) {
 	            console.info(error);
@@ -1105,7 +1108,7 @@ export default {
 			var _self = this;
 //			_self.$data.deptList = [];
 //			_self.$data.selDept = [];
-			_self.$data.memberList = [];
+			_self.memberList = [];
 //			console.log(projectName)
 			var obj = {teamId:projectSN,teamName:projectName,type:1};
 			var lengths = historyArr.length;
@@ -1473,7 +1476,7 @@ export default {
                 par = {teamId:teamId};
             }
             this.$http.post("/concats_api/query_team_members",par).then(function (response) {
-                _self.$data.memberList = response.data.result;
+                _self.memberList = response.data.result;
             }).catch(function (error) {
                 console.info(error);
             });
