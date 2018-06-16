@@ -6,18 +6,10 @@ const projectList = resolve => require(['@/components/laowu/projectList'], resol
 const normalConfig = resolve => require(['@/components/laowu/normalConfig'], resolve)
 const gongZhong = resolve => require(['@/components/laowu/gongZhong'], resolve)
 const gongRenList = resolve => require(['@/components/laowu/gongRenList'], resolve)
-const dianGongGongRen = resolve => require(['@/components/laowu/dianGongGongRen'], resolve)
-const dianGongGongZhang = resolve => require(['@/components/laowu/dianGongGongZhang'], resolve)
-const dianGongDetail = resolve => require(['@/components/laowu/dianGongDetail'], resolve)
-const baoGongGongRen = resolve => require(['@/components/laowu/baoGongGongRen'], resolve)
-const baoGongGongZhang = resolve => require(['@/components/laowu/baoGongGongZhang'], resolve)
-const baoGongGongDetail = resolve => require(['@/components/laowu/baoGongGongDetail'], resolve)
-const jiezhiGongRen = resolve => require(['@/components/laowu/jiezhiGongRen'], resolve)
-const jiezhiGongZhang = resolve => require(['@/components/laowu/jiezhiGongZhang'], resolve)
-const jiezhiDetail = resolve => require(['@/components/laowu/jiezhiDetail'], resolve)
-const jiesuanGongRen = resolve => require(['@/components/laowu/jiesuanGongRen'], resolve)
-const jiesuanGongZhang = resolve => require(['@/components/laowu/jiesuanGongZhang'], resolve)
-const jiesuanDetail = resolve => require(['@/components/laowu/jiesuanDetail'], resolve)
+const recordGongRen = resolve => require(['@/components/laowu/recordGongRen'], resolve)
+const recordGongZhang = resolve => require(['@/components/laowu/recordGongZhang'], resolve)
+const recordDetail = resolve => require(['@/components/laowu/recordDetail'], resolve)
+
 
 
 const laowuConfig = {
@@ -46,51 +38,51 @@ const laowuConfig = {
     },
     {
       path: '/static/webstatic/new_laowu/project_diangong_gongren.html',//点工--工人
-      component: dianGongGongRen
+      component: recordGongRen
     },
     {
       path: '/static/webstatic/new_laowu/project_diangong_gongzhang.html',//点工--工长
-      component: dianGongGongZhang
+      component: recordGongZhang
     },
     {
       path: '/static/webstatic/new_laowu/project_diangong_detail.html',//点工--详情
-      component: dianGongDetail
+      component: recordDetail
     },
     {
       path: '/static/webstatic/new_laowu/project_baogong.html',//包工 --工人
-      component: baoGongGongRen
+      component: recordGongRen
     },
     {
       path: '/static/webstatic/new_laowu/project_baogong_gongzhang.html',//包工 --工长
-      component: baoGongGongZhang
+      component: recordGongZhang
     },
     {
       path: '/static/webstatic/new_laowu/project_baogong_detail.html',//包工 --详情
-      component: baoGongGongDetail
+      component: recordDetail
     },
     {
       path: '/static/webstatic/new_laowu/project_jiezhi.html',//借支--工人
-      component: jiezhiGongRen
+      component: recordGongRen
     },
     {
       path: '/static/webstatic/new_laowu/project_jiezhi_gongzhang.html',//借支--工长
-      component: jiezhiGongZhang
+      component: recordGongZhang
     },
     {
       path: '/static/webstatic/new_laowu/project_jiezhi_detail.html',//借支--详情
-      component: jiezhiDetail
+      component: recordDetail
     },
     {
       path: '/static/webstatic/new_laowu/project_jiesuan.html',//结算--工人
-      component: jiesuanGongRen
+      component: recordGongRen
     },
     {
       path: '/static/webstatic/new_laowu/project_jiesuan_gongzhang.html',//结算--工长
-      component: jiesuanGongZhang
+      component: recordGongZhang
     },
     {
       path: '/static/webstatic/new_laowu/project_jiesuan_detail.html',//结算--详情
-      component: jiesuanDetail
+      component: recordDetail
     }
   ]
 }

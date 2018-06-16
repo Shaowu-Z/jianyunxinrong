@@ -1,16 +1,16 @@
 <template>
   <div>
-   <header class="mui-bar mui-bar-nav">
+    <header class="mui-bar mui-bar-nav">
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
-	<h1 class="mui-title">记包工</h1>
+	<h1 class="mui-title">{{title}}</h1>
 </header>
-    <div id="app" style="display:none;">
+     
+<div id="app">
 
-	<section class="mui-content" style="margin-top:44px">
+	<section class="mui-content" style="margin-top:44px;text-align:left">
 		<ul class="mui-table-view eg-table-view">
-
 			<li class="mui-table-view-cell mui-input-row" @click="selectDate('s')">
 				<a class="mui-navigate-right">
 					<label>日期<small>*</small></label>
@@ -27,17 +27,18 @@
 			<h4 class="oa-title">记工工人<small class="small">*</small></h4>
 			<div v-for="(user,index) in data.selectUserList" :key="index" >
 			<div class="oa-contact-cell mui-table">
-				<div class="oa-contact-avatar mui-table-cell square"><!--imghost + -->
+				<div class="oa-contact-avatar mui-table-cell square"><!--imghost-->
 					<span class="user-header"><img v-bind:src="user.ucon" alt="..." /></span>
 				</div>
 				<div class="oa-contact-content mui-table-cell" >
 					<h4 class="oa-contact-name">
 						<span class="" v-text="user.userName"></span>
+						<small @click="openNormalHtml(user,2)" class="color-primary">工资标准</small>
+						<a v-if="user.datePrice==null||user.datePrice==''" style="    font-size: 20px;" class="mui-icon mui-icon-info"></a>
 					</h4>
 				</div>
 				<div class="oa-contact-content mui-table-cell">
-					<!--setMoney(2)-->
-					<a @click="deleteAry(user);" class="mui-icon mui-icon-trash mui-pull-right"></a>
+					<a @click="deleteAry(user);setMoney(2)" class="mui-icon mui-icon-trash mui-pull-right"></a>
 				</div>
 			</div>
 			<div class="oa-contact-cell mui-table">
@@ -54,7 +55,7 @@
 			</div>
 			</div>
 		</div>
-		<div  class="eg-header" @click="openGongrenList(2)">
+		<div  class="eg-header" @click="openGongrenList(1)">
 			<div class="upfujian">
 				<div class="addimg">
 					<div class="mui-icon mui-icon-plusempty scimg"></div>
@@ -64,28 +65,18 @@
 		</div>
 		<ul class="mui-table-view eg-table-view">
 
-			<li class="mui-table-view-cell mui-input-row">
-				<label>分项<small>*</small></label>
-				<input type="text" name="fenxiangName" value="" placeholder="请输入(必填)" v-model="form.fenxiangName"/>
+			<li class="mui-table-view-cell mui-input-row" @click="open_time_popver(1)">
+				<a class="mui-navigate-right">
+				<label>上班时长<small>*</small></label>
+				<input type="text" name="workHourName" readonly="readonly" value="" placeholder="请选择时长" v-model="form.workHourName"/>
+				</a>
 			</li>
-			<li class="mui-table-view-cell mui-input-row">
-				<label>单价<small>*</small></label>
-				<input type="number" name="price" oninput="setBaoGongMoney();" value="" placeholder="请输入(必填)" v-model="form.price"/>
+			<li class="mui-table-view-cell mui-input-row" @click="open_time_popver(2)">
+				<a class="mui-navigate-right">
+				<label>加班时长</label>
+				<input type="text" name="overHourName"  readonly="readonly" value="" placeholder="请选择时长" v-model="form.overHourName"/>
+				</a>
 			</li>
-			<div class="singlebox mui-input-row input-row-unit">
-				<label>数量</label>
-				<input type="number" name="number" oninput="setBaoGongMoney();" v-model="form.number" class="mui-input-clear" value="" placeholder="数量(必填)"/>
-				<span class="mui-icon mui-icon-clear"></span>
-				<button @click="open_unit_popver()" class="mui-btn btn-unit">
-					<span name="unit" v-text="form.unit"></span><span  class="mui-icon mui-icon-arrowdown"></span>
-				</button>
-			</div>
-			<!--<li class="mui-table-view-cell mui-input-row" @click="open_number_popver(1)">-->
-				<!--<a class="mui-navigate-right">-->
-				<!--<label>数量<small>*</small></label>-->
-				<!--<input type="text" name="numberName" readonly="readonly" value="" placeholder="请填写数量" v-model="form.numberName"/>-->
-				<!--</a>-->
-			<!--</li>-->
 			<li class="mui-table-view-cell mui-input-row">
 				<label>备注</label>
 				<input type="text" name="remark" value="" placeholder="请输入(选填)" v-model="form.remark"/>
@@ -94,48 +85,10 @@
 		<div class="fixed-bottom">
 			<div class="confirm-box">
 				<div class="count-con">工资金额：￥<span id="money" class="num">0.00</span></div>
-				<div class="btn-con"><button @click="saveDataMutil(2)" class="mui-btn mui-btn-primary">保存</button></div>
+				<div class="btn-con"><button @click="saveDataMutil(1)" class="mui-btn mui-btn-primary">保存</button></div>
 			</div>
 		</div>
 	</section>
-
-	<div id="cus_number_popver" onblur="outfocus();" v-show="select_time" class="mui-popover mui-popover-action mui-popover-bottom">
-		<div class="pop-up2">
-			<div class="pop-title" >填写数量</div>
-			<div class="pop-content select-box mui-clearfix">
-				<div  class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<input style="width: 64%;margin-left: 2%;" type="text" name="number" value="" placeholder="填写数量" v-model="form.number"/>
-						<input @click="open_unit_popver(1)" readonly="readonly"  style="width: 30% ;float: right;margin-right: 2%;" type="text" name="unit" value="" placeholder="请选择单位" v-model="form.unit"/>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="cus_unit_popver"  class="mui-popover mui-popover-action mui-popover-bottom">
-		<div class="pop-up2">
-			<div class="pop-title" >选择单位</div>
-			<div class="pop-content select-box mui-clearfix">
-				<div  class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="col-xs-8 mui-clearfix">
-							<div class="mui-input-row mui-checkbox mui-left">
-								<div class="filtrate-body filtrate-primary">
-									<div v-for="(unit,index) in data.unitList" :key="index">
-										<div class="item" @click="unitClick(unit)" >
-											<!--{{unit.baseId==select_unit}}-->
-											<span v-if="select_unit==unit.baseName" class="mui-active" v-text="unit.baseName"></span>
-											<span v-else class=""  v-text="unit.baseName"></span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<div id="cus_time_popver" v-show="select_time" class="mui-popover mui-popover-action mui-popover-bottom">
 		<div class="pop-up2">
 			<div class="pop-title" v-text="select_name"></div>
@@ -158,14 +111,10 @@
 				</div>
 			</div>
 
-			<div class="pop-footer btn-contain">
-				<button @click="closePop()" type="button" class="mui-btn mui-btn-primary mui-btn-block zrrr">关闭</button>
-			</div>
 		</div>
 	</div>
 
 </div>
-
 
   </div>
 </template>
@@ -173,6 +122,7 @@
 <script>
 import { DatetimePicker } from "mint-ui";
 import laowu_main from "./js/laowu_main.js";
+import laowu_common from "./js/laowu_common.js";
 export default {
   data() {
     return {
@@ -258,7 +208,8 @@ export default {
       show_button: "", //显示保存或者删除按钮
       save_type: "",
       loginType: "",
-      checkNormalFlag: false
+			checkNormalFlag: false,
+			title:"",
     };
   },
   created: function() {
@@ -266,7 +217,9 @@ export default {
 
     laowu_main._self = this;
     laowu_main.initVue();
-    laowu_main.initData();
+		laowu_main.initData();
+		this.setTitle();
+		
   },
   methods: {
     openPicker: function() {
@@ -278,7 +231,21 @@ export default {
     },
     openNormalHtml:function(user, type){
       laowu_main.openNormalHtml(user, type);
-    }
+		},
+		setTitle:function(){
+			var _self=this;
+			var recordType=laowu_common.recordType;
+			var mutil=laowu_common.mutil;
+			if(recordType==1){
+				_self.title="记点工"
+			}else if(recordType==2){
+				_self.title="记包工"
+			}else if(recordType==3){
+				_self.title="记借支"
+			}else if(recordType==4){
+				_self.title="记结算"
+			}
+		},
   }
 };
 </script>
@@ -341,5 +308,3 @@ export default {
 	<style>
 		.cus-icon-pst{  float: left;width: 25px;height: 25px;margin-right: 16px;margin-top:12px}
 	</style>
-
-
