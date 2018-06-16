@@ -110,7 +110,8 @@
     </template>
 
 <script>
-import project_sign from  "./project_sign.js"
+
+import project_sign from  "./js/project_sign.js"
 import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
 export default {
     data(){
@@ -170,7 +171,8 @@ export default {
     created:function(){
 	 project_sign._self=this;
      project_sign.initVue()
-     project_sign.initData()
+	 project_sign.initData()
+	
      
        
     },

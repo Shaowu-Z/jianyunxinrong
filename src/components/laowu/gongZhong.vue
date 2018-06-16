@@ -27,7 +27,7 @@
 						<li :data-value="item.first" name="phoneData" @click="selectGongZhong(item)" class=" mui-table-view-cell mui-indexed-list-item mui-checkbox">
 							<div class="mui-slider-cell">
 								<div class="oa-contact-cell mui-table">
-									<div class="oa-contact-content mui-table-cell">
+									<div class="oa-contact-content mui-table-cell" style="padding:13px 0">
 										<h4 class="oa-contact-name" v-text="item.mingcheng"></h4>
 									</div>
 								</div>
@@ -146,9 +146,9 @@ body {
 }
 
 .mui-indexed-list-inner {
-  -webkit-transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  -webkit-perspective: 1000;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  perspective: 1000;
 }
 .address-list {
   padding-top: 44px;
@@ -167,4 +167,5 @@ body {
 .mui-indexed-list-inner {
   overflow: scroll;
 }
+
 </style>

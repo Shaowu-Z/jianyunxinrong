@@ -40,8 +40,11 @@
   </div>
 </template>
 <script>
-import project_sign from  "./project_sign.js"
+import project_sign from  "./js/project_sign.js"
 import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
+ function setLocationResult(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
+        alert(2)
+      }
 export default {
     data(){
         return {
@@ -121,9 +124,10 @@ export default {
       }
     },
     mounted(){
-
+    
     }
 }
+
 </script>
 <style>
   .oa-contact-email{

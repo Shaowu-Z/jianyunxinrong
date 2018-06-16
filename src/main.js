@@ -32,6 +32,7 @@ let http = axios.create({
 })
 Vue.use(http)
 Vue.use(router)
+// Vue.use(mui)
 Vue.use(mui)
 Vue.use(Mint)
 Vue.use(MintUI)

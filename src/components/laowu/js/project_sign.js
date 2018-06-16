@@ -4,8 +4,8 @@
  * 2018.6.7
  */
 import laowu_common from"./laowu_common.js"
-import image_retate from '../../playform/image_retate.js'
-import util from '../../playform/util.js'
+import image_retate from '../../../playform/image_retate.js'
+import util from '../../../playform/util.js'
 var _self=null;
 var axios=null;
 
