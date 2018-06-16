@@ -68,21 +68,19 @@
 export default {
 	data(){
 		return{
-			phones: [1]
+			phones: []
 		}
-	},
-	created(){
-		 window.appApi.getContacts();	
 	},
 	methods: {
 		goBack(){
 			this.$router.go(-1)
 		},
-		addFriends(index1, index2) {
-            var phoneMap = this.$data.phones[index1][index2];
+        addFriends(index1, index2) {
+            var phoneMap = this.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
             this.$http.post("/concats_api/insert_add_info", addVo).then(function (response) {
+				console.log(response)
                 var friendVO = response.data.result;
                 if(friendVO.isOwnOrFriend=="0"){
                     msg("不可添加自己为好友!");
@@ -97,70 +95,49 @@ export default {
                 remin("好友请求发送失败，请联系管理员!", 2);
                 console.info(error);
             });
-		},
-		importPhones:function () {
+        },
+        importPhones () {
             //loading("同步中...");
-            window.appApi.getContacts()
+            appApi.getContacts()
 
         }
-	},
-	updated:function () {//DOM更新时，进行调用的方法
+    },
+    updated() {//DOM更新时，进行调用的方法
         document.getElementById("list").style.display = "block";
         mui.ready(function () {
             var header = document.querySelector('header.mui-bar');
             var list = document.getElementById('list');
             list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
             // alert(list.innerHTML);
-            window.indexedList = new mui.IndexedList(list)
+            indexedList = new mui.IndexedList(list)
         });
-    },
-	mounted(){
-		let _self = this
+	},
+	created(){
+		// 获取通讯录联系人
+		appApi.getContacts();
+		// 查询用户好友
 		appApi.callBackFun = function (callFlag, CONTENT) {
-			
-			let isLoginIm = true;
-			if (callFlag === appApi.callBackFlag.CONTACTS) {
+			var appPl = this
+			isLoginIm = true;
+			if (callFlag == appApi.callBackFlag.CONTACTS) {
 				//查询用户的好友
 				var param = new FormData();
 				param.append("userId", "");
-				_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
+				this.$http.post("/concats_api/find_eg_list", param).then(function (response) {
 					var resultArray = response.data.result;
+					alert(resultArray);
 					var resultStr = ",";
-					alert(resultArray.cellPhone)
 					for(var i in resultArray){
 						resultStr = resultStr + resultArray[i].cellPhone + ",";
 					}
-					alert(_self.phones)
-					_self.phones = Object.assign(CONTENT.result, resultStr);
-					alert(_self.phones)
+					// appPl.phones = convertData(CONTENT.result, resultStr);
 				}).catch(function (error) {
 					console.info(error);
 				});
-
-
-
 			}
-			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
-			var result = CONTENT.result;
-			if(result == true){
-			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
-			// console.info('保存用户信息成功！');
-			// warm('保存用户信息成功！');
-			}else{
-			// console.info('保存用户信息失败！');
-			// warm('保存用户信息到本地失败！');
-			}
-			loading('登录成功！正在跳转到主页！');
-			window.appApi.goHome();
-			}else{
-			layer.close(index);
-			warm('登录失败，请重新登录!');
-			}
-			}*/
 		},
-		function convertData (resultCon, resultPhone) {
+	function convertData (resultCon, resultPhone) {
 			if (resultCon && resultCon != "") {
-
 				//加载手机号码
 				var phoneArray = resultCon.split(",");
 				var newArrs = new Array();
@@ -376,8 +353,7 @@ export default {
 				return []
 			}
 		}
-	},
-	
+	}
 }
 </script>
 

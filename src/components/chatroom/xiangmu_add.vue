@@ -198,8 +198,7 @@ export default {
             pickervalues:'',
             value:[],
             timeType:'',
-            address:0,
-            City:'所在地区' 
+            address:0, 
         }
     },
     created() {
@@ -942,10 +941,10 @@ export default {
             appApi.openNewWindow(pagepath+'/chatroom/project_member_list.html?projectSN='+projectSN+"&method=list&project="+project);
         },
         choicePlace:function(){//工程地点选择 - 打开百度地图选择地点
-            window.appApi.getLocation();  //获取当前位置
+            //window.appApi.getLocation();  //获取当前位置
             var _self=this;
-            if(appApi.isApp && appApi.isIphoneOs) {
-                appApi.showAddress(1,"",0,0);   
+            if(isApp && isIphoneOs) {
+                appApi.showAddress(1,"",0,0);
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
                         setTimeout(function () {
@@ -956,8 +955,7 @@ export default {
                         }, 50)
                     }
                 }
-            } else if(appApi.isApp && appApi.isAndroid) {
-                
+            } else if(isApp && isAndroid) {
                 window.webactivity.openBaiduMapPage(1,"",0,0);
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
@@ -973,7 +971,7 @@ export default {
                 console.info("设备不支持获取位置信息");
                 return "设备不支持获取位置信息";
             }
-        },
+            },
         formDate(value) {
             var date = new Date(value);
             Y = date.getFullYear(),
