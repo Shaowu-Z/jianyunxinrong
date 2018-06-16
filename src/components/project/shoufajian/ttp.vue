@@ -17,9 +17,9 @@
                 </a>
             </li>
         </ul> -->
-        <area-bar :title="returntitle"></area-bar>
+        <area-bar :title="returntitle" :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
         <data-bar ></data-bar>
-
+        <button @click="aa">dianji</button>
     </div>
 
 </template>
@@ -35,10 +35,24 @@ import dataBar from "../../common/dataBar"
             areaBar,
             dataBar,
         },
-        props: {},
+        props: {
+        },
         data () {
             return {
-                returntitle:"地区"
+                test:"",
+                solt:[
+                    {
+                    flex: 1,
+                    defaultIndex: 1,
+                    values: ["1.5","2.2","3.6"], //省份数组
+                    className: "slot1",
+                    textAlign: "center"
+                    }
+                    ]
+                    
+                ,
+                areatype:"2",
+                returntitle:"时间"
             //     popupVisible:false,
             //     showToolbar:[
                     
@@ -83,6 +97,13 @@ import dataBar from "../../common/dataBar"
 
         },
         methods: {
+              childValue:function(val){
+                console.log("value"+val)
+                this.test=val;
+            },
+             aa:function(){
+                 alert( this.test)
+            },
         //   onMyAddressChange(picker, values) {
         //       var _self=this
         //       if(myaddress[values[0]]){    //这个判断类似于v-if的效果（可以不加，但是vue会报错，很不爽）

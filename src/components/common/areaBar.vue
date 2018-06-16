@@ -5,7 +5,7 @@
                 <a class="mui-navigate-right" href="#">
                     <label v-text="title"></label>
                     
-                    <input type="text" v-model="area" name="start" id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
+                    <input type="text" v-model="area"  name="start" id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
                     <mt-popup
                         v-model="popupVisible"
                         position="bottom">
@@ -29,7 +29,9 @@ export default {
     "mt-picker": Picker
   },
   props: {
-    title: ""
+    title: "",
+    areatype:"",
+    shuju:'',
   },
   data() {
     return {
@@ -91,13 +93,21 @@ export default {
     },
     makesure() {
       var _self = this;
+      if(this.type==1){
       _self.area =
         this.$refs.picker.getValues()[0] +
         "-" +
         this.$refs.picker.getValues()[1] +
         "-" +
         this.$refs.picker.getValues()[2];
-      _self.popupVisible = !_self.popupVisible;
+       this.$emit('toParent', _self.area)
+      }else if(this.type==2){
+        _self.area =
+        this.$refs.picker.getValues()[0]
+        this.$emit('toParent', _self.area)
+      }
+       _self.popupVisible = !_self.popupVisible;
+
     },
     makepass() {
       this.popupVisible = !this.popupVisible;
