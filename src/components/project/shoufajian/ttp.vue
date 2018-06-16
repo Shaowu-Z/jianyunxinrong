@@ -17,8 +17,9 @@
                 </a>
             </li>
         </ul> -->
-        <area-bar :title="returntitle" :areatype="areatype" :shuju="solt"></area-bar>
+        <area-bar :title="returntitle" :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
         <data-bar ></data-bar>
+        <button @click="aa">dianji</button>
     </div>
 
 </template>
@@ -35,9 +36,11 @@ import tipApi from "../js/tipApi"
             areaBar,
             dataBar,
         },
-        props: {},
+        props: {
+        },
         data () {
             return {
+                test:"",
                 solt:[
                     {
                     flex: 1,
@@ -100,8 +103,12 @@ import tipApi from "../js/tipApi"
             // })
         },
         methods: {
+              childValue:function(val){
+                console.log("value"+val)
+                this.test=val;
+            },
              aa:function(){
-                alert("请确认")
+                 alert( this.test)
             },
         //   onMyAddressChange(picker, values) {
         //       var _self=this
