@@ -9,7 +9,11 @@
                     <mt-popup
                         v-model="popupVisible"
                         position="bottom">
-                    <mt-picker :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                    <mt-picker v-if="type==1" :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                        <mt-button size="small" @click.native="makepass">取消</mt-button>
+                        <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
+                    </mt-picker>
+                    <mt-picker v-if="type==2" :slots="solt" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
                         <mt-button size="small" @click.native="makepass">取消</mt-button>
                         <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
                     </mt-picker>
@@ -29,10 +33,14 @@ export default {
     "mt-picker": Picker
   },
   props: {
-    title: ""
+    title: "",
+    areatype:"",
+    shuju:''
   },
   data() {
     return {
+      solt:this.shuju,
+      type:this.areatype,
       popupVisible: false,
       showToolbar: [],
       myAddressSlots: [
@@ -73,7 +81,9 @@ export default {
       area: ""
     };
   },
-  created() {},
+  created() {
+    console.log(this.type)
+  },
   methods: {
     onMyAddressChange(picker, values) {
       var _self = this;
@@ -91,13 +101,18 @@ export default {
     },
     makesure() {
       var _self = this;
+      if(this.type==1){
       _self.area =
         this.$refs.picker.getValues()[0] +
         "-" +
         this.$refs.picker.getValues()[1] +
         "-" +
         this.$refs.picker.getValues()[2];
-      _self.popupVisible = !_self.popupVisible;
+      }else if(this.type==2){
+        _self.area =
+        this.$refs.picker.getValues()[0]
+      }
+       _self.popupVisible = !_self.popupVisible;
     },
     makepass() {
       this.popupVisible = !this.popupVisible;

@@ -17,9 +17,8 @@
                 </a>
             </li>
         </ul> -->
-        <area-bar :title="returntitle"></area-bar>
+        <area-bar :title="returntitle" :areatype="areatype" :shuju="solt"></area-bar>
         <data-bar ></data-bar>
-
     </div>
 
 </template>
@@ -28,6 +27,7 @@ import { Picker } from 'mint-ui';
 import myaddress from "../js/city";
 import areaBar from "../../common/areaBar"
 import dataBar from "../../common/dataBar"
+import tipApi from "../js/tipApi"
     export default {
       name: '',
         components: {
@@ -38,7 +38,19 @@ import dataBar from "../../common/dataBar"
         props: {},
         data () {
             return {
-                returntitle:"地区"
+                solt:[
+                    {
+                    flex: 1,
+                    defaultIndex: 1,
+                    values: ["1.5","2.2","3.6"], //省份数组
+                    className: "slot1",
+                    textAlign: "center"
+                    }
+                    ]
+                    
+                ,
+                areatype:"2",
+                returntitle:"时间"
             //     popupVisible:false,
             //     showToolbar:[
                     
@@ -80,9 +92,17 @@ import dataBar from "../../common/dataBar"
             }
         },
         created() {
-
+            var _self=this
+            // tipApi.makeSure("这是美容","取消","确认",function(){
+            //     _self.aa()
+            // },function(){
+            //     alert("取消")
+            // })
         },
         methods: {
+             aa:function(){
+                alert("请确认")
+            },
         //   onMyAddressChange(picker, values) {
         //       var _self=this
         //       if(myaddress[values[0]]){    //这个判断类似于v-if的效果（可以不加，但是vue会报错，很不爽）

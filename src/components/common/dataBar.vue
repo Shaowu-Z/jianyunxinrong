@@ -12,8 +12,8 @@
                     <!-- <input type="text" v-model="form.MissionStartDate" @click="app.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
     
                     <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="openPicker">
-    
-                    <mt-datetime-picker ref="picker" v-model="pickerVisible" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm">
+
+                    <mt-datetime-picker  ref="picker" v-model="pickerVisible" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm">
                     </mt-datetime-picker>
     
                 </a>
@@ -40,6 +40,9 @@ import { Toast } from "mint-ui";
                 pickerVisible: new Date(),
                 form:{MissionStartDate:''}
             }
+        },
+        created(){
+            
         },
         methods:{
             openPicker() {
