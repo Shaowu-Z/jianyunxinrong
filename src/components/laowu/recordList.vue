@@ -779,7 +779,7 @@ export default {
         .data {
             padding: 0 20%;
         }
-        .mm-btn {}
+        /* .mm-btn {} */
         .ex-case .mui-table-cell{
             padding: 0;
         }

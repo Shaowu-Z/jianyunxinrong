@@ -414,11 +414,11 @@ export default {
 			box-shadow: none;
 		}
 
-		.mui-indexed-list-inner {
+		/* .mui-indexed-list-inner {
 			-webkit-transform-style: preserve-3d;
 			-webkit-backface-visibility: hidden;
 			-webkit-perspective: 1000;
-		}
+		} */
 		.mui-indexed-list-bar .mui-hidden{
 			display: block!important;
 		}

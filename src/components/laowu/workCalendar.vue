@@ -102,7 +102,7 @@ export default {
 				font-size: 16px;
 				display: inline-block;
 				height: 24px;
-				float: left;
+				/* float: left; */
 				line-height: 24px;
 				 width: auto;
 			}
