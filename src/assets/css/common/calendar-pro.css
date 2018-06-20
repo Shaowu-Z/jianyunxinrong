@@ -1,0 +1,183 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	-webkit-tap-highlight-color: transparent;
+}
+
+.demo-box {
+	overflow: hidden;
+	background: #FFFFFF;
+}
+
+
+/*******单独组件样式********/
+
+.calendar-box * {
+	box-sizing: border-box;
+}
+
+.ht-rili-head {
+	overflow: hidden;
+	height: 41px;
+	border: 1px solid #eee;
+	border-left: 0;
+	border-right: 0;
+}
+
+.ht-rili-querybox {
+	overflow: hidden;
+}
+
+.ht-rili-title {
+	padding: 10px;
+	display: inline-block;
+	max-width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.ht-rili-datebox {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0 10px;
+	width: 100%;
+}
+
+.ht-rili-date {
+	text-align: center;
+	display: inline-block;
+	width: calc(100% - 60px);
+	height: 41px;
+	line-height: 41px;
+	font-size: 15px;
+	vertical-align: middle;
+}
+
+.ht-rili-leftarr {
+	display: inline-block;
+	width: 30px;
+	height: 41px;
+	background: url("../../images/left-arr.png") left center no-repeat;
+	background-size: 20px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.ht-rili-rightarr {
+	height: 41px;
+	display: inline-block;
+	width: 30px;
+	background: url("../../images/right-arr.png") right center no-repeat;
+	background-size: 20px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.ht-rili-th {
+	width: 14.25%;
+	float: left;
+	text-align: center;
+	font-size: 15px;
+	height: 41px;
+	line-height: 41px;
+	color: #777;
+}
+
+.ht-rili-td {
+	width: 14.25%;
+	float: left;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 3px;
+	cursor: pointer;
+}
+.ht-rili-onclick{
+	position: relative
+}
+.ht-rili-onclick:before{
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    z-index: 2;
+    font-size:13px;
+    content: "今天";
+    display: block;
+    color: #fff;
+    background: #4ba9e9;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    margin-left:-15px;
+}
+.ht-rili-body {
+	padding-top:10px;
+	overflow: hidden;
+}
+
+.ht-rili-day {
+	font-family: Arial;
+	font-size: 18px;
+	display: inline-block;
+	height: 24px;
+	line-height: 24px;
+	width: 24px;
+}
+
+.ht-rili-money {
+    font-family: Arial;
+    height: 14px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #777;
+    text-align: center;
+}
+.ht-rili-money.low {color:#f00;}
+.ht-rili-money.high {color:#0bea00;}
+.ht-rili-td-disabled {
+	color: #999;
+}
+
+.ht-rili-td-active {
+	border-radius: 3px;
+	background: rgba(75, 169, 233,.1);
+	cursor: pointer;
+}
+
+.left_rili {
+	display: none;
+}
+
+.col {
+	color: #000;
+}
+.sign .col,.confirm,.confirm-half {
+	position: relative;
+}
+.sign .col:before {
+    position: absolute;
+    top: 0px;
+    right: -8px;
+    z-index: 2;
+    content: "";
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: #f00;
+    border-radius: 50%;
+}
+.confirm .col:before{
+    background: #ccc;
+}
+.confirm-half .col:before{
+    background: #f96;
+}

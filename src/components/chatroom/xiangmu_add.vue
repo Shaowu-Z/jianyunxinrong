@@ -28,8 +28,10 @@
                         </mt-popup>
                     </a>
                 </li>
+
+                <!-- ssssssssssssssssssssssssssssss -->
                 <li class="mui-table-view-cell mui-input-row" @click="selectCity()">
-                        <area-Bar :title="City"></area-Bar>
+                        <area-Bar :title="City" :areatype="areatype"  @toParent="childValue"></area-Bar>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
                     <label class="text">工程地点</label>
@@ -50,12 +52,12 @@
                 </li>
 
                 <div id="selectDiv">
-                    <div v-if="form.gongChengFangID=='9'">
+                    <!-- <div v-if="form.gongChengFangID=='9'">
                         <li class="mui-table-view-cell mui-input-row">
                             <label class="text">专业</label>
                             <input type="text" name="roomName" v-model="roomform.roomName" value="" placeholder="必填"/>
                         </li>
-                    </div>
+                    </div> -->
                         <li v-if="form.gongChengFangID=='13'" class="mui-table-view-cell mui-input-row">
                             <label class="text">专业</label>
                             <input type="text" name="description" v-model="roomform.description" value="" placeholder="必填"/>
@@ -129,6 +131,7 @@
 import regions from '../../playform/regions' 
 import { Picker,Popup,Toast  } from 'mint-ui';
 import areaBar from '../common/areaBar'
+import {BackCookie,getParam} from '../../playform/common'
 export default {
     components: {
         'mt-picker': Picker,
@@ -136,6 +139,7 @@ export default {
     },
     data () {
         return {
+            areatype:1,
             form:{
                 PlaceZuobiao:"",//地图坐标
                 projectSN:"",
@@ -198,7 +202,14 @@ export default {
             pickervalues:'',
             value:[],
             timeType:'',
-            address:0, 
+            address:0,
+            City:'所在地区',
+            paramMap:[],
+            userName : '',
+            userId : '', 
+            projectSN:'',
+            urlProjectmanageIDs : '',
+            urlProjectmanageNames : ''
         }
     },
     created() {
@@ -210,6 +221,12 @@ export default {
         //     _self.showRecordById();
 
         // }
+        this.paramMap= getParam(window.location.href),
+        this.userName = decodeURI(BackCookie.getCookie("username")),
+        this.userId = BackCookie.getCookie("userid"), 
+        this.projectSN=this.paramMap.projectSN,
+        this.urlProjectmanageIDs = this.paramMap.userIds,
+        this.urlProjectmanageNames = this.paramMap.userNames
         //初始化职业标签
         _self.showzhiyeType();
         appApi.imgPreview.init();
@@ -290,6 +307,10 @@ export default {
             });
     },
     methods:{
+        childValue:function(val){
+                console.log("value"+val)
+                this.form.fullArea=val;
+        },
         addressRes(val){
             this.address = val;
         }, 
@@ -348,9 +369,7 @@ export default {
             // })
         },
 
-        selectCity:function () {//选择市区
-        
-        console.log(this.$refs.start)
+        selectCity:function (val) {//选择市区
             // var _self=this;
             // // 初始化省市区
             // var province = this.getProvince(regions);
@@ -775,7 +794,7 @@ export default {
             if(!_self.form.leibie){
                 // msg("工程不能为空")
                 Toast({
-                    message: '工程不能为空',
+                    message: '工程类别不能为空',
                     position: 'middle',
                     duration: 1000
                 });
@@ -790,11 +809,15 @@ export default {
                 });
                 return;
             }
-            /*if(!_self.form.placeShenbao){
-                msg("工程地点不能为空")
+            if(!_self.form.placeShenbao){
+                // msg("工程地点不能为空")
+                Toast({
+                    message: '工程地点不能为空',
+                    position: 'middle',
+                    duration: 1000
+                });
                 return;
-            }*/
-
+            }
             if(!_self.form.gongChengFangID){
                 // msg("我的组织类型不能为空")
                 Toast({
@@ -804,8 +827,8 @@ export default {
                 });
                 return;
             }
-
-            if(!projectSN){//创建项目
+            if(!_self.fm.projectSN){//创建项目
+                
                 if(_self.form.gongChengFangID=='9'){
                     if(!_self.roomform.roomName){
                         // msg("专业不能为空")
@@ -856,6 +879,7 @@ export default {
                         }*/
                     }
                 }
+
                 if(!_self.roomform.roomName&&_self.roomform.companyName){
                     _self.roomform.roomName=_self.roomform.companyName;//房间名称等于公司名称
                 }else if(!_self.roomform.companyName&&_self.roomform.roomName){
@@ -872,9 +896,9 @@ export default {
                 this.$http.post("/project_room_api/save_project",formdata).then(function (response) {
                     if(response.data.code==200){
                         var result=response.data.result;
-                        console.log("房间初始化",result)
+                        
 
-                        loading("项目创建成功，正在初始虚拟办公室信息...");
+                        // loading("项目创建成功，正在初始虚拟办公室信息...");
                         var roomdata=new FormData();
                         roomdata.append("projectSN",result.projectSN);
                         roomdata.append("roomName",result.roomName);
@@ -883,7 +907,7 @@ export default {
                         roomdata.append("companyCreditCode",result.companyCreditCode);
                         roomdata.append("description",result.description);
 
-                        this.$http.post("/pcontact_api/initprojectcontact",roomdata).then(function (response) {
+                        _self.$http.post("/pcontact_api/initprojectcontact",roomdata).then(function (response) {
                             console.log("房间初始化完成",response.data)
                             setTimeout(function () {
                                 layer.closeAll();
@@ -941,9 +965,9 @@ export default {
             appApi.openNewWindow(pagepath+'/chatroom/project_member_list.html?projectSN='+projectSN+"&method=list&project="+project);
         },
         choicePlace:function(){//工程地点选择 - 打开百度地图选择地点
-            //window.appApi.getLocation();  //获取当前位置
+            window.appApi.getLocation();  //获取当前位置
             var _self=this;
-            if(isApp && isIphoneOs) {
+            if(appApi.isApp && appApi.isIphoneOs) {
                 appApi.showAddress(1,"",0,0);
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {
@@ -955,7 +979,7 @@ export default {
                         }, 50)
                     }
                 }
-            } else if(isApp && isAndroid) {
+            } else if(appApi.isApp && appApi.isAndroid) {
                 window.webactivity.openBaiduMapPage(1,"",0,0);
                 window.appApi.callBackFun = function (callFlag, CONTENT) {
                     if (callFlag == appApi.callBackFlag.LOCATION) {

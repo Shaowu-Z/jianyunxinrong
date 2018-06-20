@@ -14,8 +14,7 @@ var project_sign={
         initVue:function(){//初始化vue引用和http请求，并定义全局变量方便使用
             _self=this._self;
             axios=_self.$http;
-             laowu_common._self=_self;
-             laowu_common.initVue();
+             laowu_common.initVue(_self);
            
         },
     
@@ -506,11 +505,7 @@ var project_sign={
                     console.info(error);
                 });
             },
-            goShare: function () {
-                var url = "/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
-                var logo = "/static/images/app-logo.jpg";
-                appApi.share(8, userName + "邀请您创建新项目", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
-            },
+         
 
             /*拍照确认后执行*/
             confirmFile:function() {

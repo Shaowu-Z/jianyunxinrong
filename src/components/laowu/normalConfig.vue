@@ -98,6 +98,7 @@ export default {
     //vue实例完成后调用的方法，有点类似与jq中的$(function(){})
     var _self = this;
     app=this;
+    laowu_common.initVue(_self)
     var paramMap=laowu_common.paramMap;
     var time_name=laowu_common.time_name;
     var money = paramMap.datePrice;

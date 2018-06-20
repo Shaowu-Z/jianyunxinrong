@@ -18,6 +18,7 @@ import './assets/css/common/common.less';
 import './assets/css/common/style.less';
 import './assets/css/common/layer.less';
 import './assets/css/common/mint.css';
+import './assets/css/common/calendar-pro.css';
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 

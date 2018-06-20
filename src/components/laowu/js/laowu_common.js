@@ -7,83 +7,21 @@ var opt = {"type": "date", "beginYear": 2000, "endYear": parseInt(new Date().get
 //引入外部js
 import {getParam} from '../../../playform/common.js'  
 import setting from '../../../playform/config.js'
-// var project={};
-// var projectImg={};
-// var paramMap= getParam(window.location.href);//获取地址栏参数
-// var date=null;//初始化当前日期
-// var time_name="小时算一个工";
-// var gongzhangId=null
-// var gongzhangName=null;
-// var gongzhangPhone=null;
-// var gongrenId=null;
-// var gongrenName=null;
-// var gongrenPhone=null;
-// var loginType="";//身份（0是工人；1是工头）
-// var recordType=paramMap.recordType;//单据类型
-// var dataType=paramMap.dataType;//显示数据类型；calendar显示我创建的和待我确认的，confirm只显示待我确认的
-// var queryTime = paramMap.queryTime;
-// var mutil=paramMap.mutil;//判断是否是批量记工
-// var serialNum=paramMap.serialNum;//序列号
-// var localgps=paramMap.localgps;
-// var type=paramMap.type;//判断是多人还是单人
-// var roomId="";
+import { EALREADY } from 'constants';
 
-// if(paramMap.roomId){
-//     roomId=paramMap.roomId;
-// }
-// var saveType=paramMap.saveType;//记录类型;//保存类型，add(默认新增)、save(创建关联单据)、del(删除)、update(修改自己的单据)、edit(修改自己的)
-// var userName = decodeURI(setting.getCookie("username"));
-
-// var userId = setting.getCookie("userid");
-// var date=null;//初始化当前日期
-
-// //由于ID不一样，需要分几种参数获取
-// //从地址栏获取项目ID**************
-// var projectId="";
-// var projectSn="";
-// var projectSN="";
-// if(paramMap.projectId){
-//     projectId=paramMap.projectId;//默认从链接获取
-// }
-// else if(paramMap.projectSn){//默认从链接获取
-//     projectSn=paramMap.projectSn;
-//     projectId=paramMap.projectSn;
-// }
-// else if(paramMap.projectSN){//默认从链接获取
-//     projectId=paramMap.projectSN;
-//     projectSN=paramMap.projectSN;
-//     projectSn=paramMap.projectSN;
-// }
-
-// //从地址栏获取项目ID**************
-
-// var projectName="";
-// if(paramMap.projectName){
-//     projectName = paramMap.projectName;//默认从链接获取
-// }
-// var confirmId=null;
-// if(paramMap.confirmId){//默认从链接获取
-//     confirmId=paramMap.confirmId;
-// }
-// var confirmName=null;
-// if(paramMap.confirmName){//默认从链接获取
-//     confirmName=paramMap.confirmName;
-// }
-// var confirmPhone=null;
 
 //定义全局变量
 var _self=null;
 var axios=null;
-
+var url=window.location.href;
 
 
 
 var laowu_common={
 
-     
      project:null,
      projectImg:null,
-     paramMap:getParam(window.location.href),//获取地址栏参数,//获取地址栏参数
+     paramMap:getParam(url),//获取地址栏参数,//获取地址栏参数
      time_name:"小时算一个工",
      gongzhangId:null,
      gongzhangName:null,
@@ -111,15 +49,28 @@ var laowu_common={
      confirmId:null,
      confirmName:null,
      confirmPhone:null,
+     timeList:[],
+     unitList:[],
      
 
-     initVue:function(){//初始化vue引用和http请求，并定义全局变量方便使用
+     initVue:function(_self){//初始化vue引用和http请求，并定义全局变量方便使用
        
-       _self=laowu_common._self;
        axios=_self.$http;
        var paramMap=laowu_common.paramMap;
        laowu_common.date=laowu_common.getNowFormatDate();
-       laowu_common.recordType=paramMap.recordType;
+       if(!paramMap.recordType){
+        if(url.indexOf("diangong_detail.html")!=-1){
+            laowu_common.recordType=1
+        }else if(url.indexOf("baogong_detail.html")!=-1){
+            laowu_common.recordType=2
+        }else if(url.indexOf("jiezhi_detail.html")!=-1){
+            laowu_common.recordType=3
+        }else if(url.indexOf("jiesuan_detail.html")!=-1){
+            laowu_common.recordType=4
+        }
+       }else{
+           laowu_common.recordType=paramMap.recordType;
+       }
        laowu_common.dataType=paramMap.dataType;
        laowu_common.queryTime=paramMap.queryTime;
        laowu_common.mutil=paramMap.mutil;
@@ -161,19 +112,20 @@ var laowu_common={
  * 加载房间信息
  */
  findRoomData:function() {
+     var result;
     console.log("加载房间信息...")
     var dataType=laowu_common.dataType;
     var paramMap=laowu_common.paramMap;
     if(dataType=="tododetail"||dataType=="todoview"||dataType=="todosign"||dataType=='todowork'){//从待办入口进来，房间ID参数不一样
         if(paramMap.roomId==null||paramMap.roomId==""||paramMap.roomId=="null"){
-            msg("房间参数异常,将使用默认的房间ID,roomId=198，房间名称为测试5");
+            alert("房间参数异常,将使用默认的房间ID,roomId=198，房间名称为测试5");
             laowu_common.roomId=1342;
         }else {
             laowu_common.roomId=paramMap.roomId;//获取房间ID
         }
     }else {//从房间点击链接
         if(paramMap.isRoomId==null||paramMap.isRoomId==""||paramMap.isRoomId=="null"){
-            msg("房间参数异常,将使用默认的房间ID,roomId=122，房间名称为测试5");
+            alert("房间参数异常,将使用默认的房间ID,roomId=122，房间名称为测试5");
             laowu_common.roomId=1342;
         }else {
             laowu_common.roomId=paramMap.isRoomId;//获取房间ID
@@ -190,7 +142,7 @@ var laowu_common={
         },
         datatype: "json",
         success: function(data) {
-           var result=data.result;
+            result=data.result;
             if(result){
                 laowu_common.projectId=result.projectSn;
                 laowu_common.projectSn=result.projectSn;
@@ -214,7 +166,7 @@ var laowu_common={
             console.log("err")
         }
     })
-
+   return result;
 },
 
 
@@ -355,10 +307,10 @@ var laowu_common={
         var list=[];
         $.ajax({
             type: "post",
-            url: getUrl()+"/project_work_api/find_torget_list",
+            url: "/api/project_work_api/find_torget_list",
             async: false,
             data: {
-                "userId":laowu_common.userId,
+                "userId":10439,//laowu_common.userId
                 "keyword":key
             },
             datatype: "json",
@@ -413,17 +365,18 @@ var laowu_common={
      * phone 工长手机号
      */
      findTotgetinvite:function(phonelist,remark) {
+         var host="";//当前域名
         var formData=new FormData();
         formData.append("userId",laowu_common.userId)
         formData.append("name",laowu_common.userName)
         formData.append("list",phonelist)
         formData.append("data",remark)
-        formData.append("url",getUrl()+"/static/webstatic/chatroom/xiangmu_add.html")
+        formData.append("url",host+"/static/webstatic/chatroom/xiangmu_add.html")
         axios.post("/project_work_api/find_torget_invite",formData).then(function (response) {
             if(response.data.code==200){
-                msg("邀请成功");
-                hidewindow();
-                hidebackdrop();
+                alert("邀请成功");
+                laowu_common.hidewindow();
+                laowu_common.hidebackdrop();
             }
         }).catch(function (error) {
             msg(error)
@@ -440,6 +393,50 @@ var laowu_common={
         console.info(error);
     });
 
+},
+
+showTimeLists: function () {//加载时间列表
+    var obj = new Object();
+    obj.type = 1;
+    axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
+        if (response.data.code == 200) {
+           
+            var result = response.data.result;
+            if (result.length > 0) {
+                laowu_common.timeList = result;
+            } else {
+                msg("未查询到时间列表!")
+            }
+        } else {
+            msg("查询时间列表出错!")
+        }
+    }).catch(function (error) {
+        console.info(error);
+    });
+},
+showUnitLists: function () {//加载单位列表
+    var obj = new Object();
+    obj.type = 2;
+    axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
+        if (response.data.code == 200) {
+            var result = response.data.result;
+            if (result.length > 0) {
+                //初始化单位
+                var unit = result[1];
+                if (!_self.form.unit) {
+                    _self.form.unit = unit.baseName;
+                    _self.select_unit = unit.baseName;
+                }
+                laowu_common.unitList = result;
+            } else {
+                msg("未查询到单位列表!")
+            }
+        } else {
+            msg("查询单位列表出错!")
+        }
+    }).catch(function (error) {
+        console.info(error);
+    });
 },
 
     /**
@@ -523,6 +520,25 @@ var laowu_common={
     return t;
 },
 
+ //制保留2位小数，如：2，会在2后面补上00.即2.00
+ toDecimal2:function(x){
+    var f = parseFloat(x);
+    if (isNaN(f)) {
+        return false;
+    }
+    var f = Math.round(x * 100) / 100;
+    var s = f.toString();
+    var rs = s.indexOf('.');
+    if (rs < 0) {
+        rs = s.length;
+        s += '.';
+    }
+    while (s.length <= rs + 2) {
+        s += '0';
+    }
+    return s;
+},
+
 //刷新页面
  reLoad:function() {
     setTimeout(function () {
@@ -536,7 +552,7 @@ var laowu_common={
     setTimeout(function () {
        appApi.refreshData();
     },1500)
-    closeLayer();
+    //closeLayer();
 },
 
  closePop:function(id) {
