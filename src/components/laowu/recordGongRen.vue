@@ -4,7 +4,7 @@
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
 	</button>
-	<h1 class="mui-title">记点工</h1>
+	<h1 class="mui-title">{{title}}</h1>
 </header>
 
 <div class="fixed-bottom" v-if="save_type=='update'||save_type=='save'">
@@ -38,39 +38,63 @@
 				<input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期">
 			</li>
 
-			<li class="mui-table-view-cell mui-input-row">
+     
+    <li class="mui-table-view-cell mui-input-row">
 				<label>项目<small>*</small></label>
 				<input type="text" name="projectName" readonly="readonly" value="" placeholder="请输入(必填)" v-model="form.projectName"/>
 			</li>
-            <li class="mui-table-view-cell mui-input-row" @click="openNormalHtml(null,1)">
-                <a class="mui-navigate-right">
-                    <div class="oa-contact-cell mui-table namelist">
-                        <div class="oa-contact-avatar mui-table-cell square">
-                            <label>工资<small>*</small></label>
-                        </div>
-                        <div class="oa-contact-content mui-table-cell">
-                            <h4 class="oa-contact-name" v-text="form.datePriceName"></h4>
-                            <p class="oa-contact-email">
-                                <span v-text="form.workNormalHour"></span>小时(上班)/
-                                <span v-text="form.overNormalHour"></span>小时(加班)
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </li>
+   
+   
+      <li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" @click="openNormalHtml(null,1)">
+          <a class="mui-navigate-right">
+              <div class="oa-contact-cell mui-table namelist">
+                  <div class="oa-contact-avatar mui-table-cell square">
+                      <label>工资<small>*</small></label>
+                  </div>
+                  <div class="oa-contact-content mui-table-cell">
+                      <h4 class="oa-contact-name" v-text="form.datePriceName"></h4>
+                      <p class="oa-contact-email">
+                          <span v-text="form.workNormalHour"></span>小时(上班)/
+                          <span v-text="form.overNormalHour"></span>小时(加班)
+                      </p>
+                  </div>
+              </div>
+          </a>
+      </li>
 
-			<li class="mui-table-view-cell mui-input-row" >
-				<a class="mui-navigate-right">
-				<label>上班时长<small>*</small></label>
-				<input type="text" name="workHourName" readonly="readonly" value="" placeholder="请选择时长" v-model="form.workHourName"/>
-				</a>
+			<li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" >
+         <area-bar :datanow="form.workHourName" :title="worktitle" :timeType=1 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
 			</li>
-			<li class="mui-table-view-cell mui-input-row" @click="open_time_popver(2)">
-				<a class="mui-navigate-right">
-				<label>加班时长<small>*</small></label>
-				<input type="text" name="overHourName" readonly="readonly" value="" placeholder="请选择时长" v-model="form.overHourName"/>
-				</a>
+			<li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" >
+         <area-bar :datanow="form.overHourName" :title="overtitle" :timeType=2 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
 			</li>
+
+          <li v-if="form.recordType==2" class="mui-table-view-cell mui-input-row">
+				<label>分项<small>*</small></label>
+				<input type="text" name="fenxiangName" value="" placeholder="请输入(必填)" v-model="form.fenxiangName"/>
+			</li>
+			<li v-if="form.recordType==2" class="mui-table-view-cell mui-input-row">
+				<label>单价<small>*</small></label>
+				<input type="number" name="price" v-on:input="setBaoGongMoney();" value="" placeholder="请输入(必填)" v-model="form.price"/>
+			</li>
+      <div v-if="form.recordType==2" class="singlebox mui-input-row input-row-unit">
+				<label>数量</label>
+				<input type="number" name="number" v-on:input="setBaoGongMoney();" v-model="form.number" class="mui-input-clear" value="" placeholder="数量(必填)"/>
+				<span class="mui-icon mui-icon-clear"></span>
+				<button @click="open_unit_popver()" class="mui-btn btn-unit">
+					<span name="unit" v-text="form.unit"></span><span  class="mui-icon mui-icon-arrowdown"></span>
+				</button>
+			</div>
+    
+      <li v-if="form.recordType==3" class="mui-table-view-cell mui-input-row">
+				<label>借支金额<small>*</small></label>
+				<input type="number" name="money" value="" v-on:input="setJiZhangMoney()" placeholder="请输入" v-model="form.money"/>
+			</li>
+      <li v-if="form.recordType==4" class="mui-table-view-cell mui-input-row">
+				<label>结算金额<small>*</small></label>
+				<input type="number" name="money" value="" v-on:input="setJiZhangMoney()" placeholder="请输入" v-model="form.money"/>
+			</li>
+    
 			<li v-if="save_type=='update'||save_type=='save'" class="mui-table-view-cell mui-input-row" >
 				<label>工资金额</label>
 				<input type="number" name="money" readonly="readonly" value=""  v-model="form.money"/>
@@ -79,21 +103,21 @@
 			<li v-if="loginType==0 && form.score!=null && form.score!='' && form.score!='0' " class="mui-table-view-cell mui-input-row">
 				<label>评分</label>
 				<div class="oa-contact-content mui-table-cell pingfen" id="pingfen">
-					<!-- <span><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span><img class="imgx" src="../../images/wuxing1.png" /></span> -->
+					<span><img class="imgx" :src="imgxurl" /></span>
+					<span><img class="imgx" :src="imgxurl" /></span>
+					<span><img class="imgx" :src="imgxurl" /></span>
+					<span><img class="imgx" :src="imgxurl" /></span>
+					<span><img class="imgx" :src="imgxurl" /></span>
 				</div>
 			</li>
 			<li v-if="loginType==1" class="mui-table-view-cell mui-input-row">
 				<label>评分<small>*</small></label>
 				<div class="oa-contact-content mui-table-cell pingfen" id="pingfen">
-					<!-- <span @click="selectStar(1,'pingfen');stopEvt(event)" ><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span @click="selectStar(2,'pingfen');stopEvt(event)" ><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span @click="selectStar(3,'pingfen');stopEvt(event)" ><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span @click="selectStar(4,'pingfen');stopEvt(event)" ><img class="imgx" src="../../images/wuxing1.png" /></span>
-					<span @click="selectStar(5,'pingfen');stopEvt(event)" ><img class="imgx" src="../../images/wuxing1.png" /></span> -->
+					<span @click.stop="selectStar(1);" ><img class="imgx" :src="imgxurl" /></span>
+					<span @click.stop="selectStar(2);" ><img class="imgx" :src="imgxurl" /></span>
+					<span @click.stop="selectStar(3);" ><img class="imgx" :src="imgxurl" /></span>
+					<span @click.stop="selectStar(4);" ><img class="imgx" :src="imgxurl" /></span>
+					<span @click.stop="selectStar(5);" ><img class="imgx" :src="imgxurl" /></span>
 				</div>
 			</li>
 			<li class="mui-table-view-cell mui-input-row">
@@ -103,42 +127,46 @@
 		</ul>
 
 	</section>
-	<div id="cus_time_popver" v-show="select_time" class="mui-popover mui-popover-action mui-popover-bottom">
-		<div class="pop-up2">
-			<div class="pop-title" v-text="select_name"></div>
+	
+
+  <mt-popup v-model="unitpopup" position="bottom">
+  	<div class="pop-up2">
+			<div class="pop-title" >选择单位</div>
 			<div class="pop-content select-box mui-clearfix">
-				<div id="cus_zhiye_popver_sc" class="mui-scroll-wrapper">
+				<div  class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-							<div class="col-xs-8 mui-clearfix">
-								<div class="mui-input-row mui-checkbox mui-left">
-									<div class="filtrate-body filtrate-primary">
-										 <div v-for="(time,index) in data.timeList" :key="index">
-												<div class="item" @click="timeClick(time,1)" >
-													<span v-if="select_hour==time.baseId" class="mui-active" v-text="time.baseName"></span>
-													<span v-else class=""  v-text="time.baseName"></span>
-												</div>
-											</div>
+						<div class="col-xs-8 mui-clearfix">
+							<div class="mui-input-row mui-checkbox mui-left">
+								<div class="filtrate-body filtrate-primary">
+									<div v-for="(unit,index) in data.unitList" :key="index">
+										<div class="item" @click="unitClick(unit)" >
+											<span v-if="select_unit==unit.baseName" class="mui-active" v-text="unit.baseName"></span>
+											<span v-else class=""  v-text="unit.baseName"></span>
 										</div>
+									</div>
 								</div>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
-	</div>
+
+</mt-popup>
+
+   
 
   </div>
 </template>
 
 <script>
-import Picker from "mint-ui"
-import { DatetimePicker } from "mint-ui";
+import {Picker,popover,DatetimePicker} from "mint-ui"
 import laowu_main from "./js/laowu_main.js";
 import dataBar from "../common/dataBar"
+import areaBar from "../common/areaBar"
 export default {
   name: '',
-  components: { dataBar},
+  components: { dataBar,areaBar},
   props: {},
   data() {
     return {
@@ -189,7 +217,7 @@ export default {
       },
       data: {
         timeList: [], //时间标签列表
-        unitList: [], //单位标签列表
+        unitList: [{"baseId":123,"baseName":333}], //单位标签列表
         selectUserList: [], //选择多人列表
         deleteForm: {},
         attform: []
@@ -215,7 +243,8 @@ export default {
       userinfoParams: {
         list: []
       },
-
+      title:"",
+      unitpopup:false,
       select_time: false,
       select_hour: "", //当前选中的时间值
       select_unit: "", //当前选中的单位值
@@ -224,7 +253,20 @@ export default {
       show_button: "", //显示保存或者删除按钮
       save_type: "",
       loginType: "",
-      checkNormalFlag: false
+      imgxurl:"../../../static/images/wuxing1.png",
+      checkNormalFlag: false,
+      worktitle:"上班时长",
+      overtitle:"加班时长",
+      areatype:"2",
+      solt:[
+          {
+          flex: 1,
+          defaultIndex: 0,
+          values: [], //省份数组
+          className: "slot1",
+          textAlign: "center"
+          }
+          ]
     };
   },
   created: function() {
@@ -233,6 +275,9 @@ export default {
     laowu_main._self = this;
     laowu_main.initVue();
     laowu_main.initData();
+    laowu_main.setTitle();
+       
+       
   },
   methods: {
     change(msg) {
@@ -246,7 +291,29 @@ export default {
     },
     saveData:function(){
       laowu_main.saveData()
-    }
+    },
+    childValue:function(obj){
+       laowu_main.timeClick(obj,obj.timeType,1)
+    },
+   
+    open_unit_popver:function(){
+       this.unitpopup=true
+    },
+    close_unit_popver:function(){
+       this.unitpopup=false
+    },
+    unitClick:function(obj){
+        laowu_main.unitClick(obj)
+    },
+    setBaoGongMoney:function(){
+      laowu_main.setBaoGongMoney()
+    },
+    selectStar:function(v1){
+      laowu_main.selectStar(v1,'pingfen')
+    },
+    deleteObj:function(v1){
+      laowu_main.deleteObj(v1)
+    },
   }
 };
 </script>
@@ -316,5 +383,11 @@ export default {
 }
 .fixed-bottom{
   text-align:left
+}
+.mint-popup-bottom{
+  width: 100%;
+}
+.btn-unit{
+  width: 1px;
 }
 </style>

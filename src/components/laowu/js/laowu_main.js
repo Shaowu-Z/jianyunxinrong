@@ -6,6 +6,7 @@
 var _self = null;
 var axios = null;
 import laowu_common from "./laowu_common.js"
+var paramMap=laowu_common.paramMap;
 
 var laowu_main = {
 
@@ -13,13 +14,12 @@ var laowu_main = {
        
         _self = this._self;
         axios = _self.$http;
-        laowu_common._self = _self;
-        laowu_common.initVue();
+        laowu_common.initVue(_self);
 
     },
     initData: function () {//初始化数据
         laowu_common.findRoomData();//加载房间信息
-        var recordId = laowu_common.paramMap.id;//记录ID，用于查询、修改单据
+        var recordId = paramMap.id;//记录ID，用于查询、修改单据
         var saveType=laowu_common.saveType;
         var gongzhangId=laowu_common.gongzhangId;
         var gongzhangName=laowu_common.gongzhangName;
@@ -39,10 +39,12 @@ var laowu_main = {
         _self.loginType = loginType;//登陆类型
         _self.save_type = saveType;//记录类型
         _self.form.createTimeStr = date;//默认创建时间为当前时间
-        if ((saveType == 'save' || saveType == 'update' || saveType == 'view' || saveType == 'chartview' || dataType == 'todoview') && dataType != 'todowork') {//编辑、查询详情、已办详情页
+        _self.form.recordType = recordType;//设置记账类型
+       
+        if ((saveType == 'save' || saveType == 'update' || saveType == 'view' || saveType == 'chartview' || laowu_common.dataType == 'todoview') && laowu_common.dataType != 'todowork') {//编辑、查询详情、已办详情页
         
         laowu_main.loadDataById(recordId);//根据ID查询记录
-           
+        console.log("表单",_self.form)
         } else {//新建
             //初始化单据信息
             if (loginType == 0) {//如果创建这个单的是工人，那么确认人是工头，工人则是当前登陆人
@@ -65,12 +67,10 @@ var laowu_main = {
                 _self.form.projectName = projectName;
                 _self.form.gongzhangId = gongzhangId;
                 _self.form.gongzhangName = gongzhangName;
-                _self.form.recordType = recordType;//设置记账类型
                 _self.form.gongrenId = gongrenId;
                 _self.form.gongrenName = gongrenName;
                 _self.form.identityType = loginType;//身份类型
-
-            }, 300)
+            }, 100)
 
            // console.log(gongzhangId)
             //点工类型才需要工资标准
@@ -88,18 +88,41 @@ var laowu_main = {
             }
         }
         if (recordType == 1) {//点工
-            laowu_main.showTimeLists();//加载时间选择列表
+            laowu_common.showTimeLists()
+            setTimeout(() => {
+                _self.data.timeList=laowu_common.timeList
+                _self.solt[0].values=laowu_common.timeList
+            }, 150);
         }
         if (recordType == 2) {//包工类型
-
-            laowu_main.showUnitLists();//加载单位选择列表
+            laowu_common.showUnitLists();
+            setTimeout(() => {
+                _self.data.unitList=laowu_common.unitList;
+            _self.solt[0].values=_self.data.unitList;
+            }, 150);
         }
-        if (dataType == 'todowork') {//房间提醒待办进来
+        if (laowu_common.dataType == 'todowork') {//房间提醒待办进来
             _self.form.createTimeStr = queryTime;
             laowu_main.updateReadStaus();
         }
     
     },
+
+    setTitle:function(){
+        var recordType=laowu_common.recordType;
+        _self.detailType=recordType;
+        var mutil=laowu_common.mutil;
+        if(recordType==1){
+            _self.title="记点工"
+        }else if(recordType==2){
+            _self.title="记包工"
+        }else if(recordType==3){
+            _self.title="记借支"
+        }else if(recordType==4){
+            _self.title="记结算"
+        }
+    },
+
     updateReadStaus: function () {//更新待办查看状态
 
         var _self = this;
@@ -124,7 +147,7 @@ var laowu_main = {
     },
     updateObject: function (id, type) {//修改记录
 
-        var url = pagepath;
+        var url = "/static/webstatic";
         if (type == 1) {//修改点工
             url += '/new_laowu/project_diangong_gongren.html?id=' + id + "&saveType=update" + "&recordType=" + type;
         } else if (type == 2) {//修改包工
@@ -138,85 +161,95 @@ var laowu_main = {
             msg("没有找到要修改的类型")
             return
         }
-        window.location.href = url + "&isRoomId=" + roomId;
+        window.location.href = url + "&isRoomId=" + laowu_common.roomId;
     },
     //根据ID查询记录
     loadDataById: function (id) {
         _self.reqParams.id = id;
-        axios.post("/project_work_api/find_record", _self.reqParams).then(function (response) {
-            if (response.data.code == 200) {
-                if (response.data.result.length > 0) {
-                    var obj = response.data.result[0];
-                    console.log("根据ID查询记录", obj)
-                    _self.form = obj;//重新赋值
-                    //查询打卡记录
-                    if (saveType != 'save' && saveType != 'update') {
-                        _self.loadAttRecords();
-                    }
-                    confirmId = obj.confirmId;//确认人Id
-                    confirmName = obj.confirmName;//确认人名称
-                    date = obj.createTimeStr;
-                    projectId = obj.projectId;
-                    projectName = obj.projectName;
-                    gongzhangId = obj.gongzhangId;
-                    gongzhangName = obj.gongzhangName;
-                    recordType = obj.recordType;
-                    gongrenId = obj.gongrenId;
-                    gongrenName = obj.gongrenName;
-                    //初始化单据信息
-                    if (loginType == 0) {//如果创建这个单的是工人，那么确认人是工头
-                        confirmId = gongzhangId;
-                        confirmName = gongzhangName;
-                    } else {//如果当前是工长创建单据，那么确认人是工人
-                        confirmId = gongrenId;
-                        confirmName = gongrenName;
-                    }
-                    setTimeout(function () {
-                        if ((saveType == 'view' || saveType == 'chartview' || saveType == 'update' || saveType == 'save' || dataType == 'todoview') && (obj.recordType == 1 || obj.recordType == 2)) {
-                            //设置评分
-                            if (obj.score) {
-                                viewPingfen(obj.score)
-                            }
-                        }
-                        var moneyHtml = document.getElementById("money");
-                        if (moneyHtml != null) {
-                            //设置金额
-                            moneyHtml.innerHTML = obj.money;
-                        }
-
-                    }, 10);
-                } else {
-                    msg("未查询到记录，请检查ID是否正确")
+        var saveType=laowu_common.saveType
+        var loginType=laowu_common.loginType
+        var dataType=laowu_common.dataType
+        var obj=new Object()
+        obj.id=111
+        console.log("参数",_self.reqParams)
+        $.ajax({
+            type: "post",
+            url: "/api/project_work_api/find_record",
+            async: false,
+            data:  JSON.stringify(_self.reqParams),
+            datatype: "json",
+            contentType : 'application/json',
+            success: function(data) {
+               var result=data.result;
+               if (data.result.length > 0) {
+                var obj = data.result[0];
+                console.log("根据ID查询记录", obj)
+                _self.form = obj;//重新赋值
+                //查询打卡记录
+                if (saveType != 'save' && saveType != 'update') {
+                    laowu_main.loadAttRecords();
                 }
+                laowu_common.confirmId = obj.confirmId;//确认人Id
+                laowu_common.confirmName = obj.confirmName;//确认人名称
+                laowu_common.date = obj.createTimeStr;
+                laowu_common.projectId = obj.projectId;
+                laowu_common.projectName = obj.projectName;
+                laowu_common.gongzhangId = obj.gongzhangId;
+                laowu_common.gongzhangName = obj.gongzhangName;
+                laowu_common.recordType = obj.recordType;
+                laowu_common.gongrenId = obj.gongrenId;
+                laowu_common.gongrenName = obj.gongrenName;
+                //初始化单据信息
+                if (loginType == 0) {//如果创建这个单的是工人，那么确认人是工头
+                    laowu_common.confirmId = laowu_common.gongzhangId;
+                    laowu_common.confirmName = laowu_common.gongzhangName;
+                } else {//如果当前是工长创建单据，那么确认人是工人
+                    laowu_common.confirmId = laowu_common.gongrenId;
+                    laowu_common.confirmName = laowu_common.gongrenName;
+                }
+                setTimeout(function () {
+                    if ((saveType == 'view' || saveType == 'chartview' || saveType == 'update' || saveType == 'save' || dataType == 'todoview') && (obj.recordType == 1 || obj.recordType == 2)) {
+                        //设置评分
+                        if (obj.score) {
+                            laowu_main.viewPingfen(obj.score)
+                        }
+                    }
+                    var moneyHtml = document.getElementById("money");
+                    if (moneyHtml != null) {
+                        //设置金额
+                        moneyHtml.innerHTML = obj.money;
+                    }
 
+                }, 10);
+            } else {
+                alert("未查询到记录，请检查ID是否正确")
             }
-        }).catch(function (error) {
-            msg(error)
-            console.info(error);
-        });
+            },
+            error: function() {
+                console.log("err")
+            }
+        })
+       
     },
     loadAttRecords: function () {//查询打卡记录
-        var _self = this;
         _self.reqWorkParamsVO.confirmId = _self.form.gongzhangId;//工长ID
         _self.reqWorkParamsVO.userId = _self.form.gongrenId;//当前登陆ID
         _self.reqWorkParamsVO.queryTime = _self.form.createTimeStr;//当前登陆ID
-        _self.reqWorkParamsVO.loginType = loginType;
+        _self.reqWorkParamsVO.loginType = laowu_common.loginType;
         _self.reqWorkParamsVO.queryType = 'day';
-        _self.reqWorkParamsVO.projectId = projectId;
-        if (dataType == 'todoview') {//已办列表入口，参数不一致，因此需要重新设置查询类型
-            _self.reqWorkParamsVO.saveType = dataType;
+        _self.reqWorkParamsVO.projectId = laowu_common.projectId;
+        if (laowu_common.dataType == 'todoview') {//已办列表入口，参数不一致，因此需要重新设置查询类型
+            _self.reqWorkParamsVO.saveType = laowu_common.dataType;
         } else {
-            _self.reqWorkParamsVO.saveType = saveType;
+            _self.reqWorkParamsVO.saveType = laowu_common.saveType;
         }
-        axios.post(getUrl() + "/project_work_api/find_att_record_day", this.reqWorkParamsVO).then(function (response) {
+        axios.post("/project_work_api/find_att_record_day", _self.reqWorkParamsVO).then(function (response) {
             if (response.data.code == 200) {
                 var result = response.data.result;
                 //console.log("打卡记录",result);
                 if (result.length > 0) {
                     _self.data.attform = result;
-                    setTimeout(function () {
-                        initImgPreview();
-                    }, 10)
+                  
                 } else {
                     console.log("未查询到打卡记录!")
                 }
@@ -255,19 +288,15 @@ var laowu_main = {
         });
     },
     open_time_popver: function (type) {//选择上班时长窗口
-        this.select_type = type;
+        _self.select_type = type;
         if (type == 1) {
-            this.select_hour = this.form.workHour;
-            this.select_name = "选择上班时长";
+            _self.select_hour = this.form.workHour;
+            _self.select_name = "选择上班时长";
         } else if (type == 2) {
-            this.select_hour = this.form.overHour;
-            this.select_name = "选择加班时长";
+            _self.select_hour = this.form.overHour;
+            _self.select_name = "选择加班时长";
         }
-        mui('#cus_time_popver').popover('toggle');
-        appApi.setPullRefresh(false);
-        jQuery(".mui-backdrop").click(function () {
-            appApi.setPullRefresh(true);
-        })
+        
     },
     open_number_popver: function () {//选择数量窗口
         var _self = this;
@@ -290,45 +319,39 @@ var laowu_main = {
     },
     open_unit_popver: function () {//选择单位窗口
         var _self = this;
-        mui('#cus_unit_popver').popover('toggle');
+        $('#cus_unit_popver').popover('toggle');
         appApi.setPullRefresh(false);
         jQuery(".mui-backdrop").click(function () {
             _self.setNumber();//设置数量和单位
             appApi.setPullRefresh(true);
         })
     },
-    timeClick: function (time, type) {//确定选择上班时长
-        if (this.select_type == 1) {
-            this.form.workHour = time.baseId;
-            this.form.workHourName = time.baseName;//上班时常名称
-        } else if (this.select_type == 2) {
-            this.form.overHour = time.baseId;
-            this.form.overHourName = time.baseName;//加班时长名称
+    timeClick: function (time, type,mutil) {//确定选择上班时长
+       
+        if (type == 1) {
+            _self.form.workHour = time.baseId;
+            _self.form.workHourName = time.baseName;//上班时常名称
+        } else if (type == 2) {
+            _self.form.overHour = time.baseId;
+            _self.form.overHourName = time.baseName;//加班时长名称
         }
-        if (type == 1) {//工人选择时间时，计算金额
-            setMoney(type)
-        } else {//工头选择时间时，计算金额
-            setMoney(type)
-        }
-        setTimeout(function () {
-            mui('#cus_time_popver').popover('toggle');
-        }, 150)
+        laowu_main.setMoney(mutil)
+        
+        console.log(_self.form)
+       
 
     },
     unitClick: function (unit) { //确定单位
-        this.form.unit = unit.baseName;
-        this.select_unit = unit.baseName;
-        this.setNumber();//设置数量和单位
-        setTimeout(function () {
-            mui('#cus_unit_popver').popover('toggle');
-        }, 150)
-
+        _self.form.unit = unit.baseName;
+        _self.select_unit = unit.baseName;
+        laowu_main.setNumber();//设置数量和单位
+        _self.close_unit_popver()
     },
 
     setNumber: function () {//设置数量和单位
-        if (this.form.number) {
-            this.form.numberName = this.form.number + "  " + this.form.unit + "";
-            setBaoGongMoney();
+        if (_self.form.number) {
+            _self.form.numberName = _self.form.number + "  " + _self.form.unit + "";
+            laowu_main.setBaoGongMoney();
         }
     },
     closePop: function (id) {//关闭时间选择窗口
@@ -337,51 +360,7 @@ var laowu_main = {
         }, 150)
 
     },
-    showTimeLists: function () {//加载时间列表
-        var obj = new Object();
-        obj.type = 1;
 
-        axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
-            if (response.data.code == 200) {
-                var result = response.data.result;
-                console.log("时间",result)
-                if (result.length > 0) {
-                    _self.$data.data.timeList = result;
-                } else {
-                    msg("未查询到时间列表!")
-                }
-            } else {
-                msg("查询时间列表出错!")
-            }
-        }).catch(function (error) {
-            console.info(error);
-        });
-    },
-    showUnitLists: function () {//加载单位列表
-        var obj = new Object();
-        obj.type = 2;
-        axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
-            if (response.data.code == 200) {
-                var result = response.data.result;
-                console.log("单位", result)
-                if (result.length > 0) {
-                    //初始化单位
-                    var unit = result[1];
-                    if (!_self.form.unit) {
-                        _self.form.unit = unit.baseName;
-                        _self.select_unit = unit.baseName;
-                    }
-                    _self.$data.data.unitList = result;
-                } else {
-                    msg("未查询到单位列表!")
-                }
-            } else {
-                msg("查询单位列表出错!")
-            }
-        }).catch(function (error) {
-            console.info(error);
-        });
-    },
     selectDate: function () {//选择日期
         var _self = this;
         var time = _self.form.createTimeStr;
@@ -399,8 +378,11 @@ var laowu_main = {
         })
     },
     deleteObj: function (id) {//删除记录，将操作状态设置为删除状态，并不是真正的删除
-        var _self = this;
         _self.form.id = id;
+        var userName=laowu_common.userName
+        var userId=laowu_common.userId
+        var loginType=laowu_common.loginType
+        var saveType=laowu_common.saveType
         loading("请稍后...")
         axios.post(getUrl() + "/project_work_api/find_record", _self.form).then(function (response) {
             if (response.data.code == 200) {
@@ -408,13 +390,13 @@ var laowu_main = {
                     _self.data.deleteForm = response.data.result[0];
                     userName = window.encodeURIComponent(userName)
                     var param = "&saveType=" + saveType + "&userId=" + userId + "&userName=" + userName + "&identityType=" + loginType;
-                    axios.post(getUrl() + "/project_work_api/update_record?type=delete" + param, _self.data.deleteForm).then(function (response) {
+                    axios.post("/project_work_api/update_record?type=delete" + param, _self.data.deleteForm).then(function (response) {
                         if (response.data.code == 200) {
-                            msg("删除成功!");
-                            closeWindow();
+                            alert("删除成功!");
+                            //closeWindow();
                         } else {
-                            msg("删除错误!");
-                            closeLayer();
+                            alert("删除错误!");
+                            //closeLayer();
                         }
                     }).catch(function (error) {
                         console.info(error);
@@ -548,22 +530,22 @@ var laowu_main = {
         }
         if (recordType == 1) {
 
-            // if (!_self.form.workNormalHour) {
-            //     alert('标准工资上班时长不能为空');
-            //     return;
-            // }
-            // if (!_self.form.overNormalHour) {
-            //     alert('标准工资加班时长不能为空');
-            //     return;
-            // }
-            // if (!_self.form.datePrice) {
-            //     alert('日工资不能为空');
-            //     return;
-            // }
-            // if (!_self.form.gongzhongName) {
-            //     alert('工种不能为空');
-            //     return;
-            // }
+            if (!_self.form.workNormalHour) {
+                alert('标准工资上班时长不能为空');
+                return;
+            }
+            if (!_self.form.overNormalHour) {
+                alert('标准工资加班时长不能为空');
+                return;
+            }
+            if (!_self.form.datePrice) {
+                alert('日工资不能为空');
+                return;
+            }
+            if (!_self.form.gongzhongName) {
+                alert('工种不能为空');
+                return;
+            }
             if (!_self.form.workHour) {
                 alert('上班时长不能为空');
                 return;
@@ -596,7 +578,7 @@ var laowu_main = {
                 alert('请给工人评分');
                 return;
             }
-            this.form.numberName = this.form.number + "  " + this.form.unit + "";
+            _self.form.numberName = _self.form.number + "  " + _self.form.unit + "";
             laowu_main.saveRecord();
         } else if (recordType == 3 || recordType == 4) {
             if (!_self.form.money) {
@@ -616,7 +598,6 @@ var laowu_main = {
         var userId=laowu_common.userId;
         var userName=laowu_common.userName;
         var loginType=laowu_common.loginType;
-        alert(loginType)
         var recordType=laowu_common.recordType;
         console.log("正在保存,请稍后...");
         if (saveType == 'save' || saveType == 'update') {
@@ -625,9 +606,7 @@ var laowu_main = {
             }
             userName = encodeURIComponent(userName);//编码
             var param = "&saveType=" + saveType + "&userId=" + userId + "&userName=" + userName + "&identityType=" + loginType + "&normalFlag=" + normalFlag;
-
             console.log("表单",_self.form)
-            return
             axios.post("/project_work_api/update_record?type=update" + param, _self.form).then(function (response) {
                 if (response.data.code == 200) {
                     alert("保存成功!");
@@ -644,7 +623,6 @@ var laowu_main = {
         } else {
             _self.form.operateStatus = "0";//新增记录——操作状态为0
             console.log("表单",_self.form)
-            return
             axios.post("/project_work_api/save_record", _self.form).then(function (response) {
                 if (response.data.code == 200) {
                     if (recordType == 1 || recordType == 2) {
@@ -659,7 +637,7 @@ var laowu_main = {
                     } else {
                         alert("记账错误")
                     }
-                    laowu_common.closeLayer();
+                    //laowu_common.closeLayer();
                 } else if (response.data.code == 202) {
                     alert("您在" + _self.form.createTimeStr + "已有一笔记工");
                     laowu_common.closeLayer();
@@ -823,17 +801,17 @@ var laowu_main = {
         this.setWuXing(val, userId)
     },
     selectStar: function (val, divId) {//设置分数（单人）
-        this.form.score = val;
-        this.setWuXing(val, divId)
+        _self.form.score = val;
+        laowu_main.setWuXing(val, divId)
     },
     setWuXing: function (val, divId) {//显示选择的分数
         var zrcimg = document.getElementById(divId);
         var cun = val
         for (var i = 0; i < cun; i++) {
-            zrcimg.children[i].children[0].src = "../../images/wuxing.png"
+            zrcimg.children[i].children[0].src = "../../../static/images/wuxing.png"
         }
         for (var i = cun; i < 5; i++) {
-            zrcimg.children[i].children[0].src = "../../images/wuxing1.png"
+            zrcimg.children[i].children[0].src = "../../../static/images/wuxing1.png"
         }
     },
     stopEvt: function (obj) {
@@ -907,7 +885,7 @@ var laowu_main = {
         }
         app.form.numberName = app.form.number + "  " + app.form.unit + "";
         //计算金额
-        setBaoGongMoney();
+        laowu_main.setBaoGongMoney();
     },
     setPingfenMutil: function (val, userId) {
         var ary = app.data.selectUserList;
@@ -919,13 +897,14 @@ var laowu_main = {
         }
     },
     setMoney: function (type) {
+       
         var app=_self;
         var saveType=laowu_common.saveType;
         setTimeout(function () {
             var workHour = app.form.workHour;
             var overHour = app.form.overHour;
             var totalMoney = 0.00;
-            if (type == 1) {//工人计算
+            if (type == 1) {//工人计算(计算单人)
                 var price = app.form.datePrice;
                 var workNormalHour = app.form.workNormalHour;
                 var overNormalHour = app.form.overNormalHour;
@@ -933,16 +912,16 @@ var laowu_main = {
                 var overCount = overHour / overNormalHour;//加班工数
                 var totalCount = workCount + overCount;//工数总数
                 if (totalCount && price) {
-                    totalMoney = toDecimal2(totalCount * price);
+                    totalMoney =laowu_common.toDecimal2(totalCount * price);
                     app.form.money = totalMoney;
                 }
                 if (saveType == 'save' || saveType == 'update') {
-                    app.form.money = toDecimal2(totalMoney);
+                    app.form.money = laowu_common.toDecimal2(totalMoney);
                 } else {
 
-                    document.getElementById("money").innerHTML = toDecimal2(totalMoney);
+                    document.getElementById("money").innerHTML = laowu_common.toDecimal2(totalMoney);
                 }
-            } else if (type == 2) {//工头计算
+            } else if (type == 2) {//工头计算（计算多人）
                 var ary = app.data.selectUserList;
                 if (ary.length > 0) {
                     for (var i = 0; i < ary.length; i++) {
@@ -954,22 +933,28 @@ var laowu_main = {
                         var totalCount = workCount + overCount;//工数总数
                         var money = 0.00;
                         if (totalCount && price) {
-                            money = toDecimal2(totalCount * price);
+                            money = laowu_common.toDecimal2(totalCount * price);
                             app.data.selectUserList[i].money = money;
                         }
 
                         totalMoney += money * 1;//总金额
                     }
                 }
-                document.getElementById("money").innerHTML = toDecimal2(totalMoney);
+                if(document.getElementById("money")!=null){
+
+                    document.getElementById("money").innerHTML = laowu_common.toDecimal2(totalMoney);
+                }
             } else if (type == 3 || type == 4) {//计算借支或结算金额
                 console.log(app.form.money)
-                if (app.form.money) {
-                    document.getElementById("money").innerHTML = toDecimal2(app.form.money);
-                } else {
-                    document.getElementById("money").innerHTML = totalMoney;
-
+                if(document.getElementById("money")!=null){
+                    if (app.form.money) {
+                        document.getElementById("money").innerHTML = laowu_common.toDecimal2(app.form.money);
+                    } else {
+                        document.getElementById("money").innerHTML = totalMoney;
+    
+                    }
                 }
+              
             }
             else {
                 document.getElementById("money").innerHTML = '0.00';
@@ -977,7 +962,7 @@ var laowu_main = {
             }
         }, 100)
 
-        //console.log("金额",toDecimal2(totalMoney))
+        
 
     },
     setJiZhangMoney: function () {
@@ -1000,7 +985,26 @@ var laowu_main = {
         for (var i = 0; i < fenshu; i++) {
             zrimg.children[i].children[0].src = "../../images/wuxing.png"
         }
-    }
+    },
+    
+        setBaoGongMoney:function () {
+            var totalMoney=0;
+            var saveType=laowu_common.saveType
+            setTimeout(function () {
+                var price=_self.form.price;
+                var number=_self.form.number;
+                if(price && number){
+                    totalMoney=laowu_common.toDecimal2(number*price);
+                }
+                _self.form.money=totalMoney;
+                if (saveType=='save'||saveType=='update'){
+                    _self.form.money=laowu_common.toDecimal2(totalMoney);
+                }else {
+                    document.getElementById("money").innerHTML=laowu_common.toDecimal2(totalMoney);
+                }
+            },50)
+
+        },
 
 }
 
@@ -1034,24 +1038,7 @@ function stopEvt(e) {
 }
 
 
-//制保留2位小数，如：2，会在2后面补上00.即2.00
-function toDecimal2(x) {
-    var f = parseFloat(x);
-    if (isNaN(f)) {
-        return false;
-    }
-    var f = Math.round(x * 100) / 100;
-    var s = f.toString();
-    var rs = s.indexOf('.');
-    if (rs < 0) {
-        rs = s.length;
-        s += '.';
-    }
-    while (s.length <= rs + 2) {
-        s += '0';
-    }
-    return s;
-}
+
 
 window.setNormalDataFromGongrenList=function (objList) {
    

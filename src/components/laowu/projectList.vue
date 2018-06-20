@@ -9,7 +9,7 @@
 			<div class="module-body sppd-content add-manager">
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell">
-						<!-- <img src="../../../static/images/ico_plus.gif" /> -->
+						<img src="../../assets/images/ico_plus.gif" />
 					</div>
 					<div @click="goShare()" class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name">邀请工长登记新项目</h4>
@@ -42,13 +42,12 @@
 <script>
 import project_sign from  "./js/project_sign.js"
 import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
- function setLocationResult(address, latitudeAndLongitude, shortAddress, iosIfrObjStrT) {
-        alert(2)
-      }
+import laowu_common from './js/laowu_common.js';
 export default {
     data(){
         return {
 			      imgbase:"../../../static/images/defualt.png",
+			      ico_plus:"../../assets/images/60x60.gif",
             project_sign:project_sign,
             form:{
             id:"",
@@ -101,7 +100,7 @@ export default {
         }
     },
     created:function(){
-	  project_sign._self=this;
+	   project_sign._self=this;
      project_sign.initVue()
      project_sign.initData()
      
@@ -110,8 +109,13 @@ export default {
      methods:{
         goback(){
             this.$router.go(-1);
-		},
-		openImg:function(index,ary){
+        },
+      goShare: function () {
+            var url = "/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
+            var logo = "/static/images/app-logo.jpg";
+            appApi.share(8, laowu_common.userName + "邀请您创建新项目", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
+        },
+		  openImg:function(index,ary){
 			console.log("ary",ary)
 			
 			disposeLogImgMutil(index,ary);

@@ -5,15 +5,15 @@
                 <a class="mui-navigate-right" href="#">
                     <label v-text="title"></label>
                     
-                    <input type="text" v-model="area"  name="start" id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
+                    <input type="text" v-model="area"  name="start"  id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
                     <mt-popup
                         v-model="popupVisible"
                         position="bottom">
-                    <mt-picker v-if="type==1" :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                    <mt-picker  v-if="type==1" :slots="myAddressSlots" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
                         <mt-button size="small" @click.native="makepass">取消</mt-button>
                         <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
                     </mt-picker>
-                    <mt-picker v-if="type==2" :slots="slot" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
+                    <mt-picker value-key="baseName" v-if="type==2" :slots="slot" ref="picker" :showToolbar="true" @change="onMyAddressChange" >
                         <mt-button size="small" @click.native="makepass">取消</mt-button>
                         <mt-button size="small" type="primary" @click.native="makesure">确认</mt-button>
                     </mt-picker>
@@ -36,6 +36,8 @@ export default {
     title: "",
     areatype:"",
     shuju:'',
+    timeType:'',
+    datanow:"",
   },
   data() {
     return {
@@ -78,10 +80,14 @@ export default {
       myAddressCity: "市",
       myAddresscounty: "区/县",
       makevalue: "",
-      area: ""
+      area: "",
+     
     };
   },
-  created() {},
+  created() {
+   console.log("当前选择时间"+this.datanow)
+   this.area=this.datanow
+  },
   methods: {
     onMyAddressChange(picker, values) {
       var _self = this;
@@ -108,9 +114,10 @@ export default {
         this.$refs.picker.getValues()[2];
        this.$emit('toParent', _self.area)
       }else if(this.type==2){
-        _self.area =
-        this.$refs.picker.getValues()[0]
-        this.$emit('toParent', _self.area)
+         _self.area = this.$refs.picker.getValues()[0].baseName
+        var rtnobj=this.$refs.picker.getValues()[0];
+        rtnobj.timeType=this.timeType
+        this.$emit('toParent',rtnobj)
       }
        _self.popupVisible = !_self.popupVisible;
 

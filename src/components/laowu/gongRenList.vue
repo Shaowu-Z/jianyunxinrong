@@ -101,6 +101,7 @@
 
 <script>
 import laowu_common from'./js/laowu_common.js';
+
 export default {
   data() {
     return {
@@ -132,11 +133,12 @@ export default {
   created: function() {
     var _self = this;
     var paramMap=laowu_common.paramMap;
-    var roomId = paramMap.roomId;
+    laowu_common.initVue(_self);
+    var roomId = laowu_common.roomId;
     var recordType=laowu_common.recordType;
     _self.recordType = recordType;
-    _self.createDate = paramMap.date;
-    _self.reqParams.projectId = paramMap.projectId;
+    _self.createDate = laowu_common.date;
+    _self.reqParams.projectId = laowu_common.projectId;
     _self.findroomuserlist(roomId);
     
   },
