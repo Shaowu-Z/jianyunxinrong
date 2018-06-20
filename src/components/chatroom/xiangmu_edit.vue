@@ -142,7 +142,7 @@
 <script>
 import {getParam,BackCookie} from '../../playform/common'
 import setting from '../../playform/config'
-import regions from '../../playform/regions'
+// import regions from '../../playform/regions'
 export default {
     data () {
         return {

@@ -1,3 +1,4 @@
+import phonePy from './py'
 let _this = this;
 const contacts = {
 _self : window,
@@ -182,9 +183,12 @@ groupChat(tempId){
 //手机通讯录转换数据 wyj
 convertData (resultCon, resultPhone) {
     if (resultCon && resultCon != "") {
-
         //加载手机号码
+        console.log("数据",resultCon)
         var phoneArray = resultCon.split(",");
+        // alert(phoneArray)
+        console.log("数据2",phoneArray)
+        // alert(phoneArray)
         var newArrs = new Array();
         for (var i = 0; i < 27; i++) {
             newArrs[i] = new Array();
@@ -192,7 +196,7 @@ convertData (resultCon, resultPhone) {
         for (var j = 0; j < phoneArray.length; j++) {
             var personPhoneArray = phoneArray[j].split("=");
             var remarksName = personPhoneArray[0];
-            var f = makePy(remarksName.charAt(0))[0].toUpperCase();
+            var f = phonePy.makePy(remarksName.charAt(0))[0].toUpperCase();
             var obj = {name: remarksName, phone: personPhoneArray[1]};
             if(resultPhone.indexOf(personPhoneArray[1])>-1){
                 obj['is_add']=false;
@@ -393,6 +397,7 @@ convertData (resultCon, resultPhone) {
 
             }
         }
+        console.log("解雇",newArrs)
         return newArrs;
     }else{
         return []
