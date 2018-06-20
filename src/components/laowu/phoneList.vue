@@ -1,9 +1,15 @@
 <template>
   <div>
+    <header class="mui-bar mui-bar-nav">
+	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
+		<span class="mui-icon mui-icon-back"></span>返回
+	</button>
+	<h1 class="mui-title">手机通讯录</h1>
+</header>
       <section class="mui-content" id="phone_list">
 	<div id='list' class="mui-indexed-list address-list hide">
 		<div class="mui-indexed-list-search mui-input-row mui-search">
-			<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
+			<input type="search"  @keyup="searchPhone" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
 		</div>
 		<div class="mui-indexed-list-bar">
 			<div class="align-middle">
@@ -18,7 +24,7 @@
 		</div>
 		<div class="mui-indexed-list-alert"></div>
 		<div class="mui-indexed-list-inner">
-			<div id="empty-view" class="mui-indexed-list-empty-alert">没有数据</div>
+			<!-- <div id="empty-view" class="mui-indexed-list-empty-alert">没有数据</div> -->
 			<ul class="mui-table-view">
 				<div v-for="(items,index) in phones" :key="index">
 					<div v-for="(item,index) in items" :key="index">
@@ -49,21 +55,69 @@
 
 	</div>
 </section>
+
+<!--长按收藏弹框-->
+<div id="windowdiv" class="mui-popup mui-popup-in" style="display:none;">
+    <div class="send-box">
+        <div class="send-title">发送给：</div>
+
+        <div class="oa-contact-cell mui-table">
+			<div class="oa-contact-avatar mui-table-cell">
+				<span class="oa-pic-default bgr2 p-label" v-text="name"></span>
+			</div>
+            <div class="oa-contact-content mui-table-cell">
+                <h4 class="oa-contact-name" v-text="name"></h4>
+            </div>
+        </div>
+
+        <div class="send-con">
+            <p class="mui-ellipsis-2 mui-text-left">您正在邀请<span v-text="name"></span>登记新项目</p>
+        </div>
+
+        <ul class="mui-table-view input-box">
+            <li class="mui-table-view-cell mui-input-row">
+                <input v-model="remark" type="text" autofocus placeholder="我想说"/>
+            </li>
+        </ul>
+        <div class="footer">
+            <button class="mui-btn mui-btn-link btn-normal" @click="cancel()">取消</button>
+            <button class="mui-btn mui-btn-link" @click="confirm()">发送</button>
+        </div>
+    </div>
+</div>
+
   </div>
 </template>
 
 <script>
+import laowu_common from "./js/laowu_common.js";
 export default {
   data() {
     return {
-      phones: []
+      phones: [],
+      phone:"",
+      name:"",
+      remark:"",
     };
   },
   created: function() {
-    
+   
+    var _self=this
+    laowu_common.initVue(this);
     window.appApi.getContacts();
     appApi.callBackFun = function(callFlag, CONTENT) {
       if (callFlag == appApi.callBackFlag.CONTACTS) {
+       _self.findFrieds(CONTENT);
+      }
+    };
+   
+  },
+   methods: {
+     searchPhone:function(){
+        console.log("搜索...")
+     },
+        findFrieds:function(CONTENT){
+          var _self=this
         //查询用户的好友
         var param = new FormData();
         param.append("userId", "");
@@ -75,59 +129,41 @@ export default {
             for (var i in resultArray) {
               resultStr = resultStr + resultArray[i].cellPhone + ",";
             }
-            appPl.$data.phones = convertData(CONTENT.result, resultStr);
+            _self.$data.phones = _self.convertData(CONTENT.result, resultStr);
           })
           .catch(function(error) {
             console.info(error);
           });
-      }
-    };
-  },
-   methods: {
-        test:function(){
-          var formData=new FormData();
-          formData.append("userIds","10212")
-          var obj=new Object()
-          obj.userIds="10212,10165,"
-          this.$http.post("/concats_api/query_gms_info_select", obj).then(function (response) {
-                console.log(response)
-
-            }).catch(function (error) {
-                remin("好友请求发送失败，请联系管理员!", 2);
-                console.info(error);
-            });
         },
-        addFriends: function (index1, index2) {
-            var phoneMap = this.$data.phones[index1][index2];
-            var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
-            phoneMap.is_add= !(phoneMap.is_add);
-            axios.post(getUrl() + "/concats_api/insert_add_info", addVo).then(function (response) {
-                var friendVO = response.data.result;
-                if(friendVO.isOwnOrFriend=="0"){
-                    msg("不可添加自己为好友!");
-                }else if(friendVO.isOwnOrFriend=="1"){
-                    msg("此用户已是你的好友!");
-                }else{
-                    msg('好友请求发送成功！');
-                }
-
-            }).catch(function (error) {
-                remin("好友请求发送失败，请联系管理员!", 2);
-                console.info(error);
-            });
-        },
+        
         importPhones:function () {
             //loading("同步中...");
             window.appApi.getContacts()
 
         },
         selectPhone:function (item) {//选择手机号邀请
-            windowVue.phone=item.phone;
-            windowVue.name=item.name;
-              showwindowDiv();
-              showbackdrop();
+              this.phone=item.phone;
+              this.name=item.name;
+              laowu_common.showwindowDiv();
+              laowu_common.showbackdrop();
+        },
+          cancel:function () {
+            setTimeout(function () {
+                laowu_common.hidebackdrop();
+                laowu_common.hidewindowDiv();
+            },100)
+
+        },
+        confirm:function () {//确定f
+            var list=[];
+            list.push(this.phone);
+            laowu_common.hidebackdrop();
+            laowu_common.hidewindowDiv();
+            laowu_common.findTotgetinvite(list,this.remark);
+
         },
          convertData:function (resultCon, resultPhone) {
+           var _self=this
           if (resultCon && resultCon != "") {
 
         //加载手机号码
@@ -139,7 +175,7 @@ export default {
         for (var j = 0; j < phoneArray.length; j++) {
             var personPhoneArray = phoneArray[j].split("=");
             var remarksName = personPhoneArray[0];
-            var f = makePy(remarksName.charAt(0))[0].toUpperCase();
+            var f = _self.phonePy.makePy(remarksName.charAt(0))[0].toUpperCase();
             var obj = {name: remarksName, phone: personPhoneArray[1]};
             if(resultPhone.indexOf(personPhoneArray[1])>-1){
                 obj['is_add']=false;
@@ -349,13 +385,20 @@ export default {
     },
       updated:function () {//DOM更新时，进行调用的方法
         document.getElementById("list").style.display = "block";
-        mui.ready(function () {
+       // mui.ready(function () {
             var header = document.querySelector('header.mui-bar');
             var list = document.getElementById('list');
             list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
             // alert(list.innerHTML);
-            window.indexedList = new mui.IndexedList(list)
-        });
+          //  window.indexedList = new mui.IndexedList(list)
+       // });
     }
 };
 </script>
+
+<style>
+.oa-contact-email{
+  text-align: left
+}
+</style>
+
