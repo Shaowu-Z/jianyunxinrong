@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import regions from '../../playform/regions' 
+// import regions from '../../playform/regions' 
 import { Picker,Popup,Toast  } from 'mint-ui';
 import areaBar from '../common/areaBar'
 import {BackCookie,getParam} from '../../playform/common'
