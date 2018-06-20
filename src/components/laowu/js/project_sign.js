@@ -37,22 +37,21 @@ var project_sign={
                 laowu_common.showAppDiv();
 
             } else if (dataType == 'todosign') {
-                _self.loadCation();
-                findRoomData();
-                setTimeout(function () {
+                project_sign.loadCation();
+                laowu_common.findRoomData();
+                
                     setTimeout(function () {
-                        _self.loadlocalProjectInfo();
-                        _self.loadAttRecords();//查询最近两天打卡记录
+                        project_sign.loadlocalProjectInfo();
+                        project_sign.loadAttRecords();//查询最近两天打卡记录
                         setTimeout(function () {
-                            _self.loadNearRecord();//查询最近一次打卡记录
+                            project_sign.loadNearRecord();//查询最近一次打卡记录
                         }, 50)
 
                     }, 50)
                     setTimeout(function () {
-                        _self.updateReadStaus();//更新查看状态
-                        showAppDiv();
-                    }, 800)
-                }, 500)
+                        project_sign.updateReadStaus();//更新查看状态
+                    }, 80)
+                
 
             } else if (dataType == 'projectlist') {
                
@@ -442,7 +441,7 @@ var project_sign={
                 var form = new FormData();
                 form.append("userId", laowu_common.userId)
                 form.append("queryType", "readStatus")
-                form.append("name", userName)
+                form.append("name", laowu_common.userName)
                 axios.post("/project_work_api/update_quertz", form).then(function (response) {
                     if (response.data.code == 200) {
                         // msg("状态更新完成")
