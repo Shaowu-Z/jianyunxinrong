@@ -24,7 +24,7 @@
 	<div id="member_div1" class="mui-page-content" style="display: block;">
 		<div id="listScroll" class="mui-scroll-wrapper">
 			<div class="mui-scroll">
-				<section class="mui-content" id="">
+				<section class="mui-content text" id="">
 					<div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
 						<a @click="showProjectList">
 							<h5 class="mui-content-padded" style="margin-top:44px">项目列表(点击收缩或展开)</h5>
@@ -33,7 +33,7 @@
 							<div v-for="(item,index) in projects" :key="index">
 								<ul class="mui-table-view">
 									<li class="mui-table-view-cell mui-collapse" style="    border-bottom: 1px solid #efeff4;">
-										<a  @click ="clickshow(index)">
+										 <a @click ="clickshow(index)" style="border-bottom: 1px solid #ccc;">
 											<div class="mui-slider-cell">
 												<div class="oa-contact-cell mui-table">
 													<div class="oa-contact-avatar mui-table-cell">
@@ -45,7 +45,7 @@
 												</div>
 											</div>
 										</a>
-										<ul :index="index"  class="" v-show="proshow" >
+										<ul class="mui-table-view" :class="{'dis' : Listshow.indexOf(index) !== -1}">
 											<li class="mui-table-view-cell">
 												<div class="mui-slider-cell">
 													<div class="oa-contact-cell mui-table">
@@ -111,7 +111,7 @@
 										<div v-for="(item,index) in items" :key="index">
 											<div v-if="item.name">
 												<!--以下是单选-->
-												<li class="mui-table-view-cell mui-indexed-list-item">
+												<li class="mui-table-view-cell mui-indexed-list-item" style="border-bottom: 1px solid #ccc;">
 													<a @click="selectUser(item,'friends')">
 														<div class="mui-slider-cell">
 															<div class="oa-contact-cell mui-table">
@@ -188,7 +188,7 @@ export default {
     projects:[],
     projectListStatus:true,
     teamListStatus:true,
-    proshow:false,
+    Listshow:[],
     }
   },
   created: function () {
@@ -235,9 +235,13 @@ export default {
 			return val;
 		},
 		clickshow: function (index) {
-			console.log()
-			this.proshow=!this.proshow
-			return false;
+			const newIndex = this.Listshow.indexOf(index);
+                if (newIndex === -1) {
+                    this.Listshow.push(index);
+                    console.log('aaaaa',newIndex)
+                } else {
+                    this.Listshow.splice(newIndex);
+                }
 		},
 		updated:function () {//DOM更新时，进行调用的方法
 			document.getElementById("list").style.display = "block";
@@ -581,5 +585,8 @@ export default {
 		.fold-title{
 			    border-bottom: 1px solid #efeff4;
 		}
+		.dis{
+        display: block!important
+    }
 </style>
 
