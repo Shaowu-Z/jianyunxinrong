@@ -51,14 +51,19 @@ var tipApi={
      * 警告图标
      * 其余看第一个说明
     */
-    waring:function(content){
+    waring:function(content,time){
         tipApi.newDom("waringmask_zr","waring_zr","waring_text_zr")
         document.getElementById("waring_text_zr").innerHTML=content
+        if(time!=undefined){
+            setTimeout(function(){
+                tipApi.close("waring")
+            },time*1000)
+        }
     },
     /**
      * 关闭对应的弹窗
     */
-    close:function(name){
+    close:function(name,){
         var id=''+name //转字符串
         if(document.getElementById(id+"mask_zr")!=null){
             document.body.removeChild(document.getElementById(id+"mask_zr"))

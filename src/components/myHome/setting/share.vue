@@ -20,7 +20,7 @@
 				<!--<img class="cpic" v-bind:src ="card.imageHost + card.qrUrl"/>-->
 			</div>
 		</div>
-		<p class="share" onclick="mycenter.goShare()">点击分享</p>
+		<p class="share" @click="goShare()">点击分享</p>
 	</section>
 	<!-- 遮罩 -->
 	<div class="mask" :class="prover ? 'addmask' : '' "></div>
@@ -75,6 +75,11 @@ export default {
 		console.log("________"+this.$refs.code)
 	},
     methods:{
+		goShare: function() {
+			var url = "http://java.winfreeinfo.com/static/webstatic/mycenter/ext/share_detail.html";
+			var logo ="http://java.winfreeinfo.com/static/images/app-logo.jpg";
+			appApi.share(-1, "蜘筑侠APP", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
+		},
         goBack(){
 			this.$router.go(-1)
 			console.log(setting);

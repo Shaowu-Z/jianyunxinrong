@@ -19,8 +19,13 @@ const shoufajian = resolve => require(['@/components/project/shoufajian'], resol
 const newCreat_lianxi = resolve => require(['@/components/project/shoufajian/newCreat'], resolve)
 const transfer_lianxi = resolve => require(['@/components/project/shoufajian/transfer'], resolve)
 const newInfo_lianxi = resolve => require(['@/components/project/shoufajian/newInfo'], resolve)
-const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
-
+// const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
+//微承诺
+const chengnuo = resolve => require(['@/components/project/chengnuo'], resolve)
+const newCreat_chengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
+const transfer_chengnuo = resolve => require(['@/components/project/chengnuo/transfer'], resolve)
+const newInfo_chengnuo = resolve => require(['@/components/project/chengnuo/newInfo'], resolve)
+// const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
 // const backpwd = resolve => require(['@/components/login/backpwd'], resolve)
@@ -78,7 +83,30 @@ const myProjectconfig = {
         },
         {
           path: '/static/newwebstatic/lianxi/ttp.html',
-          component: ttp_lianxi
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/chengnuo',
+      component: chengnuo,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/chengnuo/newCreat.html',
+          component: newCreat_chengnuo
+        },
+        {
+          path: '/static/newwebstatic/chengnuo/transfer.html',
+          component: transfer_chengnuo 
+        },
+        {
+          path: '/static/newwebstatic/chengnuo/newInfo.html',
+          component: newInfo_chengnuo
+        },
+        {
+          path: '/static/newwebstatic/chengnuo/ttp.html',
+          component: ttp
         }
       ]
     }

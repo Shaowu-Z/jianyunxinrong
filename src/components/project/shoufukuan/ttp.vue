@@ -164,7 +164,7 @@ export default {
       }
     },
     masktishi: function() {
-      msg("数据提交中，请勿重复点击");
+      alert("数据提交中，请勿重复点击");
     },
     mask: function() {
       $(".mask").css({ display: "block", opacity: "0.6" });
@@ -234,7 +234,7 @@ export default {
               //											"fileCount": imgid.length+fujianid.length,
               fileCount: 0,
               url:
-                +"/static/newwebstatic/"+_self.url+"/transfer.html?id=" +
+                "/static/newwebstatic/"+_self.url+"/transfer.html?id=" +
                 _self.$route.query.id,
               colorString: "",
               todoViewableMember: "0",
@@ -253,7 +253,7 @@ export default {
                   type: 1, //按钮点击类型 1=请求url 2=打开url
                   name: "确认",
                   url:
-                    +"/contract/do_todobtu?type=4&pingfen=0&docid=" +
+                    "/contract/do_todobtu?type=4&pingfen=0&docid=" +
                     _self.$route.query.id +
                     "&projectSn=" +
                     _self.$route.query.projectSn +
@@ -270,7 +270,7 @@ export default {
                   type: 1, //按钮点击类型 1=请求url 2=打开url
                   name: "退回",
                   url:
-                    +"/contract/do_todobtu?type=4&pingfen=0&docid=" +
+                    "/contract/do_todobtu?type=4&pingfen=0&docid=" +
                     _self.$route.query.id +
                     "&projectSn=" +
                     _self.$route.query.projectSn +
@@ -280,23 +280,31 @@ export default {
               ]
             };
             //
-            console.log(todojson);
-            _self.todojsoan = JSON.stringify(todojson);
+            alert(JSON.stringify(todojson))
+            // _self.todojsoan = JSON.stringify(todojson);
             window.appApi.sendTodo(todojson, function(d) {
+              alert(d)
               if (d.code == 200) {
                 // ludan("退回成功",2,2,function(){
                 // 	$(".mask").css({"display":"none","opacity":"0.6"})
 
                 // })
-                layer.open({
-                  type: 1,
-                  title: "退回成功",
-                  time: 2,
-                  content: "",
-                  end: function() {
-                    appApi.refreshData(2);
-                  }
-                });
+                alert("tuihui")
+                // layer.open({
+                //   type: 1,
+                //   title: "退回成功",
+                //   time: 2,
+                //   content: "",
+                //   end: function() {
+                //     // appApi.refreshData(2);
+                //     window.appApi.openChat(
+                //       _self.$route.query.nowroomImId,
+                //       "",
+                //       _self.$route.query.roomname,
+                //       2
+                //     );
+                //   }
+                // });
               }
             });
             //										window.location.href = +'/static/newwebstatic/lianxi/work_content.html?'+urllast
@@ -328,6 +336,12 @@ export default {
               content: "",
               end: function() {
                 appApi.refreshData(2);
+                window.appApi.openChat(
+                  _self.$route.query.nowroomImId,
+                  "",
+                  _self.$route.query.roomname,
+                  2
+                );
               }
             });
 
@@ -339,8 +353,9 @@ export default {
             // 	$(".mask").css({"display":"none","opacity":"0.6"})
             // 	window.appApi.openChat(_self.$route.query.nowroomImId, "", _self.$route.query.roomname, 2)
             // })
+            alert(485)
             layer.open({
-              type: 2,
+              type: 1,
               time: 2,
               title: "评论成功",
               content: "",

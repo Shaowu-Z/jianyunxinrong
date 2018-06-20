@@ -138,7 +138,7 @@ import dataBar from "../../common/dataBar"
 </script>
 <style>
 @import "../../../assets/css/common/mint";
-.picker{
+/* .picker{
     width: 100%;
 }
 .mint-popup{
@@ -175,5 +175,5 @@ import dataBar from "../../common/dataBar"
 }
 .mui-input-row.areas{
     padding-right: 36px
-}
+} */
 </style>

@@ -219,11 +219,11 @@ var danjuApi={
 				forfile.push({
 					name: f.name
 				})
-				console.log(_self.$data.fujians)
+				// console.log(_self.fujians)
 			}
 
 		}
-		_self.$data.imgsrc = forimg
+		_self.imgsrc = forimg
 		if(sessionStorage.getItem("cunnews") == 1) {
 			form.append("type", "1");
 		} else {
@@ -243,20 +243,20 @@ var danjuApi={
 				var data = JSON.parse(evt.target.responseText);
 				var rtnfiles = data.result.success;
 				if(sessionStorage.getItem("cunnews") == 1) {
-					_self.$data.imgs = _self.$data.imgs.concat(rtnfiles)
+					_self.imgs = _self.imgs.concat(rtnfiles)
 					for(var i=0;i<rtnfiles.length;i++){
 						_self.imgid.push(rtnfiles[i].fileId);
 					}
 					if(_self.imgid.toString()){
-						_self.$data.zrimg = _self.imgid.toString().split(',')
+						_self.zrimg = _self.imgid.toString().split(',')
 					}
 				} else {
 					for(var i=0;i<rtnfiles.length;i++){
 						_self.fujianid.push(rtnfiles[i].fileId);
 					}
-					_self.$data.fujians = _self.$data.fujians.concat(forfile)
+					_self.fujians = _self.fujians.concat(forfile)
 					if(_self.fujianid.toString()){
-						_self.$data.zrfujian = _self.fujianid.toString().split(',')
+						_self.zrfujian = _self.fujianid.toString().split(',')
 					}
 
 				}
@@ -387,6 +387,7 @@ var danjuApi={
 				if(response.data.code == 200) {
 					console.log("data"+response.data.result)
 					if(_self.tijao == 1 && _self.baocun != 1) { //保存不提交
+
 						for(var i = 0; i < response.data.result.length; i++) {
 							_self.imgurl.push({
 								src: response.data.result[i].thumbnailurl
@@ -414,6 +415,7 @@ var danjuApi={
 			if(_self.tijao == 1 && _self.baocun != 1) { //保存不提交
 				danjuApi.save_send(n)
 			} else if(_self.tijao != 1 && _self.baocun == 1) { //直接提交
+				alert(n)
 				danjuApi.save_send(n)
 			} else if(_self.tijao == 1 && _self.baocun == 1) { //保存 再提交
 				danjuApi.save_send(n)
@@ -426,16 +428,16 @@ var danjuApi={
 	save_send:function(n){
 		// var _self = this;
 		if(n==1){
-			layer.open({
+			var baocun=layer.open({
 				type:1,
-				title:"提交中",
+				title:"保存中",
 				content:""
 			})
 			// ludan("提交中",0,1)
 		}else{
-			layer.open({
+			var tijaio=layer.open({
 				type:1,
-				title:"保存中",
+				title:"提交中",
 				content:""
 			})
 			// ludan("保存中",0,1)
@@ -457,8 +459,8 @@ var danjuApi={
 		} else {
 			fjid = _self.imgid.toString() + "," + _self.fujianid.toString()
 		}
-		if(n==0){
-			//使用单据状态判断，无法满足需求。2018-5-21新增字段postType(提交保存状态)0=保存 1=提交
+		if(n==1){
+			//使用单据状态判断，无法满足需求。2018-5-21新增字段postType(提交保存状态)1=保存 2=提交
 			_self.confirm = '0';
 		}else{
 			_self.confirm = '1';
@@ -468,19 +470,12 @@ var danjuApi={
 
 
 
-		if(n==1){
-			//使用单据状态判断，无法满足需求。2018-5-21新增字段postType(提交保存状态)0=保存 1=提交
-			_self.$data.confirm = '0';
-		}else{
-			_self.$data.confirm = '1';
-			_self.$data.postType = '1';
-		}
 		//收付款
 		if (_self.jine == "") {
 			_self.jine = 0;
 		}
 		var contractName,contractType,companySaleName,companySaleID,companySaleRoomID,companyBuyName,companyBuyID,companyBuyRoomID,
-		money,htTotal,fapiaoTitle,fapiaoTaxLv,name,type,toimid,htTotal,fapiaoTitle,fapiaoTaxLv,dateShenqing
+		money,htTotal,fapiaoTitle,fapiaoTaxLv,name,type,toimid,htTotal,fapiaoTitle,fapiaoTaxLv,dateShenqing,gongsialllei
 		if(_self.$refs.title_name.innerText=="收付款"){
 			contractName= _self.htong
 			contractType= _self.contractType
@@ -499,6 +494,7 @@ var danjuApi={
 		}else if(_self.$refs.title_name.innerText=="收发件"){
 			companySaleName= _self.pa_isroomname
 			companySaleID= _self.pa_isRoomCreditCode
+			gongsialllei: _self.nowCompany,
 			companySaleRoomID= _self.pa_isroomid
 			companyBuyName= _self.nowCompanyname.toString()
 			companyBuyID= _self.nowCompanyid.toString()
@@ -559,7 +555,7 @@ var danjuApi={
 			postType: _self.postType ,
 			attachment: fjid + _self.attachmentIds,
 			toroomimid: toimid,
-			// gongsialllei: _self.nowCompany,
+			gongsialllei: _self.nowCompany,
 			currRoomImId: _self.currRoomImId,
 			curRoomName: _self.currRoomClassName,
 			roomid: _self.pa_isroomid,
@@ -574,7 +570,9 @@ var danjuApi={
 		}
 		// _self.attachmentIds = ''
 		console.log(param)
-		alert(JSON.stringify(param))
+		// alert(569)
+		// alert(JSON.stringify(_self.imgurl))
+		// alert(JSON.stringify(param))
 		_self.$http.post("/contract/save", param).then(function(response) {
 			if(response.data.code == 200) {
 				console.log(response.data)
@@ -587,7 +585,13 @@ var danjuApi={
 					// layer.clsose(ludan("提交中",0,1))
 					danjuApi.sendtodo(toimid)
 				} else {
-					// layer.close(ludan("保存中",0,1))
+					layer.close(baocun)
+					layer.open({
+						type:1,
+						title:"保存成功",
+						content:"",
+						time:2
+					})
 					// ludan("保存成功", 2, 2)
 				}
 			} else {
