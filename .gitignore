@@ -24,3 +24,6 @@ src/components/project/base.txt
 src/components/project/js/area.js
 src/components/project/js/comment_zr.vue
 src/playform/mui.js
+package.json
+package-lock.json
+config/index.js

@@ -1,13 +1,13 @@
 <template>
     <div id="databox">
     
-        <!-- <ul> -->
+        <ul>
     
-            <!-- <li class="mui-table-view-cell mui-input-row" >
+            <li class="mui-table-view-cell mui-input-row" >
     
                 <a class="mui-navigate-right" href="#">
     
-                    <label>日期</label> -->
+                    <label v-text="title">日期</label>
     
                     <!-- <input type="text" v-model="form.MissionStartDate" @click="app.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
                     <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="openPicker">
@@ -15,11 +15,11 @@
                     <mt-datetime-picker  ref="picker" v-model="pickerVisible" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm">
                     </mt-datetime-picker>
     
-                <!-- </a>
+                </a>
     
             </li>
     
-        </ul> -->
+        </ul>
     
     </div>
 </template>
@@ -57,7 +57,8 @@ import { Toast } from "mint-ui";
         var _self=this
         var localtime = value.toLocaleDateString().replace(/[/]/g, "-");
         //向父组件传值
-        this.$emit('upup',localtime);
+        // this.$emit('upup',localtime);
+        this.$emit('datatoParent',localtime)
         _self.form.MissionStartDate = localtime;
 		_self.show = true;
 		// Toast({
@@ -95,5 +96,8 @@ import { Toast } from "mint-ui";
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-left: 6px;
+}
+#databox {
+    width: 100%
 }
 </style>

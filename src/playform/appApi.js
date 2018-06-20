@@ -1481,12 +1481,11 @@ window.appApi = {
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
-					alert(xhr.status)
 					if(xhr.status == 200) {
+						alert(xhr.responseText)
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
-
-							var tJson = JSON.parse(xhr.responseText).result;
+							var tJson = JSON.parse(xhr.responseText).result;	
 
 							if(tJson.toImId.indexOf(",") >= 0) {
 								//多个房间的推送
@@ -1536,11 +1535,11 @@ window.appApi = {
 
 								window.webactivity.sendTodoMsg(JSON.stringify(modifyJson), true);
 							}
-
 							success && success(JSON.parse(xhr.responseText));
 						}
-
+						alert("shibai1")
 					} else {
+						alert("shibai12")
 						err && err(JSON.parse(xhr.responseText));
 					}
 

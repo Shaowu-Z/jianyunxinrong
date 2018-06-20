@@ -234,7 +234,7 @@ export default {
     //   this.formDate();
     this.getTime();
     if (this.$route.query.id != undefined) {
-      this.informations();
+      this.rebackData();
     } else {
       this.getnews();
     }
@@ -550,6 +550,69 @@ export default {
     },
     mask: function() {
       this.leibiemove = !this.leibiemove;
+    },
+    // 退回数据
+    rebackData:function(){
+      var _self = this
+						var param = {
+							id: this.$route.query.id,
+						}
+						_self.$http.post("/contract/get_content", param).then(function(response) {
+							if(response.data.code == 200) {
+								var norl = JSON.parse(response.data.result.noralJson)
+								var cont = JSON.parse(response.data.result.contentJson)
+								var data = response.data.result
+								console.log(response.data)
+								_self.title = norl.tablefields.name
+								_self.yewu = norl.tablefields.type
+								_self.form.MissionStartDate = _self.formDate(norl.tablefields.dateFasheng)
+								norl.tablefields.beizhu = norl.tablefields.beizhu.replace(/#.%#/g, "\n");
+								_self.beizhu = norl.tablefields.beizhu
+								_self.isroomname = norl.curRoomName
+								_self.currRoomImId = norl.currRoomImId
+								_self.isRoomCreditCode = norl.tablefields.companySaleID
+								_self.getnews() 
+								console.log("123",norl.gongsialllei)
+								//接收单位数据
+								_self.nowCompany = norl.gongsialllei
+								_self.nowCompanyroomid.push(norl.roomid)
+								_self.nowCompanyroomid = norl.tablefields.companyBuyRoomID.split(",")
+								_self.nowCompanyroomimid = norl.toImid.split(",")
+								//图片附件
+								_self.imgs = norl.imgs
+								_self.fujians = norl.fujians
+                                if(norl.imgid.toString()){
+                                    _self.imgid = norl.imgid.toString().split(",")
+                                    _self.zrimg = norl.imgid.toString().split(",")
+                                }
+
+								if(norl.fjid.toString()){
+                                    _self.zrfujian = norl.fjid.toString().split(",")
+                                    _self.fujianid = norl.fjid.toString().split(",")
+								}
+
+								//提交信息
+								_self.id = _self.$route.query.id
+								_self.pa_cigid = norl.table.id
+								_self.pa_projectsn = data.projectId
+								_self.pa_isroomid = data.roomId
+								_self.pa_isroomname = data.roomName
+								_self.pa_isRoomCreditCode = norl.tablefields.companySaleID
+								_self.pa_projectName = norl.tablefields.projectName
+								_self.currRoomImId = norl.currRoomImId
+								_self.currRoomClassName = norl.curRoomName
+								_self.attachmentIds = norl.attachment
+                                _self.confirm = response.data.result.confirm;
+								if(norl.tablefields.companyBuyName.split(",")[1] != undefined) {
+									_self.nowCompanyname = norl.tablefields.companyBuyName.split(',')
+									_self.nowCompanyid = norl.tablefields.companyBuyID.split(',')
+								} else {
+									_self.nowCompanyname.push(norl.tablefields.companyBuyName)
+									_self.nowCompanyid.push(norl.tablefields.companyBuyID)
+								}
+
+							}
+						})
     }
   }
 };

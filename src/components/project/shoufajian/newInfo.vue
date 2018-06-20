@@ -65,7 +65,7 @@
 					<dl class="item">
 						<dt class="label">说明</dt>
 						<dd class="con">
-							<!-- <div class="m-block" name="" rows="" cols="" v-html="beizhu.replace(/\n|\r\n/g,'<br/>')" style="border: 0;padding: 0;"></div> -->
+							<div class="m-block" name="" rows="" cols="" v-html="beizhu.replace(/\n|\r\n/g,'<br/>')" style="border: 0;padding: 0;"></div>
 						</dd>
 					</dl>
 				</div>
@@ -469,7 +469,7 @@ export default {
                                         if (seeimg[i].roomId == _self.toroomid) {
                                             //签收弹窗
                                             if (seeimg[i].signStatus == 0) {
-                                                ludan("打开即签收", 1, 2)
+                                                alert("打开即签收")
                                                 _self.first = 2
                                             }
                                             _self.qianshou = 1
@@ -488,7 +488,7 @@ export default {
                                                     projectid: _self.projectid,
                                                 }
                                                 console.log(par)
-                                                this.$http.post("/contract/set_sign", par).then(function (res_) {
+                                                _self.$http.post("/contract/set_sign", par).then(function (res_) {
                                                     if (res_.data.code == 200) {
                                                         var parm = {
                                                             "toImId": _self.currRoomImId,
@@ -548,16 +548,42 @@ export default {
 					//判断文件类型
 					yes: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.content.companySaleName
+						window.location.href= "/static/newwebstatic/shoufajian/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.content.companySaleName
 					
 					},
 					no: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.curoomclass + "&leibie=" + _self.yewu
+						var urlmain={
+							id: _self.$route.query.id,
+							projectid:  _self.projectid,
+							roomid:_self.toroomid ,
+							roomname: _self.curoomname, 
+							typ:4,
+							nowroomImId:_self.nowroomImId, 
+							formroomimid: _self.fromroomImid,
+							title: _self.title ,
+							roomclass: _self.curoomclass, 
+							leibie: _self.yewu,
+						}
+						_self.$router.push({ path: '/static/newwebstatic/lianxi/ttp.html', query:urlmain})
+						// window.location.href= "/static/newwebstatic/shoufajian/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.curoomclass + "&leibie=" + _self.yewu
 					},
 					pin: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId
+						var urlmain={
+							id: _self.$route.query.id,
+							projectid:  _self.projectid,
+							roomid:_self.toroomid ,
+							roomname: _self.curoomname, 
+							typ:3,
+							nowroomImId:_self.nowroomImId, 
+							formroomimid: _self.fromroomImid,
+							title: _self.title ,
+							roomclass: _self.curoomclass, 
+							leibie: _self.yewu,
+						}
+						_self.$router.push({ path: '/static/newwebstatic/lianxi/ttp.html', query:urlmain})
+						// window.location.href= "/static/newwebstatic/shoufajian/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId
 					},
                     withdraw: function() {
                         var _self = this

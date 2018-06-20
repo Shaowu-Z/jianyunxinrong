@@ -106,9 +106,9 @@ export default {
                     if(_self.confirm==0){//退回状态
                         if(_self.roomId==_self.currroomid){//判断当前房间是否是推送的房间
                             if(_self.creatorId==_self.userid){ //判断当前人是否是录入人
-                                history.replaceState(null, null,"work_content.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
+                                history.replaceState(null, null,"newCreat.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
                                 // location.replace(''); //加载新url页面
-                                _self.$router.replace({ path: '/static/newwebstatic/lianxi/work_content.html', query: { id: _self.$route.query.id }})
+                                _self.$router.replace({ path: '/static/newwebstatic/lianxi/newCreat.html', query: { id: _self.$route.query.id }})
 //											window.location.replace(getUrl()+"/static/newwebstatic/lianxi/work_content.html?id="+this.$route.query.id)
                             }else{
                                 history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
