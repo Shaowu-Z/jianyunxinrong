@@ -4,7 +4,7 @@
  * 2018-06-11
  * */ 
 var tipApi={
-    /*******  loading  *********/ 
+   
     newDom:function(id,boxid,textid){
         var dom=document.createElement("div");  
         var insertDiv=document.createElement("div");  

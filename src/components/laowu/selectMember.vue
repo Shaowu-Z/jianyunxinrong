@@ -32,8 +32,8 @@
 						<div v-if="projectListStatus" id="project_list_id" style="display:block;">
 							<div v-for="(item,index) in projects" :key="index">
 								<ul class="mui-table-view">
-									<li class="mui-table-view-cell mui-collapse fold-title">
-										<a @click ="clickshow">
+									<li class="mui-table-view-cell mui-collapse" style="    border-bottom: 1px solid #efeff4;">
+										<a  @click ="clickshow(index)">
 											<div class="mui-slider-cell">
 												<div class="oa-contact-cell mui-table">
 													<div class="oa-contact-avatar mui-table-cell">
@@ -45,7 +45,7 @@
 												</div>
 											</div>
 										</a>
-										<ul class="mui-table-view" v-show="true">
+										<ul :index="index"  class="" v-show="proshow" >
 											<li class="mui-table-view-cell">
 												<div class="mui-slider-cell">
 													<div class="oa-contact-cell mui-table">
@@ -188,6 +188,7 @@ export default {
     projects:[],
     projectListStatus:true,
     teamListStatus:true,
+    proshow:false,
     }
   },
   created: function () {
@@ -233,8 +234,10 @@ export default {
 			if(val==null || val=="") return getUrl()+"/static/images/60x60.gif";
 			return val;
 		},
-		clickshow: function () {
-			return true;
+		clickshow: function (index) {
+			console.log()
+			this.proshow=!this.proshow
+			return false;
 		},
 		updated:function () {//DOM更新时，进行调用的方法
 			document.getElementById("list").style.display = "block";
@@ -571,6 +574,12 @@ export default {
 		.mui-control-item.selected{
 			color: #4ba9e9 !important;
 			border-color: #4ba9e9  !important;
+		}
+		.mui-scroll-wrapper{
+			overflow: scroll;
+		}
+		.fold-title{
+			    border-bottom: 1px solid #efeff4;
 		}
 </style>
 
