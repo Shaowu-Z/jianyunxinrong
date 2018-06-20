@@ -19,7 +19,7 @@ const shoufajian = resolve => require(['@/components/project/shoufajian'], resol
 const newCreat_lianxi = resolve => require(['@/components/project/shoufajian/newCreat'], resolve)
 const transfer_lianxi = resolve => require(['@/components/project/shoufajian/transfer'], resolve)
 const newInfo_lianxi = resolve => require(['@/components/project/shoufajian/newInfo'], resolve)
-// const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
+const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 //微承诺
 const chengnuo = resolve => require(['@/components/project/chengnuo'], resolve)
 const newCreat_chengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
@@ -83,7 +83,7 @@ const myProjectconfig = {
         },
         {
           path: '/static/newwebstatic/lianxi/ttp.html',
-          component: ttp
+          component: ttp_lianxi
         }
       ]
     },

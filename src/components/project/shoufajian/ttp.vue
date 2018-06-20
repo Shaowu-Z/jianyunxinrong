@@ -1,5 +1,6 @@
 <template>
     <div>
+        <header>123</header>
         <!-- <ul>
             <li class="mui-table-view-cell mui-input-row">
                 <a class="mui-navigate-right" href="#">
@@ -28,6 +29,7 @@ import { Picker } from 'mint-ui';
 import myaddress from "../js/city";
 import areaBar from "../../common/areaBar"
 import dataBar from "../../common/dataBar"
+import tipApi from "../js/tipApi"
     export default {
       name: '',
         components: {
@@ -94,7 +96,6 @@ import dataBar from "../../common/dataBar"
             }
         },
         created() {
-
         },
         methods: {
               childValue:function(val){
@@ -102,7 +103,9 @@ import dataBar from "../../common/dataBar"
                 this.test=val;
             },
              aa:function(){
-                 alert( this.test)
+                 tipApi.makesure("器东南地区建瓯积分哦熬煎熬发哦附件覅见打扫房间飞萨达机撒泼olkklkk",function(){
+                     console.log(48)
+                 })
             },
         //   onMyAddressChange(picker, values) {
         //       var _self=this
