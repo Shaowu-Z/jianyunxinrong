@@ -1841,13 +1841,12 @@ window.setLocationResult = function(address, latitudeAndLongitude, shortAddress,
  * 获取通讯录信息回调
  * @param result 姓名=电话，以,隔开 示例：  张三=15355558888,李四=13897979797
  */
-var setContactsResult = function(result, iosIfrObjStrT) {
+window.setContactsResult = function(result, iosIfrObjStrT) {
 	// if (typeof appApi.callBackFun == "function") {
 	//     var CONTENT = {};
 	//     CONTENT.result = result;
 	//     appApi.callBackFun(appApi.callBackFlag.CONTACTS, CONTENT);
 	// }
-
 	var CONTENT = {};
 	CONTENT.result = result;
 	if(iosIfrObjStrT) {

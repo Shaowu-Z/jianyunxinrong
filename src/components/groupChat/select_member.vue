@@ -506,7 +506,7 @@ export default {
             this.pagepath = setting.getPagePath();
             this.userId = BackCookie.getCookie("userid");
             var _self = this;
-                        function convertData (friendArray) {
+            function convertData (friendArray) {
                 if (friendArray && friendArray.length > 0) {
 
                     var newArrs = new Array();
@@ -741,7 +741,7 @@ export default {
                 _self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
                     // console.log(_self,'底层');
                     _self.friendsList = convertData(response.data.result);
-                    console.log(response.data.result)
+                    console.log(response.data.result,1111111111111)
                     _self.updated();
                 }).catch(function (error) {
                     console.info(error);
