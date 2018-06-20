@@ -1,6 +1,8 @@
 <template>
   <div>
-      <router-view></router-view>
+      <header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">选择联系人</h1>
+	</header>
   </div>
 </template>
 

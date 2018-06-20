@@ -17,6 +17,7 @@ const manageCalendarDetail = resolve => require(['@/components/laowu/manageCalen
 const laowuSignDetail = resolve => require(['@/components/laowu/laowuSignDetail'], resolve)
 const contractList = resolve => require(['@/components/laowu/contractList'], resolve)
 const selectMember = resolve => require(['@/components/laowu/selectMember'], resolve)
+const phoneList = resolve => require(['@/components/laowu/phoneList'], resolve)
 
 
 
@@ -123,6 +124,10 @@ const laowuConfig = {
     {
       path: '/static/webstatic/new_laowu/select_member.html',//日历列表
       component: selectMember
+    },
+    {
+      path: '/static/webstatic/new_laowu/project_phone_list.html',//日历列表
+      component: phoneList
     },
    
   ]

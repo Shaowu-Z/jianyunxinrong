@@ -263,6 +263,7 @@ window.appApi = {
 			}
 			iosShare(shareType, JSON.stringify(shareJson));
 		} else if(isApp && isAndroid) { //addroid
+			
 			window.webactivity.share(shareType, JSON.stringify(shareJson));
 		} else {
 			console.info("请在app中调用");

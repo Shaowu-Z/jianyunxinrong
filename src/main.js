@@ -8,7 +8,7 @@ import router from './router'
 import axios from 'axios'
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
-// import mui from "mui";
+import phonePy from "./playform/py.js";
 import "./playform/alert.js";
 import "./playform/layer.js";
 import './assets/css/common/mui.less'
@@ -41,6 +41,7 @@ Vue.use(MintUI)
 Vue.prototype.$http = http
 Vue.config.productionTip = false
 Vue.prototype.HOST = ''
+Vue.prototype.phonePy = phonePy
 
 /* eslint-disable no-new */
 new Vue({

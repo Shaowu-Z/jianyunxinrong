@@ -111,8 +111,9 @@ export default {
             this.$router.go(-1);
         },
       goShare: function () {
-            var url = "/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
-            var logo = "/static/images/app-logo.jpg";
+           var host="http://java.winfreeinfo.com"
+            var url = host+"/static/webstatic/mycenter/ext/share_detail.html?type=" + 3;
+            var logo = host+"/static/images/app-logo.jpg";
             appApi.share(8, laowu_common.userName + "邀请您创建新项目", "工程人员都在用蜘筑侠，项目沟通找人都非常方便，赶紧用起来", url, logo, null);
         },
 		  openImg:function(index,ary){
