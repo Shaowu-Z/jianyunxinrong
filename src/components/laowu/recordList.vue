@@ -23,6 +23,7 @@
                     <li class="mui-table-cell mui-text-center">五</li>
                     <li class="mui-table-cell mui-text-center">六</li>
                 </ul>
+                
                 <v-touch @swipeleft="prev" @swiperight="next">
                     <div class="mui-slider-group">
                     </div>
