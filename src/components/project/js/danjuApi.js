@@ -545,7 +545,7 @@ var danjuApi={
        		fapiaoTaxLv: fapiaoTaxLv,
 			contractType:contractType,
 			dateFasheng: _self.form.MissionStartDate + " " + _self.nowtime,
-			dateChengnuo:dateChengnuo+" "+ _self.nowtime,
+			dateChengnuo:_self.form.MissionStartDate+" "+ _self.nowtime,
 			beizhu: _self.beizhu,
 			confirmStatus: "", //确认状态
 
@@ -593,7 +593,7 @@ var danjuApi={
 		console.log("param",param)
 		// alert(569)
 		// alert(JSON.stringify(_self.imgurl))
-		// alert(JSON.stringify(param))
+		alert(JSON.stringify(param))
 		_self.$http.post("/contract/save", param).then(function(response) {
 			if(response.data.code == 200) {
 				console.log(response.data)
@@ -636,6 +636,24 @@ var danjuApi={
 			todo_title=decodeURI(_self.username) + "的收发件：" + _self.title
 			todo_content="类别=" + _self.yewu + "|日期=" + _self.form.MissionStartDate
 			todo_url="/static/newwebstatic/lianxi/transfer.html?id="
+		}else if(_self.$refs.title_name.innerText=="微承诺"){
+			if (_self.type == "单方承诺") {
+				todo_title =
+				 encodeURIComponent(_self.personAccept) +
+				  "向" 
+				  _self.personDistribute +
+				  "的微承诺";
+				  todo_content="承诺日期=" + _self.shenqing
+				  todo_url="/static/newwebstatic/chengnuo/transfer.html?id="
+			  } else {
+				todo_title =
+				  encodeURIComponent(_self.personAccept)+
+				  "与" +
+				  _self.personDistribute +
+				  "的双向承诺";
+				  todo_content="承诺日期=" + _self.shenqing
+				  todo_url="/static/newwebstatic/chengnuo/transfer.html?id="
+			  }
 		}
 
 		console.log()
