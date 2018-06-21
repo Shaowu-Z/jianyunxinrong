@@ -1,7 +1,7 @@
 <template>
     <div>
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title" ref="title_name">微承诺</h1>
+            <h1 class="mui-title">微承诺</h1>
             <a class="mui-action-back mui-icon iconfont icon-back" v-if="backicon!=0" @click="back"></a>
         </header>
 					<div v-if="backicon==0" class="mui-content">
@@ -92,9 +92,9 @@
 								</ul>
 							</div>
 							<div class="mui-table mult-btn-box">
-								<div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="save(1)">保&nbsp;&nbsp;存</button></div>
+								<div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="save">保&nbsp;&nbsp;存</button></div>
 								<div class="mui-table-cell space"></div>
-								<div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="save(2)">提&nbsp;&nbsp;交</button></div>
+								<div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="sends">提&nbsp;&nbsp;交</button></div>
 							</div>
 						</div>
 					
@@ -183,14 +183,12 @@ export default {
       confirm: "",
       postType: "",
       imgid: [],
-      fujianid: [],
-      chengnuiriqi:''
+      fujianid: []
     };
   },
   created() {
     danjuApi.vue = this;
     danjuApi.initVue()
-    this.getTime()
     if (this.$route.query.id != undefined) {
       this.informations();
     } else {
@@ -205,10 +203,10 @@ export default {
   mounted() {},
   methods: {
         childValue:function(val){
-            // this.test=val;
-            this.form.MissionStartDate=this.formDate(val)
-             console.log("value"+this.form.MissionStartDate)
-        },
+                console.log("value"+val)
+                // this.test=val;
+                this.form.MissionStartDate=this.formDate(val)
+            },
             formDate:function(value) {
                 var Y,m,d,H,i,s,t
 				var date = new Date(value);
@@ -376,44 +374,44 @@ export default {
       //						_self.form.MissionStartDate = formDate('');
     },
     //时间选择
-    // selectDate: function(t) {
-    //   var o = this;
-    //   // hx
-    //   if (t == "s") {
-    //     if (o.form.MissionStartDate != "") {
-    //       opt.value = o.form.MissionStartDate;
-    //     }
-    //   } else if (t === "e") {
-    //     if (o.form.MissionEndDate != "") {
-    //       opt.value = o.form.MissionEndDate;
-    //     }
-    //   } else if (t === "d") {
-    //     if (o.form.datejiexiang != "") {
-    //       opt.value = o.form.datejiexiang;
-    //     }
-    //   }
+    selectDate: function(t) {
+      var o = this;
+      // hx
+      if (t == "s") {
+        if (o.form.MissionStartDate != "") {
+          opt.value = o.form.MissionStartDate;
+        }
+      } else if (t === "e") {
+        if (o.form.MissionEndDate != "") {
+          opt.value = o.form.MissionEndDate;
+        }
+      } else if (t === "d") {
+        if (o.form.datejiexiang != "") {
+          opt.value = o.form.datejiexiang;
+        }
+      }
 
-    //   picker.show(function(rs) {
-    //     /*
-		// 					 * rs.value 拼合后的 value
-		// 					 * rs.text 拼合后的 text
-		// 					 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
-		// 					 * rs.m 月，用法同年
-		// 					 * rs.d 日，用法同年
-		// 					 * rs.h 时，用法同年
-		// 					 * rs.i 分（minutes 的第二个字母），用法同年
-		// 					 */
-    //     opt["value"] = rs.value; //控件同步
-    //     if (t == "s") {
-    //       o.form.MissionStartDate = rs.value;
-    //     } else if (t === "e") {
-    //       o.form.MissionEndDate = rs.value;
-    //     } else if (t === "d") {
-    //       o.form.datejiexiang = rs.value;
-    //     }
-    //     //							picker.dispose(); //释放资源
-    //   });
-    // },
+      picker.show(function(rs) {
+        /*
+							 * rs.value 拼合后的 value
+							 * rs.text 拼合后的 text
+							 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+							 * rs.m 月，用法同年
+							 * rs.d 日，用法同年
+							 * rs.h 时，用法同年
+							 * rs.i 分（minutes 的第二个字母），用法同年
+							 */
+        opt["value"] = rs.value; //控件同步
+        if (t == "s") {
+          o.form.MissionStartDate = rs.value;
+        } else if (t === "e") {
+          o.form.MissionEndDate = rs.value;
+        } else if (t === "d") {
+          o.form.datejiexiang = rs.value;
+        }
+        //							picker.dispose(); //释放资源
+      });
+    },
 
     //选承诺人
     chengnuo: function() {
@@ -786,33 +784,25 @@ export default {
     //   console.log(_self.zrfujian);
     //   console.log(typeof JSON.stringify(_self.zrfujian));
     // },
-    save: function(type) {
+    save: function() {
       var _self = this;
     //   ludan("保存中", 0, 1);
-    // tipApi.waring("保存中")
-
-      if (type == 1) {
-        this.tijao = 1;
-      } else {
-        this.baocun = 1;
-      }
-      danjuApi.getimgurl(type);
-
+    tipApi.waring("保存中")
     
-    //   //						if(_self.tijao != 1) {
-    //   _self.tijao = 1;
-    //   _self.getimgurl(0);
-    //   //						} else {
-    //   //							ludan("已保存", 2, 1)
-    //   //						}
-    // },
-    // sends: function() {
-    //   var _self = this;
-    // //   ludan("提交中", 0, 1);
-    //   tipApi.waring("提交中")
-    //   //						if(_self.baocun != 1) {
-    //   _self.baocun = 1;
-    //   _self.getimgurl(1);
+      //						if(_self.tijao != 1) {
+      _self.tijao = 1;
+      _self.getimgurl(0);
+      //						} else {
+      //							ludan("已保存", 2, 1)
+      //						}
+    },
+    sends: function() {
+      var _self = this;
+    //   ludan("提交中", 0, 1);
+      tipApi.waring("提交中")
+      //						if(_self.baocun != 1) {
+      _self.baocun = 1;
+      _self.getimgurl(1);
       //						} else {
       //							ludan("已提交", 2, 1)
       //						}
@@ -916,13 +906,13 @@ export default {
       //							_self.tuiroomimid = _self.starroomimid
       //						}
       //						alert(_self.boforeroomImId)
+      var chengnuiriqi;
       if (_self.form.MissionStartDate == "") {
-        _self.chengnuiriqi = null;
+        chengnuiriqi = null;
       } else {
-        _self.chengnuiriqi =
+        chengnuiriqi =
           _self.form.MissionStartDate + " " + _self.nowtime;
       }
-      // alert("_self.form.MissionStartDate", _self.form.MissionStartDate)
       var tablefields = {
         userName: _self.username,
         userID: _self.userid,
@@ -941,8 +931,15 @@ export default {
         dateShenqing: _self.shenqing + " " + _self.nowtime,
         projectName: _self.pa_projectName,
         projectSN: _self.pa_projectsn,
+        //							companySaleName: _self.pa_isroomname,
+        //							companySaleID: _self.pa_isRoomCreditCode,
+        //							companySaleRoomID: _self.pa_isroomid,
+        //							companyBuyName: _self.nowCompanyname.toString(),
+        //							companyBuyID: _self.nowCompanyid.toString(),
+        //							companyBuyRoomID: _self.nowCompanyroomid.toString(),
+        //							name: _self.title,
         type: _self.type,
-        dateChengnuo: _self.chengnuiriqi,
+        dateChengnuo: chengnuiriqi,
         beizhu: _self.beizhuzhuan,
         confirmStatus: "", //确认状态
         confirmPersonName: "",
@@ -997,7 +994,6 @@ export default {
       this.$http
         .post( "/contract/save", param)
         .then(function(response) {
-          alert(JSON.stringify(response))
           if (response.data.code == 200) {
             _self.first = 1;
             _self.id = response.data.result.id;
@@ -1028,13 +1024,13 @@ export default {
       var title;
       if (_self.type == "单方承诺") {
         title =
-         encodeURIComponent(_self.personAccept) +
-          "向" 
+          _self.personAccept +
+          "向" +
           _self.personDistribute +
           "的微承诺";
       } else {
         title =
-          encodeURIComponent(_self.personAccept)+
+          _self.personAccept +
           "与" +
           _self.personDistribute +
           "的双向承诺";

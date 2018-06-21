@@ -38,7 +38,6 @@ export default {
     shuju:'',
     timeType:'',
     datanow:"",
-    defaultIndex:''
   },
   data() {
     return {

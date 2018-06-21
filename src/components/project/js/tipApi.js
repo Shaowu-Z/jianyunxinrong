@@ -149,7 +149,7 @@ var tipApi={
     /**
      * 关闭对应的弹窗
     */
-    close:function(name){
+    close:function(name,){
         var id=''+name //转字符串
         if(document.getElementById(id+"mask_zr")!=null){
             document.body.removeChild(document.getElementById(id+"mask_zr"))

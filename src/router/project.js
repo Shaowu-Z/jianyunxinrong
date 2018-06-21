@@ -7,25 +7,25 @@
 // import personApprove from '@/components/login/personApprove'
 
 const project = resolve => require(['@/components/project'], resolve)
-const addProject = resolve => require(['@/components/project/addproject'], resolve)
+const addProject = resolve => require(['@/components/project/add_project'], resolve)
 //收付款
 const shoufukuan = resolve => require(['@/components/project/shoufukuan'], resolve)
-const workcontent = resolve => require(['@/components/project/shoufukuan/workcontent'], resolve)
-const transfersfk = resolve => require(['@/components/project/shoufukuan/transfersfk'], resolve)
+const work_content = resolve => require(['@/components/project/shoufukuan/work_content'], resolve)
+const transfer_sfk = resolve => require(['@/components/project/shoufukuan/transfer_sfk'], resolve)
 const newInfo = resolve => require(['@/components/project/shoufukuan/newInfo'], resolve)
 const ttp = resolve => require(['@/components/project/shoufukuan/ttp'], resolve)
 //收发件
 const shoufajian = resolve => require(['@/components/project/shoufajian'], resolve)
-const newCreatlianxi = resolve => require(['@/components/project/shoufajian/newCreat'], resolve)
-const transferlianxi = resolve => require(['@/components/project/shoufajian/transfer'], resolve)
-const newInfolianxi = resolve => require(['@/components/project/shoufajian/newInfo'], resolve)
-const ttplianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
+const newCreat_lianxi = resolve => require(['@/components/project/shoufajian/newCreat'], resolve)
+const transfer_lianxi = resolve => require(['@/components/project/shoufajian/transfer'], resolve)
+const newInfo_lianxi = resolve => require(['@/components/project/shoufajian/newInfo'], resolve)
+const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 //微承诺
 const chengnuo = resolve => require(['@/components/project/chengnuo'], resolve)
-const newCreatchengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
-const transferchengnuo = resolve => require(['@/components/project/chengnuo/transfer'], resolve)
-const newInfochengnuo = resolve => require(['@/components/project/chengnuo/newInfo'], resolve)
-// const ttplianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
+const newCreat_chengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
+const transfer_chengnuo = resolve => require(['@/components/project/chengnuo/transfer'], resolve)
+const newInfo_chengnuo = resolve => require(['@/components/project/chengnuo/newInfo'], resolve)
+// const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
 // const backpwd = resolve => require(['@/components/login/backpwd'], resolve)
@@ -47,12 +47,12 @@ const myProjectconfig = {
       children: [
         
         {
-          path: '/static/newwebstatic/shoufukuan/workcontent.html',
-          component: workcontent
+          path: '/static/newwebstatic/shoufukuan/work_content.html',
+          component: work_content
         },
         {
           path: '/static/newwebstatic/shoufukuan/transfer.html',
-          component: transfersfk
+          component: transfer_sfk
         },
         {
           path: '/static/newwebstatic/shoufukuan/newInfo.html',
@@ -71,19 +71,19 @@ const myProjectconfig = {
         
         {
           path: '/static/newwebstatic/lianxi/newCreat.html',
-          component: newCreatlianxi
+          component: newCreat_lianxi
         },
         {
           path: '/static/newwebstatic/lianxi/transfer.html',
-          component: transferlianxi
+          component: transfer_lianxi
         },
         {
           path: '/static/newwebstatic/lianxi/newInfo.html',
-          component: newInfolianxi
+          component: newInfo_lianxi
         },
         {
           path: '/static/newwebstatic/lianxi/ttp.html',
-          component: ttplianxi
+          component: ttp_lianxi
         }
       ]
     },
@@ -91,17 +91,18 @@ const myProjectconfig = {
       path: '/chengnuo',
       component: chengnuo,
       children: [
+        
         {
           path: '/static/newwebstatic/chengnuo/newCreat.html',
-          component: newCreatchengnuo
+          component: newCreat_chengnuo
         },
         {
           path: '/static/newwebstatic/chengnuo/transfer.html',
-          component: transferchengnuo 
+          component: transfer_chengnuo 
         },
         {
           path: '/static/newwebstatic/chengnuo/newInfo.html',
-          component: newInfochengnuo
+          component: newInfo_chengnuo
         },
         {
           path: '/static/newwebstatic/chengnuo/ttp.html',
@@ -112,12 +113,12 @@ const myProjectconfig = {
     
     
     //     {
-    //   path: '/static/newwebstatic/shoufukuan/workcontent.html',
+    //   path: '/static/newwebstatic/shoufukuan/work_content.html',
     //   component: shoufukuan
     // },
     // {
     //   path: '/static/newwebstatic/shoufukuan/transfer.html',
-    //   component: transfersfk
+    //   component: transfer_sfk
     // },
     // {
     //   path: '/static/newwebstatic/shoufukuan/newInfo.html',

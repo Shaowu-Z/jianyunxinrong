@@ -614,7 +614,7 @@ var laowu_confirm = {
                     laowu_confirm.showPingfenList();//显示分数
                 },10)
             }else {
-                
+                alert(2)
                 app.data.confirmList=[];
             }
         }
@@ -639,7 +639,7 @@ var laowu_confirm = {
             if(result.length>0){
                 app.data.attrecordList=result;
             }else {
-                
+                alert(3)
                  app.data.attrecordList=[];
                 //  console.log("未查询到打卡记录!")
             }

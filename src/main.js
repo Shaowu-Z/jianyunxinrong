@@ -31,8 +31,6 @@ let http = axios.create({
   //   return Qs.stringify(data)
   // }]
 })
-var VueTouch = require('vue-touch')
-Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(http)
 Vue.use(router)
 // Vue.use(mui)

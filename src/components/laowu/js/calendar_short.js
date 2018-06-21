@@ -8,13 +8,8 @@ d2.getDay() // 周3
 d2.toLocaleDateString();
 var date_now = new Date().getDate()
 var paramMap=null
-var _self=null
 var calendar_short = {
 
-    initVue:function(vue){
-        _self=vue;
-        console.log("_seslf",_self)
-    },
     initData: function () {
         //传入日期
         var fromdata = "";
@@ -22,6 +17,7 @@ var calendar_short = {
         if (paramMap != null) {
             fromdata = paramMap.queryTime;
         }
+       
         if (!fromdata) {
             alert("日期查询出错")
         }
@@ -32,9 +28,9 @@ var calendar_short = {
         var chaM = 12 * chaY
         var nowM = chuanM + chaM - 1
         var nowD = parseInt(chuanD)
-       // setTimeout(function(){
+        setTimeout(function(){
             calendar_short.rlmake(nowM, nowD)
-        //},100)
+        },100)
 
         $(".cc").text(d2.getMonth() + 1)
     },
@@ -54,8 +50,6 @@ var calendar_short = {
         //最后一天周几
         var date_lastone = new Date(d2.getFullYear(), k, date_all).getDay()
         var sd = 7 - date_one
-        _self.fordata=date_one
-        console.log("设置",_self)
         var zhou = Math.ceil((date_all - sd) / 7) + 1
         //	var Mou = new Date(d2.getFullYear(), k + 1, 1).getMonth()
         var startdata = v + new Date(d2.getFullYear(), k, 1).getDay() - 1
@@ -77,7 +71,7 @@ var calendar_short = {
             $(".itm" + movestepq).find("li").eq(datanowr).css("background", "#4ba9e9")
             $(".itm" + movestepq).find("li").eq(datanowr).css("color", "#fff")
         }
-        // alert(_self.$route.query.queryTime.split("-")[2])
+
     },
     /**
  * 选择下一月
@@ -85,7 +79,6 @@ var calendar_short = {
     nextMonth: function () {
         var cunt = 0
         $(".mui-slider-group").css("transform", " translate3d(0px, 0px, 0px)")
-        $(".mui-slider-group").css("left", "0px")
         cunt++
         var num = Number($(".cc").text()) + cunt
         $(".cc").text(num)
@@ -97,7 +90,6 @@ var calendar_short = {
     lastMonth: function () {
         var cunt = 0
         $(".mui-slider-group").css("transform", " translate3d(0px, 0px, 0px)")
-        $(".mui-slider-group").css("left", "0px")
         cunt--
         var num = Number($(".cc").text()) + cunt
         $(".cc").text(num)
@@ -112,7 +104,6 @@ export default calendar_short;
 
  //点击日期
  window.clickDate=function (obj) {
-     console.log("当前值："+obj.innerHTML)
     var day = obj.innerHTML;
     if (day < 10) {
         day = "0" + day
