@@ -98,7 +98,7 @@ export default {
     this.showList();
   },
   
-  methods: {
+    methods: {
     onMyAddressChange(picker, values) {
       var _self = this;
       if (myaddress[values[0]]) {
