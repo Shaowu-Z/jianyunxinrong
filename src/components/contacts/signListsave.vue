@@ -40,6 +40,7 @@
 
 <script>
 import { Indicator } from 'mint-ui';
+import laowu_common from '../laowu/js/laowu_common';
 export default {
     data(){
         return{
@@ -139,14 +140,14 @@ export default {
                 params.append("operateType",operateType);
                 console.log(params);
                 _self.$http.post("/sign/save_seal_info",params).then(function (response) {
-                    // loading('保存成功，跳转中...！');
-                    Indicator.open('保存成功，跳转中...！');
+                   laowu_common.loading('保存成功，跳转中...！');
+                    // Indicator.open('保存成功，跳转中...！');
                     //msg("保存成功");
-
+                    
                     setTimeout(function () {
                         appApi.broadcast("reLoad()"); //刷新页面
                         appApi.closeNewWindow();
-                        Indicator.close();
+                        // Indicator.close();
                     },1500)
                 }).catch(function (error) {
                     console.info(error);

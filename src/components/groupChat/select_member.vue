@@ -32,14 +32,14 @@
                     <div class="mui-scroll">
                         <section class="mui-content" id="">
                             <div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
-                                <a href="javascript:if(isHideProjectList=='y'){isHideProjectList = 'n';$('#project_list_id').show();}else{isHideProjectList = 'y';$('#project_list_id').hide();}">
+                                <a @click="showhide(1)" style="display:block;margin-top:45px" class="text">
                                     <h5 class="mui-content-padded">项目列表(点击收缩或展开)</h5>
                                 </a>
-                                <div id="project_list_id" style="display:block;">
+                                <div id="project_list_id" style="display:block;" v-show="show2">
                                     <div v-for="(item,index) in projects" :key="index">
                                         <ul class="mui-table-view">
                                             <li class="mui-table-view-cell mui-collapse fold-title">
-                                                <a @click ="clickshow">
+                                                <a @click ="clickshow(index)" style="border-bottom: 1px solid #ccc;">
                                                     <div class="mui-slider-cell">
                                                         <div class="oa-contact-cell mui-table">
                                                             <div class="oa-contact-avatar mui-table-cell">
@@ -51,14 +51,14 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <ul class="mui-table-view" v-show="true">
+                                                <ul class="mui-table-view" :class="{'dis' : Listshow.indexOf(index) !== -1}">
                                                     <li class="mui-table-view-cell">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
                                                                     <img src="../../assets/images/ico_second.gif" />
                                                                 </div>
-                                                                <div class="oa-contact-content mui-table-cell">
+                                                                <div class="oa-contact-content mui-table-cell text">
                                                                     <a href="#select_project"  :data-project-id="item.serialNum"  :data-project-name="item.ProjectName" class="oa-contact-name"><span class="oa-contact-content mui-table-cell">所有参与人员</span></a>
                                                                 </div>
                                                             </div>
@@ -71,14 +71,14 @@
                                 </div>
                                 
                                 
-                                <a href="javascript:if(isHideTeamList=='y'){isHideTeamList = 'n';$('#team_list_id').show();}else{isHideTeamList = 'y';$('#team_list_id').hide();}">
+                                <a @click="showhide(2)" class="text">
                                     <h5 class="mui-content-padded">团队列表(点击收缩或展开)</h5>
                                 </a>
-                                <div id="team_list_id" style="display:block;">
-                                    <div v-for="(item,index) in items" :key="index">
+                                <div id="team_list_id" style="display:block;" v-show="show1">
+                                    <div v-for="(item,index1) in items" :key="index1">
                                         <ul class="mui-table-view">
                                             <li class="mui-table-view-cell mui-collapse fold-title">
-                                                <a @click ="clickshow">
+                                                <a @click ="clickshowone(index1)">
                                                     <div class="mui-slider-cell">
                                                         <div class="oa-contact-cell mui-table">
                                                             <div class="oa-contact-avatar mui-table-cell">
@@ -90,14 +90,14 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <ul class="mui-table-view" v-show="true">
+                                                <ul class="mui-table-view" :class="{'dis' : Listshow1.indexOf(index1) !== -1}">
                                                     <li class="mui-table-view-cell">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
                                                                     <img src="../../assets/images/ico_second.gif" />
                                                                 </div>
-                                                                <div class="oa-contact-content mui-table-cell">
+                                                                <div class="oa-contact-content mui-table-cell text">
                                                                     <a href="#select_children"  :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
                                                                 </div>
                                                             </div>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
 
-                                <h5 class="mui-content-padded">好友列表</h5>
+                                <h5 class="mui-content-padded text">好友列表</h5>
                                 <div id='list' class="address-list">
                                     <!--<div class="mui-indexed-list-search mui-input-row mui-search hide">
                                         <input type="search" v-model="key" class="" placeholder="搜索">
@@ -129,7 +129,7 @@
                                     <div class="mui-indexed-list-inner">
                                         <ul class="mui-table-view">
                                             <div v-for="(items,index) in friendsList" :key="index">
-                                                <div v-for="(item,index) in items" :key="index">
+                                                <div v-for="(item,indexone) in items" :key="indexone">
                                                     <div v-if="item.name">
                                                         <!--<div v-if="item.isp == 1">
                                                             <li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group" v-text="item.first"></li>
@@ -137,17 +137,17 @@
                                                         <li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item mui-checkbox">
                                                             <div class="mui-slider-cell">
                                                                 <div class="oa-contact-cell mui-table">
-                                                                    <div class="oa-contact-input mui-table-cell">
+                                                                    <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                                                         <div v-if="selectArr.contains(item.userId +'')">
                                                                             <div v-if="myId == item.friendsUserId || thirdUserId == item.friendsUserId">
-                                                                                <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                                <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent($event,item)" id="user" data-type="user" ref="user" :value="item.friendsUserId"/>
                                                                             </div>
                                                                             <div v-else>
-                                                                                <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                                <input type="checkbox" checked="checked" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.friendsUserId"/>
                                                                             </div>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
+                                                                            <input type="checkbox" @change="selEvent($event,item)" data-type="user"  ref="user" id="user" :value="item.friendsUserId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="oa-contact-avatar mui-table-cell">
@@ -263,7 +263,7 @@
                                                         <div v-else>
                                                             <input type="checkbox" onchange="selEvent(this)" data-type="dept" :value="item.deptId" class="member-select"/>
                                                         </div>-->
-                                                        <input type="checkbox" @change="selEvent(this)" data-type="dept" :value="item.deptId" class="dept-select"/>
+                                                        <input type="checkbox" @change="selEvent(this)" data-type="dept"  ref="dept" id="dept" :value="item.deptId" class="dept-select"/>
                                                     </div>
                                                     <div class="oa-contact-content mui-table-cell">
                                                         <h4 class="oa-contact-name" v-text="item.deptName"></h4>
@@ -286,14 +286,14 @@
                                                                 <div class="oa-contact-input mui-table-cell">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
                                                                         <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -430,14 +430,14 @@
                                                                 <div class="oa-contact-input mui-table-cell">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
                                                                         <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" ref="user" id="user" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -473,7 +473,8 @@
 <script>
 import {BackCookie,getParam} from '../../playform/common'
 import setting from '../../playform/config'
-import mui from '../../playform/mui'
+// import mui from '../../playform/mui'
+import { Toast } from 'mint-ui';
 export default {
         data () {
             return {
@@ -499,10 +500,15 @@ export default {
                 c_scroll:'',
                 viewApi:'',
                 view:'',
+                show1:true,
+                show2:true,
+                selectUserIds:'',
+                Listshow:[],
+                Listshow1:[]
             }
         },
         created () {
-            console.log(mui,'mui');
+            // console.log(mui,'mui');
             this.pagepath = setting.getPagePath();
             this.userId = BackCookie.getCookie("userid");
             var _self = this;
@@ -742,7 +748,7 @@ export default {
                     // console.log(_self,'底层');
                     _self.friendsList = convertData(response.data.result);
                     console.log(response.data.result,1111111111111)
-                    _self.updated();
+                    // _self.updated();
                 }).catch(function (error) {
                     console.info(error);
                 });
@@ -752,7 +758,7 @@ export default {
             */
             var paramMap= getParam(window.location.href);//获取地址栏参数
             var thirdUserId=paramMap.userId;
-            var selectUserIds = "";//选中的userIds
+            // var selectUserIds = "";//选中的userIds
 
             //弹出部门人员选择,(1选人,2回到群组创建主页)
             function controlUpdate (type) {
@@ -802,141 +808,234 @@ export default {
             //     bounce: false
             // });
 
-            window.onload=function(){
-                viewApi = $('#app').view({
-                    defaultPage: '#select_member',
-                    goEvent:function (target) {
-                        //用于点击跳转事件
-                        if (target.hash == "#select_children") {
-                            var obj = {teamId:target.getAttribute("data-team-id"),teamName:target.getAttribute("data-team-name"),deptId:target.getAttribute("data-dept-id"),deptName:target.getAttribute("data-dept-name"),type:2}
-                            historyArr.push(obj);
-                            var _self = capp;
-                            _self.navList = historyArr;
-                            initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
-                            appApi.hideBack();
-                        }else if(target.hash == "#select_project"){
-                            var obj = {teamId:target.getAttribute("data-project-id"),teamName:target.getAttribute("data-project-name"),type:1}
-            //				console.log(JSON.stringify(obj))
-            //				historyArr.push(obj);
-                            var _self = project;
-            //				_self.$data.navList = historyArr;
-                            _self.getProjectMembers(obj.teamId, obj.teamName);
-                            appApi.hideBack();
-                        }else{
-                            historyArr = new Array();
-                        }
-                    },
-                    backEvent:function (target) {
-                        if (target.id == "select_member") {
-                            historyArr = new Array();
-                            appApi.showBack();
-                        }
-                    }
-                });
+            // window.onload=function(){
+            //     viewApi = $('#app').view({
+            //         defaultPage: '#select_member',
+            //         goEvent:function (target) {
+            //             //用于点击跳转事件
+            //             if (target.hash == "#select_children") {
+            //                 var obj = {teamId:target.getAttribute("data-team-id"),teamName:target.getAttribute("data-team-name"),deptId:target.getAttribute("data-dept-id"),deptName:target.getAttribute("data-dept-name"),type:2}
+            //                 historyArr.push(obj);
+            //                 var _self = capp;
+            //                 _self.navList = historyArr;
+            //                 initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
+            //                 appApi.hideBack();
+            //             }else if(target.hash == "#select_project"){
+            //                 var obj = {teamId:target.getAttribute("data-project-id"),teamName:target.getAttribute("data-project-name"),type:1}
+            // //				console.log(JSON.stringify(obj))
+            // //				historyArr.push(obj);
+            //                 var _self = project;
+            // //				_self.$data.navList = historyArr;
+            //                 _self.getProjectMembers(obj.teamId, obj.teamName);
+            //                 appApi.hideBack();
+            //             }else{
+            //                 historyArr = new Array();
+            //             }
+            //         },
+            //         backEvent:function (target) {
+            //             if (target.id == "select_member") {
+            //                 historyArr = new Array();
+            //                 appApi.showBack();
+            //             }
+            //         }
+            //     });
             
-                this.view = this.viewApi.view;
-                (function($) {
-                    var oldBack = $.back;
-                    $.back = function() {
-                        if (this.viewApi.canBack()) { //如果view可以后退，则执行view的后退
-                            if(backFun()){
-                                this.viewApi.back();
-                            }
-                        } else { //执行webview后退
-                            //oldBack();
-                            //appApi.showBack();
-                            //appApi.resetBack();
-                            backFun();
-                        }
-                    };
-                    var myback = function () {
-                        if (this.viewApi.canBack()) { //如果view可以后退，则执行view的后退
-                            if(backFun()){
-                                this.viewApi.back();
-                            }
-                        } else { //执行webview后退
-                            oldBack();
-                            appApi.resetBack();
-                        }
-                    };
-                    //appApi.stopBack(myback);//注销此行 2017.9.20
-                    view.addEventListener('pageBeforeShow', function(e) {
-                        //appApi.hideBack();
-                    });
-                    view.addEventListener('pageBeforeBack', function(e) {
+            //     this.view = this.viewApi.view;
+            //     (function($) {
+            //         var oldBack = $.back;
+            //         $.back = function() {
+            //             if (this.viewApi.canBack()) { //如果view可以后退，则执行view的后退
+            //                 if(backFun()){
+            //                     this.viewApi.back();
+            //                 }
+            //             } else { //执行webview后退
+            //                 //oldBack();
+            //                 //appApi.showBack();
+            //                 //appApi.resetBack();
+            //                 backFun();
+            //             }
+            //         };
+            //         var myback = function () {
+            //             if (this.viewApi.canBack()) { //如果view可以后退，则执行view的后退
+            //                 if(backFun()){
+            //                     this.viewApi.back();
+            //                 }
+            //             } else { //执行webview后退
+            //                 oldBack();
+            //                 appApi.resetBack();
+            //             }
+            //         };
+            //         //appApi.stopBack(myback);//注销此行 2017.9.20
+            //         view.addEventListener('pageBeforeShow', function(e) {
+            //             //appApi.hideBack();
+            //         });
+            //         view.addEventListener('pageBeforeBack', function(e) {
             
-                    });
-                    view.addEventListener('pageBack', function(e) {
-                        //appApi.showBack();
-                    });
-                    view.addEventListener('pageShow', function(e) {
+            //         });
+            //         view.addEventListener('pageBack', function(e) {
+            //             //appApi.showBack();
+            //         });
+            //         view.addEventListener('pageShow', function(e) {
             
-                        // c_scroll = mui('#select_children_scroll').scroll({
-                        //     scrollY: false,
-                        //     scrollX: true,
-                        //     indicators: false,
-                        //     snap: '.mui-control-item'
-                        // });
-                    });
-                    /*var list = document.getElementById("list");
-                    list.addEventListener("touchstart", function(e) {
-                        //关闭页面滚动
-                        list_scroll.setStopped(true);
-                    }, false);
-                    list.addEventListener("touchmove", function(e) {
-                        //关闭页面滚动
-                        list_scroll.setStopped(true);
-                    }, false);
-                    list.addEventListener("touchend", function(ev) {
-                        //启用页面滚动
-                        list_scroll.setStopped(false);
-                    }, false);*/
-                })(mui);
-            };
+            //             // c_scroll = mui('#select_children_scroll').scroll({
+            //             //     scrollY: false,
+            //             //     scrollX: true,
+            //             //     indicators: false,
+            //             //     snap: '.mui-control-item'
+            //             // });
+            //         });
+            //         /*var list = document.getElementById("list");
+            //         list.addEventListener("touchstart", function(e) {
+            //             //关闭页面滚动
+            //             list_scroll.setStopped(true);
+            //         }, false);
+            //         list.addEventListener("touchmove", function(e) {
+            //             //关闭页面滚动
+            //             list_scroll.setStopped(true);
+            //         }, false);
+            //         list.addEventListener("touchend", function(ev) {
+            //             //启用页面滚动
+            //             list_scroll.setStopped(false);
+            //         }, false);*/
+            //     })(mui);
+            // };
         },
         methods:{
+            selectInArr(bool,val) {
+                val = val + "";
+                if(bool){
+                    if(!this.selectArr.contains(val)){
+                        this.selectArr.push(val);
+                    }
+                }else{
+                    if(this.userId != val){ //自己不能删除
+                        this.selectArr.remove(val);
+                    }
+                }
+                var count = this.selectArr.length;
+                var text = count ? "完成(" + count + ")" : "完成";
+                var btn = jQuery(".ok-btn");
+                btn.text(text);
+                if (count>1) {
+                    if (btn.hasClass("mui-disabled")) {
+                        btn.removeClass("mui-disabled");
+                    }
+                } else {
+                    if (!btn.hasClass("mui-disabled")) {
+                        btn.addClass("mui-disabled");
+                    }
+                }
+                this.selArr = this.selectArr;
+
+            },
+            showhide(type){
+                if(type == 1){
+                    this.show2 = !this.show2
+                }else{
+                    this.show1 = !this.show1
+                }
+            },
+            selEvent(e,target) {
+                let _self = this
+                var type = e.target.getAttribute("data-type");
+
+                console.log(e.target.checked,'html');
+                
+                var value = target.friendsUserId
+                console.log(target.friendsUserId);
+                if(type == "user"){
+                    _self.selectInArr(e.target.checked,value);
+                }else{
+                    var par = {deptId:value};
+                    this.$http.post("/concats_api/query_team_members",par).then(function (response) {
+                        var memberList = response.data.result;
+                        for(var i= 0;i<memberList.length;i++){
+                            _self.selectInArr(this.$refs.user[0].checked,memberList[i].userId);
+                        }
+                    }).catch(function (error) {
+                        console.info(error);
+                    });
+                    if(this.$refs.user[0].checked){
+                        if(!this.selectDepts.contains(value)){
+                            this.selectDepts.push(value);
+                        }
+                    }else{
+                        this.selectDepts.remove(value);
+                    }
+                    this.selDept = this.selectDepts;
+                }
+            },
             getImageUrl: function (val) {
                 if(val==null || val=="") return "http://java.winfreeinfo.com/static/images/60x60.gif";
                 return val;
             },
-            clickshow: function () {
-                return true;
+            clickshow: function (index) {
+                // return true;
+                // this.dis = !this.dis;
+                console.log(index)
+                const newIndex = this.Listshow.indexOf(index);
+                if (newIndex === -1) {
+                    this.Listshow.push(index);
+                    console.log('aaaaa',newIndex)
+                } else {
+                    this.Listshow.splice(newIndex);
+                }
             },
-            updated:function () {//DOM更新时，进行调用的方法
-                document.getElementById("list").style.display = "block";
-                mui.ready(function () {
-                    window.indexedList = new mui.IndexedList(list)
-                });
+            clickshowone:function(index1){
+                console.log(index1)
+                const newIndex1 = this.Listshow1.indexOf(index1);
+                if (newIndex1 === -1) {
+                    this.Listshow1.push(index1);
+                    console.log('aaaaa',newIndex1)
+                } else {
+                    this.Listshow1.splice(newIndex1);
+                }
             },
+            // updated:function () {//DOM更新时，进行调用的方法
+            //     document.getElementById("list").style.display = "block";
+            //     mui.ready(function () {
+            //         window.indexedList = new mui.IndexedList(list)
+            //     });
+            // },
             //确定选中的userIds
             trueSelectUser: function () {
                 /**
                 * 必须选人
                 */
+               
                 if(this.selectArr.length<=1){
                     return;
                 }
                 var l;
                 var selectUserIdsEvy = "";
+                console.log(this.selectArr,1111111);
                 if(this.selectArr.length==2){
-                    l = loading("请稍等...");
+                    l = Toast({
+                            message: '请稍等',
+                            position: 'bottom',
+                            duration: 5000
+                        });
                     for(var i=0;i<this.selectArr.length;i++){
                         if(this.selectArr[i]!=this.userId){
                             selectUserIdsEvy=this.selectArr[i];
                         }
                     }
-                }else{
-                    l= loading("创建中，请稍等");
+                }else{  
+                 l = Toast({
+                            message: '创建中，请稍等',
+                            position: 'bottom',
+                            duration: 5000
+                        });
                     for(var i=0;i<this.selectArr.length;i++){
-                        if(i==this.selectArr.length-1){
+                        if(i==this.selectArr.length){
                             selectUserIdsEvy+=this.selectArr[i];
                         }else{
                             selectUserIdsEvy+=this.selectArr[i]+",";
                         }
                     }
                 }
-                selectUserIds = selectUserIdsEvy;
-                var param = {userIds:selectUserIds};//查询头像list返回
+                this.selectUserIds = selectUserIdsEvy;
+                var param = {userIds:this.selectUserIds};//查询头像list返回
                 var _self = this;
                 var groupName = "";
                 this.$http.post("/concats_api/query_gms_info_select",param).then(function (response) {
@@ -947,10 +1046,10 @@ export default {
                     /**
                     * 选了一个人进入单聊页面
                     */
-                    if(this.selectArr.length==2){
+                    if(_self.selectArr.length==2){
                         window.appApi.openChat(mList[0].imId,mList[0].imageHost,mList[0].nickName,1);
                         setTimeout(function(){
-                            layer.close(l);
+                            // layer.close(l);
                             window.appApi.closeNewWindow();
                         },200);
                         return;
@@ -969,14 +1068,14 @@ export default {
                     console.log(groupName)
                     _self.createGroup(groupName,l)
                 }).catch(function (error) {
-                    layer.close(l)
+                    // layer.close(l)
                     console.info(error);
                 });
-                this.viewApi.back();//关闭选择子部门div
+                // this.viewApi.back();//关闭选择子部门div
             },
             createGroup: function (groupName,l) {
                 var userAvatar = "http://java.winfreeinfo.com/static/images/ico_groupchat.png";
-                var pram = {groupType:"2",userIds:selectUserIds,groupName:groupName,avatar0:userAvatar};//自主创建群组
+                var pram = {groupType:"2",userIds:this.selectUserIds,groupName:groupName,avatar0:userAvatar};//自主创建群组
                 this.$http.post("/concats_api/create_group",pram).then(function (response) {
                     console.log(response.data.result.sdkChatId)
                     if(response.data.code==200){
@@ -991,14 +1090,14 @@ export default {
                     }else{
                         mui.toast("创建群组失败,请联系管理员!")
                     }
-                    layer.close(l);
+                    // layer.close(l);
                 }).catch(function (error) {
-                    layer.close(l)
+                    // layer.close(l)
     //				alert("创建群组失败,请联系管理员!");
                     mui.toast("创建群组失败,请联系管理员!")
                     console.info(error);
                 });
-                this.viewApi.back();//关闭选择子部门div
+                // this.viewApi.back();//关闭选择子部门div
                 
             },
             selectDept:function (deptId,deptName,event) {
@@ -1231,59 +1330,6 @@ export default {
             //         viewApi.back('#select_member');
             //     }
             // });
-            function selEvent(target) {
-                console.log(1111);
-                var type = target.getAttribute("data-type");
-                var value = target.value;
-                if(type == "user"){
-                    selectInArr(target.checked,value);
-                }else{
-                    var par = {deptId:value};
-                    this.$http.post("/concats_api/query_team_members",par).then(function (response) {
-                        var memberList = response.data.result;
-                        for(var i= 0;i<memberList.length;i++){
-                            selectInArr(target.checked,memberList[i].userId);
-                        }
-                    }).catch(function (error) {
-                        console.info(error);
-                    });
-                    if(target.checked){
-                        if(!this.selectDepts.contains(value)){
-                            this.selectDepts.push(value);
-                        }
-                    }else{
-                        this.selectDepts.remove(value);
-                    }
-                    this.selDept = this.selectDepts;
-                }
-            }
-            function selectInArr(bool,val) {
-                val = val + "";
-                if(bool){
-                    if(!this.selectArr.contains(val)){
-                        this.selectArr.push(val);
-                    }
-                }else{
-                    if(this.userId != val){ //自己不能删除
-                        this.selectArr.remove(val);
-                    }
-                }
-                var count = this.selectArr.length;
-                var text = count ? "完成(" + count + ")" : "完成";
-                var btn = jQuery(".ok-btn");
-                btn.text(text);
-                if (count>1) {
-                    if (btn.hasClass("mui-disabled")) {
-                        btn.removeClass("mui-disabled");
-                    }
-                } else {
-                    if (!btn.hasClass("mui-disabled")) {
-                        btn.addClass("mui-disabled");
-                    }
-                }
-                this.selArr = this.selectArr;
-
-            }
             /*---------------选择成员-----------------*/
             Array.prototype.contains = function (obj) {
                 var i = this.length;
@@ -1304,6 +1350,11 @@ export default {
     }
 </script>
 
-<style>
-
+<style scoped>
+    .mui-scroll-wrapper{
+        overflow: scroll
+    }
+    .dis{
+        display: block!important
+    }
 </style>

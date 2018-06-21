@@ -32,14 +32,14 @@
                     <div class="mui-scroll">
                         <section class="mui-content" id="">
                             <div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
-                                <a href="javascript:if(isHideProjectList=='y'){isHideProjectList = 'n';$('#project_list_id').show();}else{isHideProjectList = 'y';$('#project_list_id').hide();}">
+                                <a @click="showhide(2)" style="display:block;margin-top:45px" class="text">
                                     <h5 class="mui-content-padded">项目列表(点击收缩或展开)</h5>
                                 </a>
-                                <div id="project_list_id" style="display:block;">
+                                <div id="project_list_id" style="display:block;" v-show="show2">
                                     <div v-for="(item,index) in projects" :key="index">
                                         <ul class="mui-table-view">
                                             <li class="mui-table-view-cell mui-collapse fold-title">
-                                                <a @click ="clickshow">
+                                                <a @click ="clickshow(index)" style="border-bottom: 1px solid #ccc;">
                                                     <div class="mui-slider-cell">
                                                         <div class="oa-contact-cell mui-table">
                                                             <div class="oa-contact-avatar mui-table-cell">
@@ -51,14 +51,14 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <ul class="mui-table-view" v-show="true">
+                                                <ul class="mui-table-view" :class="{'dis' : Listshow.indexOf(index) !== -1}">
                                                     <li class="mui-table-view-cell">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
                                                                     <img src="../../assets/images/ico_second.gif" />
                                                                 </div>
-                                                                <div class="oa-contact-content mui-table-cell">
+                                                                <div class="oa-contact-content mui-table-cell text">
                                                                     <a href="#select_project"  :data-project-id="item.serialNum"  :data-project-name="item.ProjectName" class="oa-contact-name"><span class="oa-contact-content mui-table-cell">所有参与人员</span></a>
                                                                 </div>
                                                             </div>
@@ -71,14 +71,14 @@
                                 </div>
                                 
                                 
-                                <a href="javascript:if(isHideTeamList=='y'){isHideTeamList = 'n';$('#team_list_id').show();}else{isHideTeamList = 'y';$('#team_list_id').hide();}">
+                                <a @click="showhide(1)" class="text">
                                     <h5 class="mui-content-padded">团队列表(点击收缩或展开)</h5>
                                 </a>
-                                <div id="team_list_id" style="display:block;">
-                                    <div v-for="(item,index) in items" :key="index">
+                                <div id="team_list_id" style="display:block;" v-show="show1">
+                                    <div v-for="(item,index1) in items" :key="index1">
                                         <ul class="mui-table-view">
                                             <li class="mui-table-view-cell mui-collapse fold-title">
-                                                <a @click ="clickshow">
+                                                <a @click ="clickshowone(index1)" style="border-bottom: 1px solid #ccc;">
                                                     <div class="mui-slider-cell">
                                                         <div class="oa-contact-cell mui-table">
                                                             <div class="oa-contact-avatar mui-table-cell">
@@ -89,15 +89,15 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
-                                                <ul class="mui-table-view" v-show="true">
+                                                </a>  
+                                                <ul class="mui-table-view" :class="{'dis' : Listshow1.indexOf(index1) !== -1}">
                                                     <li class="mui-table-view-cell">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
                                                                     <img src="../../assets/images/ico_second.gif" />
                                                                 </div>
-                                                                <div class="oa-contact-content mui-table-cell">
+                                                                <div class="oa-contact-content mui-table-cell text">
                                                                     <a href="#select_children"  :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
                                                                 </div>
                                                             </div>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
 
-                                <h5 class="mui-content-padded">好友列表</h5>
+                                <h5 class="mui-content-padded text">好友列表</h5>
                                 <div id='list' class="address-list">
                                     <!--<div class="mui-indexed-list-search mui-input-row mui-search hide">
                                         <input type="search" v-model="key" class="" placeholder="搜索">
@@ -137,7 +137,7 @@
                                                         <li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item mui-checkbox">
                                                             <div class="mui-slider-cell">
                                                                 <div class="oa-contact-cell mui-table">
-                                                                    <div class="oa-contact-input mui-table-cell">
+                                                                    <!-- <div class="oa-contact-input mui-table-cell">
                                                                         <div v-if="selectArr.contains(item.userId +'')">
                                                                             <div v-if="myId == item.friendsUserId || thirdUserId == item.friendsUserId">
                                                                                 <input type="checkbox" checked="checked" disabled="disabled" onchange="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
@@ -149,13 +149,13 @@
                                                                         <div v-else>
                                                                             <input type="checkbox" onchange="selEvent(this)" data-type="user" :value="item.friendsUserId"/>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> -->
                                                                     <div class="oa-contact-avatar mui-table-cell">
                                                                         <img :src="item.headerImage">
                                                                     </div>
                                                                     <div class="oa-contact-content mui-table-cell">
                                                                         <h4 class="oa-contact-name" v-text="item.name"></h4>
-                                                                        <p class="oa-contact-email" v-text="item.phone"></p>
+                                                                        <p class="oa-contact-email text" v-text="item.phone"></p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -254,7 +254,7 @@
                                 <div  v-for="(item,index) in deptList" :key="index">
                                     <ul class="mui-table-view group-list">
                                         <li class="mui-table-view-cell mui-checkbox">
-                                            <a @click ="clickshow" class="">
+                                            <a @click ="clickshow">
                                                 <div class="oa-contact-cell mui-table">
                                                     <div class="oa-contact-input mui-table-cell">
                                                         <!--<template v-if="selDept.contains(item.deptId +'')">
@@ -371,7 +371,7 @@
                                 <div v-for="(item,index) in deptList" :key="index">
                                     <ul class="mui-table-view group-list">
                                         <li class="mui-table-view-cell mui-checkbox">
-                                            <a @click ="clickshow" class="">
+                                            <a @click ="clickshow">
                                                 <div class="oa-contact-cell mui-table">
                                                     <div class="oa-contact-input mui-table-cell">
                                                         <!--<template v-if="selDept.contains(item.deptId +'')">
@@ -589,7 +589,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../playform/common'
-import mui from '../../playform/mui'
+// import mui from '../../playform/mui'
 export default {
     data () {
         return {
@@ -609,6 +609,10 @@ export default {
             navList:[],
             selDept:[],
             selectArr :[],
+            show1:true,
+            show2:true,
+            Listshow:[],
+            Listshow1:[]
         }
     },
     created () {
@@ -870,6 +874,14 @@ export default {
         },400);
     },
     methods:{
+        showhide(type){
+            console.log(type)
+            if(type == 1){
+                this.show1 = !this.show1
+            }else{
+                this.show2 = !this.show2
+            }
+        },
         selectDept:function (deptId,deptName,event) {
             var obj = {teamId:undefined,deptId:deptId,deptName:deptName};
             //i=0为联系人页面
@@ -945,8 +957,27 @@ export default {
             this.selArr = this.selectArr;
             this.selArr = this.selectArr;
         },
-        clickshow: function () {
-            return true;
+        clickshow: function (index) {
+            // return true;
+            // this.dis = !this.dis;
+            console.log(index)
+			const newIndex = this.Listshow.indexOf(index);
+			if (newIndex === -1) {
+				this.Listshow.push(index);
+				console.log('aaaaa',newIndex)
+			} else {
+				this.Listshow.splice(newIndex);
+			}
+        },
+        clickshowone:function(index1){
+            console.log(index1)
+			const newIndex1 = this.Listshow1.indexOf(index1);
+			if (newIndex1 === -1) {
+				this.Listshow1.push(index1);
+				console.log('aaaaa',newIndex1)
+			} else {
+				this.Listshow1.splice(newIndex1);
+			}
         },
         selectDept:function (deptId,deptName,event) {
             var obj = {teamId:undefined,deptId:deptId,deptName:deptName};
@@ -993,24 +1024,15 @@ export default {
             event.preventDefault();
             event.stopPropagation();
         },
-        updated:function () {//DOM更新时，进行调用的方法
-            document.getElementById("list").style.display = "block";
-            mui.ready(function () {
-                window.indexedList = new mui.IndexedList(list)
-            });
-        },
         getImageUrl: function (val) {
             if(val==null || val=="") return "/static/images/60x60.gif";
             return val;
         },
-        clickshow: function () {
-            return true;
-        },
         updated:function () {//DOM更新时，进行调用的方法
             document.getElementById("list").style.display = "block";
-            mui.ready(function () {
-                window.indexedList = new mui.IndexedList(list)
-            });
+            // mui.ready(function () {
+            //     window.indexedList = new mui.IndexedList(list)
+            // });
         },
         //确定选中的userIds
         trueSelectUser: function () {
@@ -1416,32 +1438,7 @@ export default {
             } else {
                 return []
             }
-        }
-        mui('#children_scroll').on('tap', '.mui-control-item', function(e) {
-            var target = e.target;
-            var teamId = target.getAttribute("data-team-id");
-            var deptId = target.getAttribute("data-dept-id");
-            if(undefined != teamId){
-                var teamName = target.getAttribute("data-team-name");
-                this.selectTeam(teamId,teamName,e)
-            }else if(undefined != deptId){
-                var deptName = target.getAttribute("data-dept-name");
-                this.selectDept(deptId,deptName,e);
-            }else{ 
-                viewApi.back('#select_member');
-            }
-        });
-        mui('#project_scroll').on('tap', '.mui-control-item', function(e) {
-            var target = e.target;
-            var teamId = target.getAttribute("data-team-id");
-            if(undefined != teamId){
-                var deptName = target.getAttribute("data-team-name");
-                this.getProjectMembers(teamId,deptName);
-            }else{
-                viewApi.back('#select_member');
-            }
-        });
-        function initChildDept(teamId,deptId,deptName) {
+            function initChildDept(teamId,deptId,deptName) {
             if(undefined == teamId){
                 teamId = 0;
             }
@@ -1465,7 +1462,7 @@ export default {
                             $(this).removeAttr("checked");
                         }
                     });
-                    mui('.dept-select').input();
+                    $('.dept-select').input();
                 },200)
             }).catch(function (error) {
                 console.info(error);
@@ -1482,16 +1479,58 @@ export default {
             });
             if(c_scroll){
                 setTimeout(function () {
-                    mui('#select_children_scroll').scroll().refresh();
+                    $('#select_children_scroll').scroll().refresh();
                     var w = document.getElementById("children_scroll").scrollWidth;
                     var s = c_scroll.wrapperWidth - w;
                     if(s<0){
-                        mui('#select_children_scroll').scroll().scrollTo(s,0,100);
+                        $('#select_children_scroll').scroll().scrollTo(s,0,100);
                     }
         //          var _self = capp;
                 },500)
             }
         }
+            /*---------------选择成员-----------------*/
+            Array.prototype.contains = function (obj) {
+                var i = this.length;
+                while (i--) {
+                    if (this[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            Array.prototype.remove = function(val) {
+                var index = this.indexOf(val);
+                if(index > -1) {
+                    this.splice(index, 1);
+                }
+            };
+        }
+        $('#children_scroll').on('tap', '.mui-control-item', function(e) {
+            var target = e.target;
+            var teamId = target.getAttribute("data-team-id");
+            var deptId = target.getAttribute("data-dept-id");
+            if(undefined != teamId){
+                var teamName = target.getAttribute("data-team-name");
+                this.selectTeam(teamId,teamName,e)
+            }else if(undefined != deptId){
+                var deptName = target.getAttribute("data-dept-name");
+                this.selectDept(deptId,deptName,e);
+            }else{ 
+                viewApi.back('#select_member');
+            }
+        });
+        $('#project_scroll').on('tap', '.mui-control-item', function(e) {
+            var target = e.target;
+            var teamId = target.getAttribute("data-team-id");
+            if(undefined != teamId){
+                var deptName = target.getAttribute("data-team-name");
+                this.getProjectMembers(teamId,deptName);
+            }else{
+                viewApi.back('#select_member');
+            }
+        });
+        
         //单选一个人员
         function selectOne(userId,userName,phone) {
 
@@ -1522,6 +1561,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .mui-scroll-wrapper{
+        overflow: scroll
+    }
+    .dis{
+        display: block!important
+    }
 </style>

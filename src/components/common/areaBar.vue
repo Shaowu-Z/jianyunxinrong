@@ -87,19 +87,17 @@ export default {
   },
   created() {
     var _self=this
-  //  console.log("当前选择时间"+this.datanow)
-  //  console.log(this.slot)
-  var obj=_self.shuju[0]
-    for(var i in obj){
-      console.log(obj[i])
-      // if(_self.shuju[0].values[i]==_self.datanow){
-      //   alert(i)
-      // }
-    }
+   console.log("当前选择时间"+this.datanow)
+   setTimeout(function(){
+
+     console.log("数据aaa",_self.slot[0].values)
+   },100)
    this.area=this.datanow
   },
-  mounted(){
+   mounted:function(){
+    this.showList();
   },
+  
   methods: {
     onMyAddressChange(picker, values) {
       var _self = this;

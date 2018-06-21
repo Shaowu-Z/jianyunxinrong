@@ -31,17 +31,19 @@
                     <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
                 </ul>
             </div>
+			<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore>
             <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top:51px" v-bind:class="{list_select:selectMode}">
                 <div class="mui-scroll">
+					<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="50">
                     <div id="js-dish-con" class="cloud-content">
+						
                         <!--搜索入口-->
                         <div class="cloud-search">
                             <a class="search-inner" href="javascript:;" @tap="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
                         </div>
                         <div v-if="curList.length != 0 && status == 1">
-							<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">	
 								<ul class="mui-table-view mui-table-view-striped">
-									<div v-for="(item,index) in curList" :key="index">
+									<div v-for="(obj,index) in curList" :key="index">
 										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
 											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
 												<div class="oa-contact-cell mui-table">
@@ -137,10 +139,10 @@
 										</li>
 									</div>
 								</ul>
-							</mt-loadmore>
                         </div>
-                        <div id="loadMore" style="display: none" class="mui-pull-bottom-tips"><div class="mui-pull-bottom-wrapper"><span class="mui-pull-loading"></span></div></div>
+                        <!-- <div id="loadMore" style="display: none" class="mui-pull-bottom-tips"><div class="mui-pull-bottom-wrapper"><span class="mui-pull-loading"></span></div></div> -->
                     </div>
+					</mt-loadmore>
                 </div>
             </div>
             <div v-if="curList.length == 0 && status == 1">
@@ -419,7 +421,8 @@ export default {
             curUserId: 0,
             projectManageId: 0,
             curList: [],
-            showShade: false,
+			showShade: false,
+			allLoaded: false,
             editItem: {
                 id: 0,
                 name: "",
@@ -454,86 +457,83 @@ export default {
             }
 	},
     mounted() {
-		function reLoad() {
-			window.location.reload();
-		}
 		var _self = this;
 		//获取参数
 		var params = getParam(window.location.href);
 		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
             if(params.hasOwnProperty("projectSN"))
-				_self.$data.projectId = params.projectSN; //项目id
+				_self.projectId = params.projectSN; //项目id
 			else
-                _self.$data.projectId = params.projectSn; //项目id
+                _self.projectId = params.projectSn; //项目id
             if(params.hasOwnProperty("teamCode"))
-            	_self.$data.teamCode = params.teamCode;
-            _self.$data.roomId = params.roomId; //房间id
+            	_self.teamCode = params.teamCode;
+            _self.roomId = params.roomId; //房间id
 			if(params.hasOwnProperty("isSys")) {
-				_self.$data.isSys = true;
+				_self.isSys = true;
 			} else {
-				_self.$data.showEdit = true;
+				_self.showEdit = true;
 			}
 			if(params.hasOwnProperty("isOpe")) {
-				_self.$data.isOpe = false;
+				_self.isOpe = false;
 			} else {
-				_self.$data.isOpe = true;
+				_self.isOpe = true;
 			}
 			if(params.hasOwnProperty("isShare")) {
-				_self.$data.isShare = true;
-				_self.$data.pageParams.from = "1";
+				_self.isShare = true;
+				_self.pageParams.from = "1";
 			}
 			if(1 == 1) {
 				_self.showHeader();
 			}
 			if(params.hasOwnProperty("id")) {
 				//显示头部
-				_self.$data.isIndex = 0;
-				_self.$data.id = params.id; //目录id
-				if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
-					_self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
+				_self.isIndex = 0;
+				_self.id = params.id; //目录id
+				if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initData(_self.id, _self.getCurData);//, _self.roomId
 				else
-                    _self.initData(_self.$data.id, _self.getCurData);//, _self.$data.roomId
+                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
 				_self.showHeader();
-				_self.$data.loadStatus = true;
+				_self.loadStatus = true;
 			} else if(params.hasOwnProperty("keyword")) {
 				//搜索
-				_self.$data.pageParams.keyword = params.keyword;
-				_self.$data.pageParams.projectId = _self.$data.projectId;
+				_self.pageParams.keyword = params.keyword;
+				_self.pageParams.projectId = _self.projectId;
 				_self.searchData();
-				_self.$data.loadStatus = true;
+				_self.loadStatus = true;
 			} else {
 				//首目录
 				//不显示头部
 				//数据初始化
-				_self.$data.isIndex = 1;
-                if(_self.$data.roomId=="" || _self.$data.roomId=="undefined")
-					_self.initFirstData(_self.$data.projectId, _self.getFirstData);//, _self.$data.roomId
+				_self.isIndex = 1;
+                if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
 				else
-					_self.initFirstData(_self.$data.projectId, _self.getFirstData, _self.$data.roomId);//, _self.$data.roomId
+					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
 				if(!appApi.isApp) {
-					_self.$data.showUpload = false;
+					_self.showUpload = false;
 				}
-				//_self.$data.showUpload = true;
+				//_self.showUpload = true;
 			}
 			_self.uploadInit();
 			_self.downLoadInit();
 		} else if(params.hasOwnProperty("shareId")) {
 			//分享
-			_self.$data.shareId = params.shareId;
+			_self.shareId = params.shareId;
 			var params = {
-				shareId: _self.$data.shareId
+				shareId: _self.shareId
 			};
 			console.info(params);
 			this.$http.post("/cdish/share/detail", params).then(function(response) {
 				if(response.data.code == 0) {
 //					console.info(response.data.result);
 					var rs = response.data.result;
-					_self.$data.status = 1;
-					_self.$data.loadStatus = true;
-					_self.$data.isShare = true;
-					_self.$data.shareInfo = rs;
-					_self.$data.projectId = rs.projectId;
-					_self.$data.shareInfoList = rs.shareItems;
+					_self.status = 1;
+					_self.loadStatus = true;
+					_self.isShare = true;
+					_self.shareInfo = rs;
+					_self.projectId = rs.projectId;
+					_self.shareInfoList = rs.shareItems;
 					_self.downLoadInit();
 				} else {
 					msg(response.data.message);
@@ -565,50 +565,67 @@ export default {
 			})
 		}
 		
-		
-		// function loadData () {
-		// 	console.log(111);
-		// 	var _self = this;
-		// 	var pageParams = _self.pageParams;
-		// 	this.$http.post("/cdish/list", pageParams).then(function(response) {
-		// 		// console.log(response.data)
-		// 		if(response.data.code == 200) {
-		// 			var rs = response.data;
-		// 			var allPage = rs.result.endPage;
-		// 			if(pageParams.curPage == 1) {
-		// 				//首次 加载一次
-		// 				_self.curList = rs.result.list;
-		// 				undefined != fun && fun();
-		// 				if(allPage > 1) {
-		// 					document.getElementById("loadMore").style.display = "block";
-		// 				}
-		// 			} else {
-		// 				_self.curList = _self.curList.concat(rs.result.list);
-		// 				undefined != fun && fun(pageParams.curPage >= allPage);
-		// 			}
-		// 		} else {
-		// 			undefined != fun && fun(true);
-        //             // msg("系统出了点小状况，请稍后再试");
-        //             layer.open({
-        //                 content:"系统出了点小状况，请稍后再试!"
-        //                 ,skin: 'msg'
-        //                 ,time: 1 //2秒后自动关闭
-        //                 ,anim:false
-        //             });
-		// 		}
-		// 		//console.log(_self.curList);
-		// 		_self.pageParams.curPage++;
-		// 		_self.initScroll();
-		// 		_self.status = 1;
-		// 	}).catch(function(error) {
-		// 		console.log(error);
-		// 	});
-		// }
+			var pageParams = _self.pageParams;
+			pageParams.nodeId = this.$route.query.id
+			pageParams.projectId = this.$route.query.projectSN
+			this.$http.post("/cdish/list", pageParams).then(function(response) {
+				// console.log(response.data)
+				if(response.data.code == 200) {
+					var rs = response.data;
+					var allPage = rs.result.endPage;
+					_self.curList = response.data.result.list;
+					console.log(_self.curList.length);
+				} else {
+                    layer.open({
+                        content:"系统出了点小状况，请稍后再试!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+				}
+				_self.pageParams.curPage++;
+				_self.status = 1;
+			}).catch(function(error) {
+				console.log(error);
+			});
 	},
     methods: {
-		loadTop() {
-		// 加载更多数据
-		this.$refs.loadmore.onTopLoaded();
+		loadTop () {
+			var _self = this;
+			var pageParams = _self.pageParams;
+			pageParams.curPage = 1;
+			this.$http.post("/cdish/list", pageParams).then(function(response) {
+				if(response.data.code == 200) {
+					var rs = response.data;
+					var allPage = rs.result.endPage;
+					if(pageParams.curPage == 1) {
+						//首次 加载一次
+						_self.curList = rs.result.list;
+						// undefined != fun && fun();
+						// if(allPage > 1) {
+						// 	document.getElementById("loadMore").style.display = "block";
+						// }
+					} else {
+						_self.curList = _self.curList.concat(rs.result.list);
+						// undefined != fun && fun(pageParams.curPage >= allPage);
+					}
+				} else {
+					// undefined != fun && fun(true);
+                    layer.open({
+                        content:"系统出了点小状况，请稍后再试!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+				}
+				//console.log(_self.curList);
+				// _self.pageParams.curPage;
+				// _self.initScroll();
+				_self.status = 1;
+			}).catch(function(error) {
+				console.log(error);
+			});
+			this.$refs.loadmore.onTopLoaded();
 		},
 		goBack(){
 			this.$router.go(-1)
@@ -676,59 +693,6 @@ export default {
                     });
 				}
 			})
-		},
-		initScroll: function() {
-			//阻尼系数
-			// var deceleration = mui.os.ios ? 0.003 : 0.0009;
-			var scroll = $('.mui-scroll-wrapper').scroll({
-				bounce: false,
-				indicators: true, //是否显示滚动条
-				deceleration: deceleration
-			});
-			var _self = this;
-			/*document.querySelector('.mui-scroll-wrapper' ).addEventListener('scroll', function (e) {
-			 if (scroll.y <-30) {
-			 _self.showUpload = false;
-			 } else {
-			 _self.showUpload = true;
-			 }
-			 })*/
-			/***********************
-			 * 函数：判断滚轮滚动方向
-			 * 作者：walkingp
-			 * 参数：event
-			 * 返回：滚轮方向 1：向上 -1：向下
-			 *************************/
-			var scrollFunc = function(e) {
-				var y = scroll.y;
-				var direct = 0
-				e = e || window.event;
-
-				if(e.wheelDelta) { //IE/Opera/Chrome
-					direct = e.wheelDelta;
-				} else if(e.detail) { //Firefox
-					direct = e.detail;
-				}
-
-				y += direct / 5;
-				//console.info(scroll)
-				var allH = scroll.element.children[0].clientHeight;
-				var t = scroll.wrapperHeight - allH;
-				//console.info("t:" + t)
-				//console.info(y)
-				/*if(t == 0){
-				 scroll.scrollTo(0,y);
-				 }*/
-				if(y > 0 || y < t) {
-					return;
-				}
-				scroll.scrollTo(0, y);
-			}
-			/*注册事件*/
-			if(document.addEventListener) {
-				document.addEventListener('DOMMouseScroll', scrollFunc, false);
-			} //W3C
-			window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
 		},
 		initPageFun: function() {
 			var _self = this;
@@ -1144,42 +1108,6 @@ export default {
 			//var t = Y + '-' + m + '-' + d;
 			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
 			return t;
-		},
-		loadSearchData: function(fun) {
-			var _self = this;
-			var pageParams = _self.pageParams;
-			this.$http.post("/cdish/search", pageParams).then(function(response) {
-				if(response.data.code == 200) {
-					var rs = response.data;
-					var allPage = rs.result.endPage;
-					if(pageParams.curPage == 1) {
-						//首次 加载一次
-						_self.curList = rs.result.list;
-						undefined != fun && fun();
-						if(allPage > 1) {
-							document.getElementById("loadMore").style.display = "block";
-						}
-					} else {
-						_self.curList = _self.curList.concat(rs.result.list);
-						undefined != fun && fun(pageParams.curPage >= allPage);
-					}
-				} else {
-//					alert(1)
-					undefined != fun && fun(true);
-                    // msg("系统出了点小状况，请稍后再试");
-                    layer.open({
-                        content:"系统出了点小状况，请稍后再试!"
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
-				}
-				_self.pageParams.curPage++;
-				_self.initScroll();
-				_self.status = 1;
-			}).catch(function(error) {
-				console.log(error);
-			});
 		},
 		uploadInit: function() {
 			var _self = this;
