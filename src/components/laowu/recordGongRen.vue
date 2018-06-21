@@ -170,6 +170,7 @@ export default {
   props: {},
   data() {
     return {
+      titleriqi:"日期",
       form: {
         id: "",
         userId: "",
@@ -391,8 +392,5 @@ export default {
 }
 .btn-unit{
   width: 1px;
-}
-.mint-datetime-action important{
-  
 }
 </style>
