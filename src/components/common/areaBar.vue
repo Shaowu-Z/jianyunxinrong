@@ -85,9 +85,18 @@ export default {
     };
   },
   created() {
+    var _self=this
    console.log("当前选择时间"+this.datanow)
+   setTimeout(function(){
+
+     console.log("数据aaa",_self.slot[0].values)
+   },100)
    this.area=this.datanow
   },
+   mounted:function(){
+    this.showList();
+  },
+  
   methods: {
     onMyAddressChange(picker, values) {
       var _self = this;

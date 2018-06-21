@@ -28,8 +28,8 @@
 			</li>
 			<li v-if="save_type==''||save_type==null" class="mui-table-view-cell mui-input-row"   >
 				<a class="mui-navigate-right">
-					<label>日期<small>*</small></label>
-          <data-bar :datanow='form.createTimeStr' @upup="change"></data-bar>
+					<!-- <label>日期<small>*</small></label> -->
+          <data-bar :title="datetitle" :datanow='form.createTimeStr' @upup="change"></data-bar>
 				<!-- <input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期"> -->
 				</a>
 			</li>
@@ -257,6 +257,7 @@ export default {
       checkNormalFlag: false,
       worktitle:"上班时长",
       overtitle:"加班时长",
+      datetitle:"日期",
       areatype:"2",
       solt:[
           {
@@ -275,9 +276,10 @@ export default {
     laowu_main._self = this;
     laowu_main.initVue();
     laowu_main.initData();
+  },
+  mounted:function(){
+    
     laowu_main.setTitle();
-       
-       
   },
   methods: {
     change(msg) {

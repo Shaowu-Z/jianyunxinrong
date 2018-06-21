@@ -58,6 +58,7 @@ var laowu_common={
        axios=_self.$http;
        var paramMap=laowu_common.paramMap;
        laowu_common.date=laowu_common.getNowFormatDate();
+       
        if(!paramMap.recordType){
         if(url.indexOf("diangong_detail.html")!=-1){
             laowu_common.recordType=1
@@ -143,6 +144,7 @@ var laowu_common={
         datatype: "json",
         success: function(data) {
             result=data.result;
+            console.log("房间信息",result)
             if(result){
                 laowu_common.projectId=result.projectSn;
                 laowu_common.projectSn=result.projectSn;
@@ -176,6 +178,7 @@ var laowu_common={
  */
  findroomuserlist:function(memberType) {//查询房间成员
 
+   
     $.ajax({
         type: "post",
         url: "/api/pcontact_api/findroomuserlist",
@@ -396,22 +399,40 @@ var laowu_common={
 },
 
 showTimeLists: function () {//加载时间列表
-    var obj = new Object();
-    obj.type = 1;
-    axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
-        if (response.data.code == 200) {
+    // var obj = new Object();
+    // obj.type = 1;
+    // axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
+    //     if (response.data.code == 200) {
            
-            var result = response.data.result;
-            if (result.length > 0) {
-                laowu_common.timeList = result;
-            } else {
-                msg("未查询到时间列表!")
-            }
-        } else {
-            msg("查询时间列表出错!")
+    //         var result = response.data.result;
+    //         console.log("时间列表",result)
+    //         if (result.length > 0) {
+    //             laowu_common.timeList = result;
+    //         } else {
+    //             msg("未查询到时间列表!")
+    //         }
+    //     } else {
+    //         msg("查询时间列表出错!")
+    //     }
+    // }).catch(function (error) {
+    //     console.info(error);
+    // });
+
+    
+    $.ajax({
+        type: "post",
+        url: "/api/project_work_api/find_base_cfg",
+        async: false,
+        data:'{"type":"1"}', 
+        datatype: "json",
+        contentType : 'application/json',
+        success: function(data) {
+            console.log("时间列表",data)
+            laowu_common.timeList = data.result;
+        },
+        error: function() {
+            console.log("err")
         }
-    }).catch(function (error) {
-        console.info(error);
     });
 },
 showUnitLists: function () {//加载单位列表

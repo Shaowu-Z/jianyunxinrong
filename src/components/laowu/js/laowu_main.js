@@ -18,6 +18,7 @@ var laowu_main = {
 
     },
     initData: function () {//初始化数据
+        console.log("初始化...")
         laowu_common.findRoomData();//加载房间信息
         var recordId = paramMap.id;//记录ID，用于查询、修改单据
         var saveType=laowu_common.saveType;
@@ -40,11 +41,10 @@ var laowu_main = {
         _self.save_type = saveType;//记录类型
         _self.form.createTimeStr = date;//默认创建时间为当前时间
         _self.form.recordType = recordType;//设置记账类型
-       
-        if ((saveType == 'save' || saveType == 'update' || saveType == 'view' || saveType == 'chartview' || laowu_common.dataType == 'todoview') && laowu_common.dataType != 'todowork') {//编辑、查询详情、已办详情页
         
+        if ((saveType == 'save' || saveType == 'update' || saveType == 'view' || saveType == 'chartview' || laowu_common.dataType == 'todoview') && laowu_common.dataType != 'todowork') {//编辑、查询详情、已办详情页
         laowu_main.loadDataById(recordId);//根据ID查询记录
-        console.log("表单",_self.form)
+        
         } else {//新建
             //初始化单据信息
             if (loginType == 0) {//如果创建这个单的是工人，那么确认人是工头，工人则是当前登陆人
@@ -89,10 +89,11 @@ var laowu_main = {
         }
         if (recordType == 1) {//点工
             laowu_common.showTimeLists()
-            setTimeout(() => {
+           // setTimeout(() => {
                 _self.data.timeList=laowu_common.timeList
                 _self.solt[0].values=laowu_common.timeList
-            }, 150);
+           // }, 150);
+           console.log("设置完成...",_self.form)
         }
         if (recordType == 2) {//包工类型
             laowu_common.showUnitLists();
@@ -105,6 +106,7 @@ var laowu_main = {
             _self.form.createTimeStr = queryTime;
             laowu_main.updateReadStaus();
         }
+        console.log("表单",_self.form)
     
     },
 

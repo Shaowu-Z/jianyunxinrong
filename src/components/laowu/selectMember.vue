@@ -167,6 +167,280 @@
 	</div>
 </div>
 
+<div id="select_children" class="mui-page">
+	<div class="mui-navbar-inner mui-bar mui-bar-nav">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>返回
+			</button>
+			<h1 class="mui-center mui-title">组织架构</h1>
+			<!--<button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" onclick="app.trueSelectUser()">完成</button>-->
+		</div>
+	</div>
+	<div class="mui-page-content">
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<section class="mui-content">
+					<div id="dept_head" class="group-header">
+						<div id="select_children_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
+							<div id="children_scroll" class="mui-scroll">
+								<div class="mui-control-item selected">
+									联系人 &gt;
+								</div>
+								<div v-for="(obj,index) in select_children.navList" :key="index">
+									<div v-if="index == 0">
+										<div v-if="index == (select_children.navList.length-1)">
+											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
+										</div>
+										<div v-else>
+											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+										</div>
+									</div>
+									<div v-if="index > 0">
+										<div v-if="index == (select_children.navList.length-1)">
+											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
+										</div>
+										<div v-else>
+											<div class="mui-control-item selected" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-control-content address-list mui-active">
+						<div v-if="deptList.length > 0">
+							<h5 class="mui-content-padded">子部门列表</h5>
+						</div>
+						<div  v-for="(item,index) in deptList" :key="index">
+							<ul class="mui-table-view group-list">
+
+								<!--以下是单选操作-->
+								<li class="mui-table-view-cell mui-indexed-list-item">
+									<a  onchange="selEvent(this)">
+										<div class="mui-slider-cell">
+											<div class="oa-contact-cell mui-table">
+												<div class="oa-contact-content mui-table-cell">
+													<h4 class="oa-contact-name" v-text="item.deptName"></h4>
+												</div>
+											</div>
+										</div>
+									</a>
+								</li>
+								
+								<div class="sub-btn" @click="selectDept(item.deptId,item.deptName,$event)"><span class="mui-icon iconfont icon-sub"></span>下级</div>
+							</ul>
+						</div>
+						<div v-if="memberList.length > 0">
+							<h5 class="mui-content-padded">部门成员</h5>
+							<div class="address-list">
+								<div class="">
+									<ul class="mui-table-view">
+										<div v-for="(item,index) in memberList" :key="index">
+
+											<!--以下是单选-->
+											<li class="mui-table-view-cell mui-indexed-list-item">
+												<a @click="selectUser(item,'team')">
+													<div class="mui-slider-cell">
+														<div class="oa-contact-cell mui-table">
+															<div class="oa-contact-avatar mui-table-cell">
+																<img :src="item.userAvatar">
+															</div>
+															<div class="oa-contact-content mui-table-cell">
+																<h4 class="oa-contact-name" v-text="item.memberName"></h4>
+																<p class="oa-contact-email" v-text="item.phoneNumber"></p>
+															</div>
+														</div>
+													</div>
+												</a>
+											</li>
+
+											
+										</div>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div v-if="deptList.length == 0 && memberList.length == 0">
+				<div class="no-group">
+					<div class="no-record-img"></div>
+					<p>该部门暂无成员</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="select_project" class="mui-page">
+	<div class="mui-navbar-inner mui-bar mui-bar-nav">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>返回
+			</button>
+			<h1 class="mui-center mui-title">组织架构</h1>
+			<!--<button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" onclick="app.trueSelectUser()">完成</button>-->
+		</div>
+	</div>
+	<div class="mui-page-content">
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll" id="sc">
+				<section class="mui-content">
+					<div id="dept_head" class="group-header">
+						<div id="select_project_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
+							<div id="project_scroll" class="mui-scroll">
+								<div class="mui-control-item selected">
+									联系人 &gt;
+								</div>
+								<div v-for="(obj,index) in navList" :key="index">
+									<div v-if="index == 0">
+										<div v-if="index == (navList.length-1)">
+											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
+										</div>
+										<div v-else>
+											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+										</div>
+									</div>
+									<div v-if="index > 0">
+										<div v-if="index == (navList.length-1)">
+											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
+										</div>
+										<div v-else>
+											<div class="mui-control-item selected" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-control-content address-list mui-active">
+						<div v-if="selDept.length > 0">
+							<h5 class="mui-content-padded">项目联系人</h5>
+						</div>
+						<ul class="mui-table-view" v-if="selDept.length > 0">
+							<div  v-for="(item,index) in selDept" :key="index">
+								<li class="mui-table-view-cell" v-if="item.type==2&&item.memberNumber>0">
+									<a class="mui-navigate-right" @click="getRoomMembers(index,-1,item.roomClassName)">
+										<div class="oa-contact-cell mui-table">
+											<div class="oa-contact-avatar mui-table-cell">
+												<img :src="item.iconUrl"/>
+											</div>
+											<div class="oa-contact-content mui-table-cell">
+												<h4 class="oa-contact-name" v-text="item.roomClassName"></h4>
+												<p class="oa-contact-email"><span v-text="item.roomName"></span>（<span v-text="item.roomMembers.items.length"></span>）人</p>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-collapse" v-if="item.type==1&&item.items.length>0">
+									<a class="mui-navigate-right">
+										<div class="oa-contact-cell mui-table">
+											<div class="oa-contact-avatar mui-table-cell">
+												<img :src="item.iconUrl"/>
+											</div>
+											<div class="oa-contact-content mui-table-cell">
+												<h4 class="oa-contact-name" v-text="item.roomClassName"></h4>
+											</div>
+										</div>
+									</a>
+									<div class="mui-collapse-content" style="padding-top: 0px;">
+										<ul class="mui-table-view" style="margin-top: 0px;">
+											<div v-for="(it,index) in item.items" :key="index">
+												<li class="mui-table-view-cell" v-if="it.roomMembers.items.length>0">
+													<a class="mui-navigate-right" @click="getRoomMembers(index,i,it.roomName)">
+														<div class="oa-contact-cell mui-table">
+															<div class="oa-contact-avatar mui-table-cell mui-col-xs-3">
+																<img :src="item.iconUrl"/>
+															</div>
+															<div class="oa-contact-content mui-table-cell mui-col-xs-9">
+																<h4 class="oa-contact-name" v-text="it.roomName"></h4>
+																<p class="oa-contact-email"><span v-text="it.ownerName"></span>（<span v-text="it.roomMembers.items.length"></span>）人</p>
+															</div>
+														</div>
+													</a>
+												</li>
+											</div>
+										</ul>
+									</div>
+								</li>
+								<!--<div class="sub-btn" @click="selectDept(item.deptId,item.deptName,$event)"><span class="mui-icon iconfont icon-sub"></span>下级</div>-->
+							</div>
+						</ul>
+						
+						<div v-if="memberList.length > 0">
+							<h5 class="mui-content-padded">部门成员</h5>
+							<div class="address-list">
+								<div class="">
+									<ul class="mui-table-view">
+										<div v-for="(item,index) in memberList" :key="index">
+
+											<!--以下是单选-->
+											<li class="mui-table-view-cell mui-indexed-list-item">
+												<a @click="selectUser(item,'project')">
+													<div class="mui-slider-cell">
+														<div class="oa-contact-cell mui-table">
+															<div class="oa-contact-avatar mui-table-cell">
+																<img :src="item.userIcon">
+															</div>
+															<div class="oa-contact-content mui-table-cell">
+																<h4 class="oa-contact-name" v-text="item.nickName"></h4>
+																<p class="oa-contact-email" v-text="item.cellPhone"></p>
+															</div>
+														</div>
+													</div>
+												</a>
+											</li>
+
+											
+										</div>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!--遮罩层-->
+<div id="backdrop" class="mui-backdrop" style="display:none ;z-index: 999;"></div>
+
+<!--长按收藏弹框-->
+<div id="window" class="mui-popup mui-popup-in" style="display:none ;">
+    <div class="send-box">
+        <div class="send-title">发送给：</div>
+
+        <div class="oa-contact-cell mui-table">
+            <div class="oa-contact-avatar mui-table-cell">
+                <img :src="ucon">
+            </div>
+            <div class="oa-contact-content mui-table-cell">
+                <h4 class="oa-contact-name" v-text="name"></h4>
+                <!--<p class="oa-contact-email" v-text="count"></p>-->
+            </div>
+        </div>
+
+        <div class="send-con">
+            <p class="mui-ellipsis-2 mui-text-left">您正在邀请<span v-text="name"></span>登记新项目</p>
+        </div>
+
+        <ul class="mui-table-view input-box">
+            <li class="mui-table-view-cell mui-input-row">
+                <input v-model="remark" type="text" autofocus placeholder="我想说"/>
+            </li>
+        </ul>
+        <div class="footer">
+            <button class="mui-btn mui-btn-link btn-normal" @click="cancel()">取消</button>
+            <button class="mui-btn mui-btn-link" @click="confirm()">发送</button>
+        </div>
+    </div>
+</div>
+
   </div>
 </template>
 
@@ -177,7 +451,9 @@ var paramMap;
 export default {
   data () {
     return {
-	items:[],
+	
+	select_member:{
+		items:[],
 		friendsList:[],
 		key:"",
 		selArr:[],
@@ -185,10 +461,38 @@ export default {
 		selDept:[],
 		selectNumStr:"",
 		groupName:"",
-    projects:[],
-    projectListStatus:true,
-    teamListStatus:true,
-    Listshow:[],
+		projects:[],
+		projectListStatus:true,
+		teamListStatus:true,
+		Listshow:[],
+	},
+	select_children:{
+		deptList:[],
+		memberList:[],
+		navList:[],
+		selArr:[],
+		myId:"",
+		selDept:[]
+	  },
+	window:{
+		names:[],
+		phones:[],
+        ucons:[],
+		userId:"",
+        name:"",
+        phone:"",
+		ucon:"",
+		count:0,
+        remark:"",
+	  },
+	 select_project:{
+		deptList:[],
+		memberList:[],
+		navList:[],
+		selArr:[],
+		myId:"",
+		selDept:[],
+	 } ,
     }
   },
   created: function () {
@@ -224,6 +528,32 @@ export default {
     //	document.getElementById("list").style.display = "block";
   },
   methods:{
+	   selectUser:function(item,type) {
+	if(type=='project'){
+        windowVue.name=item.nickName;
+        windowVue.phone=item.cellPhone;
+        windowVue.ucon=item.userIcon;
+        windowVue.userId=item.userId;
+	}else if(type=='team'){
+        windowVue.name=item.memberName;
+        windowVue.phone=item.phoneNumber;
+        windowVue.ucon=item.userAvatar;
+        windowVue.userId=item.userId;
+	}else if(type=='friends'){
+        windowVue.name=item.name;
+        windowVue.phone=item.phone;
+        windowVue.ucon=item.headerImage;
+        windowVue.userId=item.friendsUserId;
+	}
+
+	if(windowVue.userId==userId){
+		msg("不能邀请自己")
+		return
+	}
+    showbackdrop();
+    showwindow();
+
+},
     showProjectList:function(){
       this.projectListStatus=!this.projectListStatus
     },
