@@ -8,7 +8,7 @@
     <div name="need_hide_div" id="app" >
     <div class="mui-table-view address-item">
         <div class="mui-content">
-            <div id="Gallery" class="mui-slider">
+            <div id="Gallery" class="mui-sliders">
                 <div class="datatop">
                     <span @click="lastMonth()" class="lastm mm-btn"></span>
                     <span class="data"></span>
@@ -23,8 +23,10 @@
                     <li class="mui-table-cell mui-text-center">五</li>
                     <li class="mui-table-cell mui-text-center">六</li>
                 </ul>
-                <div class="mui-slider-group">
-                </div>
+                <v-touch @swipeleft="prev" @swiperight="next">
+                    <div class="mui-slider-group">
+                    </div>
+                </v-touch>
             </div>
         </div>
         <p class="cc" hidden="hidden"></p>
@@ -587,6 +589,10 @@
 </template>
 	
  <script>
+
+// var VueTouch = require('vue-touch')
+// Vue.use(VueTouch, {name: 'v-touch'})
+
 import ljian from '@/assets/images/ljian.png'
 import rjian from '@/assets/images/rjian.png'
 import laowu_confirm from "./js/laowu_confirm.js";
@@ -637,14 +643,24 @@ export default {
         queryStatus: "" //状态，包含多种状态值
 	  },
 	  wuxing1:"../../images/wuxing1.png",
-	  imgbase:"../../images/defualt.png",
+      imgbase:"../../images/defualt.png",
+      cunt:0,
+      cunn:0,
+      fordata:'',
+      starcunt:''
     }
   },created:function(){
 	  laowu_confirm._self=this;
 	  laowu_confirm.initVue();
-	  laowu_confirm.initData();
-	  calendar_short.initData();
-	 
+      laowu_confirm.initData();
+     
+    //   alert(this.$route.query.queryTime.split("-")[2])
+  },
+  mounted:function(){
+      calendar_short.initVue(this)
+      calendar_short.initData();
+      this.starcunt=parseInt((parseInt(this.$route.query.queryTime.split("-")[2])+this.fordata)/7)
+      $(".mui-slider-group").css("transform","translate3d(-"+20*this.starcunt+"%, 0px, 0px)")
   },
   methods:{
 	 nextMonth:function(){
@@ -655,8 +671,40 @@ export default {
      },
      open_calendar_popver:function(v1,v2,v3){
          laowu_confirm.open_calendar_popver(v1,v2,v3)
-     }
-  }
+     },
+      prev:function(){ //右滑
+          var _self=this
+        //   alert($(".mui-slider-group .mui-slider-item").length)
+        if((_self.cunt+_self.cunn)>(this.starcunt-$(".mui-slider-group .mui-slider-item").length+1)){
+          _self.cunt--
+           var cc= parseInt(_self.cunn)+parseInt(_self.cunt)-parseInt(this.starcunt)
+            var dd=parseInt(_self.cunn)+parseInt(_self.cunt)
+        // $(".mui-slider-group").css("transform","translate3d("+20*cc+"%, 0px, 0px)")
+
+        var dd=dd*100
+        var le=parseInt($(".mui-slider-group").css("left").split("px"))
+        $(".mui-slider-group").animate({
+            "left":le-375+"px"
+        });
+        }
+
+    },
+    next:function(){ //左滑
+        var _self=this
+        // alert(_self.cunn+"///"+this.starcunt)
+        if((_self.cunt+_self.cunn)<this.starcunt){
+        _self.cunn++
+         var cc= parseInt(_self.cunn)+parseInt(_self.cunt)-parseInt(this.starcunt)
+        //  $(".mui-slider-group").css("transform","translate3d("+20*cc+"%, 0px, 0px)")
+         var dd=parseInt(_self.cunn)+parseInt(_self.cunt)
+         var dd=dd*100
+         var le=parseInt($(".mui-slider-group").css("left").split("px"))
+        $(".mui-slider-group").animate({
+            "left":le+375+"px"
+        });
+        }
+    }
+  },
 }
 </script>
 <style>
@@ -799,4 +847,14 @@ export default {
 		.mui-table-view-cell{
 			text-align: left
 		}
+        .mui-slider-group{
+            width: 500%;
+            height: 46px;
+            overflow: hidden;
+            position: absolute;
+        }
+        .mui-slider-group>div{
+            width: 20%;
+            float: left;
+        }
     </style>		

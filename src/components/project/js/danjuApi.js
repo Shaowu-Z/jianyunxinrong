@@ -475,7 +475,8 @@ var danjuApi={
 			_self.jine = 0;
 		}
 		var contractName,contractType,companySaleName,companySaleID,companySaleRoomID,companyBuyName,companyBuyID,companyBuyRoomID,
-		money,htTotal,fapiaoTitle,fapiaoTaxLv,name,type,toimid,htTotal,fapiaoTitle,fapiaoTaxLv,dateShenqing,gongsialllei
+		money,htTotal,fapiaoTitle,fapiaoTaxLv,name,type,toimid,htTotal,fapiaoTitle,fapiaoTaxLv,dateShenqing,gongsialllei,personAccept,personAcceptID,personDistribute,
+		personDistributeID,dateChengnuo 
 		if(_self.$refs.title_name.innerText=="收付款"){
 			contractName= _self.htong
 			contractType= _self.contractType
@@ -503,6 +504,21 @@ var danjuApi={
 			name= _self.title
 			type= _self.yewu
 			toimid=_self.nowCompanyroomimid.toString()
+		}else if(_self.$refs.title_name.innerText=="微承诺"){
+			personAccept: _self.personAccept
+			personAcceptID= _self.personAcceptID		
+			personDistribute=_self.personDistribute
+			personDistributeID= _self.personDistributeID
+			companySaleName= _self.companySaleName
+			companySaleID=_self.companySaleID
+			companySaleRoomID= _self.companySaleRoomID
+			companyBuyName= _self.companyBuyName
+			companyBuyID= _self.companyBuyID
+			companyBuyRoomID= _self.companyBuyRoomID
+			dateShenqing=_self.shenqing
+			dateChengnuo=_self.chengnuiriqi
+
+			type= _self.type
 		}
 		var tablefields = {
 			userName: _self.username,
@@ -517,6 +533,10 @@ var danjuApi={
 			companyBuyName: companyBuyName,
 			companyBuyID: companyBuyID,
 			companyBuyRoomID: companyBuyRoomID,
+			personAccept: personAccept,
+			personAcceptID: personAcceptID	,	
+			personDistribute:personDistribute,
+			personDistributeID: personDistributeID,
 			name: name,
 			type: type,
 			money:money,
@@ -525,6 +545,7 @@ var danjuApi={
        		fapiaoTaxLv: fapiaoTaxLv,
 			contractType:contractType,
 			dateFasheng: _self.form.MissionStartDate + " " + _self.nowtime,
+			dateChengnuo:dateChengnuo+" "+ _self.nowtime,
 			beizhu: _self.beizhu,
 			confirmStatus: "", //确认状态
 
@@ -569,7 +590,7 @@ var danjuApi={
 			createRoomId:_self.$route.query.currRoomId,
 		}
 		// _self.attachmentIds = ''
-		console.log(param)
+		console.log("param",param)
 		// alert(569)
 		// alert(JSON.stringify(_self.imgurl))
 		// alert(JSON.stringify(param))

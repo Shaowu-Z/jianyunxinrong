@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h4>测试</h4>
+        <h4 @click="aaaa">测试</h4>
         <mt-button type="default">default</mt-button>
         <mt-button type="primary">primary</mt-button>
         <mt-button type="danger">danger</mt-button>
@@ -17,6 +17,9 @@ export default {
         }
     },
     methods:{
+        aaaa(){
+            this.$router.push({path:'/static/newwebstatic/chengnuo/newCreat.html'})
+        }
     }
 }
 </script>

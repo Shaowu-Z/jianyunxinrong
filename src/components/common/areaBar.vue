@@ -38,6 +38,7 @@ export default {
     shuju:'',
     timeType:'',
     datanow:"",
+    defaultIndex:''
   },
   data() {
     return {
@@ -85,8 +86,19 @@ export default {
     };
   },
   created() {
-   console.log("当前选择时间"+this.datanow)
+    var _self=this
+  //  console.log("当前选择时间"+this.datanow)
+  //  console.log(this.slot)
+  var obj=_self.shuju[0]
+    for(var i in obj){
+      console.log(obj[i])
+      // if(_self.shuju[0].values[i]==_self.datanow){
+      //   alert(i)
+      // }
+    }
    this.area=this.datanow
+  },
+  mounted(){
   },
   methods: {
     onMyAddressChange(picker, values) {

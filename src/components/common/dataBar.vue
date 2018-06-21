@@ -100,4 +100,16 @@ import { Toast } from "mint-ui";
 #databox {
     width: 100%
 }
+.mint-datetime-confirm {
+    width: auto;
+    height: auto;
+    padding: 0 10px;
+    margin: 3px 0;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 6px;
+    background: #26a2ff;
+    color: #fff;
+}
 </style>

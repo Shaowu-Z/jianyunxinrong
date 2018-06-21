@@ -28,8 +28,8 @@
 			</li>
 			<li v-if="save_type==''||save_type==null" class="mui-table-view-cell mui-input-row"   >
 				<a class="mui-navigate-right">
-					<label>日期<small>*</small></label>
-          <data-bar :datanow='form.createTimeStr' @upup="change"></data-bar>
+					<!-- <label>日期<small>*</small></label> -->
+          <data-bar :datanow='form.createTimeStr' :title="titleriqi" @upup="change"></data-bar>
 				<!-- <input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期"> -->
 				</a>
 			</li>
@@ -170,6 +170,7 @@ export default {
   props: {},
   data() {
     return {
+      titleriqi:"日期",
       form: {
         id: "",
         userId: "",
@@ -390,4 +391,5 @@ export default {
 .btn-unit{
   width: 1px;
 }
+
 </style>
