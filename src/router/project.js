@@ -25,6 +25,11 @@ const chengnuo = resolve => require(['@/components/project/chengnuo'], resolve)
 const newCreat_chengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
 const transfer_chengnuo = resolve => require(['@/components/project/chengnuo/transfer'], resolve)
 const newInfo_chengnuo = resolve => require(['@/components/project/chengnuo/newInfo'], resolve)
+//收货
+const shouhuo = resolve => require(['@/components/project/shouhuo'], resolve)
+const newCreat_shouhuo = resolve => require(['@/components/project/shouhuo/newCreat'], resolve)
+const transfer_shouhuo = resolve => require(['@/components/project/shouhuo/transfer'], resolve)
+const newInfo_shouhuo = resolve => require(['@/components/project/shouhuo/newInfo'], resolve)
 // const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
@@ -106,6 +111,29 @@ const myProjectconfig = {
         },
         {
           path: '/static/newwebstatic/chengnuo/ttp.html',
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/shouhuo',
+      component: shouhuo,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/shouhuo/work_content.html',
+          component: newCreat_shouhuo
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/transfer.html',
+          component: transfer_shouhuo 
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/newInfo.html',
+          component: newInfo_shouhuo
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/ttp.html',
           component: ttp
         }
       ]

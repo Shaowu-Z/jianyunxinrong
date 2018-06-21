@@ -1,7 +1,7 @@
 <template>
     <div>
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title">微承诺</h1>
+            <h1 class="mui-title" ref="title_name">微承诺</h1>
             <a class="mui-action-back mui-icon iconfont icon-back" v-if="backicon!=0" @click="back"></a>
         </header>
 					<div v-if="backicon==0" class="mui-content">
@@ -123,7 +123,7 @@ export default {
         danjuApi:danjuApi,
         returntitle:"承诺完成日期",
       userid: setting.getCookie("userid"),
-      username: setting.getCookie("username"),
+      username: decodeURI(setting.getCookie("username")),
       imgurl: "http://res.winfreeinfo.com:8000",
       imgIcon: "../../images/ico_image.png",
       id: "",
@@ -183,12 +183,14 @@ export default {
       confirm: "",
       postType: "",
       imgid: [],
-      fujianid: []
+      fujianid: [],
+      chengnuiriqi:''
     };
   },
   created() {
     danjuApi.vue = this;
     danjuApi.initVue()
+    this.getTime()
     if (this.$route.query.id != undefined) {
       this.informations();
     } else {
@@ -203,10 +205,10 @@ export default {
   mounted() {},
   methods: {
         childValue:function(val){
-                console.log("value"+val)
-                // this.test=val;
-                this.form.MissionStartDate=this.formDate(val)
-            },
+            // this.test=val;
+            this.form.MissionStartDate=this.formDate(val)
+             console.log("value"+this.form.MissionStartDate)
+        },
             formDate:function(value) {
                 var Y,m,d,H,i,s,t
 				var date = new Date(value);
@@ -374,44 +376,44 @@ export default {
       //						_self.form.MissionStartDate = formDate('');
     },
     //时间选择
-    selectDate: function(t) {
-      var o = this;
-      // hx
-      if (t == "s") {
-        if (o.form.MissionStartDate != "") {
-          opt.value = o.form.MissionStartDate;
-        }
-      } else if (t === "e") {
-        if (o.form.MissionEndDate != "") {
-          opt.value = o.form.MissionEndDate;
-        }
-      } else if (t === "d") {
-        if (o.form.datejiexiang != "") {
-          opt.value = o.form.datejiexiang;
-        }
-      }
+    // selectDate: function(t) {
+    //   var o = this;
+    //   // hx
+    //   if (t == "s") {
+    //     if (o.form.MissionStartDate != "") {
+    //       opt.value = o.form.MissionStartDate;
+    //     }
+    //   } else if (t === "e") {
+    //     if (o.form.MissionEndDate != "") {
+    //       opt.value = o.form.MissionEndDate;
+    //     }
+    //   } else if (t === "d") {
+    //     if (o.form.datejiexiang != "") {
+    //       opt.value = o.form.datejiexiang;
+    //     }
+    //   }
 
-      picker.show(function(rs) {
-        /*
-							 * rs.value 拼合后的 value
-							 * rs.text 拼合后的 text
-							 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
-							 * rs.m 月，用法同年
-							 * rs.d 日，用法同年
-							 * rs.h 时，用法同年
-							 * rs.i 分（minutes 的第二个字母），用法同年
-							 */
-        opt["value"] = rs.value; //控件同步
-        if (t == "s") {
-          o.form.MissionStartDate = rs.value;
-        } else if (t === "e") {
-          o.form.MissionEndDate = rs.value;
-        } else if (t === "d") {
-          o.form.datejiexiang = rs.value;
-        }
-        //							picker.dispose(); //释放资源
-      });
-    },
+    //   picker.show(function(rs) {
+    //     /*
+		// 					 * rs.value 拼合后的 value
+		// 					 * rs.text 拼合后的 text
+		// 					 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+		// 					 * rs.m 月，用法同年
+		// 					 * rs.d 日，用法同年
+		// 					 * rs.h 时，用法同年
+		// 					 * rs.i 分（minutes 的第二个字母），用法同年
+		// 					 */
+    //     opt["value"] = rs.value; //控件同步
+    //     if (t == "s") {
+    //       o.form.MissionStartDate = rs.value;
+    //     } else if (t === "e") {
+    //       o.form.MissionEndDate = rs.value;
+    //     } else if (t === "d") {
+    //       o.form.datejiexiang = rs.value;
+    //     }
+    //     //							picker.dispose(); //释放资源
+    //   });
+    // },
 
     //选承诺人
     chengnuo: function() {
@@ -784,10 +786,12 @@ export default {
     //   console.log(_self.zrfujian);
     //   console.log(typeof JSON.stringify(_self.zrfujian));
     // },
-    save: function() {
+    save: function(type) {
       var _self = this;
     //   ludan("保存中", 0, 1);
     tipApi.waring("保存中")
+
+
     
       //						if(_self.tijao != 1) {
       _self.tijao = 1;
@@ -906,13 +910,13 @@ export default {
       //							_self.tuiroomimid = _self.starroomimid
       //						}
       //						alert(_self.boforeroomImId)
-      var chengnuiriqi;
       if (_self.form.MissionStartDate == "") {
-        chengnuiriqi = null;
+        _self.chengnuiriqi = null;
       } else {
-        chengnuiriqi =
+        _self.chengnuiriqi =
           _self.form.MissionStartDate + " " + _self.nowtime;
       }
+      // alert("_self.form.MissionStartDate", _self.form.MissionStartDate)
       var tablefields = {
         userName: _self.username,
         userID: _self.userid,
@@ -931,15 +935,8 @@ export default {
         dateShenqing: _self.shenqing + " " + _self.nowtime,
         projectName: _self.pa_projectName,
         projectSN: _self.pa_projectsn,
-        //							companySaleName: _self.pa_isroomname,
-        //							companySaleID: _self.pa_isRoomCreditCode,
-        //							companySaleRoomID: _self.pa_isroomid,
-        //							companyBuyName: _self.nowCompanyname.toString(),
-        //							companyBuyID: _self.nowCompanyid.toString(),
-        //							companyBuyRoomID: _self.nowCompanyroomid.toString(),
-        //							name: _self.title,
         type: _self.type,
-        dateChengnuo: chengnuiriqi,
+        dateChengnuo: _self.chengnuiriqi,
         beizhu: _self.beizhuzhuan,
         confirmStatus: "", //确认状态
         confirmPersonName: "",
@@ -989,7 +986,6 @@ export default {
         createRoomId: this.$route.query.currRoomId
       };
       console.log(param);
-      alert(JSON.stringify(param))
       //						alert(JSON.stringify(param))
       this.$http
         .post( "/contract/save", param)
@@ -1024,13 +1020,13 @@ export default {
       var title;
       if (_self.type == "单方承诺") {
         title =
-          _self.personAccept +
-          "向" +
+         _self.personAccept +
+          "向" 
           _self.personDistribute +
           "的微承诺";
       } else {
         title =
-          _self.personAccept +
+          _self.personAccept+
           "与" +
           _self.personDistribute +
           "的双向承诺";
@@ -1083,11 +1079,12 @@ export default {
       };
       window.appApi.sendTodo(todojson, function(d) {
         if (d.code == 200) {
-          ludan("提交成功", 2, 2, function() {
+          tipApi.success("提交成功",2)
+          // ludan("提交成功", 2, 2, function() {
             window.appApi.closeNewWindow();
-          });
+          // });
         } else {
-          alert(d);
+          tipApi.failure(d,2)
         }
       });
     },

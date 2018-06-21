@@ -501,7 +501,7 @@ export default {
     starinfo: function() {
       var _self = this;
       var param = {
-        id: paramMap.id
+        id: this.$route.query.id
       };
       this.$http.post("/contract/get_content", param).then(function(response) {
         if (response.data.code == 200) {
@@ -521,7 +521,7 @@ export default {
           //附件
           _self.imgsrc(norl.attachment);
           //提交信息
-          _self.id = paramMap.id;
+          _self.id = this.$route.query.id;
           _self.cfgid = norl.table.id;
           _self.pa_projectsn = norl.table.projectid;
           _self.pa_isRoomId = norl.table.roomid;
