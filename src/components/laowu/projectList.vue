@@ -125,6 +125,8 @@ export default {
         project_sign.existProject(item)
       },
       selectProject:function(item){
+        // console.log(item)
+        // return
         project_sign.selectProject(item)
       }
     },

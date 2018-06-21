@@ -62,11 +62,11 @@
           </a>
       </li>
 
-			<li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" >
-         <area-bar :datanow="form.workHourName" :title="worktitle" :timeType=1 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
+			<li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row"  >
+         <area-bar :datanow="form.workHourName" :starindex="sindex" :title="worktitle" :timeType=1 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
 			</li>
 			<li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" >
-         <area-bar :datanow="form.overHourName" :title="overtitle" :timeType=2 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
+         <area-bar :datanow="form.overHourName" :starindex="oindex" :title="overtitle" :timeType=2 :areatype="areatype" @toParent="childValue"  :shuju="solt"></area-bar>
 			</li>
 
           <li v-if="form.recordType==2" class="mui-table-view-cell mui-input-row">
@@ -170,6 +170,8 @@ export default {
   props: {},
   data() {
     return {
+      sindex:0,
+      oindex:0,
       titleriqi:"日期",
       form: {
         id: "",
@@ -260,15 +262,16 @@ export default {
       overtitle:"加班时长",
       datetitle:"日期",
       areatype:"2",
-      solt:[
-          {
-          flex: 1,
-          defaultIndex: 0,
-          values: [], //省份数组
-          className: "slot1",
-          textAlign: "center"
-          }
-          ]
+      solt:[],
+      // solt:[
+      //     {
+      //     flex: 1,
+      //     defaultIndex: 0,
+      //     values: [], //省份数组
+      //     className: "slot1",
+      //     textAlign: "center"
+      //     }
+      //     ]
     };
   },
   created: function() {
@@ -283,6 +286,9 @@ export default {
     laowu_main.setTitle();
   },
   methods: {
+    clickTime:function(){
+      alert(3)
+    },
     change(msg) {
       this.form.createTimeStr=msg;
     },
@@ -390,7 +396,37 @@ export default {
 .mint-popup-bottom{
   width: 100%;
 }
-.btn-unit{
-  width: 1px;
+.mui-btn.btn-unit:before{
+  width: 1px !important;
+  position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    content: '';
+    background-color: #efeff4;
+}
+.mint-datetime-confirm{
+    width: auto !important;
+    height: auto !important;
+    padding: 0 10px !important;
+    margin: 3px 0 !important;
+    line-height: 30px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    margin-right: 6px !important;
+    background: #26a2ff !important;
+    color: #fff !important;
+}
+.mint-datetime-cancel{
+        width: auto !important;
+    height: auto !important;
+    color: #aaa !important;
+    padding: 0 10px !important;
+    margin: 3px 0 !important;
+    line-height: 30px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    margin-left: 6px !important;
 }
 </style>

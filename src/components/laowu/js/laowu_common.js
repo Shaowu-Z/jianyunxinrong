@@ -53,9 +53,10 @@ var laowu_common={
      unitList:[],
      
 
-     initVue:function(_self){//初始化vue引用和http请求，并定义全局变量方便使用
+     initVue:function(vue){//初始化vue引用和http请求，并定义全局变量方便使用
        
-       axios=_self.$http;
+       axios=vue.$http;
+       _self=vue;
        var paramMap=laowu_common.paramMap;
        laowu_common.date=laowu_common.getNowFormatDate();
        
@@ -399,6 +400,7 @@ var laowu_common={
 },
 
 showTimeLists: function () {//加载时间列表
+
     // var obj = new Object();
     // obj.type = 1;
     // axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
@@ -436,28 +438,29 @@ showTimeLists: function () {//加载时间列表
     });
 },
 showUnitLists: function () {//加载单位列表
-    var obj = new Object();
-    obj.type = 2;
-    axios.post("/project_work_api/find_base_cfg", obj).then(function (response) {
-        if (response.data.code == 200) {
-            var result = response.data.result;
-            if (result.length > 0) {
-                //初始化单位
-                var unit = result[1];
-                if (!_self.form.unit) {
-                    _self.form.unit = unit.baseName;
-                    _self.select_unit = unit.baseName;
-                }
-                laowu_common.unitList = result;
-            } else {
-                msg("未查询到单位列表!")
+  
+    $.ajax({
+        type: "post",
+        url: "/api/project_work_api/find_base_cfg",
+        async: false,
+        data:'{"type":"2"}', 
+        datatype: "json",
+        contentType : 'application/json',
+        success: function(data) {
+            console.log("单位列表",data)
+            var result=data.result
+            var unit = result[1];
+            if (!_self.form.unit) {
+                _self.form.unit = unit.baseName;
+                _self.select_unit = unit.baseName;
             }
-        } else {
-            msg("查询单位列表出错!")
+            laowu_common.unitList = result;
+        },
+        error: function() {
+            console.log("err")
         }
-    }).catch(function (error) {
-        console.info(error);
     });
+
 },
 
     /**
@@ -615,7 +618,7 @@ showUnitLists: function () {//加载单位列表
   showAppDiv:function() {
     if(document.getElementById("app")!=null)
     document.getElementById("app").style.display='block';
-},
+ },
   showULDiv:function() {
     if(document.getElementById("uldiv")!=null)
     document.getElementById("uldiv").style.display='block';

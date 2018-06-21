@@ -595,13 +595,13 @@ var laowu_confirm = {
 
  clickCalendar:function(queryTime) {
      var app=_self
-     console.log(app)
+     console.log(queryTime)
     if(!queryTime){
         msg("请选择查询日期")
         return
     }
     app.reqParams.userId=laowu_common.userId;
-    app.reqParams.queryTime=laowu_common.queryTime;
+    app.reqParams.queryTime=queryTime;
     app.reqParams.queryStatus=3;
     app.reqParams.projectId=laowu_common.projectId;
     axios.post("/project_work_api/find_record_create_confirm",app.reqParams).then(function (response) {
@@ -614,7 +614,6 @@ var laowu_confirm = {
                     laowu_confirm.showPingfenList();//显示分数
                 },10)
             }else {
-                alert(2)
                 app.data.confirmList=[];
             }
         }
@@ -639,9 +638,7 @@ var laowu_confirm = {
             if(result.length>0){
                 app.data.attrecordList=result;
             }else {
-                alert(3)
                  app.data.attrecordList=[];
-                //  console.log("未查询到打卡记录!")
             }
         }
     }).catch(function (error) {

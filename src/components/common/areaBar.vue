@@ -38,13 +38,23 @@ export default {
     shuju:'',
     timeType:'',
     datanow:"",
+    starindex:'',
+    
   },
   data() {
     return {
       type:this.areatype,
       popupVisible: false,
       showToolbar: [],
-      slot:this.shuju,
+      slot:[
+          {
+          flex: 1,
+          defaultIndex: Number(this.starindex),
+          values: this.shuju, //省份数组
+          className: "slot1",
+          textAlign: "center"
+          }
+          ],
       myAddressSlots: [
         {
           flex: 1,
@@ -87,16 +97,10 @@ export default {
   created() {
     var _self=this
    console.log("当前选择时间"+this.datanow)
-   setTimeout(function(){
-
-     console.log("数据aaa",_self.slot[0].values)
-   },100)
+   console.log("数据aaa",this.starindex)
    this.area=this.datanow
   },
-   mounted:function(){
-    this.showList();
-  },
-  
+
     methods: {
     onMyAddressChange(picker, values) {
       var _self = this;
@@ -133,7 +137,8 @@ export default {
     },
     makepass() {
       this.popupVisible = !this.popupVisible;
-    }
+    },
+      
   },
   mounted() {
     this.$nextTick(() => {
