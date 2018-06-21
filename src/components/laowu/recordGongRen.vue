@@ -393,4 +393,27 @@ export default {
 .btn-unit{
   width: 1px;
 }
+.mint-datetime-confirm{
+    width: auto !important;
+    height: auto !important;
+    padding: 0 10px !important;
+    margin: 3px 0 !important;
+    line-height: 30px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    margin-right: 6px !important;
+    background: #26a2ff !important;
+    color: #fff !important;
+}
+.mint-datetime-cancel{
+        width: auto !important;
+    height: auto !important;
+    color: #aaa !important;
+    padding: 0 10px !important;
+    margin: 3px 0 !important;
+    line-height: 30px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    margin-left: 6px !important;
+}
 </style>
