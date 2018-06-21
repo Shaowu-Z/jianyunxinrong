@@ -396,8 +396,15 @@ export default {
 .mint-popup-bottom{
   width: 100%;
 }
-.btn-unit{
-  width: 1px;
+.mui-btn.btn-unit:before{
+  width: 1px !important;
+  position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    content: '';
+    background-color: #efeff4;
 }
 .mint-datetime-confirm{
     width: auto !important;

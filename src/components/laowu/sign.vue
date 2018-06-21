@@ -172,6 +172,7 @@ export default {
 	 project_sign._self=this;
      project_sign.initVue()
 	 project_sign.initData()
+
 	
      
        
@@ -188,7 +189,7 @@ export default {
       
     },
     mounted(){
-
+			
     }
 }
 </script>
@@ -235,6 +236,19 @@ export default {
 		.sign-btn{
 			padding: 0
 		}
+		
+		.statue{
+			width:15px;
+			height:15px;
+		}
+		.statue.success{
+			background-position:0 -66px
+		}
+		.statue.waiting{
+			background-position:0 -170px
+		}
+		.location-gps p span{display:inline-block;vertical-align:middle;}
+		
 	</style>
 
 

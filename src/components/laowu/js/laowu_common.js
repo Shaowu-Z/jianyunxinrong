@@ -618,7 +618,7 @@ showUnitLists: function () {//加载单位列表
   showAppDiv:function() {
     if(document.getElementById("app")!=null)
     document.getElementById("app").style.display='block';
-},
+ },
   showULDiv:function() {
     if(document.getElementById("uldiv")!=null)
     document.getElementById("uldiv").style.display='block';
