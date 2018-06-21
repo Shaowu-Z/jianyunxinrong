@@ -89,18 +89,14 @@ var laowu_main = {
         }
         if (recordType == 1) {//点工
             laowu_common.showTimeLists()
-           // setTimeout(() => {
-                _self.data.timeList=laowu_common.timeList
-                _self.solt[0].values=laowu_common.timeList
-           // }, 150);
-           console.log("设置完成...",_self.form)
+            _self.data.timeList=laowu_common.timeList
+            _self.sindex=laowu_main.getIndex(_self.data.timeList,_self.form.workHour);
+            _self.oindex=laowu_main.getIndex(_self.data.timeList,_self.form.overHour);
+            _self.solt=laowu_common.timeList
         }
         if (recordType == 2) {//包工类型
             laowu_common.showUnitLists();
-            setTimeout(() => {
-                _self.data.unitList=laowu_common.unitList;
-            _self.solt[0].values=_self.data.unitList;
-            }, 150);
+            _self.data.unitList=laowu_common.unitList;
         }
         if (laowu_common.dataType == 'todowork') {//房间提醒待办进来
             _self.form.createTimeStr = queryTime;
@@ -108,6 +104,21 @@ var laowu_main = {
         }
         console.log("表单",_self.form)
     
+    },
+
+    getIndex:function(ary,key){
+        console.log("数组",ary)
+        var _self=this
+        var selectindex=null
+        if(ary.length>0 && key){
+            for(var i=0;i<ary.length;i++){
+                if(ary[i].baseId==key){
+                   selectindex=i;
+                   break;
+                }
+            }
+        }
+        return selectindex
     },
 
     setTitle:function(){
