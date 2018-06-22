@@ -77,7 +77,7 @@
                                       >
   
                                 </mt-datetime-picker>
-                                    <!-- <input type="text" name="receiptDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
+                                    <!-- <input type="text" name="form.MissionStartDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
     
                                 </li>
     

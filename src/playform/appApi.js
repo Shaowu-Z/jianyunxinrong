@@ -1483,7 +1483,6 @@ window.appApi = {
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
 					if(xhr.status == 200) {
-						alert(xhr.responseText)
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
 							var tJson = JSON.parse(xhr.responseText).result;	
@@ -1538,9 +1537,7 @@ window.appApi = {
 							}
 							success && success(JSON.parse(xhr.responseText));
 						}
-						alert("shibai1")
 					} else {
-						alert("shibai12")
 						err && err(JSON.parse(xhr.responseText));
 					}
 

@@ -2,23 +2,25 @@
 <template>
     <div class="mui-fullscreen" >
 			<!-- 菜单容器 -->
-			<div class="mui-off-canvas-wrap mui-draggable mui-slide-in" :class="hetongmove ? 'move-left' : 'move-right'">
-				<!-- <div class="mui-off-canvas-wrap mui-draggable mui-slide-in" > -->
-                <header class="mui-bar mui-bar-nav">
-					<h1 class="mui-title">选择合同</h1>
-				</header>
-				<div class="mui-scroll-wrapper" :class="tapyewu? 'listup':'listdown'">
-					<!-- <div class="mui-scroll"> -->
-						<!-- 合同类别 -->
-						<ul class="mui-table-view eg-table-view category-table" style="margin-bottom: 0;">
-                            <li class="mui-table-view-cell" v-for="(n,index) in hetongx" :key="index">
-                                <a v-text="n.contractName" @click="hetongmore(n)"></a>
-                            </li>
-						</ul>
-					<!-- </div> -->
-				</div>
-			</div>
-			<div id="backdrop" class="mask" @click="mask" :class="hetongmove ? 'move-leftmask' : 'move-rightmask'"></div>
+			<!-- <div class="mui-off-canvas-wrap mui-draggable mui-slide-in " :class="hetongmove? 'move-left' : 'move-right'"> -->
+			<mt-popup v-model="popupVisible"  position="right">
+                <div class="mui-off-canvas-wrap mui-draggable mui-slide-in" ref="mui_slide">
+                    <header class="mui-bar mui-bar-nav">
+                        <h1 class="mui-title">选择合同</h1>
+                    </header>
+                    <div class="mui-scroll-wrapper" :class="tapyewu? 'listup':'listdown'">
+                        <!-- <div class="mui-scroll"> -->
+                            <!-- 合同类别 -->
+                            <ul class="mui-table-view eg-table-view category-table" style="margin-bottom: 0;">
+                                <li class="mui-table-view-cell" v-for="(n,index) in hetongx" :key="index">
+                                    <a v-text="n.contractName" @click="hetongmore(n)"></a>
+                                </li>
+                            </ul>
+                        <!-- </div> -->
+                    </div>
+			    </div>
+            </mt-popup>
+			<!-- <div id="backdrop" class="mask" @click="mask" :class="hetongmove ? 'move-leftmask' : 'move-rightmask'"></div> -->
 			<!-- 主页面容器 -->
 
 			<div class="mui-inner-wrap">
@@ -28,7 +30,7 @@
 					<a class="mui-action-back mui-icon iconfont icon-back" style="display: none;" v-show="backicon!=0" @click="back"></a>
 					<a class="mui-action-back mui-icon iconfont icon-help2 mui-pull-right" v-show="backicon==1" style="margin-left:0;display: none;"></a>
 					<button class="mui-btn mui-btn-link mui-pull-right" style="margin-left:0;margin-right:0;padding-right:0;display: none;" @click="showSelectdFile" v-show="backicon==1">导入Excel</button>
-					<input id="excelFile" type="file" class="upfile" style="display: none;" onclick="window.webactivity.setInputType(4,4,1);" @change="excelAnalysis(event)" />
+					<input id="excelFile" type="file" class="upfile" style="display: none;" @click="pushexcel"  v-on:change="excelAnalysis" ref="eve"/>
 				</header>
 				<div class="mui-content fix_content" v-if='fixcont==1'>
 					<div v-if="backicon==0">
@@ -50,7 +52,17 @@
 								</li>
 								<li class="mui-table-view-cell mui-input-row">
 									<label>到货日期</label>
-									<input type="text" name="receiptDate" v-model="receiptDate" @click="app.selectDate()" readonly="readonly" placeholder="请选择">
+									<input type="text" name="form.MissionStartDate" v-model="form.MissionStartDate" @click="danjuApi.openPicker" readonly="readonly" placeholder="请选择">
+                                    <mt-datetime-picker  ref="picker"  
+                                      v-model="pickerVisible"
+                                      type="date"
+                                      year-format="{value} 年"
+                                      month-format="{value} 月"
+                                      date-format="{value} 日"
+                                      @confirm="danjuApi.handleConfirm"
+                                      >
+  
+                                    </mt-datetime-picker>
 								</li>
 								<li class="mui-table-view-cell mui-input-row">
 									<label>详细说明</label>
@@ -100,10 +112,10 @@
 												<div class="img-item-inner">
 													<img v-bind:src="img.src">
 												</div>
-												<span class="btn-roll btn-delete" @click="moveimg(number+1)"></span>
+												<span class="btn-roll btn-delete" @click="danjuApi.moveimg(number+1)"></span>
 											</li>
 										<li class="upload-btn">
-											<div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" accept="image/*" class="upimg" id="file" v-on:change="upfile" multiple="multiple" /></div>
+											<div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" accept="image/*" class="upimg" id="file" v-on:change="danjuApi.upfile" multiple="multiple" /></div>
 										</li>
 									</ul>
 								</div>
@@ -112,10 +124,10 @@
 									<div class="title">附件</div>
 									<ul class="mui-table-view mui-table-view-striped container-average container-file">
 											<li class="mui-table-view-cell" v-for="(img,number) in fujians" :key="number">
-												<span class="btn-roll btn-delete" @click="movefj(number+1)"></span>
+												<span class="btn-roll btn-delete" @click="danjuApi.movefj(number+1)"></span>
 												<div class="oa-contact-cell mui-table">
 													<div class="oa-contact-avatar mui-table-cell">
-														<span :class="'my-list-icon '+ fileType(img.name)"></span>
+														<span :class="'my-list-icon '+ danjuApi.fileType(img.name)"></span>
 													</div>
 													<div class="oa-contact-content mui-table-cell">
 														<h4 class="oa-contact-name" v-text="img.name"></h4>
@@ -124,7 +136,7 @@
 												</div>
 											</li>
 										<li class="upload-btn">
-											<div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" class="upfile" id="files" v-on:change="upfile" multiple="multiple" /></div>
+											<div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" class="upfile" id="files" v-on:change="danjuApi.upfile" multiple="multiple" /></div>
 										</li>
 									</ul>
 								</div>
@@ -207,6 +219,7 @@
 								<span v-for="(item,index) in units" :key="index" @click="selectdUnit(item)" class="item" :class="{current : item.value==selectdTab.danwei}">
                                     <span class="con" v-text="item.value"></span>
                                 </span>
+
 						</div>
 					</div>
 				</div>
@@ -215,6 +228,7 @@
 </template>
 <script>
 import { Picker } from 'mint-ui';
+import { Popup } from 'mint-ui';
 import { BackCookie } from "../../../playform/common.js";
 import setting from "../../../playform/config.js";
 import danjuApi from "../js/danjuAPi.js";
@@ -223,6 +237,15 @@ import dataBar from "../../common/dataBar"
 export default {
     data () {
     return {
+        imgid:[],
+        fujianid:[],
+        form: {
+        MissionStartDate: ""
+        },
+        danjuApi:danjuApi,
+        tipApi:tipApi,
+        popupVisible:false,
+        pickerVisible:'',
         id: "",
         hetongmove: false,
         userid: setting.getCookie("userid"),
@@ -277,7 +300,6 @@ export default {
         companySaleRoomID: "",
         companySaleRoomImID: "",
         contractID: "",
-        receiptDate: "",
         fashengDate: "",
         nowtime: "",
         sites: [],
@@ -322,6 +344,8 @@ export default {
         }
     },
     created: function() {
+        danjuApi.vue = this;
+    danjuApi.initVue()
 					var _self = this
 					var getTime = new Date()
 					var nowTime = getTime.toLocaleDateString()
@@ -378,7 +402,7 @@ export default {
 				return t;
 			}
 					_self.fashengDate = formDate(printTime);
-					_self.receiptDate = formDate(printTime);
+					_self.form.MissionStartDate = formDate(printTime);
 					//获取合同
 					//获取合同
 					if(this.$route.query.id != undefined) {
@@ -431,6 +455,9 @@ export default {
                 },
 				// 在 `methods` 对象中定义方法
 				methods: {
+                    pushexcel:function(){
+                        // window.webactivity.setInputType(4,4,1)
+                    },
 					moneyTotals: function() {
 						var _self = this;
 						var moneyTotal = 0;
@@ -457,7 +484,7 @@ export default {
 								_self.contractName = norl.tablefields.contractName
 								_self.companyBuyName = norl.tablefields.companyBuyName
 								_self.companySaleName = norl.tablefields.companySaleName
-								_self.receiptDate = norl.tablefields.dateFasheng.split(" ")[0]
+								_self.form.MissionStartDate = norl.tablefields.dateFasheng.split(" ")[0]
 								_self.beizhu = norl.tablefields.beizhu
 								_self.projectSn = norl.table.projectid
 
@@ -497,12 +524,12 @@ export default {
 										_self.imgs.push({
 											src: response.data.result[i].thumbnailurl
 										})
-										imgid.push(response.data.result[i].id)
+										_self.imgid.push(response.data.result[i].id)
 									} else {
 										_self.fujians.push({
 											name: response.data.result[i].filename
 										})
-										fujianid.push(response.data.result[i].id)
+										_self.fujianid.push(response.data.result[i].id)
 									}
 								}
 
@@ -674,14 +701,15 @@ export default {
 					next: function(pageIndex) {
 						var _self = this;
 						if(pageIndex == 1) {
-							if(app.contractName == '') {
-								ludan("请选择合同!", 2, 1)
-								return false;
+							if(_self.contractName == '') {
+                                tipApi.waring("请选择合同",2)
+								// ludan("请选择合同!", 2, 1)
+                                return false;
 							} else {
 								_self.fixcont = 0
 							}
 						} else if(pageIndex == 2) {
-							app.moneyTotals()
+							_self.moneyTotals()
 							var isNext = _self.checkTabs()
 							if(!isNext) {
 								return false;
@@ -758,7 +786,15 @@ export default {
 					 * 弹出选择合同
 					 */
 					changeht: function() {
+                        this.popupVisible=!this.popupVisible
                          this.hetongmove = !this.hetongmove;
+                        //  if(this.hetongmove){
+                        //      this.$refs.mui_slide.classList.add("move-left");
+                        //      this.$refs.mui_slide.classList.remove("move-right");
+                        //  }else{
+                        //      this.$refs.mui_slide.classList.add("move-right");
+                        //      this.$refs.mui_slide.classList.remove("move-left");
+                        //  }
 						// mui('.mui-off-canvas-wrap').offCanvas().show()
 					},
 					//excel表格解析
@@ -802,11 +838,13 @@ export default {
 					//						fileReader.readAsBinaryString(files[0]);
 					//					},
 					//excel表格解析
-					excelAnalysis: function(e) {
+					excelAnalysis: function() {
+                        var e=event
 						if(e.target.files[0] == null) {
 							return false;
-						}
-						loading("解析中")
+                        }
+						alert("解析中")
+                        console.log(event)
 						var _self = this;
 						var suffix = /\.[^\.]+$/.exec(e.target.files[0].name).toString()
 						if(suffix == '.xlsx') {
@@ -840,9 +878,9 @@ export default {
 										if(excelname.indexOf("mingcheng") != -1 && excelname.indexOf("guigexinghao") != -1 && excelname.indexOf("danwei") != -1 && excelname.indexOf("pinpai") != -1 && excelname.indexOf("shuliang") != -1 && excelname.indexOf("danjia") != -1) {
 											persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
 										} else {
-											layer.close(loading("解析中"))
+                                            alert("解析中2")
 											_self.excelok = 1
-											ludan("导入的模板格式不正确", 2, 3)
+											alert("导入的模板格式不正确")
 
 										}
 										// break; // 如果只取第一张表，就取消注释这行
@@ -851,14 +889,14 @@ export default {
 								_self.tabs = _self.tabs.concat(persons)
 								//							console.log(persons);
 							};
-							_self.upfile(e)
+							danjuApi.upfile(e)
 
-							// 以二进制方式打开文件
+                            // 以二进制方式打开文件
 							fileReader.readAsBinaryString(files[0]);
-							_self.upfile(e)
+							danjuApi.upfile(e)
 						} else {
-							layer.close(loading("解析中"))
-							ludan("导入的文件格式不正确", 2, 3)
+                            // layer.close(loading("解析中"))
+                            alert("导入的文件格式不正确")
 						}
 
 					},
@@ -871,7 +909,7 @@ export default {
 						// 	labels: ['年', '月', '日'], //设置默认标签区域提示语 
 						// })
 						// dtpicker.show(function(e) {
-						// 	_self.receiptDate = e.value
+						// 	_self.form.MissionStartDate = e.value
 						// 	dtpicker.dispose()
 						// })
 					},
@@ -920,7 +958,8 @@ export default {
 							}
 
 							if(!isCue) {
-								ludan("请填写列表(" + (++index) + ")的" + isname + "!", 2, 1)
+                                tipApi.waring("请填写列表(" + (++index) + ")的" + isname + "!",2)
+								// ludan("请填写列表(" + (++index) + ")的" + isname + "!", 2, 1)
 								isStatus = false
 							}
 						})
@@ -931,32 +970,34 @@ export default {
 						//获取数据
 						var _self = this;
 						if(type == 1) {
-							ludan("保存中", 0, 1)
+                            tipApi.waring("保存中")
+							// ludan("保存中", 0, 1)
 						} else {
-							ludan("提交中", 0, 1)
+                            tipApi.waring("提交中")
+							// ludan("提交中", 0, 1)
 						}
-						//						var fjid = imgid.toString()
+						//						var fjid = _self.imgid.toString()
 						var fjid
 						if(_self.attachmentIds == '') {
 							_self.attachmentIds = ''
 						} else {
 							_self.attachmentIds = "," + _self.attachmentIds
 						}
-						if(imgid.toString() == '') {
-							fjid = fujianid.toString()
-						} else if(fujianid.toString() == '') {
-							fjid = imgid.toString()
+						if(_self.imgid.toString() == '') {
+							fjid = _self.fujianid.toString()
+						} else if(_self.fujianid.toString() == '') {
+							fjid = _self.imgid.toString()
 						} else {
-							fjid = imgid.toString() + "," + fujianid.toString()
+							fjid = _self.imgid.toString() + "," + _self.fujianid.toString()
 						}
 						//						var id="5a6ecbda70474ea263ddfbb5";
 						//		var uid='10392';
 						var tablefield = {
-							userName: decodeURI(username),
-							userID: userid,
+							userName: decodeURI(_self.username),
+							userID: _self.userid,
 							dateShenqing: _self.fashengDate + " " +
 								_self.nowtime, 
-							dateFasheng: _self.receiptDate + " " + "00:00:00",
+							dateFasheng: _self.form.MissionStartDate + " " + "00:00:00",
 							projectName: _self.projectName,
 							projectSN: _self.projectSn,
 							contractName: _self.contractName,
@@ -1000,7 +1041,7 @@ export default {
 							currRoomImId: _self.currRoomImId,
 							currRoomClassName: _self.currRoomClassName,
 							curRoomName: _self.currRoomName,
-							uid: userid,
+							uid: _self.userid,
 							tablefields: tablefield,
 							subtablefields: _self.tabs,
 						}
@@ -1016,16 +1057,17 @@ export default {
 										_self.id = response.data.result.id
 										_self.sites = response.data.result.tablefields;
 										if(type == 2) {
-											layer.close(ludan("提交中", 0, 1))
+                                            tipApi.close("waring")
+											// layer.close(ludan("提交中", 0, 1))
                                             var titletype = encodeURIComponent(encodeURIComponent("收付款"));
-                                            var title = encodeURIComponent(encodeURIComponent(decodeURI(username)));
+                                            var title = encodeURIComponent(encodeURIComponent(decodeURI(_self.username)));
 											var todojson = {
-												"title": decodeURI(username) + "的收货",
+												"title": decodeURI(_self.username) + "的收货",
 												"titileTwo": _self.currRoomClassName + "-" + _self.currRoomName,
 												"content": "合同名称=" +
 													_self.contractName +
 													"|到货日期=" +
-													_self.receiptDate +
+													_self.form.MissionStartDate +
 													"|合计金额=" +
 													_self.money + "元",
 												"fileCount": "0",
@@ -1035,7 +1077,7 @@ export default {
 												"todoViewableMember": "0",
 												"toImId": _self.toImId
 													.toString(),
-												"formuserid": userid,
+												"formuserid": _self.userid,
 												"currentRoomImid": _self.currRoomImId,
 												"chatType": "2",
 												"relation": response.data.result.id,
@@ -1046,27 +1088,33 @@ export default {
 												"setButton": [{
 													"type": 1, //按钮点击类型 1=请求url 2=打开url
 													"name": "确认",
-													"url":  "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + userid+"&sendtype=1"
+													"url":  "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&sendtype=1"
 												}, {
 													"type": 1, //按钮点击类型 1=请求url 2=打开url
 													"name": "退回",
-													"url":  "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
+													"url":  "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
 												}]
 											}
 											//alert(JSON.stringify(todojson))
 											window.appApi.sendTodo(todojson, function(d) {
 												//												alert(JSON.stringify(d))
 												if(d.code == 200) {
-													ludan("提交成功", 3, 2, function() {
+                                                    tipApi.success("提交成功",2,function(){
                                                         appApi.refreshData(2);
-														/*window.appApi.closeNewWindow()*/
-													})
+                                                    })
+                                                    
+													// ludan("提交成功", 3, 2, function() {
+                                                    //     appApi.refreshData(2);
+													// 	/*window.appApi.closeNewWindow()*/
+													// })
 												}
 
 											})
 										} else {
-											layer.close(ludan("保存中", 0, 1))
-											ludan("保存成功", 3, 2)
+                                            tipApi.close("waring")
+                                            // layer.close(ludan("保存中", 0, 1))
+                                            tipApi.success("保存成功",2)
+											// ludan("保存成功", 3, 2)
 										}
 
 									} else {
@@ -1075,10 +1123,10 @@ export default {
 								})
 					},
 					//点击遮罩层
-					mask: function() {
-                        this.hetongmove = false;
-						// mui('.mui-off-canvas-wrap').offCanvas().close()
-					},
+					// mask: function() {
+                    //     this.hetongmove = false;
+					// 	// mui('.mui-off-canvas-wrap').offCanvas().close()
+					// },
 					hetongmore: function(event) {
 						var _self = this
 						console.log(event)
@@ -1103,17 +1151,18 @@ export default {
 						if(_self.companyBuyRoomImID != _self.currRoomImId) {
 							_self.toImId
 								.push(_self.companyBuyRoomImID);
-						}
-						_self.mask()
+                        }
+                        this.popupVisible=!this.popupVisible
+						// _self.mask()
 					},
 					//上传文件
 					upfile: function(event) {
-						loading("上传中")
+						alert("上传中")
 						sessionStorage.removeItem("cunnews")
 						var _self = this
 						var file = document.getElementById(event.target.id).files;
 						var zrid = document.getElementById(event.target.id).getAttribute("id")
-						var url =  "/sass_api/upload_file";
+						var url =  "/api/sass_api/upload_file";
 						var form = new FormData();
 						var forimg = []
 						var forfile = []
@@ -1129,8 +1178,8 @@ export default {
 									//加载图片获取图片真实宽度和高度
 									var image = new Image();
 									image.onload = function() {
-										width = image.width;
-										height = image.height;
+										var width = image.width;
+										var height = image.height;
 
 									};
 									image.src = data;
@@ -1163,21 +1212,21 @@ export default {
 							form.append("type", "2");
 						}
 						form.append("module", "contractnote");
-						form.append("userid", userid);
-						xhr = new XMLHttpRequest();
+						form.append("userid", _self.userid);
+						var xhr = new XMLHttpRequest();
 						xhr.open("post", url, true);
 						xhr.onload = function(evt) {
 							//请求完成
 							//							var data = JSON.parse(evt.target.responseText);
 							//							if(sessionStorage.getItem("cunnews") == 1) {
-							//								imgid.push(data.result.success)
-							//								_self.zrimg = imgid.toString().split(',')
+							//								_self.imgid.push(data.result.success)
+							//								_self.zrimg = _self.imgid.toString().split(',')
 							//							} else {
-							//								fujianid.push(data.result.success)
-							//								_self.zrfujian = fujianid.toString().split(',')
-							//								console.log(fujianid.toString())
+							//								_self.fujianid.push(data.result.success)
+							//								_self.zrfujian = _self.fujianid.toString().split(',')
+							//								console.log(_self.fujianid.toString())
 							//							}
-							layer.close(loading("上传中"))
+							// layer.close(loading("上传中"))
 						};
 						xhr.onreadystatechange = function(evt) {
 							console.log(xhr)
@@ -1187,47 +1236,47 @@ export default {
 								// if(sessionStorage.getItem("cunnews") == 1) {
                                  //    _self.imgs = _self.imgs.concat(forimg)
                                  //    if(data.result.success.indexOf(",") == -1) {
-                                 //        imgid.push(data.result.success)
+                                 //        _self.imgid.push(data.result.success)
                                  //    } else {
-                                 //        imgid = imgid.concat(data.result.success.split(","))
+                                 //        _self.imgid = _self.imgid.concat(data.result.success.split(","))
                                  //    }
                                 //
-                                 //    //										imgid.push(data.result.success)
-                                 //    console.log(imgid)
-                                 //    _self.zrimg = imgid.toString().split(',')
+                                 //    //										_self.imgid.push(data.result.success)
+                                 //    console.log(_self.imgid)
+                                 //    _self.zrimg = _self.imgid.toString().split(',')
                                 // } else {
 								// 	if(data.result.success.indexOf(",") == -1) {
-								// 		fujianid.push(data.result.success)
+								// 		_self.fujianid.push(data.result.success)
 								// 	} else {
-								// 		fujianid = fujianid.concat(data.result.success.split(","))
+								// 		_self.fujianid = _self.fujianid.concat(data.result.success.split(","))
 								// 	}
                                 //
-								// 	//										fujianid.push(data.result.success)
+								// 	//										_self.fujianid.push(data.result.success)
 								// 	_self.fujians = _self.fujians.concat(forfile)
-								// 	_self.zrfujian = fujianid.toString().split(',')
-								// 	console.log(fujianid.toString())
+								// 	_self.zrfujian = _self.fujianid.toString().split(',')
+								// 	console.log(_self.fujianid.toString())
 								// }
                                 var rtnfiles = data.result.success;
                                 if(sessionStorage.getItem("cunnews") == 1) {
                                     _self.imgs = _self.imgs.concat(rtnfiles)
                                     for(var i=0;i<rtnfiles.length;i++){
-                                        imgid.push(rtnfiles[i].fileId);
+                                        _self.imgid.push(rtnfiles[i].fileId);
                                     }
-                                    console.log(imgid)
-									if(imgid.toString()){
+                                    console.log(_self.imgid)
+									if(_self.imgid.toString()){
 
-                                        _self.zrimg = imgid.toString().split(',')
+                                        _self.zrimg = _self.imgid.toString().split(',')
                                     }
                                 } else {
                                     for(var i=0;i<rtnfiles.length;i++){
-                                        fujianid.push(rtnfiles[i].fileId);
+                                        _self.fujianid.push(rtnfiles[i].fileId);
                                     }
                                     _self.fujians = _self.fujians.concat(forfile)
-									if(fujianid.toString()){
+									if(_self.fujianid.toString()){
 
-                                        _self.zrfujian = fujianid.toString().split(',')
+                                        _self.zrfujian = _self.fujianid.toString().split(',')
                                     }
-                                    console.log(fujianid.toString())
+                                    console.log(_self.fujianid.toString())
                                 }
 
 							} else if(xhr.readyState == 4 && xhr.status == 500) {
@@ -1253,9 +1302,9 @@ export default {
 						}).catch(function(error) {
 							ludan(error, 1, 3);
 						})
-						imgid.splice(n - 1, 1)
-						console.log(imgid)
-						console.log(imgid.toString())
+						_self.imgid.splice(n - 1, 1)
+						console.log(_self.imgid)
+						console.log(_self.imgid.toString())
 						//						console.log(_self.imgs)
 						_self.imgs.splice(n - 1, 1)
 						//						console.log(_self.imgs)
@@ -1264,8 +1313,8 @@ export default {
 						_self.zrimg.splice(n - 1, 1)
 						//						console.log(_self.zrimg)
 						//						console.log(typeof JSON.stringify(_self.zrimg))
-						//						console.log(imgid[1])
-						//						imgid.remove(n-1)
+						//						console.log(_self.imgid[1])
+						//						_self.imgid.remove(n-1)
 					},
 					movefj: function(n) {
 						var _self = this;
@@ -1277,49 +1326,20 @@ export default {
 						}).catch(function(error) {
 							ludan(error, 1, 3);
 						})
-						fujianid.splice(n - 1, 1)
+						_self.fujianid.splice(n - 1, 1)
 						_self.fujians.splice(n - 1, 1)
 						//						console.log(n-1)
 						_self.zrfujian.splice(n - 1, 1)
 						console.log(_self.zrfujian)
 						console.log(typeof JSON.stringify(_self.zrfujian))
-						//						console.log(imgid[1])
-						//						imgid.remove(n-1)
+						//						console.log(_self.imgid[1])
+						//						_self.imgid.remove(n-1)
 					}
 				},
 }
 </script>
 <style>
-.move-left {
-  /* transform: translate3d(43%, 0, 0);
-  transition: all 0.75s; */
-    animation:moveleft 0.5s ease-out;
-  animation-fill-mode: forwards;
-}
-@keyframes moveleft{
-from {right:-70%;}
-to {right:0;}
-}
-.move-right {
-  /* transform: translate3d(143%, 0, 0);
-  transition: all 0.75s; */
-  animation:moveright 0.5s ease-out;
-  animation-fill-mode: forwards;
-}
-@keyframes moveright{
-from {right:0;}
-to {right:-70%}
-}
-.move-leftmask {
-  opacity: 0.6;
-  display: block;
-  z-index: 8;
-}
-.move-rightmask {
-  opacity: 0;
-  display: none;
-  z-index: 8;
-}
+
 .mui-fullscreen{
     overflow: hidden;
     z-index: 1;
@@ -1332,23 +1352,54 @@ to {right:-70%}
 .mui-table-view{
     height: 100%;
 }
+.mui-scroll-wrapper .eg-table-view{
+    padding-top: 44px;
+}
 .mask{
     position: fixed;
     z-index: 1000;
     top: 0
 }
-.mui-off-canvas-wrap{
-    z-index: 1001;
-}
 .mui-title{
     width: 100%
 }
-.mui-off-canvas-wrap{
-    position: absolute;
-    width: 70%;
-    right: -70%;
-}
 #scrpll1{
     padding-top:0
+}
+.mint-popup-right{
+    width: 70%;
+    height: 100%;
+}
+.mui-table-view-cell:last-child:after, .mui-table-view-cell:last-child:before {
+    height: 1px;
+}
+.mui-action-back{
+    float: left;
+}
+.list-container .list-item .list-title{
+    background: #fff;
+    text-align: left
+}
+.mui-table-view-cell.mui-input-row label{
+    text-align: left
+}
+.cell-shuliang.mui-table-view-cell.mui-input-row input {
+    width: 34%;
+}
+.shulaingbtn {
+    width: 20%;
+    height: 43px;
+    border: 0;
+    float: right;
+    text-align: right;
+    margin: 5px 0;
+    border-left: 1px solid #ccc;
+    border-radius: 0;
+}
+.unit-box .item{
+    float: left;
+}
+.title{
+    text-align: left
 }
 </style>

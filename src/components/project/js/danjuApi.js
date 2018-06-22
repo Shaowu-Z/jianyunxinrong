@@ -23,7 +23,7 @@ var danjuApi={
 	handleConfirm(value) {
 		// this.form.MissionStartDate = value.toString();
 		var localtime = value.toLocaleDateString().replace(/[/]/g, "-");
-
+		
 		_self.form.MissionStartDate = localtime;
 		_self.show = true;
 		Toast({

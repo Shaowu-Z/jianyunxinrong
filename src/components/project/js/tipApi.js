@@ -12,9 +12,9 @@ var tipApi={
         dom.id =id;
         insertDiv.id =boxid;
         insertText.id =textid;
-        dom.style.cssText='position:fixed;width:100%;height:100%;z-index:9999;background:#fff;top:0;opacity:0;display:block'; 
+        dom.style.cssText='position:fixed;width:100%;height:100%;z-index:98;background:#fff;top:0;opacity:0;display:block'; 
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center';
-        insertDiv.style.cssText='position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 99;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgb(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px';
+        insertDiv.style.cssText='position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 999;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgba(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px';
         document.body.appendChild(insertDiv);
         insertDiv.appendChild(insertText);
         document.body.appendChild(dom);   
@@ -118,17 +118,28 @@ var tipApi={
      * 成功图标
      * 其余看第一个说明
     */
-    success:function(content){
+    success:function(content,time,obj){
         tipApi.newDom("successmask_zr","success_zr","success_text_zr")
         document.getElementById("success_text_zr").innerHTML=content
+        if(time!=undefined && time!=''){
+            setTimeout(function(){
+                tipApi.close("success")
+                obj()
+            },time*1000)
+        }
     },
     /**
      * 失败图标
      * 其余看第一个说明
     */
-    failure:function(content){
+    failure:function(content,time){
         tipApi.newDom("successmask_zr","success_zr","success_text_zr")
         document.getElementById("success_text_zr").innerHTML=content
+        if(time!=undefined && time!=''){
+            setTimeout(function(){
+                tipApi.close("failure")
+            },time*1000)
+        }
     },
     /**
      * 警告图标
