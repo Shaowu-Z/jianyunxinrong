@@ -271,17 +271,17 @@
 
 	</div>
 </section>
-	<footer-bar></footer-bar>
+	<!-- <footer-bar></footer-bar> -->
   </div>
 </template>
 
 <script>
-import footerBar from '../common/footerBar'
+// import footerBar from '../common/footerBar'
 // import {findTeamList} from '../../seek'
 export default {
-  components: {
-	footerBar,
-  },
+//   components: {
+// 	footerBar,
+//   },
   data () {
     return {
 	show: false,

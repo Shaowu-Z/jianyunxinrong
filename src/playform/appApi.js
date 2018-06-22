@@ -483,22 +483,22 @@ window.appApi = {
 	//          window.webactivity.vibrator();
 	//      }
 	//  },
-	//隐藏菜单
-	//  hideMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://hideMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.hideMenu();
-	//      }
-	//  },
-	//显示菜单
-	//  showMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://showMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.showMenu();
-	//      }
-	//  },
+	// 隐藏菜单
+	 hideMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://hideMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.hideMenu();
+	     }
+	 },
+	// 显示菜单
+	 showMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://showMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.showMenu();
+	     }
+	 },
 
 	/**
 	 *  获得地理位置信息
