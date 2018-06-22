@@ -11,7 +11,6 @@ const myHome = resolve => require(['@/components/myHome'], resolve)
 const myHomeIndex = resolve => require(['@/components/myHome/homeIndex'], resolve)
 const setUp = resolve => require(['@/components/myHome/setUp'], resolve)
 const set = resolve => require(['@/components/myHome/setUp/set'], resolve)
-const enterprise_home = resolve => require(['@/components/myHome/setUp/enterprise_home'], resolve)
 const setting = resolve => require(['@/components/myHome/setting'], resolve)
 const settingIndex = resolve => require(['@/components/myHome/setting/settingIndex'], resolve)
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
@@ -22,6 +21,9 @@ const serviceAgreement = resolve => require(['@/components/myHome/setting/servic
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
+const selectMemberShare = resolve => require(['@/components/myHome/myCenter/selectMemberShare'], resolve)
+const myCollectionDetail = resolve => require(['@/components/myHome/myCenter/myCollectionDetail'], resolve)
+const playVideo = resolve => require(['@/components/myHome/myCenter/playVideo'], resolve)
 
 const myHomeConfig = {
   path: '/static/webstatic/mycenter/mycenter.html',
@@ -42,10 +44,6 @@ const myHomeConfig = {
         {
           path: '/',
           component: set
-        },
-        {
-          path: '/mycenter/enterprise_home.html',
-          component: enterprise_home
         }
       ]
     },
@@ -84,9 +82,22 @@ const myHomeConfig = {
           component: myInfo
         },
         {
-          path: '/myCollect',
+          path: '/static/webstatic/mycenter/my_collect.html',
           component: myCollect
         },
+        {
+          path: '/selectMemberShare',
+          component: selectMemberShare
+        },
+        {
+          path: '/myCollectionDetail',
+          component: myCollectionDetail
+        },
+        {
+          path: '/playVideo',
+          component: playVideo
+        },
+        
       ]
     },
   ]
