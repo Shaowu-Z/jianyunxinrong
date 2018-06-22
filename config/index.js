@@ -43,8 +43,8 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    host:"192.168.0.33",
-    port: 8100,
+    host:"192.168.0.102",
+    port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -63,6 +63,7 @@ module.exports = {
       // },
       "/api": {
         target: "http://java.winfreeinfo.com",
+        // target: "http://192.168.0.32",
         changeOrigin:true,
         pathRewrite: {"^/api" : ""}
       }
