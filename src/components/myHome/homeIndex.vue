@@ -148,7 +148,7 @@
 			</li>
 		</ul> 
 		<div class="singlebox" @click="collect">
-			<a class="mui-navigate-right" href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/mycenter/my_collect.html')">
+			<a class="mui-navigate-right" >
 				<span class="my-list-icon label-shoucang"></span>
 				我的收藏
 				<!--<span class="mui-badge mui-badge-inverted">2</span>-->
@@ -309,7 +309,7 @@ export default {
 		//   console.log(this.user)
 		},
 		collect(){
-			 this.$router.push({path:'/myCollect'});
+			 this.$router.push({path:'/static/webstatic/mycenter/my_collect.html'});
 		}
   },
   created() {
