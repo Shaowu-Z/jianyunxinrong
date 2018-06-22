@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <div id="select_member" class="mui-page">
+        <div id="select_member" class="mui-page" v-show="memberList.length == 0 || selDept.length == 0">
             <div id="head_2" class="mui-navbar-inner mui-bar mui-bar-nav" style="display: none;">
                 <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
                     <span class="mui-icon mui-icon-back"></span>取消
@@ -31,7 +31,7 @@
                 <div id="listScroll" class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <section class="mui-content" id="">
-                            <div id="tabbar-with-contact" class="mui-control-content address-list mui-active">
+                            <div id="tabbar-with-contact" class="mui-control-content address-list mui-active" style="margin-top:50px;">
                                 <a @click="showhide(1)" style="display:block;margin-top:45px" class="text">
                                     <h5 class="mui-content-padded">项目列表(点击收缩或展开)</h5>
                                 </a>
@@ -52,7 +52,7 @@
                                                     </div>
                                                 </a>
                                                 <ul class="mui-table-view" :class="{'dis' : Listshow.indexOf(index) !== -1}">
-                                                    <li class="mui-table-view-cell">
+                                                    <li class="mui-table-view-cell" @click="aaa" >
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -78,7 +78,7 @@
                                     <div v-for="(item,index1) in items" :key="index1">
                                         <ul class="mui-table-view">
                                             <li class="mui-table-view-cell mui-collapse fold-title">
-                                                <a @click ="clickshowone(index1)">
+                                                <a @click ="clickshowone(index1)" style="border-bottom:1px solid #ccc">
                                                     <div class="mui-slider-cell">
                                                         <div class="oa-contact-cell mui-table">
                                                             <div class="oa-contact-avatar mui-table-cell">
@@ -91,14 +91,14 @@
                                                     </div>
                                                 </a>
                                                 <ul class="mui-table-view" :class="{'dis' : Listshow1.indexOf(index1) !== -1}">
-                                                    <li class="mui-table-view-cell">
+                                                    <li class="mui-table-view-cell" @click="bbb" >
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
                                                                 <div class="oa-contact-avatar mui-table-cell">
                                                                     <img src="../../assets/images/ico_second.gif" />
                                                                 </div>
                                                                 <div class="oa-contact-content mui-table-cell text">
-                                                                    <a href="#select_children"  :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
+                                                                    <a href="#select_project" :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -139,7 +139,7 @@
                                                                 <div class="oa-contact-cell mui-table">
                                                                     <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                                                         <div v-if="selectArr.contains(item.userId +'')">
-                                                                            <div v-if="myId == item.friendsUserId || thirdUserId == item.friendsUserId">
+                                                                            <div v-if="myId == item.friendsUserId || this.thirdUserId == item.friendsUserId">
                                                                                 <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent($event,item)" id="user" data-type="user" ref="user" :value="item.friendsUserId"/>
                                                                             </div>
                                                                             <div v-else>
@@ -206,14 +206,14 @@
                 </div>
             </div>
         </div>
-        <div id="select_children" class="mui-page" style="display:none">
+        <div id="select_children" class="mui-page" v-show="memberList.length>0">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <div class="mui-navbar-inner mui-bar mui-bar-nav">
                     <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left hide">
                         <span class="mui-icon mui-icon-left-nav"></span>返回
                     </button>
                     <h1 class="mui-center mui-title">组织架构</h1>
-                    <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" @click="trueSelectUser()">完成</button>
+                    <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" @click="trueSelectUser">完成</button>
                 </div>
             </div>
             <div class="mui-page-content">
@@ -223,9 +223,9 @@
                             <div id="dept_head" class="group-header">
                                 <div id="select_children_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
                                     <div id="children_scroll" class="mui-scroll">
-                                        <div class="mui-control-item selected">
+                                        <a href="javascript:;" class="mui-control-item selected">
                                             联系人 &gt;
-                                        </div>
+                                        </a>
                                         <div v-for="(obj,index) in navList" :key="index">
                                             <div v-if="index == 0">
                                                 <div v-if="index == (navList.length-1)">
@@ -256,14 +256,14 @@
                                         <li class="mui-table-view-cell mui-checkbox">
                                             <a @click ="clickshow" class="">
                                                 <div class="oa-contact-cell mui-table">
-                                                    <div class="oa-contact-input mui-table-cell">
+                                                    <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                                         <!--<div v-if="selDept.contains(item.deptId +'')">
                                                             <input type="checkbox" checked="checked"  onchange="selEvent(this)" data-type="dept" :value="item.deptId" class="member-select"/>
                                                         </div>
                                                         <div v-else>
                                                             <input type="checkbox" onchange="selEvent(this)" data-type="dept" :value="item.deptId" class="member-select"/>
                                                         </div>-->
-                                                        <input type="checkbox" @change="selEvent(this)" data-type="dept"  ref="dept" id="dept" :value="item.deptId" class="dept-select"/>
+                                                        <input type="checkbox" @change="selEvent($event,item)" data-type="dept"  ref="dept" id="dept" :value="item.deptId" class="dept-select"/>
                                                     </div>
                                                     <div class="oa-contact-content mui-table-cell">
                                                         <h4 class="oa-contact-name" v-text="item.deptName"></h4>
@@ -283,17 +283,17 @@
                                                     <li class="mui-table-view-cell mui-indexed-list-item mui-checkbox">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
-                                                                <div class="oa-contact-input mui-table-cell">
+                                                                <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
-                                                                        <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
+                                                                        <div v-if="myId == item.userId || this.thirdUserId == item.userId">
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" @change="selEvent(index)" data-type="user" ref="user" id="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -330,7 +330,7 @@
                         <span class="mui-icon mui-icon-left-nav"></span>返回
                     </button>
                     <h1 class="mui-center mui-title">组织架构</h1>
-                    <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" @click="trueSelectUser()">完成</button>
+                    <button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" @click="trueSelectUser">完成</button>
                 </div>
             </div>
             <div class="mui-page-content">
@@ -427,17 +427,17 @@
                                                     <li class="mui-table-view-cell mui-indexed-list-item mui-checkbox">
                                                         <div class="mui-slider-cell">
                                                             <div class="oa-contact-cell mui-table">
-                                                                <div class="oa-contact-input mui-table-cell">
+                                                                <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                                                     <div v-if="selectArr.contains(item.userId +'')">
-                                                                        <div v-if="myId == item.userId || thirdUserId == item.userId">
-                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent(this)" ref="user" id="user" data-type="user" :value="item.userId"/>
+                                                                        <div v-if="myId == item.userId || this.thirdUserId == item.userId">
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" @change="selEvent($event,item)" ref="user" id="user" data-type="user" :value="item.userId"/>
                                                                         </div>
                                                                         <div v-else>
-                                                                            <input type="checkbox" checked="checked" @change="selEvent(this)" data-type="user" ref="user" id="user" :value="item.userId"/>
+                                                                            <input type="checkbox" checked="checked" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
-                                                                        <input type="checkbox" @change="selEvent(this)" data-type="user" ref="user" id="user" :value="item.userId"/>
+                                                                        <input type="checkbox" @change="selEvent($event,item)" data-type="user" ref="user" id="user" :value="item.userId"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="oa-contact-avatar mui-table-cell">
@@ -504,11 +504,18 @@ export default {
                 show2:true,
                 selectUserIds:'',
                 Listshow:[],
-                Listshow1:[]
+                Listshow1:[],
+                paramMap:[],
+                thirdUserId:''
             }
         },
         created () {
             // console.log(mui,'mui');
+                        /**
+            * 在单聊中点击发起群聊的单聊人ID
+            */
+            this.paramMap= getParam(window.location.href);//获取地址栏参数
+            this.thirdUserId=this.paramMap.userId;
             this.pagepath = setting.getPagePath();
             this.userId = BackCookie.getCookie("userid");
             var _self = this;
@@ -753,11 +760,7 @@ export default {
                     console.info(error);
                 });
             },400);
-            /**
-            * 在单聊中点击发起群聊的单聊人ID
-            */
-            var paramMap= getParam(window.location.href);//获取地址栏参数
-            var thirdUserId=paramMap.userId;
+
             // var selectUserIds = "";//选中的userIds
 
             //弹出部门人员选择,(1选人,2回到群组创建主页)
@@ -781,14 +784,14 @@ export default {
                 }
             }
             var backFun= function () {
-                if(historyArr.length < 2){
+                if(this.historyArr.length < 2){
                     return true;
                 }else{
                     //读取history
-                    historyArr.pop(); //移除最后一位
-                    var obj = historyArr[historyArr.length-1];
+                    this.historyArr.pop(); //移除最后一位
+                    var obj = this.historyArr[historyArr.length-1];
                     var _self = capp;
-                    _self.navList = historyArr; 
+                    _self.navList = this.historyArr; 
                     console.log(obj)
                     if(obj.type==1){
                         project.getProjectMembers(obj.teamId,obj.teamName)
@@ -901,6 +904,67 @@ export default {
             // };
         },
         methods:{
+            bbb(){
+                this.initChildDept()
+            },
+            aaa(){
+                console.log(1111)
+                this.getProjectMembers();
+            },
+            initChildDept(teamId,deptId,deptName) {
+                if(undefined == teamId){
+                    teamId = 0;
+                }
+                if(undefined == deptId){
+                    deptId = 0;
+                }
+                //清除原有选中
+                //jQuery("#select_children").find('input[type="checkbox"]').removeAttr("checked").removeAttr("disabled");
+                this.selDept = this.selectDept;
+
+                var _self = this;
+                var par = {deptId:deptId,teamId:teamId};
+                par.teamId = this.items[0].teamId
+                this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
+                    _self.deptList = response.data.result;
+                    setTimeout(function () {
+                        $(".dept-select").each(function(){
+                            var id = $(this).val();
+                            if(this.selectDept.contains(id)){
+                                $(this).attr("checked","checked");
+                            }else{
+                                $(this).removeAttr("checked");
+                            }
+                        });
+                        // mui('.dept-select').input();
+                    },200)
+                }).catch(function (error) {
+                    console.info(error);
+                });
+                if(deptId!=0){
+                    par = {deptId:deptId};
+                }else{
+                    par = {teamId:this.items[0].teamId};
+                }
+                this.$http.post("/concats_api/query_team_members",par).then(function (response) {
+                    _self.memberList = response.data.result;
+                }).catch(function (error) {
+                    console.info(error);
+                });
+                if(this.c_scroll){
+                    setTimeout(function () {
+                        // mui('#select_children_scroll').scroll().refresh();
+                        var w = document.getElementById("children_scroll").scrollWidth;
+                        var s = this.c_scroll.wrapperWidth - w;
+                        if(s<0){
+                            // mui('#select_children_scroll').scroll().scrollTo(s,0,100);
+                        }
+            //			var _self = capp;
+                    },500)
+                }
+
+
+            },
             selectInArr(bool,val) {
                 val = val + "";
                 if(bool){
@@ -1013,7 +1077,7 @@ export default {
                     l = Toast({
                             message: '请稍等',
                             position: 'bottom',
-                            duration: 5000
+                            duration: 1000
                         });
                     for(var i=0;i<this.selectArr.length;i++){
                         if(this.selectArr[i]!=this.userId){
@@ -1024,7 +1088,7 @@ export default {
                  l = Toast({
                             message: '创建中，请稍等',
                             position: 'bottom',
-                            duration: 5000
+                            duration: 1000
                         });
                     for(var i=0;i<this.selectArr.length;i++){
                         if(i==this.selectArr.length){
@@ -1105,9 +1169,9 @@ export default {
                 //i=0为联系人页面
                 var flag = false;
                 var nArr = new Array();
-                for(var i=0;i<historyArr.length;i++){
-                    nArr.push(historyArr[i]);
-                    if(undefined != deptId && deptId == historyArr[i].deptId){
+                for(var i=0;i<this.historyArr.length;i++){
+                    nArr.push(this.historyArr[i]);
+                    if(undefined != deptId && deptId == this.historyArr[i].deptId){
                         flag = true;
                         break;
                     }
@@ -1116,9 +1180,9 @@ export default {
                 if(!flag){
                     nArr.push(obj);
                 }
-                historyArr = nArr;
+                this.historyArr = nArr;
                 var _self = this;
-                _self.navList = historyArr;
+                _self.navList = this.historyArr;
                 initChildDept(undefined,deptId,deptName);
                 event.preventDefault();
                 event.stopPropagation();
@@ -1128,9 +1192,9 @@ export default {
                 //i=0为联系人页面
                 var flag = false;
                 var nArr = new Array();
-                for(var i=0;i<historyArr.length;i++){
-                    nArr.push(historyArr[i]);
-                    if(undefined != teamId && teamId == historyArr[i].teamId){
+                for(var i=0;i<this.historyArr.length;i++){
+                    nArr.push(this.historyArr[i]);
+                    if(undefined != teamId && teamId == this.historyArr[i].teamId){
                         flag = true;
                         break;
                     }
@@ -1138,9 +1202,9 @@ export default {
                 if(!flag){
                     nArr.push(obj);
                 }
-                historyArr = nArr;
+                this.historyArr = nArr;
                 var _self = this;
-                _self.navList = historyArr;
+                _self.navList = this.historyArr;
                 initChildDept(teamId,undefined,undefined);
                 event.preventDefault();
                 event.stopPropagation();
@@ -1150,52 +1214,63 @@ export default {
     //			_self.$data.deptList = [];
     //			_self.$data.selDept = [];
                 _self.memberList = [];
-    //			console.log(projectName)
+                console.log(projectSN)
+    			console.log(projectName)
                 var obj = {teamId:projectSN,teamName:projectName,type:1};
-                var lengths = historyArr.length;
+                var lengths = this.historyArr.length;
                 if (lengths>0) {
                     for(var i=0 ; i<lengths;i++){
-                        historyArr.pop();
+                        this.historyArr.pop();
                     }
                 }
-                historyArr.push(obj)
-                _self.navList = historyArr;
+                this.historyArr.push(obj)
+                _self.navList = this.historyArr;
                 document.getElementById("sc").style.transform="translate3d(0px, 0px, 0px) translateZ(0px)";
-                $.ajax({
-                    type: "post",
-                    url: "/pcontact_api/findallroomlist",
-                    data: {
+                let data= {
                         "projectSn":projectSN,
                         "flag":2,//1: 包涵会议室、招聘室 2 不包含会议室和招聘室
                         "isQueryMember":1//isQueryMember 是否返回成员信息  1：返回  2：不返回
-                    },
-                    datatype: "json",
-                    success: function(data) {
-                        console.log(data)
-                        if(data.code==0){
-                            _self.deptList = data.result.roomItems;
-                            _self.selDept = data.result.roomItems;
-    //	            		console.log(_self.$data.deptList)
-                        }
-    //	            	if(c_scroll){
-    //						setTimeout(function () {
-    //							mui('#select_project_scroll').scroll().refresh();
-    //							var w = document.getElementById("project_scroll").scrollWidth;
-    //							var s = c_scroll.wrapperWidth - w;
-    //							if(s<0){
-    //								mui('#select_project_scroll').scroll().scrollTo(s,0,100);
-    //							}
-    //							var _self = capp;
-    //							mui('#project_scroll').on('tap', '.mui-control-item', function(e) {
-    //								viewApi.back('#select_member');
-    //							});
-    //						},500)
-    //					}
-                    },
-                    error:function(error){
+                }
+                this.$http.post("/pcontact_api/findallroomlist",data).then(function (res){
+                        console.log(res)
+                }).catch(function(res){
+
+                })
+    //             $.ajax({
+    //                 type: "post",
+    //                 url: "/pcontact_api/findallroomlist",
+    //                 data: {
+    //                     "projectSn":'0d420cb9-4d52-4b85-943b-f063aab3cf4d',
+    //                     "flag":2,//1: 包涵会议室、招聘室 2 不包含会议室和招聘室
+    //                     "isQueryMember":1//isQueryMember 是否返回成员信息  1：返回  2：不返回
+    //                 },
+    //                 datatype: "json",
+    //                 success: function(data) {
+    //                     console.log(data)
+    //                     if(data.code==0){
+    //                         _self.deptList = data.result.roomItems;
+    //                         _self.selDept = data.result.roomItems;
+    // //	            		console.log(_self.$data.deptList)
+    //                     }
+    // //	            	if(c_scroll){
+    // //						setTimeout(function () {
+    // //							mui('#select_project_scroll').scroll().refresh();
+    // //							var w = document.getElementById("project_scroll").scrollWidth;
+    // //							var s = c_scroll.wrapperWidth - w;
+    // //							if(s<0){
+    // //								mui('#select_project_scroll').scroll().scrollTo(s,0,100);
+    // //							}
+    // //							var _self = capp;
+    // //							mui('#project_scroll').on('tap', '.mui-control-item', function(e) {
+    // //								viewApi.back('#select_member');
+    // //							});
+    // //						},500)
+    // //					}
+    //                 },
+    //                 error:function(error){
                         
-                    }
-                });
+    //                 }
+    //             });
             },
             /**
             * 获取房间数据
@@ -1207,14 +1282,14 @@ export default {
                 //i=0为联系人页面
                 
                 var _self = this;
-                var lengths = historyArr.length-1;
+                var lengths = this.historyArr.length-1;
                 if (lengths>0) {
                     for(var i=0 ; i<lengths;i++){
-                        historyArr.pop();
+                        this.historyArr.pop();
                     }
                 }
-                historyArr.push(obj)
-                _self.navList = historyArr;
+                this.historyArr.push(obj)
+                _self.navList = this.historyArr;
                 var deptList = _self.deptList;
                 _self.selDept = [];
                 if (leave2==-1) {
@@ -1242,80 +1317,27 @@ export default {
             },
         },
         mounted(){
-            // mui('#project_scroll').on('tap', '.mui-control-item', function(e) {
-            //     var target = e.target;
-            //     var teamId = target.getAttribute("data-team-id");
-            //     if(undefined != teamId){
-            //         var deptName = target.getAttribute("data-team-name");
-            //         project.getProjectMembers(teamId,deptName);
-            //     }else{
-            //         viewApi.back('#select_member');
-            //     }
-            // });
+            $('#project_scroll').on('tap', '.mui-control-item', function(e) {
+                var target = e.target;
+                var teamId = target.getAttribute("data-team-id");
+                if(undefined != teamId){
+                    var deptName = target.getAttribute("data-team-name");
+                    this.getProjectMembers(teamId,deptName);
+                }else{
+                    viewApi.back('#select_member');
+                }
+            });
             //把自加进去
             (function init(){
                 let _self = this
                 selectInArr(true,_self.userId);
-                if(thirdUserId!=undefined&&thirdUserId!=null){
+                if(this.thirdUserId!=undefined&&this.thirdUserId!=null){
                     //如果是单聊点进来的就把单聊人也加进来
-                    selectInArr(true,thirdUserId);
+                    selectInArr(true,this.thirdUserId);
                 }else{
-                    thirdUserId = "";
+                    this.thirdUserId = "";
                 }
             })
-            function initChildDept(teamId,deptId,deptName) {
-                if(undefined == teamId){
-                    teamId = 0;
-                }
-                if(undefined == deptId){
-                    deptId = 0;
-                }
-                //清除原有选中
-                //jQuery("#select_children").find('input[type="checkbox"]').removeAttr("checked").removeAttr("disabled");
-                this.selDept = this.selectDept;
-
-                var _self = this;
-                var par = {deptId:deptId,teamId:teamId};
-                this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
-                    _self.deptList = response.data.result;
-                    setTimeout(function () {
-                        $(".dept-select").each(function(){
-                            var id = $(this).val();
-                            if(this.selectDept.contains(id)){
-                                $(this).attr("checked","checked");
-                            }else{
-                                $(this).removeAttr("checked");
-                            }
-                        });
-                        // mui('.dept-select').input();
-                    },200)
-                }).catch(function (error) {
-                    console.info(error);
-                });
-                if(deptId!=0){
-                    par = {deptId:deptId};
-                }else{
-                    par = {teamId:teamId};
-                }
-                this.$http.post("/concats_api/query_team_members",par).then(function (response) {
-                    _self.memberList = response.data.result;
-                }).catch(function (error) {
-                    console.info(error);
-                });
-                if(c_scroll){
-                    setTimeout(function () {
-                        // mui('#select_children_scroll').scroll().refresh();
-                        var w = document.getElementById("children_scroll").scrollWidth;
-                        var s = c_scroll.wrapperWidth - w;
-                        if(s<0){
-                            // mui('#select_children_scroll').scroll().scrollTo(s,0,100);
-                        }
-            //			var _self = capp;
-                    },500)
-                }
-
-
-            }
             // mui('#children_scroll').on('tap', '.mui-control-item', function(e) {
             //     var target = e.target;
             //     var teamId = target.getAttribute("data-team-id");
@@ -1356,5 +1378,9 @@ export default {
     }
     .dis{
         display: block!important
+    }
+    .mui-control-content{
+        margin-top: 66px;
+        text-align: left
     }
 </style>
