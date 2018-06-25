@@ -147,6 +147,7 @@ export default {
     }
     },
     created(){
+        appApi.hideMenu()
         this.initData();
     },
 }

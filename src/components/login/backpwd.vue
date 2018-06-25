@@ -110,7 +110,7 @@ export default {
 			jsondata["pwd"] = oldpwd;
 			jsondata["newPwd"] = newPwd;
 			var param = JSON.stringify(jsondata);
-			// showloading();
+			// showloading(); 
 			// axios({
 			// 	method:'post',
 			// 	url:getUrl()+"/user_api/update_pwd",
@@ -151,11 +151,11 @@ export default {
 			// 		duration: 1000
 			// 	});
 			// });
-			this.$http.post("/user_api/update_pwd",{data:param},{headers:{'Content-Type':'application/json'}}).then(function(resp){
+			this.$http.post("/user_api/update_pwd",param,{headers:{'Content-Type':'application/json'}}).then(function(resp){
 				Toast({
 					message: resp.data.message,
 					position: 'bottom',
-					duration: 1000
+					duration: 2000
 				});
 				if(resp.data.code==0||resp.data.code=="0"){
 					_self.$http.post("/user_api/user_loginout").then(function (resp) {
@@ -170,11 +170,12 @@ export default {
 						Toast({
 							message: error.data.message,
 							position: 'bottom',
-							duration: 1000
+							duration: 2000
 						});
 					});
 				}
 			}).catch(function(error){
+				alert(data,111111111111111)
 				Toast({
 					message: error,
 					position: 'bottom',

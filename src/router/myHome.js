@@ -11,10 +11,12 @@ const myHome = resolve => require(['@/components/myHome'], resolve)
 const myHomeIndex = resolve => require(['@/components/myHome/homeIndex'], resolve)
 const setUp = resolve => require(['@/components/myHome/setUp'], resolve)
 const set = resolve => require(['@/components/myHome/setUp/set'], resolve)
+const enterprise_home = resolve => require(['@/components/myHome/setUp/enterprise_home'], resolve)
+const project_application = resolve => require(['@/components/myHome/setUp/project_application'], resolve)
 const setting = resolve => require(['@/components/myHome/setting'], resolve)
 const settingIndex = resolve => require(['@/components/myHome/setting/settingIndex'], resolve)
 const share = resolve => require(['@/components/myHome/setting/share'], resolve)
-// const project = resolve => require(['@/components/myHome/project'], resolve)
+const project = resolve => require(['@/components/myHome/project'], resolve)
 const aboutUs = resolve => require(['@/components/myHome/setting/aboutUs'], resolve)
 const privacy_policy = resolve => require(['@/components/myHome/setting/privacy_policy'], resolve)
 const serviceAgreement = resolve => require(['@/components/myHome/setting/serviceAgreement'], resolve)
@@ -33,10 +35,10 @@ const myHomeConfig = {
       path: '',
       component: myHomeIndex
     },
-    // {
-    //   path: '/project',
-    //   component: project
-    // },
+    {
+      path: '/project',
+      component: project
+    },
     {
       path: '/setUp',
       component: setUp,
@@ -44,6 +46,14 @@ const myHomeConfig = {
         {
           path: '/',
           component: set
+        },
+        {
+          path: '/static/webstatic/mycenter/enterprise_home.html',
+          component: enterprise_home
+        },
+        {
+          path: '/static/webstatic/work/project_application.html',
+          component: project_application
         }
       ]
     },

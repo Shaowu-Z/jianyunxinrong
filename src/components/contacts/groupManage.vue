@@ -163,6 +163,7 @@ export default {
         }
     },
     created () {
+        appApi.hideMenu()
         //  相当于setDeptHead
         var _self = this;
         this.teamId = this.$route.query.teamId;

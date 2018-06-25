@@ -314,12 +314,13 @@ export default {
         window.location.reload();
     }
     appApi.callBackFun = function(callFlag, CONTENT) {
-    if(callFlag == appApi.callBackFlag.USER_INFO) {
-        app.userInfo = JSON.parse(CONTENT);//转换成json对象
-    }
-}
+		if(callFlag == appApi.callBackFlag.USER_INFO) {
+			app.userInfo = JSON.parse(CONTENT);//转换成json对象
+		}
+	}
   },
-      created() {
+    created() {
+		appApi.showMenu()
 		  //  企业信息
         var _self = this;
         this.$http.post('/concats_api/find_team_list',{}).then(function (response) {
