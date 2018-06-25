@@ -5,6 +5,7 @@
 	 */
 	import { DatetimePicker } from "mint-ui";
 	import { Toast } from "mint-ui";
+	// import tipApi from "../js/tipApi.js";
 var _self
 var danjuApi={
 	initVue:function(){
@@ -23,7 +24,7 @@ var danjuApi={
 	handleConfirm(value) {
 		// this.form.MissionStartDate = value.toString();
 		var localtime = value.toLocaleDateString().replace(/[/]/g, "-");
-		
+
 		_self.form.MissionStartDate = localtime;
 		_self.show = true;
 		Toast({
@@ -287,6 +288,7 @@ var danjuApi={
 			if(response.data.code == 0) {
 				console.log(response.data)
 				// ludan("删除成功",1,2)
+				_self.tipApi.success("删除成功",2)
 				layer.open({
 					type:1,
 					time:2,

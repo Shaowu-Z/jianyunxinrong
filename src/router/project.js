@@ -30,6 +30,11 @@ const shouhuo = resolve => require(['@/components/project/shouhuo'], resolve)
 const newCreat_shouhuo = resolve => require(['@/components/project/shouhuo/newCreat'], resolve)
 const transfer_shouhuo = resolve => require(['@/components/project/shouhuo/transfer'], resolve)
 const newInfo_shouhuo = resolve => require(['@/components/project/shouhuo/newInfo'], resolve)
+//发工单
+const gongdan = resolve => require(['@/components/project/gongdan'], resolve)
+const newCreat_gongdan = resolve => require(['@/components/project/gongdan/newCreat'], resolve)
+const transfer_gongdan = resolve => require(['@/components/project/gongdan/transfer'], resolve)
+const newInfo_gongdan = resolve => require(['@/components/project/gongdan/newInfo'], resolve)
 // const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
@@ -134,6 +139,29 @@ const myProjectconfig = {
         },
         {
           path: '/static/newwebstatic/shouhuo/ttp.html',
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/gongdan',
+      component: gongdan,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/gongdan/work_content.html',
+          component: newCreat_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/transfer.html',
+          component: transfer_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/newInfo.html',
+          component: newInfo_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/ttp.html',
           component: ttp
         }
       ]
