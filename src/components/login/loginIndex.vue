@@ -43,6 +43,7 @@
 
 <script>
 // import setting from "./playform/appApi.js";
+import { Toast } from 'mint-ui';
 export default {
   data () {
     return {
@@ -98,6 +99,11 @@ export default {
             this.$http.post("/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
                 console.log(response);
+                    Toast({
+                        message: response.data.message,
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 if(rs.code === 0){
                      //登录成功
                     var userInfo = rs.result.userInfo;

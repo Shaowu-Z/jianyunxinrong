@@ -270,16 +270,16 @@
     </div>
 </div>-->
 <!--分享方式结束-->
-      <footer-bar :title="user"></footer-bar>
+      <!-- <footer-bar :title="user"></footer-bar> -->
   </div>
 </template>
 
 <script>
-import footerBar from '../common/footerBar'
+// import footerBar from '../common/footerBar'
 export default {
-  components: {
-    footerBar
-  },
+//   components: {
+//     footerBar
+//   },
   data () {
     return {
       items: {},
@@ -297,6 +297,7 @@ export default {
   	mycenter(){
   		this.$router.push({path:'/myInfo'})
   	},
+<<<<<<< HEAD
 		set(){
 			this.$router.push({path:'/setUp'})
 		},
@@ -311,9 +312,26 @@ export default {
 		collect(){
 			 this.$router.push({path:'/static/webstatic/mycenter/my_collect.html'});
 		}
+=======
+	set(){
+		this.$router.push({path:'/setUp'})
+	},
+	setting(){
+		
+		// appApi.openNewWindow('/setting');
+		this.$router.push({path:'/setting'});
+	},
+	project(){
+		this.$router.push({path:'/project'});
+	//   console.log(this.user)
+	},
+	collect(){
+			this.$router.push({path:'/myCollect'});
+	}
+>>>>>>> e6831a30d40c21911f3119c28051beb706619812
   },
   created() {
-    
+	  appApi.showMenu();
 	  var _self = this;
       this.$http.post("/user_api/find_login_user").then(function(response) {
         _self.user = response.data.result.userInfo;

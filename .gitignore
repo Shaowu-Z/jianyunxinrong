@@ -27,3 +27,6 @@ src/playform/mui.js
 package.json
 package-lock.json
 config/index.js
+config/prod.env.js
+config/dev.env.js
+package-lock.json

@@ -333,7 +333,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 .mui-bar-nav ~ .mui-content {
     padding-top: 44px;
 }
