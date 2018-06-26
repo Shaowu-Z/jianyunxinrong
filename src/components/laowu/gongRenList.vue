@@ -440,7 +440,7 @@ Array.prototype.removeUser = function (val) {
 //*********移除数组元素******结束**********
 </script>
 
-<style>
+<style scoped>
 .project {
   position: relative;
   padding: 5px;

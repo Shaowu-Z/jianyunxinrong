@@ -156,7 +156,7 @@ export default {
      }
 }
 </script>
-<style>
+<style scoped>
     body,.mui-content,.about-content{background: #ffffff;}
     	ol {padding-left:18px;}
     	ol li{list-style-type: decimal;}

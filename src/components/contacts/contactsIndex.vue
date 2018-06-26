@@ -443,7 +443,7 @@ export default {
 
 </script>
 
-<style> 
+<style scoped> 
 	@import "../../assets/css/common/style.less";
 	.hide{
 		display: none

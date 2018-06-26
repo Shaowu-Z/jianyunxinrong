@@ -165,7 +165,7 @@ export default {
   }
 };
 </script>
-	<style>
+	<style scoped>
 		.mui-fullscreen {/*大图遮罩*/
 			position: fixed;
 			z-index: 20;

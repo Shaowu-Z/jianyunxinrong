@@ -270,16 +270,16 @@
     </div>
 </div>-->
 <!--分享方式结束-->
-      <footer-bar :title="user"></footer-bar>
+      <!-- <footer-bar :title="user"></footer-bar> -->
   </div>
 </template>
 
 <script>
-import footerBar from '../common/footerBar'
+// import footerBar from '../common/footerBar'
 export default {
-  components: {
-    footerBar
-  },
+//   components: {
+//     footerBar
+//   },
   data () {
     return {
       items: {},
@@ -297,23 +297,24 @@ export default {
   	mycenter(){
   		this.$router.push({path:'/myInfo'})
   	},
-		set(){
-			this.$router.push({path:'/setUp'})
-		},
-		setting(){
-		  this.$router.push({path:'/setting'});
-		//   this.$router.push({path:'/shoufukuan'});
-		},
-		project(){
-		  this.$router.push({path:'/project'});
-		//   console.log(this.user)
-		},
-		collect(){
-			 this.$router.push({path:'/myCollect'});
-		}
+	set(){
+		this.$router.push({path:'/setUp'})
+	},
+	setting(){
+		
+		// appApi.openNewWindow('/setting');
+		this.$router.push({path:'/setting'});
+	},
+	project(){
+		this.$router.push({path:'/project'});
+	//   console.log(this.user)
+	},
+	collect(){
+			this.$router.push({path:'/myCollect'});
+	}
   },
   created() {
-    
+	  appApi.showMenu();
 	  var _self = this;
       this.$http.post("/user_api/find_login_user").then(function(response) {
         _self.user = response.data.result.userInfo;

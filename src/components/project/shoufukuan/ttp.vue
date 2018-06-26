@@ -582,7 +582,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .mui-action-back {
   float: left;
 }

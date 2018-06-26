@@ -974,7 +974,7 @@ export default {
       var _self = this;
       var file = document.getElementById(event.target.id).files;
       var zrid = document.getElementById(event.target.id).getAttribute("id");
-      var url = "/api/sass_api/upload_file";
+      var url = "/sass_api/upload_file";
       var form = new FormData();
       var forimg = [];
       var forfile = [];
@@ -1100,7 +1100,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../../assets/css/common/mint";
 body {
   background: #efeff4;  

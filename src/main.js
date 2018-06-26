@@ -9,18 +9,20 @@ import axios from 'axios'
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import phonePy from "./playform/py.js";
-import "./playform/alert.js";
-import "./playform/layer.js";
-import './assets/css/common/mui.less'
-import './assets/css/common/mui.min.less'
-import './assets/css/common/icons-extend.less';
-import './assets/css/common/common.less';
-import './assets/css/common/style.less';
-import './assets/css/common/layer.less';
-import './assets/css/common/mint.css';
-import './assets/css/common/calendar-pro.css';
+// import "./playform/alert.js";
+// import "./playform/layer.js";
 import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+import tipApi from "./playform/tipApi.js";
+import "./assets/css/common/mui.less"
+// import "./assets/css/common/mui.min.less"
+import "./assets/css/common/icons-extend.less";
+import "./assets/css/common/common.less";
+import "./assets/css/common/style.less";
+import "./assets/css/common/layer.less";
+import "./assets/css/common/mint.css";
+import "./assets/css/common/page.css";
+import "./assets/css/common/calendar-pro.css";
+import "mint-ui/lib/style.css"
 
 
 let http = axios.create({
@@ -35,6 +37,7 @@ var VueTouch = require('vue-touch')
 Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(http)
 Vue.use(router)
+Vue.use(tipApi)
 // Vue.use(mui)
 Vue.use(mui)
 Vue.use(Mint)

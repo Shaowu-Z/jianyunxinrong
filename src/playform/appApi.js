@@ -475,30 +475,30 @@ window.appApi = {
     },
 
 	//震动
-	//  vibration: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("vibration://vibration");
-	//          ;
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.vibrator();
-	//      }
-	//  },
+	 vibration: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("vibration://vibration");
+	         ;
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.vibrator();
+	     }
+	 },
 	//隐藏菜单
-	//  hideMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://hideMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.hideMenu();
-	//      }
-	//  },
+	 hideMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://hideMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.hideMenu();
+	     }
+	 },
 	//显示菜单
-	//  showMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://showMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.showMenu();
-	//      }
-	//  },
+	 showMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://showMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.showMenu();
+	     }
+	 },
 
 	/**
 	 *  获得地理位置信息
@@ -1478,7 +1478,7 @@ window.appApi = {
 				xhr = new ActiveXObject();
 			}
 
-			xhr.open('post', '/api/sass_api/send_todo');
+			xhr.open('post', '/sass_api/send_todo');
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {

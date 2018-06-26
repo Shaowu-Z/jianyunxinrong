@@ -61,7 +61,7 @@ export default {
   }
 }
 </script>
-		<style>
+		<style scoped>
 			.ht-rili-td {
 				width: 14.25%;
 				width: calc(14.25% - 4px);

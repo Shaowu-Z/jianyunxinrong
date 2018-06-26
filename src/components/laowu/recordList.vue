@@ -710,7 +710,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
         .trend-list:before {
             top: 15px;
             height: calc(100% - 15px);

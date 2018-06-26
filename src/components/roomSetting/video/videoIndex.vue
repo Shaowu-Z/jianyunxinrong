@@ -382,7 +382,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .mui-bar {
         height: 44px;
         display: block;

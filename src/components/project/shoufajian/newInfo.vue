@@ -594,7 +594,7 @@ export default {
 				}
 }
 </script>
-<style>
+<style >
 .mui-content {
   background: #fff;
   text-align: left;

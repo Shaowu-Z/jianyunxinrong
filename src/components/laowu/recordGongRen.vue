@@ -327,7 +327,7 @@ export default {
 };
 </script>
 
-    <style>
+    <style scoped>
 .cus-icon-pst {
   float: left;
   width: 25px;

@@ -2392,7 +2392,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .mui-pull-top-pocket {
 			top: 0 !important;
 		}
