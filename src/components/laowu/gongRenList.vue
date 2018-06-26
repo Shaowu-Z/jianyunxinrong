@@ -434,6 +434,7 @@ Array.prototype.removeUser = function (val) {
     var index = this.indexOfUser(val);
     if (index > -1) {
         this.splice(index, 1);
+        
     }
 };
 
