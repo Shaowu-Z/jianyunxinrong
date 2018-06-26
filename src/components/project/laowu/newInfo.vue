@@ -1,8 +1,8 @@
 <template>
     <div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<h1 class="mui-title"></h1>
-				<!--<a class="mui-action-back mui-icon iconfont icon-back"></a>-->
+				<h1 class="mui-title">报量</h1>
+				<a class="mui-action-back mui-icon iconfont icon-back"></a>
 				<!--<button class="mui-btn mui-btn-link mui-pull-right">编辑</button>-->
 			</header>
 			<div v-for="(n,index) in jieshou" :key="index">
@@ -127,12 +127,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<div v-for="(tab,i) in qingdan" :key="i">
-										<tr id="two">
+										<tr id="two" v-for="(tab,i) in qingdan" :key="i">
 											<td align="center" style="width:50%;" v-text="tab.mingcheng"></td>
 											<td align="center" v-text="tab.shuliang + ' '+ tab.danwei"></td>
 										</tr>
-									</div>
 								</tbody>
 							</table>
 						</dd>
@@ -570,6 +568,7 @@ export default {
 						var _self = this
 						window.location.href= "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName
 						//appApi.openNewWindow( "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName)
+						_self.$router.push({ path: '/static/newwebstatic/lianxi/ttp.html', query:urlmain})
 					},
 					no: function() {
 						var _self = this
@@ -708,5 +707,25 @@ export default {
 .process-item .process-con .contain-img,
 .process-item .process-con .container-average {
   margin-top: 10px;
+}
+.table-record th {
+    font-weight: normal;
+    font-size: 15px;
+    color: #777;
+	text-align: center
+}
+.mui-action-back{
+	float: left;
+}
+.show-item:nth-child(1){
+padding: 0
+}
+.table tbody td{
+	color: #000;
+	font-size: 15px
+}
+.process-shenpi .process-item .process-con .title {
+    font-size: 14px;
+    color: #555;
 }
 </style>

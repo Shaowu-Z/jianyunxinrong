@@ -156,6 +156,10 @@ export default {
         _self.todo_title="工单退回:"+_self.$route.query.title+"的工单",
         _self.url="gongdan"
         _self.title="工单"
+      }else if(_self.test_danju("laowu")){
+         _self.todo_title="报量退回:" + _self.$route.query.title+"的报量",
+        _self.url="laowu"
+        _self.title="报量"
       }
 
 
