@@ -47,7 +47,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
     @import "../../assets/css/common/style.less";
     @import "../../assets/css/common/layer.less";
