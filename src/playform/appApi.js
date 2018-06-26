@@ -1478,7 +1478,7 @@ window.appApi = {
 				xhr = new ActiveXObject();
 			}
 
-			xhr.open('post', '/api/sass_api/send_todo');
+			xhr.open('post', '/sass_api/send_todo');
 			xhr.setRequestHeader("Content-type", "application/json");
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {

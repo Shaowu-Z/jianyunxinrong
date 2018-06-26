@@ -139,7 +139,7 @@ import tipApi from "../js/tipApi"
     }
 
 </script>
-<style>
+<style scoped>
 @import "../../../assets/css/common/mint";
 /* .picker{
     width: 100%;

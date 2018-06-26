@@ -1,11 +1,12 @@
 <template>
     <div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<h1 class="mui-title">发工单</h1>
+				<h1 class="mui-title"></h1>
 				<!--<a class="mui-action-back mui-icon iconfont icon-back"></a>-->
 				<!--<button class="mui-btn mui-btn-link mui-pull-right">编辑</button>-->
 			</header>
-				<div class="fixed-bottom" v-if="qianshou==1" v-for="(n,index) in jieshou" :key="index">
+			<div v-for="(n,index) in jieshou" :key="index">
+				<div class="fixed-bottom" v-if="qianshou==1">
 					<div v-if="userId==creatorId">
 						<div class="mui-table mui-text-center v-line-half">
 							<div class="mui-table-cell">
@@ -18,25 +19,16 @@
 							<div class="mui-table mui-text-center v-line-half">
 								<div class="mui-table-cell">
 									<button type="button" class="mui-btn mui-btn-link" @click="pin">评论</button>
-
 								</div>
 							</div>
 						</div>
 						<div v-else>
-							<!--<div v-else-if="homeer==userId && okshow!=1">-->
 							<div class="mui-table mui-text-center v-line-half">
 								<div class="mui-table-cell"><button class="mui-btn mui-btn-link" @click="yes">确认</button></div>
 								<div class="mui-table-cell"><button class="mui-btn mui-btn-link" @click="no">退回</button></div>
 								<div class="mui-table-cell"><button class="mui-btn mui-btn-link" @click="pin">评论</button></div>
 							</div>
 						</div>
-						<!--<div v-else>
-							<div class="mui-table mui-text-center v-line-half">
-								<div class="mui-table-cell">
-									<button type="button" class="mui-btn mui-btn-link" @click="pin">评论</button>
-								</div>
-							</div>
-						</div>-->
 					</div>
 				</div>
 				<div class="fixed-bottom" v-else>
@@ -47,6 +39,7 @@
 					</div>
 				</div>
 
+			</div>
 			<div v-if="okshow==1 || confirm==2">
 				<!-- <img class="zhuangtai" src="../../images/approval-by.png" /> -->
 			</div>
@@ -56,11 +49,11 @@
 					<ul class="mui-table-view mui-table-view-striped user-box">
 						<li class="mui-table-view-cell">
 							<div class="oa-contact-cell mui-table">
-								<div class="oa-contact-avatar mui-table-cell" @click="userimg(fromuserId)">
+								<div class="oa-contact-avatar mui-table-cell">
 									<img v-bind:src="creatorpic" >
 								</div>
 								<div class="oa-contact-content mui-table-cell">
-									<h4 class="oa-contact-name"><span v-text="decodeURI(content.userName)"></span><span class="secondary mui-pull-right" style="color:#aaa" v-text="content.dateShenqing"></span></h4>
+									<h4 class="oa-contact-name"><span v-text="content.userName"></span><span class="secondary mui-pull-right" style="color:#aaa" v-text="content.createDate"></span></h4>
 									<p class="oa-contact-email"><span v-text="fromRoomClass"></span>&nbsp;&nbsp;<span v-text="fromRoomName"></span></p>
 								</div>
 							</div>
@@ -69,33 +62,26 @@
 				</div>
 
 				<div class="show-item">
-					<section style="display: block;" class="mui-content publish-box mycenter-content">
-						<div class="list-container">
-							<table class="table table-block table-record">
-								<thead>
-									<tr id="one">
-										<th style="width:50%;"> 工作项</th>
-										<th>数量 / 单位</th>
-									</tr>
-								</thead>
-								<tbody>
-										<tr id="two" v-for="(tab,i) in qingdan" :key="i">
-											<td ><input class="tb-input" type="text" v-model="tab.mingcheng" readonly="readonly" /></td>
-											<td><input class="tb-input select-input" type="number" v-model="tab.shuliang" value="99" readonly="readonly" /><span class="unit" @tap="showUnits(tab)"><span v-text="tab.danwei"></span></span>
-											</td>
-										</tr>
-								</tbody>
-							</table>
-						</div>
-					</section>
-				</div>
-
-				<div class="show-item">
 					<dl class="item">
-						<dt class="label">接收方</dt>
+						<dt class="label">报量区间</dt>
+						<dd class="con" v-text="content.startDate.split(' ')[0]+' 至 '+content.endDate.split(' ')[0]"></dd>
+					</dl>
+					<!--<dl class="item">
+						<dt class="label">结束日期</dt>
+						<dd class="con" v-text="content.endDate.split(' ')[0]"></dd>
+					</dl>-->
+					<dl class="item">
+						<dt class="label">专业</dt>
+						<dd class="con" v-text="content.zhuanye">
+							<div v-if="content.zhuanye=='' || content.zhuanye==null">
+								无
+							</div>
+						</dd>
+					</dl>
+					<dl class="item">
+						<dt class="label">报量给</dt>
 						<dd class="con">
 							<ul class="mui-table-view mui-table-view-striped container-average address-item">
-								<!--<div v-for="n in jieshou">-->
 								<li class="mui-table-view-cell" v-for="(n,index) in jieshou" :key="index">
 									<div class="oa-contact-cell mui-table">
 										<div class="oa-contact-avatar mui-table-cell">
@@ -124,32 +110,120 @@
 										</div>
 									</div>
 								</li>
-								<!--</div>-->
 							</ul>
 						</dd>
 					</dl>
 				</div>
+
+				<div class="show-item">
+					<dl class="item">
+						<dt class="label">报量清单</dt>
+						<dd class="con">
+							<table class="table table-block table-record" style="margin-top:-5px;">
+								<thead>
+									<tr>
+										<th>工作项</th>
+										<th>数量/单位</th>
+									</tr>
+								</thead>
+								<tbody>
+									<div v-for="(tab,i) in qingdan" :key="i">
+										<tr id="two">
+											<td align="center" style="width:50%;" v-text="tab.mingcheng"></td>
+											<td align="center" v-text="tab.shuliang + ' '+ tab.danwei"></td>
+										</tr>
+									</div>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+
+				<!--<div class="show-item">
+					<section style="display: block;" class="mui-content publish-box mycenter-content">
+						<div class="list-container">
+							<table class="table table-block table-record">
+								<thead>
+									<tr id="one">
+										<th style="width:50%;"> 工作项</th>
+										<th>数量 / 单位</th>
+									</tr>
+								</thead>
+								<tbody>
+									<div v-for="(tab,i) in qingdan">
+										<tr id="two">
+											<td style="width:50%;"><input class="tb-input" type="text" v-model="tab.mingcheng" readonly="readonly" /></td>
+											<td><input class="tb-input select-input" type="number" v-model="tab.shuliang" value="99" readonly="readonly" /><span class="unit" @tap="showUnits(tab)"><span v-text="tab.danwei"></span></span>
+											</td>
+										</tr>
+									</div>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</div>-->
+
+				<!--<div class="show-item">
+					<dl class="item">
+						<dt class="label">接收方</dt>
+						<dd class="con">
+							<ul class="mui-table-view mui-table-view-striped container-average address-item">
+								<li class="mui-table-view-cell" v-for="n in jieshou">
+									<div class="oa-contact-cell mui-table">
+										<div class="oa-contact-avatar mui-table-cell">
+											<img v-bind:src="geturl+n.icon" />
+										</div>
+										<div class="oa-contact-content mui-table-cell">
+											<h4 class="oa-contact-name" v-text="n.roomName"></h4>
+											<p class="oa-contact-email">
+												<div v-if="userId==creatorId">
+													<span class="sta " v-if="n.signStatus==1">已签收</span>
+													<span class="sta " v-else='n.signStatus==0'>未签收</span>
+												</div>
+												<div v-if="userId!=creatorId">
+													<div v-if="n.roomId==currroomid">
+														<span class="sta ">已签收</span>
+													</div>
+													<div v-else="n.roomId!=currroomid">
+														<span class="sta" v-if="n.signStatus==1">已签收</span>
+														<span class="sta" v-else='n.signStatus==0'>未签收</span>
+													</div>
+												</div>
+												&nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+												<span class="sta" v-if="n.confirmStatus==1">已确认</span>
+												<span class="sta" v-else>未确认</span>
+											</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+				</div>-->
 				<div class="show-item">
 					<dl class="item">
 						<dt class="label">图片</dt>
 						<dd class="con">
 							<ul class="container-average container-average-img">
-									<li class="img-item" @click="disposeLogImg(index,site_img)" v-for="(n,index) in site_img" :key="index">
+								<div v-for="(n,index) in site_img" :key="index">
+									<li class="img-item" @click="disposeLogImg(index,site_img)">
 										<div class="img-item-inner">
 											<img v-bind:src="n.thumbnailurl">
 										</div>
 									</li>
+								</div>
 							</ul>
 						</dd>
 					</dl>
-					<dl class="item  ">
+					<dl class="item publish-container cloud-content">
 						<dt class="label">附件</dt>
 						<dd class="con">
-							<ul class="mui-table-view mui-table-view-striped container-average cloud-content">
-									<li class="mui-table-view-cell" @click="open_file(n.id)" v-for="(n,index) in site_fj" :key="index">
+							<ul class="mui-table-view mui-table-view-striped container-average">
+								<div v-for="(n,index) in site_fj" :key="index">
+									<li class="mui-table-view-cell" @click="open_file(n.id)">
 										<div class="oa-contact-cell mui-table">
 											<div class="oa-contact-avatar mui-table-cell">
-												<span :class="'my-list-icon '+ danjuApi.fileType(n.filename)"></span>
+												<span :class="'my-list-icon '+ common.fileType(n.filename)"></span>
 											</div>
 											<div class="oa-contact-content mui-table-cell">
 												<h4 class="oa-contact-name" v-text="n.filename"></h4>
@@ -157,6 +231,7 @@
 											</div>
 										</div>
 									</li>
+								</div>
 							</ul>
 						</dd>
 					</dl>
@@ -178,7 +253,8 @@
 										</dd>
 									</dl>-->
 
-										<dl class="process-item" v-for="(item,index) in noteList" :key="index">
+									<div v-for="(item,index) in noteList" :key="index">
+										<dl class="process-item">
 											<dt class="process-label">
 							        			<div class="img-header" @click="userimg(item.userId)"><img v-bind:src="item.userAvatar"/></div>
 							        		</dt>
@@ -192,7 +268,7 @@
 													<span class="secondary mui-pull-right" v-text='util.fnFormat(item.creatDate,"MM.dd hh:mm")'></span>
 												</div>
 												<div class="secondary"><span v-text="item.roomClassName"></span>&nbsp;<span v-text="item.roomName"></span></div>
-												<div class="txt-content" v-html="item.content.replace(/#.%#/g, '<br/>')"></div>
+												<div class="txt-content" v-text="item.content"></div>
 												<!--<div v-for="(n,index) in item.attachments">-->
 												<div class="contain-img" v-if="item.noteType!=0">
 													<ul class="list-con col-xs-4">
@@ -219,6 +295,7 @@
 												<!--</div>-->
 											</dd>
 										</dl>
+									</div>
 									<!--<dl class="process-item">
 										<dt class="process-label">
 					        			<div class="img-header"><img src="../../static/images/header3.jpg"/></div>
@@ -264,6 +341,7 @@
 			</section>
 		</div>
 </template>
+
 <script>
 import setting from "../../../playform/config.js";
 import util from "../../../playform/util.js";
@@ -272,8 +350,8 @@ import danjuApi from "../js/danjuAPi.js";
 export default {
     data(){
         return{
-            danjuApi:danjuApi,
             util:util,
+            danjuApi:danjuApi,
 					qingdan: [],
 					title: '',
 					yewu: "",
@@ -284,7 +362,8 @@ export default {
 					site_fj: [],
 					site_img: [],
                     userId: setting.getCookie("userid"),
-                    userid:setting.getCookie("userid"),
+                    userid: setting.getCookie("userid"),
+                    username: setting.getCookie("username"),
 					roomName: "",
 					creatorId: '',
 					currroomid: "",
@@ -304,22 +383,21 @@ export default {
 					fromroomImid: '',
 					fromuserId: '',
 					confirm: '0',
-					tuifromcurrRoomName: '',
-					homeer: ''
         }
     },
     created: function() {
-                    danjuApi.vue = this;
+        danjuApi.vue = this;
         danjuApi.initVue()
                     appApi.showBack()
 					this.initdata()
 					appApi.imgPreview.init();
-                },
-                methods: {
+				},
+				mounted: function() {},
+				methods: {
 					initdata: function() {
 						var _self = this;
 						var param = {
-							id: this.$route.query.id,
+							id: _self.$route.query.id,
 							//														uid: "10395",
 						}
 						//获取单据信息
@@ -350,7 +428,7 @@ export default {
 								_self.fromRoomClass = noral.currRoomClassName
 								_self.fromRoomName = noral.curRoomName
 								_self.fromroomImid = noral.currRoomImId
-								_self.fromuserId = noral.tablefields.userID
+								_self.fromuserId = noral.table.userId
 								//当前用户房间信息
 								_self.usermain(response.data.result.flowList, JSON.parse(response.data.result.noralJson).table.projectid)
 								//图片  附件
@@ -377,20 +455,9 @@ export default {
 							}
 						})
 					},
-					//获取本房间房主
-					roomer: function() {
-						var _self = this;
-						this.$http.post( "/pcontact_api/findroomuserlist?memberType=1&roomId=" + _self.currroomid).then(function(response) {
-							console.log(response)
-							if(response.data.code == 0) {
-								_self.homeer = response.data.result[0].userId
-							}
-						})
-					},
-
 					//点击头像
 					userimg: function(userid) {
-						this.lookUserInfo(userid);
+						this.lookUserInfo(this.$http);
 					},
 					disposeLogImg: function(index, datas) {
 						var _self = this;
@@ -408,7 +475,7 @@ export default {
 					},
 					//头像信息
 					lookUserInfo: function(userId) { //查看用户资料
-						window.appApi.openNewWindow(getPagePath() + "/contacts/eg_details.html?userId=" + _self.userId);
+						window.appApi.openNewWindow(getPagePath() + "/contacts/eg_details.html?userId=" + this.userId);
 					},
 					//查询当前用户信息
 					usermain: function(seeimg, sn) {
@@ -420,30 +487,28 @@ export default {
 								_self.curoomname = response.data.result.roomName
 								_self.currroomid = response.data.result.roomId
 								_self.nowroomImId = response.data.result.roomImId
-								_self.roomer()
-								//								var n = response.data.result.roomClass
-								_self.tuifromcurrRoomName = response.data.result.roomClassName
-								//								if(n == 1) {
-								//									_self.tuifromcurrRoomName = "施工单位"
-								//								} else if(n == 2) {
-								//									_self.tuifromcurrRoomName = "建设单位"
-								//								} else if(n == 3) {
-								//									_self.tuifromcurrRoomName = "勘察单位"
-								//								} else if(n == 4) {
-								//									_self.tuifromcurrRoomName = "设计单位"
-								//								} else if(n == 5) {
-								//									_self.tuifromcurrRoomName = "监理单位"
-								//								} else if(n == 6) {
-								//									_self.tuifromcurrRoomName = "质检单位"
-								//								} else if(n == 7) {
-								//									_self.tuifromcurrRoomName = "材料商"
-								//								} else if(n == 8) {
-								//									_self.tuifromcurrRoomName = "劳务分包商"
-								//								} else if(n == 9) {
-								//									_self.tuifromcurrRoomName = "劳务班组"
-								//								} else if(n == 11) {
-								//									_self.tuifromcurrRoomName = "总包单位"
-								//								}
+								var n = response.data.result.roomClass
+								if(n == 1) {
+									_self.tuifromcurrRoomName = "施工单位"
+								} else if(n == 2) {
+									_self.tuifromcurrRoomName = "建设单位"
+								} else if(n == 3) {
+									_self.tuifromcurrRoomName = "勘察单位"
+								} else if(n == 4) {
+									_self.tuifromcurrRoomName = "设计单位"
+								} else if(n == 5) {
+									_self.tuifromcurrRoomName = "监理单位"
+								} else if(n == 6) {
+									_self.tuifromcurrRoomName = "质检单位"
+								} else if(n == 7) {
+									_self.tuifromcurrRoomName = "材料商"
+								} else if(n == 8) {
+									_self.tuifromcurrRoomName = "分包商"
+								} else if(n == 9) {
+									_self.tuifromcurrRoomName = "班组"
+								} else if(n == 11) {
+									_self.tuifromcurrRoomName = "总包单位"
+								}
 								//判断签收状态
                                 if(_self.confirm==1) {
                                     for (var i = 0; i < seeimg.length; i++) {
@@ -462,7 +527,7 @@ export default {
                                             if (seeimg[i].signStatus == 0) {
                                                 var roomname = seeimg[i].roomName
                                                 var par = {
-                                                    docid: this.$route.query.id,
+                                                    docid: _self.$route.query.id,
                                                     //												uid: _self.uid,
                                                     roomid: _self.currroomid,
                                                     projectid: _self.projectid,
@@ -470,17 +535,17 @@ export default {
                                                 console.log(par)
                                                 this.$http.post( "/contract/set_sign", par).then(function (res_) {
                                                     if (res_.data.code == 200) {
+                                                        _self.initdata()
                                                         var parm = {
                                                             "toImId": _self.currRoomImId,
                                                             "chatType": "2",
                                                             "toNickName": "",
                                                             "toAvatarUrl": "",
                                                             //														myExtType: 'notify_type',
-                                                            "content": roomname + "已签收" + _self.fromRoomName + "的工单",
+                                                            "content": roomname + "已签收" + _self.fromRoomName + "的报量",
                                                         }
                                                         console.log(parm)
                                                         appApi.sendNotifyMsg(parm)
-                                                        _self.initdata();
                                                     } else {
                                                         msg("签收状态验证失败")
                                                     }
@@ -503,29 +568,30 @@ export default {
 					},
 					yes: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName
-//						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName)
+						window.location.href= "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName
+						//appApi.openNewWindow( "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName)
 					},
 					no: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu
-//						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu)
+						window.location.href= "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.content.zhuanye
+//						appApi.openNewWindow( "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.content.zhuanye)
 					},
 					pin: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId
-//						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId)
-						//						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3"+"&nowroomImId="+_self.nowroomImId
-					},
-}
+						window.location.href= "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId
+//						appApi.openNewWindow( "/static/newwebstatic/laowu/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId)
+						//						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3"+"&nowroomImId="+_self.nowroomImId
+                    },
+                }
 }
 </script>
-<style>
+
+<style scope>
 .mui-content {
   background: #fff;
   text-align: left;
-  /* padding-bottom: 50px; */
-  /* position: absolute; */
+  padding-bottom: 50px;
+  position: absolute;
   top: 0;
 }
 
@@ -642,49 +708,5 @@ export default {
 .process-item .process-con .contain-img,
 .process-item .process-con .container-average {
   margin-top: 10px;
-}
-.table-record thead {
-    border-bottom: 1px solid #eee;
-}
-.table-record th {
-    width: 50%;
-    font-weight: normal;
-    font-size: 15px;
-    color: #777;
-    text-align: center
-}
-.table-record td:nth-child(1){
-    width:50%;
-    border-bottom: 1px solid #eee;
-    position: relative;
-}
-.table-record td:nth-child(2){
-    position: relative;
-    border-bottom: 1px solid #eee;
-}
-.table-record .unit {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    font-size: 14px;
-}
-.table-record td input{
-    margin-bottom: 0;
-    text-align: center;
-    padding: 0 5px;
-    border: none;
-    background: #f6f6f6;
-    margin-bottom: 0;
-}
-.list-container{
-    min-height:auto
-}
-.table-record tbody tr:nth-last-child(1) td{
-    border-bottom: 0
-}
-.show-item:nth-child(1){
-    padding: 0
 }
 </style>

@@ -277,7 +277,7 @@ var project_sign={
               
                 $.ajax({
                     type: "post",
-                    url: "/api/project_work_api/find_nearest_record",
+                    url: "/project_work_api/find_nearest_record",
                     async: false,
                     data:{
                         confirmId:laowu_common.gongzhangId,
@@ -447,18 +447,18 @@ var project_sign={
                 });
             },
             delayRemind: function (queryTime) {//更新提醒期限，如果还没有记录则自动创建。
-                var _self = this;
+               
                 var form = new FormData();
                 form.append("userId", laowu_common.userId);
                 form.append("queryType", "remindTime");
-                form.append("name", userName)
+                form.append("name", laowu_common.userName)
                 form.append("queryTime", queryTime);//提醒时间类型，按天提醒或按时分秒提醒  day表示按天提醒；hour表示按时分秒提醒
                 axios.post("/project_work_api/update_quertz", form).then(function (response) {
                     if (response.data.code == 200) {
                         if (queryTime == 'day') {
-                            // msg("今日不再提醒上工")
+                             msg("今日不再提醒上工")
                         } else if (queryTime == 'hour') {
-                            // msg("推迟一个小时提醒上工")
+                             msg("推迟一个小时提醒上工")
                         }
                         setTimeout(function () {
                             appApi.closeNewWindow();

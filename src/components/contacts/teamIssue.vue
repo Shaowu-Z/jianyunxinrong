@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
         .mui-fullscreen {
 			position: fixed;
 			z-index: 20;
@@ -78,6 +78,6 @@ export default {
 		}
 		.oper{
 			display: inline-block;
-			float: right;
+            float:right;
 		}
 </style>

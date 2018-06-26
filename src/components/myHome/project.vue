@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .mui-table-view-cell div{
 	display: flex;
 	
