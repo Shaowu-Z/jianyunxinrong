@@ -25,6 +25,21 @@ const chengnuo = resolve => require(['@/components/project/chengnuo'], resolve)
 const newCreat_chengnuo = resolve => require(['@/components/project/chengnuo/newCreat'], resolve)
 const transfer_chengnuo = resolve => require(['@/components/project/chengnuo/transfer'], resolve)
 const newInfo_chengnuo = resolve => require(['@/components/project/chengnuo/newInfo'], resolve)
+//收货
+const shouhuo = resolve => require(['@/components/project/shouhuo'], resolve)
+const newCreat_shouhuo = resolve => require(['@/components/project/shouhuo/newCreat'], resolve)
+const transfer_shouhuo = resolve => require(['@/components/project/shouhuo/transfer'], resolve)
+const newInfo_shouhuo = resolve => require(['@/components/project/shouhuo/newInfo'], resolve)
+//发工单
+const gongdan = resolve => require(['@/components/project/gongdan'], resolve)
+const newCreat_gongdan = resolve => require(['@/components/project/gongdan/newCreat'], resolve)
+const transfer_gongdan = resolve => require(['@/components/project/gongdan/transfer'], resolve)
+const newInfo_gongdan = resolve => require(['@/components/project/gongdan/newInfo'], resolve)
+//劳务报量
+const laowu = resolve => require(['@/components/project/laowu'], resolve)
+const newCreat_laowu = resolve => require(['@/components/project/laowu/newCreat'], resolve)
+const transfer_laowu = resolve => require(['@/components/project/laowu/transfer'], resolve)
+const newInfo_laowu = resolve => require(['@/components/project/laowu/newInfo'], resolve)
 // const ttp_lianxi = resolve => require(['@/components/project/shoufajian/ttp'], resolve)
 // const loginIndex = resolve => require(['@/components/login/loginIndex'], resolve)
 // const register = resolve => require(['@/components/login/register'], resolve)
@@ -106,6 +121,75 @@ const myProjectconfig = {
         },
         {
           path: '/static/newwebstatic/chengnuo/ttp.html',
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/shouhuo',
+      component: shouhuo,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/shouhuo/work_content.html',
+          component: newCreat_shouhuo
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/transfer.html',
+          component: transfer_shouhuo 
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/newInfo.html',
+          component: newInfo_shouhuo
+        },
+        {
+          path: '/static/newwebstatic/shouhuo/ttp.html',
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/gongdan',
+      component: gongdan,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/gongdan/work_content.html',
+          component: newCreat_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/transfer.html',
+          component: transfer_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/newInfo.html',
+          component: newInfo_gongdan
+        },
+        {
+          path: '/static/newwebstatic/gongdan/ttp.html',
+          component: ttp
+        }
+      ]
+    },
+    {
+      path: '/laowu',
+      component: laowu,
+      children: [
+        
+        {
+          path: '/static/newwebstatic/laowu/work_content.html',
+          component: newCreat_laowu
+        },
+        {
+          path: '/static/newwebstatic/laowu/transfer.html',
+          component: transfer_laowu
+        },
+        {
+          path: '/static/newwebstatic/laowu/newInfo.html',
+          component: newInfo_laowu
+        },
+        {
+          path: '/static/newwebstatic/laowu/ttp.html',
           component: ttp
         }
       ]

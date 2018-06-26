@@ -102,6 +102,7 @@ export default {
 		}
     },
     created(){
+		appApi.hideMenu()
         var _self = this;
         var param = new FormData();
         param.append("userId", "");

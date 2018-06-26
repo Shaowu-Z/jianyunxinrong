@@ -39,14 +39,15 @@ export default {
 		}
     },
     created(){
-			const _self=this
-            this.$http.post("/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
-				console.log(response);
-				_self.list = response.data.result;
-				console.log(_self.list);
-            }).catch(function (error) {
-                console.info(error);
-            });
+		appApi.hideMenu()
+		const _self=this
+		this.$http.post("/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
+			console.log(response);
+			_self.list = response.data.result;
+			console.log(_self.list);
+		}).catch(function (error) {
+			console.info(error);
+		});
     }
 }
 </script>

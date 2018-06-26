@@ -78,6 +78,6 @@ export default {
 		}
 		.oper{
 			display: inline-block;
-			float: right;
+            float:right;
 		}
 </style>

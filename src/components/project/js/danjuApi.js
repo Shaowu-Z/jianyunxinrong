@@ -5,6 +5,7 @@
 	 */
 	import { DatetimePicker } from "mint-ui";
 	import { Toast } from "mint-ui";
+	// import tipApi from "../js/tipApi.js";
 var _self
 var danjuApi={
 	initVue:function(){
@@ -179,6 +180,7 @@ var danjuApi={
 	 */
 	upfile: function(event) {
 		// loading("上传中")
+		_self.tipApi.waring("上传中")
 		sessionStorage.removeItem("cunnews")
 		// var _self = this
 		var file = document.getElementById(event.target.id).files;
@@ -236,6 +238,7 @@ var danjuApi={
 		xhr.onload = function(evt) {
 			//请求完成
 			// layer.close(loading("上传中"))
+			_self.tipApi.close("waring")
 		};
 		xhr.onreadystatechange = function(evt) {
 			if(xhr.readyState == 4 && xhr.status == 200) {
@@ -261,13 +264,16 @@ var danjuApi={
 
 				}
 				// ludan("上传成功", 1, 1)
+				_self.tipApi.success("上传成功",1)
 			} else if(xhr.readyState == 4 && xhr.status == 500) {
 				// ludan("上传失败", 1, 1)
+				_self.tipApi.failure("上传失败",1)
 			}
 		}
 		xhr.onerror = function(evt) {
 			//请求失败
 			var data = JSON.parse(evt.target.responseText);
+			_self.tipApi.failure("请求失败",1)
 			// ludan("请求失败", 1, 1)
 			console.log("data");
 		};
@@ -286,22 +292,10 @@ var danjuApi={
 		_self.$http.post("/sass_api/delete_file?userId="+_self.userid+"&fileId=" + _self.imgid[n-1]).then(function(response) {
 			if(response.data.code == 0) {
 				console.log(response.data)
-				// ludan("删除成功",1,2)
-				layer.open({
-					type:1,
-					time:2,
-					title:"删除成功",
-					content:""
-				})
+				_self.tipApi.success("删除成功",2)
 			}
 		}).catch(function(error) {
-			// ludan(error, 1, 3);
-			layer.open({
-					type:1,
-					time:2,
-					title:"请求失败",
-					content:error
-				})
+			_self.tipApi.failure("请求失败",2)
 		})
 		_self.imgs.splice(n-1,1)
 		_self.imgid.splice(n - 1, 1)
@@ -326,23 +320,11 @@ var danjuApi={
 		  .then(function(response) {
 			if (response.data.code == 0) {
 			  console.log(response.data);
-			  // ludan("删除成功",1,2)
-			  layer.open({
-				type: 1,
-				time: 2,
-				title: "删除成功",
-				content: ""
-			  });
+			  _self.tipApi.success("删除成功",2)
 			}
 		  })
 		  .catch(function(error) {
-			// ludan(error, 1, 3);
-			layer.open({
-			  type: 1,
-			  time: 2,
-			  title: "请求失败",
-			  content: error
-			});
+			_self.tipApi.failure("请求失败",2)
 		  });
 		_self.fujians.splice(n - 1, 1);
 		_self.fujianid.splice(n - 1, 1)

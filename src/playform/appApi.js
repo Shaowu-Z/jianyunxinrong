@@ -475,15 +475,15 @@ window.appApi = {
     },
 
 	//震动
-	 vibration: function () {
-	     if (isApp && isIphoneOs) {
-	         loadURL("vibration://vibration");
-	         ;
-	     } else if (isApp && isAndroid) {
-	         window.webactivity.vibrator();
-	     }
-	 },
-	//隐藏菜单
+	//  vibration: function () {
+	//      if (isApp && isIphoneOs) {
+	//          loadURL("vibration://vibration");
+	//          ;
+	//      } else if (isApp && isAndroid) {
+	//          window.webactivity.vibrator();
+	//      }
+	//  },
+	// 隐藏菜单
 	 hideMenu: function () {
 	     if (isApp && isIphoneOs) {
 	         loadURL("hidemenu://hideMenu");
@@ -491,7 +491,7 @@ window.appApi = {
 	         window.webactivity.hideMenu();
 	     }
 	 },
-	//显示菜单
+	// 显示菜单
 	 showMenu: function () {
 	     if (isApp && isIphoneOs) {
 	         loadURL("hidemenu://showMenu");
@@ -1483,7 +1483,6 @@ window.appApi = {
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
 					if(xhr.status == 200) {
-						alert(xhr.responseText)
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
 							var tJson = JSON.parse(xhr.responseText).result;	
@@ -1538,9 +1537,7 @@ window.appApi = {
 							}
 							success && success(JSON.parse(xhr.responseText));
 						}
-						alert("shibai1")
 					} else {
-						alert("shibai12")
 						err && err(JSON.parse(xhr.responseText));
 					}
 

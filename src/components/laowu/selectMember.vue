@@ -1102,8 +1102,8 @@ export default {
 	}
 	.mui-page{
 		display: inline;
-		top: 44px;
-        height: auto;
+		top:44px;
+		height:auto;
 	}
 	.mui-content-padded{
 		text-align: left

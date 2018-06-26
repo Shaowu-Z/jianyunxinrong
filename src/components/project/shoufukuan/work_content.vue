@@ -77,7 +77,7 @@
                                       >
   
                                 </mt-datetime-picker>
-                                    <!-- <input type="text" name="receiptDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
+                                    <!-- <input type="text" name="form.MissionStartDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
     
                                 </li>
     
@@ -501,7 +501,7 @@ export default {
     starinfo: function() {
       var _self = this;
       var param = {
-        id: paramMap.id
+        id: this.$route.query.id
       };
       this.$http.post("/contract/get_content", param).then(function(response) {
         if (response.data.code == 200) {
@@ -521,7 +521,7 @@ export default {
           //附件
           _self.imgsrc(norl.attachment);
           //提交信息
-          _self.id = paramMap.id;
+          _self.id = this.$route.query.id;
           _self.cfgid = norl.table.id;
           _self.pa_projectsn = norl.table.projectid;
           _self.pa_isRoomId = norl.table.roomid;

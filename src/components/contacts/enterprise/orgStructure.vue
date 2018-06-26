@@ -95,6 +95,7 @@ export default {
         }
     },
     created() {
+        appApi.hideMenu()
         var _self = this;
         this.from = this.$route.query.from;
         console.log(this.from);
