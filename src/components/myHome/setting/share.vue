@@ -150,7 +150,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     #app{
         background: #efeff4;
         width:100%;
