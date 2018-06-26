@@ -152,7 +152,12 @@ export default {
         _self.todo_title="收货退回:"+_self.$route.query.title+"的收货",
         _self.url="shouhuo"
         _self.title="收货"
+      }else if(_self.test_danju("gongdan")){
+        _self.todo_title="工单退回:"+_self.$route.query.title+"的工单",
+        _self.url="gongdan"
+        _self.title="工单"
       }
+
 
     },
     back: function() {

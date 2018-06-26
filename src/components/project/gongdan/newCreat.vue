@@ -190,7 +190,8 @@ export default {
 						callbackCode: "", //回调code 111 选人  222选公司
 						selectdTadIndex: "", //记录请求选人的列表框下标
 						hetongs: [],
-						userName: setting.getCookie("username"),
+                        userName: setting.getCookie("username"),
+                        username:setting.getCookie("username"),
                         userID: setting.getCookie("userid"),
                         userid:setting.getCookie("userid"),
 						dateShenqing: '',
@@ -227,8 +228,9 @@ export default {
 						projectSn: this.$route.query.projectSn,
 						isRoomId :this.$route.query.isRoomId,
 						isRoomName : this.$route.query.isRoomName,
-						currRoomImId : this.$route.query.currRoomImId,
-                        currRoomClassName:this.$route.query.currRoomClassNa,
+                        currRoomImId : this.$route.query.currRoomImId,
+						currRoomName : this.$route.query.currRoomName,
+                        currRoomClassName:this.$route.query.currRoomClassName,
                         currRoomCreditCode:this.$route.query.currRoomCreditCode,
                         imgid:[],
                         fujianid:[]
@@ -345,7 +347,7 @@ export default {
 										_self.fujians.push({
 											name: response.data.result[i].filename
 										})
-										fujianid.push(response.data.result[i].id)
+										_self.fujianid.push(response.data.result[i].id)
 									}
 								}
 
@@ -584,11 +586,11 @@ export default {
 								_self.attachmentIds = "," + _self.attachmentIds
 							}
 							if(_self.imgid.toString() == '') {
-							fjid = fujianid.toString()
-							} else if(fujianid.toString() == '') {
+							fjid = _self.fujianid.toString()
+							} else if(_self.fujianid.toString() == '') {
 								fjid = _self.imgid.toString()
 							} else {
-								fjid = _self.imgid.toString() + "," + fujianid.toString()
+								fjid = _self.imgid.toString() + "," + _self.fujianid.toString()
 							}
 							
 							$.each(_self.tabs, function() {
@@ -638,9 +640,10 @@ export default {
 								},
 								subtablefields: _self.tabs,
 							}
-							console.log(param)
+                            console.log(param)
+                            // alert(JSON.stringify(param))
 							this.$http.post( "/contract/save", param).then(function(response) {
-								//alert(JSON.stringify(response))
+								// alert(JSON.stringify(response))
 								if(response.data.code == 200) {
 									console.log(response)
 									_self.sites = response.data.result.tablefields;
@@ -673,11 +676,11 @@ export default {
 								}
 								content = content + _self.tabs[i].mingcheng + _self.tabs[i].shuliang + _self.tabs[i].danwei + "|"
 							}
-							content = content + "共" + _self.tabs.length + "项"
+                            content = content + "共" + _self.tabs.length + "项"
                             var titletype = encodeURIComponent(encodeURIComponent("工单"));
-                            var title = encodeURIComponent(encodeURIComponent(decodeURI(username)+ "的工单"));
+                            var title = encodeURIComponent(encodeURIComponent(decodeURI(setting.getCookie("username"))+ "的工单"));
 							var todojson = {
-								"title": _self.username + "的工单",
+								"title": decodeURI(_self.username) + "的工单",
 								"titileTwo": _self.currRoomClassName + "-" +  _self.currRoomName,
 								"content": content,
 								"fileCount": '0',
@@ -694,13 +697,14 @@ export default {
 								"setButton": [{
 									"type": 1, //按钮点击类型 1=请求url 2=打开url
 									"name": "确认",
-									"url": "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + userid+"&sendtype=1"
+									"url": "/contract/do_todobtu?type=1&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&sendtype=1"
 								}, {
 									"type": 1, //按钮点击类型 1=请求url 2=打开url
 									"name": "退回",
-									"url":  "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
+									"url":  "/contract/do_todobtu?type=4&pingfen=0&docid=" + _self.id + "&projectSn=" + _self.projectSn + "&userid=" + _self.userid+"&title="+title+"&titletype="+titletype+"&sendtype=1"
 								}]
-							}
+                            }
+                            // alert(JSON.stringify(todojson))
 							window.appApi.sendTodo(todojson, function(d) {
 								//alert(JSON.stringify(d))
 								if(d.code == 200) {
@@ -896,10 +900,10 @@ export default {
                                     // 	console.log(_self.imgid)
                                     // 	_self.zrimg = _self.imgid.toString().split(',')
                                     // } else {
-                                    // 	fujianid.push(data.result.success)
+                                    // 	_self.fujianid.push(data.result.success)
                                     // 	_self.fujians = _self.fujians.concat(forfile)
-                                    // 	_self.zrfujian = fujianid.toString().split(',')
-                                    // 	console.log(fujianid.toString())
+                                    // 	_self.zrfujian = _self.fujianid.toString().split(',')
+                                    // 	console.log(_self.fujianid.toString())
                                     // }
                                     var rtnfiles = data.result.success;
                                     if(sessionStorage.getItem("cunnews") == 1) {
@@ -914,14 +918,14 @@ export default {
 
                                     } else {
                                         for(var i=0;i<rtnfiles.length;i++){
-                                            fujianid.push(rtnfiles[i].fileId);
+                                            _self.fujianid.push(rtnfiles[i].fileId);
                                         }
                                         _self.fujians = _self.fujians.concat(forfile)
-										if(fujianid.toString()){
-                                            _self.zrfujian = fujianid.toString().split(',')
+										if(_self.fujianid.toString()){
+                                            _self.zrfujian = _self.fujianid.toString().split(',')
 										}
 
-                                        console.log(fujianid.toString())
+                                        console.log(_self.fujianid.toString())
                                     }
 									_self.atts.push(data.result.success)
 									// ludan("上传成功！", 2, 2)

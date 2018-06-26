@@ -14,7 +14,7 @@ var tipApi={
         insertText.id =textid;
         dom.style.cssText='position:fixed;width:100%;height:100%;z-index:98;background:#fff;top:0;opacity:0;display:block'; 
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center';
-        insertDiv.style.cssText='position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 999;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgba(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px';
+        insertDiv.style.cssText='position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 999;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgba(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px;border-radius:3px';
         document.body.appendChild(insertDiv);
         insertDiv.appendChild(insertText);
         document.body.appendChild(dom);   
@@ -28,7 +28,7 @@ var tipApi={
         var btn2=document.createElement("button");
         dom.style.cssText='position:fixed;width:100%;height:100%;z-index:98;background:#666;top:0;opacity:0.6;display:block'; 
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center;margin:6px auto;width:80%';
-        insertDiv.style.cssText='background:#fff;position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 99;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px';
+        insertDiv.style.cssText='background:#fff;position: absolute;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 99;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px;border-radius:3px';
         btn1.style.cssText="padding:0 0 0 20px;right:32%;border:0;height:36px;position:absolute;bottom:0;color:#ccc"
         btn2.style.cssText="padding:0 0 0 20px;right:9%;border:0;height:36px;position:absolute;bottom:0;color:#4ba9e9"
         insertText.innerHTML=content
@@ -119,12 +119,20 @@ var tipApi={
      * 其余看第一个说明
     */
     success:function(content,time,obj){
+        var objpro
+        if(obj==undefined){
+            objpro=function(){}
+        }else if(typeof obj=='function'){
+            objpro=obj
+        }else{
+            console.log("传入类型错误")
+        }
         tipApi.newDom("successmask_zr","success_zr","success_text_zr")
         document.getElementById("success_text_zr").innerHTML=content
         if(time!=undefined && time!=''){
             setTimeout(function(){
                 tipApi.close("success")
-                obj()
+                objpro()
             },time*1000)
         }
     },
