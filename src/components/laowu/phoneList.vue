@@ -396,7 +396,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .oa-contact-email{
   text-align: left
 }

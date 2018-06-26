@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style leng='less'>
+<style leng='less' scoped>
     @import '../../assets/css/common/style.less';
     label{
         text-align: left

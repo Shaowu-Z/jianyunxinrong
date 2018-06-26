@@ -508,7 +508,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     *{
     	-webkit-user-select: auto;
         }

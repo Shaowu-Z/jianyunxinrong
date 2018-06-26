@@ -290,7 +290,7 @@ export default {
         }
 </script>
 
-<style>
+<style scoped>
   @import "../../assets/css/common/mint";
   .picker-slot-center{
     width: 100%;

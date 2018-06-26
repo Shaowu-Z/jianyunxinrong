@@ -136,7 +136,7 @@ var laowu_common={
 
     $.ajax({
         type: "post",
-        url: "/api/pcontact_api/getroommember",
+        url: "/pcontact_api/getroommember",
         async: false,
         data: {
             "roomId":laowu_common.roomId,
@@ -182,7 +182,7 @@ var laowu_common={
    
     $.ajax({
         type: "post",
-        url: "/api/pcontact_api/findroomuserlist",
+        url: "/pcontact_api/findroomuserlist",
         async: false,
         data: {
             "roomId":laowu_common.roomId,
@@ -216,7 +216,7 @@ var laowu_common={
     var project=null
     $.ajax({
         type: "post",
-        url: "/api/chart/column/table_swprojectinfo?used=getinfo",
+        url: "/chart/column/table_swprojectinfo?used=getinfo",
         async: false,
         data: {
             "projectSN":laowu_common.projectId,
@@ -264,7 +264,7 @@ var laowu_common={
     var project=null;
     $.ajax({
         type: "post",
-        url: getUrl()+"/project_work_api/find_common_record",
+        url: "/project_work_api/find_common_record",
         async: false,
         data: {
             "userId":laowu_common.userId,
@@ -311,7 +311,7 @@ var laowu_common={
         var list=[];
         $.ajax({
             type: "post",
-            url: "/api/project_work_api/find_torget_list",
+            url: "/project_work_api/find_torget_list",
             async: false,
             data: {
                 "userId":10439,//laowu_common.userId
@@ -341,7 +341,7 @@ var laowu_common={
         var list=[];
         $.ajax({
             type: "post",
-            url: "/api/project_work_api/find_laour_member",
+            url: "/project_work_api/find_laour_member",
             async: false,
             data: {
                 "userId":laowu_common.userId,
@@ -423,7 +423,7 @@ showTimeLists: function () {//加载时间列表
     
     $.ajax({
         type: "post",
-        url: "/api/project_work_api/find_base_cfg",
+        url: "/project_work_api/find_base_cfg",
         async: false,
         data:'{"type":"1"}', 
         datatype: "json",
@@ -441,7 +441,7 @@ showUnitLists: function () {//加载单位列表
   
     $.ajax({
         type: "post",
-        url: "/api/project_work_api/find_base_cfg",
+        url: "/project_work_api/find_base_cfg",
         async: false,
         data:'{"type":"2"}', 
         datatype: "json",

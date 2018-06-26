@@ -96,7 +96,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .top{
      margin-bottom:10px
   }

@@ -595,14 +595,20 @@ var $create = {
                     +"<div class='filtrate-title-sub'><span class='title' >"+$label.sel_like[i]+"</span></div>"
                     +"<div class='filtrate-body'>"
                     +"<div class='price-section'>"
-                    +"<input id='sel_like_input"+i+"'class='item-input' type='text' value='' placeholder='请输入'  onkeyup='$search.fuzzy_query_changed("+i+")'>"
+                    +"<input id='sel_like_input"+i+"'class='item-input' type='text' value='' placeholder='请输入' >"
                     +"<span id='clear_fuzzy_query"+i+"' class='mui-icon mui-icon-clear' style='display: none'></span>"
                     +"</div>"
                     +"</div>"
                     +"</li>"
                 b = b + a;
                 $search.last.like[i]="";
+                setTimeout(() => {
+                    $("#sel_like_input"+i).keyup(function(){
+                        $search.fuzzy_query_changed(i);
+                    })
+                }, 500);
             }
+            
             return b;
         },
         //创建数据区间查询
@@ -620,12 +626,12 @@ var $create = {
                     +"<div class='filtrate-body'>"
                     +"<div class='price-section' id='sel_qujian_number"+i+"'>"
                     +"<div class='price-item'>"
-                    +"<input id='qujian_min"+i+"' class='item-input' type='number' value='' pattern='[0-9]*' placeholder='最低价' onkeyup='$search.qujian_min_changed("+i+")'>"
+                    +"<input id='qujian_min"+i+"' class='item-input' type='number' value='' pattern='[0-9]*' placeholder='最低价'>"
                     +"<span id='qujian_min_clear"+i+"' class='mui-icon mui-icon-clear' style='display: none'></span>"
                     +"</div>"
                     +"<span class='line'>-</span>"
                     +"<div class='price-item'>"
-                    +"<input id='qujian_max"+i+"' class='item-input' type='number' value='' pattern='[0-9]*' placeholder='最高价' onkeyup='$search.qujian_max_changed("+i+")'>"
+                    +"<input id='qujian_max"+i+"' class='item-input' type='number' value='' pattern='[0-9]*' placeholder='最高价'>"
                     +"<span id='qujian_max_clear"+i+"' class='mui-icon mui-icon-clear' style='display: none'></span>"
                     +"</div>"
                     +"</div>"
@@ -634,6 +640,16 @@ var $create = {
                 b = b + a;
                 $search.last.qujian_number_max[i]="";
                 $search.last.qujian_number_min[i]="";
+                setTimeout(() => {
+                    $("#qujian_min"+i).keyup(function(){
+                        $search.qujian_min_changed(i);
+                    })
+                }, 500);
+                setTimeout(() => {
+                    $("#qujian_max"+i).keyup(function(){
+                        $search.qujian_max_changed(i);
+                    })
+                }, 500);
             }
             return b;
         },
@@ -692,10 +708,15 @@ var $create = {
             b="	<div class='cloud-search search-input-box' >"
                 +"<div class='search-inner'>"
                 +"<span class='mui-icon mui-icon-search'></span>"
-                +"<input id='search_list_input' type='search' class='search-input' placeholder='搜索' onkeyup='$search_list.input_changed(1)'>"
+                +"<input id='search_list_input' type='search' class='search-input' placeholder='搜索'>"
                 +"<span id='search_list_input_clear' class='mui-icon mui-icon-clear' style='display: none'></span>"
                 +"</div>"
                 +"</div>";
+                setTimeout(() => {
+                    $("#search_list_input").keyup(function(){
+                        $search_list.input_changed(1)
+                    })
+                }, 500);
             return b
         },
         section:function () {

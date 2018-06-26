@@ -2392,7 +2392,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .mui-pull-top-pocket {
 			top: 0 !important;
 		}
@@ -2448,9 +2448,9 @@ export default {
 		.mui-pull-top-wrapper .mui-spinner {
 			margin-top: 7px;
 		}
-		.mui-pull-top-wrapper .mui-icon.mui-reverse {
-			/*-webkit-transform: rotate(180deg) translateZ(0);*/
-		}
+		/* .mui-pull-top-wrapper .mui-icon.mui-reverse {
+			-webkit-transform: rotate(180deg) translateZ(0);
+		} */
 		.mui-pull-bottom-tips {
 			text-align: center;
 			font-size: 15px;

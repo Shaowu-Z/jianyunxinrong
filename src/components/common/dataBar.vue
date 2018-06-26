@@ -74,7 +74,7 @@ import { Toast } from "mint-ui";
         }
     };
 </script>
-<style>
+<style scoped>
     #databox{
         float: left
     }

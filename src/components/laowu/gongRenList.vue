@@ -434,13 +434,14 @@ Array.prototype.removeUser = function (val) {
     var index = this.indexOfUser(val);
     if (index > -1) {
         this.splice(index, 1);
+        
     }
 };
 
 //*********移除数组元素******结束**********
 </script>
 
-<style>
+<style scoped>
 .project {
   position: relative;
   padding: 5px;
