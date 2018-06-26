@@ -43,7 +43,7 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
-    host:"192.168.0.33",
+    host:"192.168.0.44",
     port: 8100,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
@@ -71,6 +71,7 @@ module.exports = {
   },
 
   build: {
+    env: require('./dev.env'),
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
@@ -83,7 +84,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
