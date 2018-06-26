@@ -297,38 +297,20 @@ export default {
   	mycenter(){
   		this.$router.push({path:'/myInfo'})
   	},
-<<<<<<< HEAD
-		set(){
-			this.$router.push({path:'/setUp'})
-		},
-		setting(){
-		  this.$router.push({path:'/setting'});
-		//   this.$router.push({path:'/shoufukuan'});
-		},
-		project(){
-		  this.$router.push({path:'/project'});
-		//   console.log(this.user)
-		},
-		collect(){
-			 this.$router.push({path:'/static/webstatic/mycenter/my_collect.html'});
-		}
-=======
 	set(){
 		this.$router.push({path:'/setUp'})
 	},
 	setting(){
-		
-		// appApi.openNewWindow('/setting');
 		this.$router.push({path:'/setting'});
+	//   this.$router.push({path:'/shoufukuan'});
 	},
 	project(){
 		this.$router.push({path:'/project'});
 	//   console.log(this.user)
 	},
 	collect(){
-			this.$router.push({path:'/myCollect'});
+			this.$router.push({path:'/static/webstatic/mycenter/my_collect.html'});
 	}
->>>>>>> e6831a30d40c21911f3119c28051beb706619812
   },
   created() {
 	  appApi.showMenu();
