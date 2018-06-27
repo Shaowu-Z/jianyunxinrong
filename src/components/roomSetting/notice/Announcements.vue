@@ -28,7 +28,7 @@
 					<li class="img-item">
 						<div class="img-item-inner">
 							<img v-bind:src="img">
-						</div> <span class="btn-roll btn-delete iconfont icon-delete" @click="deleteFile(number,'img')"></span>
+						</div> <span class="btn-roll btn-delete" @click="deleteFile(number,'img')"></span>
 					</li>
 					</div>
 					<li class="upload-btn">

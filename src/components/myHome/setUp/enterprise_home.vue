@@ -15,7 +15,8 @@
                     <div class="div">
                         <div class="oa-contact-cell mui-table">
                             <div class="oa-contact-avatar mui-table-cell">
-                                <img src="../../../assets/images/defualt.png">
+                                <img v-if='!item.img_url' src="../../../assets/images/defualt.png">
+                                <img v-if="item.img_url" :src="item.img_url">
                             </div>
                             <div class="oa-contact-content mui-table-cell">
                                 <h4 class="oa-contact-name">{{item.ProjectName}}</h4>
@@ -24,7 +25,7 @@
                                         <span class="data"></span>
                                     </span>
                                     <span class="mui-pull-right project-data">
-                                        <span class="data">{{item.flag}}万</span>
+                                        <span class="data">{{item.Zaojia || 0}}万</span>
                                     </span>
                                 </p>
                                 <p>
@@ -32,7 +33,7 @@
                                         <span class="data">{{item.name}}</span>
                                     </span>
                                     <span class="mui-pull-right project-data">
-                                        <span class="data">{{item.roomUserName}}</span>
+                                        <span class="data">{{item.roomUserName || "null"}}</span>
                                     </span>
                                 </p>
                             </div> 
@@ -105,7 +106,7 @@ export default {
         //     })
         // },
         queryProjectlist(){
-            let item = 'used=getConPro&whereOther=123'
+            let item = 'used=getConPro&whereOther='+this.$route.query.teamCode
             let _self = this
             this.$http.post("/chart/column/table_swprojectinfo",item).then(function(res){
                 _self.projectList = res.data.result

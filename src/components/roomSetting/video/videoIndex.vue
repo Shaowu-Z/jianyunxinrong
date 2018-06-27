@@ -9,7 +9,7 @@
 			<!--<a class="mui-icon iconfont icon-shaixuan mui-pull-right" onclick="openFilter()"></a>-->
 			<!--<button class="mui-btn  mui-btn-link mui-pull-right">筛选</button>
 			<a class="mui-icon iconfont icon-add mui-pull-right" onclick="javascript:showProject();"></a>-->
-			<input style="display: none" id="upfile" type="file" accept="video/*" capture="camcorder" @change="uploadImageAndVideo($event)" ref="file">
+			<input style="display: none" id="upfile" type="file" accept="video/*" capture="camcorder" onclick="window.appApi.openCamera(3,1);" @change="uploadImageAndVideo($event)" ref="file">
 		</header>
         		<!-- 形象视频 -->
 		<section class="mui-content" id="video_list">
@@ -29,10 +29,9 @@
 			
 			<div class="mui-scroll content">
 				<div class=" video-list mui-table-view mui-table-view-chevron lists">
-					<mt-loadmore :bottom-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="10">
 						<div v-for="(item, a) in items" :key="a">
 							<div class="video-item">
-								<div class="video-content">
+								<div class="video-content" @click="ccc(item)">
 									<div class="video-pic" :data-a="a">
 										<div class="pic_bg" style="position:absolute;top: 0;height:100%;width:100% ;background-size: 100% 100%;"></div>
 										<div style="line-height: 200px;text-align: center;">
@@ -64,7 +63,6 @@
 							</div>
 
 						</div>
-					</mt-loadmore>
 				</div>
 			</div>
 		</section>
@@ -87,6 +85,7 @@ export default {
 				project:"",
 			},
 			allLoaded: false,
+			id:'',
         }
     },
     created() {
@@ -212,11 +211,16 @@ export default {
 		},
 		//上传视屏
 		uploadImageAndVideo(e) {
+			let _self = this
 			console.log(e.target.files[0])
-			window.appApi.openCamera(3,1);
 			if(e.target.files[0].size<=15728640){
 				if (e.target.files[0] == null || e.target.files[0].type.indexOf("video") == -1) {
-					msg("请选择视频类型");
+					// msg("请选择视频类型");
+					Toast({
+						message: "上传成功！",
+						position: 'bottom',
+						duration: 1000
+					});
 				} else {
 					// var index_ = layer.open({
 					// 	type: 2
@@ -262,14 +266,15 @@ export default {
 								duration: 1000
 							});
 							document.getElementsByClassName("mui-title")[0].innerText = "形象视频";
-							setTimeout(function(){
-								projectSN = "";
-								layer.closeAll();
-								appApi.refreshNav(0);
-		//			    		appApi.closeNewWindow();
-								e.target.value = "";
-								location.reload(true)
-							},1000);
+							_self.loadData()
+		// 					setTimeout(function(){
+		// 						projectSN = "";
+		// 						layer.closeAll();
+		// 						appApi.refreshNav(0);
+		// //			    		appApi.closeNewWindow();
+		// 						e.target.value = "";
+		// 						location.reload(true)
+		// 					},1000);
 						}else{
 							layer.closeAll();
 							// msg(resp.message);
@@ -311,12 +316,7 @@ export default {
 		loadData: function(type,me) {
 			this.pageParams.projectSN = this.$route.query.projectSn
 			var _self = this;
-			this.$http.post("/community/video/find_page",
-				this.pageParams, {
-					headers: {
-						'Content-Type': 'application/json'
-					},
-				}).then(function(response) {
+			this.$http.post("/community/video/find_page",this.pageParams, {headers: {'Content-Type': 'application/json'},}).then(function(response) {
 					if(type == "up"){
 //						$('.lists').empty();
                         this.items = [];
@@ -401,6 +401,11 @@ export default {
 //				me.resetload();
 			});
 
+		},
+		ccc(a){
+			console.log(a)
+			window.appApi.openVideo(setting.getPagePath() + "/community/community_comment.html?id="+a.id,);
+			// this.$router.push({path:'/static/webstatic/community/community_comment.html',query:{id:a.id}})
 		},
 		initMui: function(share_key) { //初始化mui的分页插件
 		let _self = this;

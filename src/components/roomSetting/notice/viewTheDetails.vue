@@ -80,7 +80,7 @@ export default {
     },
     methods: {
         open_file(id){
-            appApi.openFile(getUrl()+'/sass_api/file/download?id='+id);
+            appApi.openFile('http://java.winfreeinfo.com/sass_api/file/download?id='+id);
         },
         //时间过滤
         formatDate(value) {
@@ -131,14 +131,27 @@ export default {
                             } else {
                                 fileIdStr += "," + files[1]
                             }
-                            $.ajax({
-                                type: "POST",
-                                url: getUrl() + "/sass_api/get_uploadfile_info",
-                                data: {
-                                    "fileIdStr": fileIdStr
-                                },
-                                success: function(response) {
-                                    if(imgs.toString()!=""){
+                            // $.ajax({
+                            //     type: "POST",
+                            //     url: "http://java.winfreeinfo.com/sass_api/get_uploadfile_info",
+                            //     data: {
+                            //         "fileIdStr": fileIdStr
+                            //     },
+                            //     success: function(response) {
+                            //         if(imgs.toString()!=""){
+                            //             _self.$data.imgs = response.result.slice(0, imgs.length)
+                            //             _self.$data.pics = response.result.slice(imgs.length, response.result.length)
+                            //         }else{
+                            //             _self.$data.pics = response.result.slice(0, response.result.length)
+                            //         }
+                            //         _self.$data.imgUrl =xk_util.getArrayProperty(_self.$data.imgs,"thumbnailurl");
+                            //         console.log(response)
+                            //     }
+                                
+                            // })
+                            let data = { "fileIdStr": fileIdStr}
+                            _self.$http.post("/sass_api/get_uploadfile_info",data).then(function(response){
+                                if(imgs.toString()!=""){
                                         _self.$data.imgs = response.result.slice(0, imgs.length)
                                         _self.$data.pics = response.result.slice(imgs.length, response.result.length)
                                     }else{
@@ -146,8 +159,6 @@ export default {
                                     }
                                     _self.$data.imgUrl =xk_util.getArrayProperty(_self.$data.imgs,"thumbnailurl");
                                     console.log(response)
-                                }
-                                
                             })
                         }
 

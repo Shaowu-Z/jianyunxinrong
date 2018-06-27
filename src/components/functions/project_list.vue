@@ -350,14 +350,13 @@ export default {
                     "fileSize":_self.fileshares[i].size,
                     "fileType":_self.fileshares[i].fileType
                 })
-                console.log(_self.fileshares,'发名片');
 							if(i==(_self.fileshares.length-1)){
-								
+								 
 								appApi.setSelectData(param);
 							}
             }
 //						alert(JSON.stringify(param))
-            appApi.setSelectData(param)
+            // appApi.setSelectData(param)
         },
         //判断文件类型
         fileType: function(suffix) {
@@ -503,13 +502,9 @@ export default {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
     .txt{
         border-bottom:1px solid #ccc;
         padding-left:10px 15px; 
         margin-left:11px
     }
-=======
-
->>>>>>> f0d54a0c625f49e7c07f15fa5f4d88895fa16cfe
 </style>

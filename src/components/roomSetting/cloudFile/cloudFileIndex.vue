@@ -698,6 +698,11 @@ export default {
 			if(!isOpe){
                 url = url + "&isOpe=false";
 			}
+			// if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined || isSys == true || !isOpe== true){
+			// 	this.$router.push({path:"/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,roomId:_self.roomId,isSys:true,isOpe:false}})
+			// } else {
+			// 	this.$router.push({path:"/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,isSys:true,isOpe:false}})
+			// }
 			window.appApi.openNewWindow(url);
 		},
 		itemEditShow: function(type) {

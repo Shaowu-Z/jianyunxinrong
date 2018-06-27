@@ -27,7 +27,8 @@ export default {
         return {
             status:false,
             name:"",
-            curInfo:{}
+			curInfo:{},
+			projectSN:'',
         }
     },
     created () {
@@ -62,6 +63,8 @@ export default {
 			this.$http.get("/cdish/data?dirId=" + dirId).then(function (response) {
 				if (response.data.code == 0) {
 					var rs = response.data.result;
+					console.log(response.data.result.data.projectId);
+					_self.projectSN = response.data.result.data.projectId
 					if(callBack) callBack(rs)
 				} else {
 					msg(response.data.message)
@@ -98,7 +101,8 @@ export default {
                     //所有页面刷新
 					if(appApi.isApp){
 						appApi.broadcast("refreshPage()");
-						appApi.closeNewWindow();
+						// appApi.closeNewWindow();
+						_self.$router.push({path:'/static/webstatic/dish/open_dir.html',query:{id:_self.$route.query.pid,projectSN:_self.projectSN}})
 					}else{
 						window.history.back();
 					}

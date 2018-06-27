@@ -1,8 +1,7 @@
 <template>
     <div id="app">
         <header class="mui-bar mui-bar-nav" id="js-head">
-            <!--@click="javascript:history.back(-1)"-->
-            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack" v-show="showBack">
+            <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack" v-if="showBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <div v-if="headerMode == 0">
@@ -15,84 +14,134 @@
             <h1 class="mui-title" id="js-head-name"></h1>
         </header>
         <section class="mui-content" id="dish_content" v-show="loadStatus">
-            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3;"  v-show="this.sortShow" @click="this.sortShow=!this.sortShow"></div>
+            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3; display: none"  v-show="sortShow" @click="sortShow=!sortShow"></div>
             <div class="tab-box">
                 <div id="dish-tab" class="sift-tab search-sort">
-                    <div class="tab-item sort-integrative" @click="this.sortShow = !this.sortShow">
+                    <div class="tab-item sort-integrative" @click="sortShow = !sortShow">
                         <span v-text="curSort.text"></span>
                         <span class="mui-icon mui-icon-arrowdown"></span>
                     </div>
                     <div class="tab-item" v-bind:class="{disabled:(isSys || isSys == 'true')}" @click="createDir">新建文件夹</div>
                 </div>
-                <ul class="mui-table-view sub-sort" id="sort-list" v-show="this.sortShow">
-                    <li class="mui-table-view-cell item name" v-bind:class="{ active: curSort.type == sorts.NAME_SORT}" @click="selectSort(sorts.NAME_SORT,'名称排序')">名称排序</li>
-                    <li class="mui-table-view-cell item size" v-bind:class="{ active: curSort.type == sorts.SIZE_ASC}" @click="selectSort(sorts.SIZE_ASC,'大小升序排序')">大小升序排序</li>
-                    <li class="mui-table-view-cell item size" v-bind:class="{ active: curSort.type == sorts.SIZE_DESC}" @click="selectSort(sorts.SIZE_DESC,'大小倒序排序')">大小倒序排序</li>
-                    <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_ASC}" @click="selectSort(sorts.DATE_ASC,'时间升序排序')">时间升序排序</li>
-                    <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
+                <ul class="mui-table-view sub-sort" id="sort-list" style="display:none;" v-show="sortShow">
+                    <li class="mui-table-view-cell item name text" v-bind:class="{ active: curSort.type == sorts.NAME_SORT}" @click="selectSort(sorts.NAME_SORT,'名称排序')">名称排序</li>
+                    <li class="mui-table-view-cell item size text" v-bind:class="{ active: curSort.type == sorts.SIZE_ASC}" @click="selectSort(sorts.SIZE_ASC,'大小升序排序')">大小升序排序</li>
+                    <li class="mui-table-view-cell item size text" v-bind:class="{ active: curSort.type == sorts.SIZE_DESC}" @click="selectSort(sorts.SIZE_DESC,'大小倒序排序')">大小倒序排序</li>
+                    <li class="mui-table-view-cell item time text" v-bind:class="{ active: curSort.type == sorts.DATE_ASC}" @click="selectSort(sorts.DATE_ASC,'时间升序排序')">时间升序排序</li>
+                    <li class="mui-table-view-cell item time text" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
                 </ul>
             </div>
+			<!-- <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore> -->
             <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top:51px" v-bind:class="{list_select:selectMode}">
                 <div class="mui-scroll">
+					<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="50">
                     <div id="js-dish-con" class="cloud-content">
+						
                         <!--搜索入口-->
                         <div class="cloud-search">
                             <a class="search-inner" href="javascript:;" @click="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
                         </div>
                         <div v-if="curList.length != 0 && status == 1">
-                            <ul class="mui-table-view mui-table-view-striped">
-                                <div v-for="(obj,index) in curList" :key="index">
-                                    <li class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}"> <!-- v-longtouch="timeOutEvent" 长按触发事件-->
-                                        <a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
-                                            <div class="oa-contact-cell mui-table">
-                                                <div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
-                                                    <input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" onchange="selectEvent(this)" />
-                                                </div>
-                                                <div class="oa-contact-avatar mui-table-cell">
-                                                    <div v-if="obj.type==1">
-                                                        <span class="my-list-icon label-folder"></span>
-                                                    </div>
-                                                    <div v-else>
-                                                    <span :class="'my-list-icon ' + fileType(obj.suffix)"  >
-                                                        <div  v-if="obj.thumbnail != null ">
-                                                            <img v-bind:src="obj.thumbnail" >
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-if="obj.orixy==6">-->
-                                                                <!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                            <!--<div v-else>-->
-                                                                <!--<img v-bind:src="imageHost + obj.thumbnail" >-->
-                                                            <!--</div>-->
-                                                        </div>
-                                                        <span v-if="operateShow()"></span>
-                                                    </span>
-                                                    </div>
-                                                </div>
-                                                <div class="oa-contact-content mui-table-cell">
-                                                    <h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
-                                                    <p class="oa-contact-email">
-                                                        <span v-text="obj.createName"></span>
-                                                        <span>{{obj.updateDate | formDate}}</span>
-                                                        <span v-text="obj.size"></span>
+								<ul class="mui-table-view mui-table-view-striped">
+									<div v-for="(obj,index) in curList" :key="index">
+										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
+											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
+												<div class="oa-contact-cell mui-table">
+													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
+														<input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
+													</div>
+													<div class="oa-contact-avatar mui-table-cell">
+														<div v-if="obj.type==1">
+															<span class="my-list-icon label-folder"></span>
+														</div>
+														<div v-else>
+														<span :class="'my-list-icon ' + fileType(obj.suffix)"  >
+															<div  v-if="obj.thumbnail != null ">
+																<img v-bind:src="obj.thumbnail" >
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+															</div>
+														</span>
+														</div>
+													</div>
+													<div class="oa-contact-content mui-table-cell">
+														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
+														<p class="oa-contact-email text">
+															<span v-text="obj.createName"></span>
+															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
+															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
+															<span>{{obj.updateDate}}</span>
+															<span v-text="obj.size"></span>
+														</p>
+													</div>
+												</div>
+												<!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
+											</a>
+											<!--<button v-show="itemEditShow(obj.type) && operateShow()"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>-->
+											<button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
+										</li>
+										<li v-else class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
+											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
+												<div class="oa-contact-cell mui-table">
+													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
+														<input type="checkbox" name="selectItem" :data-type="obj.type" :data-id="obj.id" :data-name="obj.name" :data-suffix="obj.suffix" :data-status="obj.status" :data-userId="obj.userId"  v-bind:value="obj.id" @change="selectEvent(this)" />
+													</div>
+													<div class="oa-contact-avatar mui-table-cell">
+														<div v-if="obj.type==1">
+															<span class="my-list-icon label-folder"></span>
+														</div>
+														<div v-else>
+														<span :class="'my-list-icon ' + fileType(obj.suffix)"  >
+															<div  v-if="obj.thumbnail != null ">
+																<img v-bind:src="obj.thumbnail" >
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-if="obj.orixy==6">-->
+																	<!--<img class="img_move" v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+																<!--<div v-else>-->
+																	<!--<img v-bind:src="imageHost + obj.thumbnail" >-->
+																<!--</div>-->
+															</div>
+														</span>
+														</div>
+													</div>
+													<div class="oa-contact-content mui-table-cell">
+														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
+														<p class="oa-contact-email">
+															<span v-text="obj.createName"></span>
+															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
+															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
+															<span>{{obj.updateDate | formDate}}</span>
+															<span v-text="obj.size"></span>
 
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <span v-if="operateShow()"></span>
-                                            <!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
-                                        </a>
-                                        <button v-show="itemEditShow(obj.type) && operateShow()"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
-                                    </li>
-                                </div>
-                            </ul>
+														</p>
+													</div>
+												</div>
+												<!--<button class="mui-btn mui-btn-primary mui-btn-outlined">设置权限</button>-->
+											</a>
+											<button v-show="operateShow(obj.type)"  class="mui-btn mui-btn-link iconfont icon-more" @click="itemEdit(obj.id,obj.type,obj.name,obj.suffix,obj.status,obj.userId,$event)"></button>
+										</li>
+									</div>
+								</ul>
                         </div>
-                        <div id="loadMore" style="display: none" class="mui-pull-bottom-tips"><div class="mui-pull-bottom-wrapper"><span class="mui-pull-loading"></span></div></div>
+                        <!-- <div id="loadMore" style="display: none" class="mui-pull-bottom-tips"><div class="mui-pull-bottom-wrapper"><span class="mui-pull-loading"></span></div></div> -->
                     </div>
+					</mt-loadmore>
                 </div>
             </div>
             <div v-if="curList.length == 0 && status == 1">
@@ -114,104 +163,104 @@
             </div>
             <!--上传文件弹框结束-->
 
-            <!--编辑文件夹弹框开始-->
-            <div class="mui-backdrop" v-show="showEditBox" @click="showEditBox=!showEditBox" style="z-index: 999;"></div>
-            <div id="editBox" class="floorzr" style="position: fixed;bottom: 0;width: 100%;margin-bottom: 0;" v-show="showEditBox">
-                <p class="floorzr-title" v-text="editItem.name + editItem.suffix"></p>
-                <ul class="mui-row mui-grid-view mui-grid-12">
-                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                        <div class="menu-item" @click="sendFile(editItem.id)">
-                            <span class="mui-icon iconfont icon-send"></span>
-                            <span class="menu-item-name" >文件发送</span>
-                        </div>
-                    </li>
-                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                        <div class="menu-item" @click="itemShare(editItem.id)">
-                            <span class="mui-icon iconfont icon-share"></span>
-                            <span class="menu-item-name" >分享</span>
-                        </div>
-                    </li>
-                    <div v-if="!isSys || (isSys && editItem.type == 2)">
-                        <li v-if="editItem.auth" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item" @click="moveItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                <span class="mui-icon iconfont icon-move"></span>
-                                <span class="menu-item-name">移动</span>
-                            </div>
-                        </li>
-                        <div v-if="editItem.auth">
-                            <div v-if="(isSys || isSys == 'true')">
-                                <div v-if="editItem.status==0">
-                                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                        <div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                            <span class="mui-icon iconfont icon-zuofei"></span>
-                                            <span class="menu-item-name">作废</span>
-                                        </div>
-                                    </li>
-                                </div>
-                                <div v-else>
-                                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                        <div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                            <span class="mui-icon iconfont icon-zuofei active"></span>
-                                            <span class="menu-item-name">恢复</span>
-                                        </div>
-                                    </li>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <li v-show="!isSys" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel">
-                                    <div class="menu-item quxiao1" @click="delItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-delete"></span>
-                                        <span class="menu-item-name">删除</span>
-                                    </div>
-                                </li>
-                            </div>
-                        </div>
-                        <div v-if="showCollect && editItem.type == 2">
-                            <div v-if="editItem.collectStatus">
-                                <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                    <div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-shoucang active"></span>
-                                        <span class="menu-item-name">取消收藏</span>
-                                    </div>
-                                </li>
-                            </div>
-                            <div v-else>
-                                <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                    <div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-shoucang"></span>
-                                        <span class="menu-item-name">收藏</span>
-                                    </div>
-                                </li>
-                            </div>
-                        </div>
-                        <li v-if="editItem.auth" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item" @click="renameItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                <span class="mui-icon iconfont icon-edit"></span>
-                                <span class="menu-item-name">重命名</span>
-                            </div>
-                        </li>
-                        <li v-show="editItem.type == 2" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item"  @click="itemDetail(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                <span class="mui-icon iconfont icon-help"></span>
-                                <span class="menu-item-name">文件详情</span>
-                            </div>
-                        </li>
-                        <!-- 电子签署-->
-                        <li v-show="1 == 1" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item"  @click="sign(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                <span class="mui-icon iconfont icon-qianzhang"></span>
-                                <span class="menu-item-name">电子签署</span>
-                            </div>
-                        </li>
-                    </div>
-                </ul>
-                <p class="remov" @click="$data.showEditBox = false">取消</p>
-            </div>
-            <!--编辑文件夹弹框结束-->
+	<!--编辑文件夹弹框开始-->
+	<div class="mui-backdrop" v-show="showEditBox" @click="showEditBox=!showEditBox" style="display: none;z-index: 999;"></div>
+	<div id="editBox" class="floorzr" style="position: fixed;bottom: 0;width: 100%;margin-bottom: 0;display: none;" v-show="showEditBox">
+		<p class="floorzr-title" v-text="editItem.name + editItem.suffix"></p>
+		<ul class="mui-row mui-grid-view mui-grid-12">
+			<!--<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
+				<!--<div class="menu-item" @click="sendFile(editItem.id)">-->
+					<!--<span class="mui-icon iconfont icon-send"></span>-->
+					<!--<span class="menu-item-name" >文件发送</span>-->
+				<!--</div>-->
+			<!--</li>-->
+			<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+				<div class="menu-item" @click="itemShare(editItem.id)">
+					<span class="mui-icon iconfont icon-share"></span>
+					<span class="menu-item-name" >分享</span>
+				</div>
+			</li>
+			<template v-if="!isSys || (isSys && editItem.type == 2)">
+				<li v-if="editItem.auth||isOpeAll" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item" @click="moveItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+						<span class="mui-icon iconfont icon-move"></span>
+						<span class="menu-item-name">移动</span>
+					</div>
+				</li>
+				<template v-if="(editItem.auth ||isOpeAll)">
+					<template v-if="(isSys || isSys == 'true')">
+						<template v-if="editItem.status==0">
+							<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+								<div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+									<span class="mui-icon iconfont icon-zuofei"></span>
+									<span class="menu-item-name">作废</span>
+								</div>
+							</li>
+						</template>
+						<template v-else>
+							<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+								<div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+									<span class="mui-icon iconfont icon-zuofei active"></span>
+									<span class="menu-item-name">恢复</span>
+								</div>
+							</li>
+						</template>
+					</template>
+					<template v-else>
+						<li v-show="(!isSys&&isOpeAll)" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel">
+							<div class="menu-item quxiao1" @click="delItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-delete"></span>
+								<span class="menu-item-name">删除</span>
+							</div>
+						</li>
+					</template>
+				</template>
+				<template v-if="showCollect && editItem.type == 2">
+					<template v-if="editItem.collectStatus">
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+							<div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-shoucang active"></span>
+								<span class="menu-item-name">取消收藏</span>
+							</div>
+						</li>
+					</template>
+					<template v-else>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+							<div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-shoucang"></span>
+								<span class="menu-item-name">收藏</span>
+							</div>
+						</li>
+					</template>
+				</template>
+				<li v-if="(editItem.auth||isOpeAll||!isSys)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item" @click="renameItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+						<span class="mui-icon iconfont icon-edit"></span>
+						<span class="menu-item-name">重命名</span>
+					</div>
+				</li>
+				<li v-show="(editItem.type == 2||isOpeAll)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item"  @click="itemDetail(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event,editItem.isOpe)">
+						<span class="mui-icon iconfont icon-help"></span>
+						<span class="menu-item-name">文件详情</span>
+					</div>
+				</li>
+				<!-- 电子签署-->
+				<!--<li v-show="1 == 1" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
+					<!--<div class="menu-item"  @click="sign(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">-->
+						<!--<span class="mui-icon iconfont icon-qianzhang"></span>-->
+						<!--<span class="menu-item-name">电子签署</span>-->
+					<!--</div>-->
+				<!--</li>-->
+			</template>
+		</ul>
+		<p class="remov" onclick="app.showEditBox = false">取消</p>
+	</div>
+	<!--编辑文件夹弹框结束-->
 
             <!--手动输入弹框开始-->
-            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3;"  v-show="showDelBox" @click="showDelBox=!showDelBox"></div>
-            <div id="handwritten" v-show="showDelBox" class="mui-popup mui-popup-in">
+            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3; display: none"  v-show="showDelBox" @click="showDelBox=!showDelBox"></div>
+            <div id="handwritten" v-show="showDelBox" class="mui-popup mui-popup-in" style="display: none;">
                 <div class="mui-popup-title mui-text-left" v-text="delTitle"></div>
                 <div class="mui-popup-content sppd-content mui-text-left" v-text="delMsg">
                     <!--文件夹及文件夹下的所有文件将被彻底删除-->
@@ -226,37 +275,37 @@
                 </div>
             </div>
 
-            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3; " id="shade" v-show="shareSetShow" @click="shareSetShow=!shareSetShow"></div>
+            <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3; display: none" id="shade" v-show="shareSetShow" @click="shareSetShow=!shareSetShow"></div>
             <!--底部选项卡-->
-            <div class="mui-backdrop" v-show="selectEdit" @click="selectEdit=!selectEdit" style="z-index: 999;"></div>
-            <nav class="g-bar g-bar-tab tab-zr0" v-show="selectMode" style="">
+            <div class="mui-backdrop" v-show="selectEdit" @click="selectEdit=!selectEdit" style="display: none;z-index: 999;"></div>
+            <nav class="g-bar g-bar-tab tab-zr0" v-show="selectMode" style="display: none">
                 <a class="g-tab-item" href="javascript:;">
                     <span class="mui-icon iconfont icon-more mui-pull-right jump_bottom" @click="openSelectEdit()" style="margin-right: 5%;"></span>
                     <span class="mui-tab-label" style="text-align: left;text-indent: 5%;">已选择<span class="num_all" v-text="selectCount"></span>项</span>
                 </a>
             </nav>
-            <div class="floorzr selectEdit" v-show="selectEdit" style="position: fixed;bottom: 0px;width: 100%;margin-bottom: 0;">
+            <div class="floorzr selectEdit" v-show="selectEdit" style="display:none;position: fixed;bottom: 0px;width: 100%;margin-bottom: 0;">
                 <p class="floorzr-title" v-text="selectCount + '个文件（夹）'"></p>
                 <ul class="mui-row mui-grid-view mui-grid-12">
-                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4" @click="batchSendFile()">
-                        <div class="menu-item">
-                            <span class="mui-icon iconfont icon-send"></span>
-                            <span class="menu-item-name">发送文件</span>
-                        </div>
-                    </li>
+                    <!--<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4" @click="batchSendFile()">-->
+                        <!--<div class="menu-item">-->
+                            <!--<span class="mui-icon iconfont icon-send"></span>-->
+                            <!--<span class="menu-item-name">发送文件</span>-->
+                        <!--</div>-->
+                    <!--</li>-->
                     <li v-show="canShare" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4" @click="batchShare()">
                         <div class="menu-item">
                             <span class="mui-icon iconfont icon-share"></span>
                             <span class="menu-item-name">分享</span>
                         </div>
                     </li>
-                    <li v-show="canMove" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4" @click="batchCut()">
+                    <li v-show="(canMove&&isOpeAll)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4" @click="batchCut()">
                         <div class="menu-item">
                             <span class="mui-icon iconfont icon-move"></span>
                             <span class="menu-item-name">移动</span>
                         </div>
                     </li>
-                    <li v-show="!isSys" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel()">
+                    <li v-show="(!isSys&&isOpeAll)" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel()">
                         <div class="menu-item quxiao1">
                             <span class="mui-icon iconfont icon-delete"></span>
                             <span class="menu-item-name">删除</span>
@@ -284,7 +333,7 @@
                 <p class="remov" @click="backSelectMode">取消</p>
             </div>
             <!--选择分享有效期-->
-            <div class="pop-up" v-show="shareSetShow" style="z-index: 1002">
+            <div class="pop-up" v-show="shareSetShow" style="display: none;z-index: 1002">
                 <div class="pop-title"><span class="title">文件分享有效期</span><span class="btn-title iconfont icon-close" @click="shareSetShow=!shareSetShow"></span></div>
                 <div class="pop-content select-box mui-clearfix" style="height: 150px;">
                     <div class="mui-input-row mui-radio mui-left">
@@ -307,13 +356,16 @@
 
 <script>
 import setting from '../../../playform/config'
+import {getParam,BackCookie,setDishSort,getDishSort} from '../../../playform/common'
 import mui from '../../../playform/mui'
+// import  '../../../playform/mui.pullToRefresh'
+import { Loadmore,Toast } from 'mint-ui'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
-            headerMode: 0, //为1的时候在多选状态
-			showBack: false,
-			keyword: "",
+			widget: '',
+			pullWidget: '',
             orixy: '',
             loadStatus: false,
             imageHost: setting.UPLOAD_SERVER_ADDRESS,
@@ -323,6 +375,7 @@ export default {
             showUpload: true,
             projectId: "", //项目id
             rooId:"",
+            teamCode:"",
             pageParams: {
                 projectId: "",
                 pageSize: 20,
@@ -352,7 +405,7 @@ export default {
             },
             firstList: [],
             isSys: false,
-            isPC: false,
+            isOpe: true,
             canMove: true,
             canShare: true,
             canAffirm: true,
@@ -369,7 +422,8 @@ export default {
             curUserId: 0,
             projectManageId: 0,
             curList: [],
-            showShade: false,
+			showShade: false,
+			allLoaded: false,
             editItem: {
                 id: 0,
                 name: "",
@@ -377,8 +431,12 @@ export default {
                 suffix: "",
                 status: 0,
                 collectStatus: false,
-                auth: false
-            },
+                auth: false,
+                isOpe:false
+			},
+			headerMode: 0, //为1的时候在多选状态
+        	showBack: false,
+        	keyword: "",
             showEditBox: false,
             showEdit: false,
             selectMode: false, //选择模式
@@ -395,244 +453,303 @@ export default {
             shareInfo: {},
             shareInfoList: [],
             /*确认相关参数*/
-            affirmId: ""
+            affirmId: "",
+            isOpeAll:false//文件操作所有权限
             }
-    },
-    mounted(){
-        // 日期月份/天的显示，如果是1位数，则在前面加上'0'
-        function getFormatDate(arg) {
-            if(arg == undefined || arg == '') {
-                return '';
-            }
-
-            var re = arg + '';
-            if(re.length < 2) {
-                re = '0' + re;
-            }
-
-            return re;
-        }
-        function addDate(date, days) {
-            if(days == undefined || days == '') {
-                days = 1;
-            }
-
-            date.setDate(date.getDate() + days);
-            return date;
-        }
-        function uploadTarget(id, isSys) {
-            if(widget) {
-                app.uploadCallBack(widget, id, isSys);
-            }
-        }
-        function refreshPage() {
-            if(pullWidget) {
-                pullWidget.pullDownLoading();
-            }
-            if(app.$data.isIndex == 1) {
-                app.initFirstData(app.$data.projectId, app.getFirstData);//, app.$data.roomId
-            }
-        }
-        if(window.location.href.split("?")[1]){
-            var arrays = window.location.href.split("?")[1].split("&");
-            var map = {};
-            for (i = 0; i < arrays.length; i++) {
-                var param = arrays[i].split("=");
-                map[param[0]] = decodeURI(param[1]);
-            }
-            if(map.datatype=='admin'){
-                document.getElementsByName("index_return_button")[0].style.display='none';
-            }
-        }
-        function projectClick(id) {
-            appApi.openNewWindow(getUrl() + "/static/webstatic/dish/create_share.html?header=1&projectSN=" + id);
-        }
-    },
-    created(){
-        if(!appApi.isApp) {
-            this.showBack = true;
-        }
-        ('formDate', function(value) { //value为13位的时间戳
-            return app.formDate(value);
-        });
-        ("longtouch", function(el, binding) {
-            var oDiv = el,
-                value = binding.value,
-                x = 0,
-                y = 0,
-                z = 0,
-                timer = null;
-            oDiv.addEventListener("touchstart", function(e) {
-                if(e.touches.length > 1) {
-                    return false;
-                }
-                z = 0;
-                timer = setTimeout(function() {
-                    app.goSelectMode(e);
-                    z = 1;
-                }, 500);
-                x = e.touches[0].clientX;
-                y = e.touches[0].clientY;
-                //e.preventDefault();
-            }, false);
-            document.addEventListener("touchmove", function(e) {
-                if(x != e.touches[0].clientX || y != e.touches[0].clientY) {
-                    clearTimeout(timer);
-                    return false;
-                }
-            }, false);
-            document.addEventListener("touchend", function(ev) {
-                if(z != 1) {
-                    clearTimeout(timer);
-                    x = 0;
-                    y = 0;
-                    //return false;
-                } else {
-                    x = 0;
-                    y = 0;
-                    z = 0;
-                    app.goSelectMode(ev);
-                }
-            }, false);
-        })
-    },
+	},
+	created(){
+		this.init();
+	},
+    mounted() {
+		var _self = this;
+		//获取参数
+		var params = getParam(window.location.href);
+		if(params.hasOwnProperty("projectSN") || params.hasOwnProperty("projectSn")) {
+            if(params.hasOwnProperty("projectSN"))
+				_self.projectId = params.projectSN; //项目id
+			else
+                _self.projectId = params.projectSn; //项目id
+            if(params.hasOwnProperty("teamCode"))
+            	_self.teamCode = params.teamCode;
+            _self.roomId = params.roomId; //房间id
+			if(params.hasOwnProperty("isSys")) {
+				_self.isSys = true;
+			} else {
+				_self.showEdit = true;
+			}
+			if(params.hasOwnProperty("isOpe")) {
+				_self.isOpe = false;
+			} else {
+				_self.isOpe = true;
+			}
+			if(params.hasOwnProperty("isShare")) {
+				_self.isShare = true;
+				_self.pageParams.from = "1";
+			}
+			if(1 == 1) {
+				_self.showHeader();
+			}
+			if(params.hasOwnProperty("id")) {
+				//显示头部
+				_self.isIndex = 0;
+				_self.id = params.id; //目录id
+				if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initData(_self.id, _self.getCurData);//, _self.roomId
+				else
+                    _self.initData(_self.id, _self.getCurData);//, _self.roomId
+				_self.showHeader();
+				_self.loadStatus = true;
+			} else if(params.hasOwnProperty("keyword")) {
+				//搜索
+				_self.pageParams.keyword = params.keyword;
+				_self.pageParams.projectId = _self.projectId;
+				_self.searchData();
+				_self.loadStatus = true;
+			} else {
+				//首目录
+				//不显示头部
+				//数据初始化
+				_self.isIndex = 1;
+                if(_self.roomId=="" || _self.roomId=="undefined")
+					_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
+				else
+					_self.initFirstData(_self.projectId, _self.getFirstData, _self.roomId);//, _self.roomId
+				if(!appApi.isApp) {
+					_self.showUpload = false;
+				}
+				//_self.showUpload = true;
+			}
+			_self.uploadInit();
+			_self.downLoadInit();
+		} else if(params.hasOwnProperty("shareId")) {
+			//分享
+			_self.shareId = params.shareId;
+			var params = {
+				shareId: _self.shareId
+			};
+			console.info(params);
+			this.$http.post("/cdish/share/detail", params).then(function(response) {
+				if(response.data.code == 0) {
+//					console.info(response.data.result);
+					var rs = response.data.result;
+					_self.status = 1;
+					_self.loadStatus = true;
+					_self.isShare = true;
+					_self.shareInfo = rs;
+					_self.projectId = rs.projectId;
+					_self.shareInfoList = rs.shareItems;
+					_self.downLoadInit();
+				} else {
+					msg(response.data.message);
+				}
+			}).catch(function(error) {
+				layer.closeAll();
+				warm("查看分享失败")
+			});
+		} else if(params.hasOwnProperty("affirmId")) {} else {
+			//选择项目
+			this.$http.get("/work_api/projectname").then(function(resp) {
+				if(resp.data.code == 0) {
+					var array = resp.data.result;
+					document.getElementById("shade").style.display = "block";
+					document.getElementById("add-style").style.display = "block";
+					if(array) {
+						var ht = '<li class="mui-table-view-cell" onclick="javascript:projectClick(\'$projectSN\')">$text</li>';
+						var htmlstr = array.length > 0 ? '' : '<li class="mui-table-view-cell">没有参与的项目</li>';
+						for(var i = 0; i < array.length; i++) {
+							htmlstr += ht.replace("$projectSN", array[i].serialNum).replace("$text", array[i].ProjectName);
+						}
+						document.getElementById("project_list").innerHTML = htmlstr;
+					}
+				} else {
+					msg("系统报错:" + resp.data.message);
+				}
+			}).catch(function(err) {
+				console.log(err);
+			})
+		}
+		
+		var pageParams = _self.pageParams;
+		pageParams.nodeId = this.$route.query.id
+		pageParams.projectId = this.$route.query.projectSN
+		this.$http.post("/cdish/list", pageParams).then(function(response) {
+			// console.log(response.data)
+			if(response.data.code == 200) {
+				var rs = response.data;
+				var allPage = rs.result.endPage;
+				_self.curList = response.data.result.list;
+				for(let i=0;i<_self.curList.length;i++){
+					_self.curList[i].updateDate = util.fnFormat(_self.curList[i].updateDate,'yyyy-MM-dd')
+				}
+				console.log(_self.curList,111111111111111);
+			} else {
+				layer.open({
+					content:"系统出了点小状况，请稍后再试!"
+					,skin: 'msg'
+					,time: 1 //2秒后自动关闭
+					,anim:false
+				});
+			}
+			_self.pageParams.curPage++;
+			_self.status = 1;
+		}).catch(function(error) {
+			console.log(error);
+		});
+	},
     methods: {
-        intoSelect: function() {
-            //进入多选状态 如果在app中 需隐藏返回键
-            var _self = this;
-            _self.headerMode = 1;
-            _self.showBack = false;
-            appApi.hideBack();
-        },
-        backSelect: function() {
-            var _self = this;
-            _self.headerMode = 0;
-            if(!appApi.isApp) {
-                _self.showBack = true;
-            } else {
-                appApi.showBack();
-            }
-        },
-        goBack(){
-            this.$router.go(-1);
-        },
+		init(){
+			let _self = this
+			var pageParams = _self.pageParams;
+			pageParams.nodeId = this.$route.query.id
+			pageParams.projectId = this.$route.query.projectSN
+			this.$http.post("/cdish/list", pageParams).then(function(response) {
+				// console.log(response.data)
+				if(response.data.code == 200) {
+					var rs = response.data;
+					var allPage = rs.result.endPage;
+					_self.curList = response.data.result.list;
+					for(let i=0;i<_self.curList.length;i++){
+						_self.curList[i].updateDate = util.fnFormat(_self.curList[i].updateDate,'yyyy-MM-dd')
+					}
+					console.log(_self.curList,111111111111111);
+				} else {
+					layer.open({
+						content:"系统出了点小状况，请稍后再试!"
+						,skin: 'msg'
+						,time: 1 //2秒后自动关闭
+						,anim:false
+					});
+				}
+				_self.pageParams.curPage++;
+				_self.status = 1;
+			}).catch(function(error) {
+				console.log(error);
+			});	
+		},
+		loadTop () {
+			var _self = this;
+			var pageParams = _self.pageParams;
+			pageParams.curPage = 1;
+			this.$http.post("/cdish/list", pageParams).then(function(response) {
+				if(response.data.code == 200) {
+					var rs = response.data;
+					var allPage = rs.result.endPage;
+					if(pageParams.curPage == 1) {
+						//首次 加载一次
+						_self.curList = rs.result.list;
+						// undefined != fun && fun();
+						// if(allPage > 1) {
+						// 	document.getElementById("loadMore").style.display = "block";
+						// }
+					} else {
+						_self.curList = _self.curList.concat(rs.result.list);
+						// undefined != fun && fun(pageParams.curPage >= allPage);
+					}
+				} else {
+					// undefined != fun && fun(true);
+                    layer.open({
+                        content:"系统出了点小状况，请稍后再试!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+				}
+				//console.log(_self.curList);
+				// _self.pageParams.curPage;
+				// _self.initScroll();
+				_self.status = 1;
+			}).catch(function(error) {
+				console.log(error);
+			});
+			this.$refs.loadmore.onTopLoaded();
+		},
+		goBack(){
+			this.$router.go(-1)
+		},
+		intoSelect: function() {
+			//进入多选状态 如果在app中 需隐藏返回键
+			this.headerMode = 1;
+			this.showBack = false;
+			appApi.hideBack();
+		},
+		backSelect: function() {
+			this.headerMode = 0;
+			if(!appApi.isApp) {
+				this.showBack = true;
+			} else {
+				appApi.showBack();
+			}
+		},
 		initData: function(dirId, callback, rommId) {
 			var _self = this;
 			//获取数据
-			this.$http.get("/cdish/common?dirId=" + dirId).then(function(response) {// + "&roomId=" + rommId
+			var rid = "";
+			if(rommId!="" && rommId!="undefined" && rommId!=undefined)
+				rid = "&roomId=" + rommId;
+			var teamCode = "";
+			if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
+			this.$http.get("/cdish/data?projectId=" + _self.projectId + "&dirId=" + dirId + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
 					if(callback) callback(rs);
 				} else {
-					msg("获取云盘目录信息失败")
+                    // msg("获取云盘目录信息失败")
+                    layer.open({
+                        content: "获取云盘目录信息失败"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 			})
 		},
 		initFirstData: function(project_id, callback, rommId) {
 			var _self = this;
 			//获取数据
-			this.$http.get("/cdish/common?projectId=" + project_id).then(function(response) {// + "&roomId=" + rommId
+            var rid = "";
+            if(rommId!="" && rommId!="undefined" && rommId!=undefined)
+                rid = "&roomId=" + rommId;
+            var teamCode = "";
+            if(_self.teamCode!="" && _self.teamCode!="undefined" && _self.teamCode!=undefined)
+                teamCode = "&teamCode=" + _self.teamCode;
+			this.$http.get("/cdish/data?projectId=" + project_id + rid+teamCode).then(function(response) {// + "&roomId=" + rommId
 				if(response.data.code == 0) {
 					var rs = response.data.result;
-					if(callback) callback(rs);
+					if(callback){
+                        callback(rs);
+					}
 				} else {
-					msg("获取云盘信息失败")
+                    // msg("获取云盘信息失败")
+                    layer.open({
+                        content: "获取云盘目录信息失败"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 			})
-		},
-		initScroll: function() {
-			//阻尼系数
-			var deceleration = mui.os.ios ? 0.003 : 0.0009;
-			var scroll = mui('.mui-scroll-wrapper').scroll({
-				bounce: false,
-				indicators: true, //是否显示滚动条
-				deceleration: deceleration
-			});
-			var _self = this;
-			/*document.querySelector('.mui-scroll-wrapper' ).addEventListener('scroll', function (e) {
-			 if (scroll.y <-30) {
-			 _self.showUpload = false;
-			 } else {
-			 _self.showUpload = true;
-			 }
-			 })*/
-			/***********************
-			 * 函数：判断滚轮滚动方向
-			 * 作者：walkingp
-			 * 参数：event
-			 * 返回：滚轮方向 1：向上 -1：向下
-			 *************************/
-			var scrollFunc = function(e) {
-				var y = scroll.y;
-				var direct = 0
-				e = e || window.event;
-
-				if(e.wheelDelta) { //IE/Opera/Chrome
-					direct = e.wheelDelta;
-				} else if(e.detail) { //Firefox
-					direct = e.detail;
-				}
-
-				y += direct / 5;
-				//console.info(scroll)
-				var allH = scroll.element.children[0].clientHeight;
-				var t = scroll.wrapperHeight - allH;
-				//console.info("t:" + t)
-				//console.info(y)
-				/*if(t == 0){
-				 scroll.scrollTo(0,y);
-				 }*/
-				if(y > 0 || y < t) {
-					return;
-				}
-				scroll.scrollTo(0, y);
-			}
-			/*注册事件*/
-			if(document.addEventListener) {
-				document.addEventListener('DOMMouseScroll', scrollFunc, false);
-			} //W3C
-			window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
 		},
 		initPageFun: function() {
 			var _self = this;
 			_self.pageParams.curPage = 1;
-			mui.init();
-			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							_self.pageParams.curPage = 1;
-							if(_self.isIndex == 1) {
-								_self.initFirstData(_self.projectId, _self.getFirstData);//, _self.roomId
-							}
-							_self.loadData(function() {
-								self.endPullDownToRefresh();
-								self.refresh(true);
-							});
-						}
-					},
-					up: {
-						auto: true,
-						contentrefresh: '正在加载...',
-						callback: function() {
-							var self = this;
-							_self.loadData(function(bool) {
-								self.endPullUpToRefresh(bool);
-							});
-						}
-					}
-				})
-
-			});
-            mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
+			// mui.init();
+			// mui.ready(function() {
+			// });
+            $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
               this.click();
             });
 		},
 		getFirstData: function(rs) {
 			var _self = this;
 			if(rs.data.hasOwnProperty("code")) {
-				msg(rs.data.message);
+                // msg(rs.data.message);
+                layer.open({
+                        content: rs.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				_self.loadStatus = false;
 				return;
 			}
@@ -649,10 +766,17 @@ export default {
 				 _self.firstInfo.name = rs.data.first.name;
 				 _self.firstInfo.size = rs.data.first_size;*/
 				_self.firstList = rs.data.firstList;
+				console.log(rs.data.firstList)
 				_self.loadStatus = true;
 			} else {
 				_self.loadStatus = false;
-				msg("当前项目尚未被审核，无法打开云盘")
+                // msg("当前项目尚未被审核，无法打开云盘")
+                layer.open({
+                        content: "当前项目尚未被审核，无法打开云盘"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 			}
 		},
 		getCurData: function(rs) {
@@ -663,11 +787,20 @@ export default {
 				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.curInfo.createTime = _self.formDate(rs.updateTime);
+			_self.curInfo.createTime = util.fnFormat(rs.updateTime,'yyyy-MM-dd')
 			_self.curInfo.id = rs.id;
 			_self.curInfo.name = rs.name;
 			_self.curInfo.size = rs.size;
 			document.getElementById("js-head-name").innerText = _self.curInfo.name;
+			if (_self.curInfo.name=="图纸及资料"){
+				//该系统文件下可以创建文件夹
+                _self.isSys = false;
+			}
+            if (_self.curInfo.name=="临时文件"){
+                //临时文件放开操作所有权限
+                _self.isOpeAll = true;
+            }
+
 			//完善分页参数
 			_self.pageParams.projectId = _self.projectId;
 			_self.pageParams.nodeId = _self.curInfo.id;
@@ -682,30 +815,8 @@ export default {
 			_self.pageParams.curPage = 1;
 			mui.init();
 			mui.ready(function() {
-				pullWidget = mui("#pullrefresh .mui-scroll").pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							_self.pageParams.curPage = 1;
-							_self.loadSearchData(function() {
-								self.endPullDownToRefresh();
-								self.refresh(true);
-							});
-						}
-					},
-					up: {
-						auto: true,
-						contentrefresh: '正在加载...',
-						callback: function() {
-							var self = this;
-							_self.loadSearchData(function(bool) {
-								self.endPullUpToRefresh(bool);
-							});
-						}
-					}
-				})
 			});
-            mui("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
+            $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
                 this.click();
             });
 		},
@@ -717,19 +828,6 @@ export default {
 			}
 			appApi.openNewWindow(setting.getPagePath() + "/dish/create_dir.html?pid=" + _self.curInfo.id);
 		},
-        operateShow: function() {
-            var _self = this;
-            if(_self.isSys) {
-                //系统目录
-                if(document.getElementById("uoload")!=null)
-	                document.getElementById("uoload").style.display = "none";
-                return false;
-            } else {
-                if(document.getElementById("uoload")!=null)
-	                document.getElementById("uoload").style.display = "";
-                return true;
-            }
-        },
 		showHeader: function() {
 			if(document.getElementById("pullrefresh"))
 				document.getElementById("pullrefresh").style.top = "84px";
@@ -740,7 +838,7 @@ export default {
 			if(document.getElementById("dish-tab"))
 				document.getElementById("dish-tab").style.top = "44px";
 			if(document.getElementById("js-dish-con"))
-				addClass(document.getElementById("js-dish-con"), "sift-content");
+				$("#js-dish-con").addClass("sift-content");
 			if(document.getElementById("dish_content"))
 				document.getElementById("dish_content").style.paddingTop = "44px";
 			//绑定后退事件
@@ -758,9 +856,16 @@ export default {
 			_self.editItem.suffix = suffix;
 			_self.editItem.status = status;
 			if(type == 1) { /*打开目录*/
-				var url = setting.getPagePath() + "/dish/open_common.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+                var url = "";
+                if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined)
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+				else
+					url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
 				if(id == _self.sysInfo.id || _self.isSys == true || _self.isSys == "true") {
 					url = url + "&isSys=true";
+				}
+				if( _self.isOpe == false || _self.isOpe == "false") {
+					url = url + "&isOpe=false";
 				}
 				if(_self.isShare) {
 					url = setting.getPagePath() + "/dish/share_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&isShare=true";
@@ -774,18 +879,26 @@ export default {
 			event.stopPropagation();
 			return;
 		},
-		openDirMini: function(id, isSys) {
+		openDirMini: function(id, isSys, isOpe) {
 			var arrays = window.location.href.split("?")[1].split("&");
 			var map = {};
-			for(i = 0; i < arrays.length; i++) {
+			for(let i = 0; i < arrays.length; i++) {
 				var param = arrays[i].split("=");
 				map[param[0]] = decodeURI(param[1]);
 			}
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
-			var url = setting.getPagePath() + "/dish/open_common.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
-			if(!_self.isPC) {
+            var url;
+            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
+            }else{
+				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+            }
+            if(isSys) {
 				url = url + "&isSys=true";
+			}
+			if(!isOpe){
+                url = url + "&isOpe=false";
 			}
 			window.appApi.openNewWindow(url);
 		},
@@ -805,7 +918,27 @@ export default {
 				return !_self.selectMode;
 			}
 		},
+		operateShow: function(type) {
+			var _self = this;
+            if(!_self.isOpe) {
+                //系统目录
+                if(document.getElementById("uoload")!=null)
+                    document.getElementById("uoload").style.display = "none";
+                // return false;
+            } else {
+                if(document.getElementById("uoload")!=null)
+                    document.getElementById("uoload").style.display = "";
+                // return true;
+            }
+            // 现在只要是文件都有操作权限
+			if (type==1){
+				return false;
+			}else {
+                return true;
+			}
+		},
 		itemEdit: function(id, type, name, suffix, status, userId, event) {
+
 			var _self = this;
 			/*if(_self.selectMode){
 			 msg("请先退出批量选择再进行此操作")
@@ -817,6 +950,7 @@ export default {
 			_self.editItem.type = type;
 			_self.editItem.suffix = suffix;
 			_self.editItem.status = status;
+            _self.editItem.isOpe = _self.isOpe;
 			if(userId == _self.curUserId || _self.projectManageId == _self.curUserId) {
 				_self.editItem.auth = true;
 			} else {
@@ -845,15 +979,27 @@ export default {
 		cancelItem: function(id, type, name, suffix, status, event) {
 			//标识作废 或取消作废
 			var _self = this;
-			var url = "/cdish/file/cancel";
+			var url ="/cdish/file/cancel";
 			this.$http.post(url, {
 				id: parseInt(id)
 			}).then(function(response) {
 				if(response.data.code == 0) {
-					msg(response.data.message);
-					refreshPage();
+                    // msg(response.data.message);
+                    layer.open({
+                        content: response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+					_self.refreshPage();
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content: response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				_self.showEditBox = false;
 			}).catch(function(error) {
@@ -873,19 +1019,31 @@ export default {
 			var okFun = function() {
 				var url = "";
 				if(type == 1) {
-					url = "/cdish/dir/delete";
+					url ="/cdish/dir/delete";
 				} else {
-					url = "/cdish/file/delete";
+					url ="/cdish/file/delete";
 				}
-				this.$http.post(url, {
+				_self.$http.post(url, {
 					id: parseInt(id)
 				}).then(function(response) {
 					if(response.data.code == 0) {
-						msg("删除成功");
-						refreshPage();
+                        // msg("删除成功");
+                        layer.open({
+                            content: "删除成功"
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                            ,anim:false
+                        });
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 					} else {
-						msg(response.data.message);
+                        // msg(response.data.message);
+                        layer.open({
+                                content: response.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
 					layer.closeAll();
@@ -901,24 +1059,42 @@ export default {
 			_self.dishConfirm(qtitle, qmsg, okFun);
 			_self.showEditBox = false;
 		},
-		itemDetail: function(id, type, name, suffix, status, event) {
-			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id)
+		itemDetail: function(id, type, name, suffix, status, event,isOpe) {
+			// appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
+			this.$router.push({path:'/static/webstatic/dish/file_detail.html',query:{from:"list",id:id,isOpe:isOpe}})
 		},
 		//电子签署 2017.11.21
 		sign:function (id,type,name,suffix,status,event) {
 			if(suffix!='.pdf'){
-				msg("暂只支持PDF文件的签章!");
+                // msg("暂只支持PDF文件的签章!");
+                layer.open({
+                        content:"暂只支持PDF文件的签章!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				return;
 			}
-			loading("文件签署中，请不要进行任何操作");
+			// loading("文件签署中，请不要进行任何操作");
+			Toast({
+				message: '文件签署中，请不要进行任何操作',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
-			this.$http.post(getUrl()+"/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
+			this.$http.post("/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
 				console.info(response.data.result);
 				layer.closeAll();
 				var res = response.data;
                 if(res.code==200){
 
                     msg("签署成功!");
+                    layer.open({
+                        content:"签署成功!"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
                     window.location.reload();
 
                 }
@@ -945,116 +1121,26 @@ export default {
 				fun();
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
-		loadData: function(fun) {
-			var _self = this;
-			var pageParams = _self.pageParams;
-			this.$http.post("/cdish/list", pageParams).then(function(response) {
-				if(response.data.code == 200) {
-					var rs = response.data;
-					var allPage = rs.result.endPage;
-					if(pageParams.curPage == 1) {
-						//首次 加载一次
-						_self.curList = rs.result.list;
-						undefined != fun && fun();
-						if(allPage > 1) {
-							document.getElementById("loadMore").style.display = "block";
-						}
-					} else {
-						_self.curList = _self.curList.concat(rs.result.list);
-						undefined != fun && fun(pageParams.curPage >= allPage);
-					}
-				} else {
-					undefined != fun && fun(true);
-					msg("系统出了点小状况，请稍后再试");
-				}
-				//console.log(_self.curList);
-				_self.pageParams.curPage++;
-				_self.initScroll();
-				_self.status = 1;
-			}).catch(function(error) {
-				console.log(error);
-			});
-		},
-		loadSearchData: function(fun) {
-			var _self = this;
-			var pageParams = _self.pageParams;
-			this.$http.post("/cdish/search", pageParams).then(function(response) {
-				if(response.data.code == 200) {
-					var rs = response.data;
-					var allPage = rs.result.endPage;
-					if(pageParams.curPage == 1) {
-						//首次 加载一次
-						_self.curList = rs.result.list;
-						undefined != fun && fun();
-						if(allPage > 1) {
-							document.getElementById("loadMore").style.display = "block";
-						}
-					} else {
-						_self.curList = _self.curList.concat(rs.result.list);
-						undefined != fun && fun(pageParams.curPage >= allPage);
-					}
-				} else {
-//					alert(1)
-					undefined != fun && fun(true);
-					msg("系统出了点小状况，请稍后再试");
-				}
-				_self.pageParams.curPage++;
-				_self.initScroll();
-				_self.status = 1;
-			}).catch(function(error) {
-				console.log(error);
-			});
-		},
 		uploadInit: function() {
 			var _self = this;
 			var html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 				'<input type="file" id="uploadWidget" multiple="multiple" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 				'</form>';
-			if(isApp && isIphoneOs) { //IOS
+			if(appApi.isApp && appApi.isIphoneOs) { //IOS
 				//IOS现在多选有问题，暂先只做单传
 				html = '<form id="uploadFrom" enctype="multipart/form-data">' +
 					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			widget = document.getElementById("uploadWidget");
-			widget.addEventListener("change", function(event) {
+			this.widget = document.getElementById("uploadWidget");
+			this.widget.addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
 				if(_self.isIndex == 1) {
 					//选择要上传的目录
 					console.info("选择目录");
-					var url = setting.getPagePath() + "/dish/upload_select.html?projectId=" + _self.projectId;
+					var url = getPagePath() + "/dish/upload_select.html?projectId=" + _self.projectId;
 					appApi.openNewWindow(url);
 				} else {
 					_self.uploadCallBack(this);
@@ -1062,15 +1148,20 @@ export default {
 			}, false);
 		},
 		uploadFile: function() {
-			widget.value = "";
-			return widget.click();
+			this.widget.value = "";
+			return this.widget.click();
 		},
 		uploadCallBack: function(event, id, isSys) {
-			if(widget.value == "") {
+			if(this.widget.value == "") {
 				return;
 			}
 			//			console.log(event.files[0])
-			loading("正在上传，请稍后...");
+			// loading("正在上传，请稍后...");
+			Toast({
+				message: '正在上传，请稍后...',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			//添加文件
 			/*var params = {
@@ -1141,35 +1232,62 @@ export default {
 			 });*/
 			setTimeout(function() {
 				//为保证能获取到base64，延时调用服务
-				if(fileBase64) {
-					formData.append('imageBase64', fileBase64);
-				}
+				// if(fileBase64) {
+				// 	formData.append('imageBase64', fileBase64);
+				// }
 
 				console.info("imageBase64====" + formData.imageBase64);
                 // var params = getParam(window.location.href);
                 // var roomId = params.roomId*1;
-                // formData.append('roomId', roomId);
-				this.$http.post("/cdish/file/upload", formData, config).then(function(res) {
+				// formData.append('roomId', roomId);
+
+				_self.$http.post("/cdish/file/upload", formData, config).then(function(res) {
 					layer.closeAll();
+					console.log(res);
 					if(res.data.code == 0) {
+										console.log(res);
 						var rs = res.data.result;
 						if(rs.fail_num != 0) {
-							msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
+                            // msg("已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！");
+                            layer.open({
+                                content:"已上传成功" + rs.success_num + "个文件，" + rs.fail_num + "上传失败！"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+							});
 						} else {
 							console.log(res)
-							msg("已上传成功" + rs.success_num + "个文件");
+                            // msg("已上传成功" + rs.success_num + "个文件");
+                            layer.open({
+                                content:"已上传成功" + rs.success_num + "个文件"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						}
-						widget.value = "";
-						refreshPage();
+						document.getElementById("uploadWidget").value = "";
+						_self.refreshPage();
 						appApi.broadcast("refreshPage()");
 						if(undefined != id) {
 							_self.openDirMini(id, isSys);
 						}
 					} else {
-						msg(res.data.message);
+                        // msg(res.data.message);
+                        layer.open({
+                                content:res.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
-					msg("上传出错");
+                    // msg("上传出错");
+                    layer.open({
+                                content:"上传出错"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
                     layer.closeAll();
                 });
 			}, 800);
@@ -1192,15 +1310,15 @@ export default {
 				}
 				// var URL = URL || webkitURL;
 				//获取照片方向角属性，用户旋转控制
-				EXIF.getData(file, function() {
-					// alert(EXIF.pretty(this));
-					EXIF.getAllTags(this);
-					//alert(EXIF.getTag(this, 'Orientation'));
-					//          alert(EXIF.getTag(this, 'Orientation'));
-					Orientation = EXIF.getTag(this, 'Orientation');
-					//                  alert(Orientation)
-					//return;
-				});
+				// EXIF.getData(file, function() {
+				// 	// alert(EXIF.pretty(this));
+				// 	EXIF.getAllTags(this);
+				// 	//alert(EXIF.getTag(this, 'Orientation'));
+				// 	//          alert(EXIF.getTag(this, 'Orientation'));
+				// 	Orientation = EXIF.getTag(this, 'Orientation');
+				// 	//                  alert(Orientation)
+				// 	//return;
+				// });
 
 				var oReader = new FileReader();
 				oReader.onload = function(e) {
@@ -1306,7 +1424,7 @@ export default {
 						//		              img.src=base64
 						//uploadImage(base64);
 						//              $("#myImage").attr("src", base64);
-						fileBase64 = base64; //赋值给全局变量
+						var fileBase64 = base64; //赋值给全局变量
 						var base64Data = base64;
 
 						function getBlobBydataURI(dataURI, type) {
@@ -1410,17 +1528,17 @@ export default {
 			var _self = this;
 			var html = '<iframe id="downloadWidget" class="mui-hidden"></iframe>';
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			downloadWidget = document.getElementById("downloadWidget");
+			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
-			return "/cdish/file/download?id=" + id;
+			return "http://java.winfreeinfo.com/cdish/file/download?id=" + id;
 		},
 		downloadFile: function(id, type, name, suffix, event) {
 			var _self = this;
-			if(isApp) {
+			if(appApi.isApp) {
 				appApi.openFile(_self.getFileUrl(id));
 			} else {
-				downloadWidget.src = _self.getFileUrl(id);
+				document.getElementById("downloadWidget").src = _self.getFileUrl(id);
 			}
 			_self.showEditBox = false;
 		},
@@ -1442,90 +1560,189 @@ export default {
 				case ".txt":
 					clazz += "txt";
 					break;
+                case ".TXT":
+                    clazz += "txt";
+                    break;
 				case ".doc":
 					clazz += "word";
 					break;
+                case ".DOC":
+                    clazz += "word";
+                    break;
 				case ".docm":
 					clazz += "word";
 					break;
+                case ".DOCM":
+                    clazz += "word";
+                    break;
 				case ".dotx":
 					clazz += "word";
 					break;
+                case ".DOTX":
+                    clazz += "word";
+                    break;
 				case ".dotm":
 					clazz += "word";
 					break;
+                case ".DOTM":
+                    clazz += "word";
+                    break;
 				case ".docx":
 					clazz += "word";
+                    break;
+                case ".DOCX":
+                    clazz += "word";
                     break;
 				case ".rtf":
 					clazz += "word";
 					break;
+                case ".RTF":
+                    clazz += "word";
+                    break;
 				case ".pdf":
 					clazz += "pdf";
 					break;
+                case ".PDF":
+                    clazz += "pdf";
+                    break;
 				case ".xls":
 					clazz += "excel";
 					break;
+                case ".XLS":
+                    clazz += "excel";
+                    break;
 				case ".ppt":
 					clazz += "ppt";
 					break;
+                case ".PPT":
+                    clazz += "ppt";
+                    break;
 				case ".pptx":
 					clazz += "ppt";
 					break;
+                case ".PPTX":
+                    clazz += "ppt";
+                    break;
 				case ".xlsx":
 					clazz += "excel";
 					break;
+                case ".XLSX":
+                    clazz += "excel";
+                    break;
 				case ".xlsm":
 					clazz += "excel";
 					break;
+                case ".XLSM":
+                    clazz += "excel";
+                    break;
 				case ".xltx":
 					clazz += "excel";
 					break;
+                case ".XLTX":
+                    clazz += "excel";
+                    break;
 				case ".xltm":
 					clazz += "excel";
 					break;
+                case ".XLTM":
+                    clazz += "excel";
+                    break;
 				case ".xlsb":
 					clazz += "excel";
 					break;
+                case ".XLSB":
+                    clazz += "excel";
+                    break;
 				case ".xlam":
 					clazz += "excel";
 					break;
+                case ".XLAM":
+                    clazz += "excel";
+                    break;
 				case ".rm":
 					clazz += "video";
 					break;
+                case ".RM":
+                    clazz += "video";
+                    break;
 				case ".rmvb":
 					clazz += "video";
 					break;
+                case ".RMVB":
+                    clazz += "video";
+                    break;
 				case ".wmv":
 					clazz += "video";
 					break;
+                case ".WMV":
+                    clazz += "video";
+                    break;
 				case ".avi":
 					clazz += "video";
 					break;
+                case ".AVI":
+                    clazz += "video";
+                    break;
 				case ".mp4":
 					clazz += "video";
 					break;
+                case ".MP4":
+                    clazz += "video";
+                    break;
 				case ".3gp":
 					clazz += "video";
 					break;
+                case ".3GP":
+                    clazz += "video";
+                    break;
 				case ".mkv":
 					clazz += "video";
 					break;
+                case ".MKV":
+                    clazz += "video";
+                    break;
 				case ".navi":
 					clazz += "video";
 					break;
+                case ".NAVI":
+                    clazz += "video";
+                    break;
 				case ".mov":
 					clazz += "video";
 					break;
+                case ".MOV":
+                    clazz += "video";
+                    break;
 				case ".asf":
 					clazz += "video";
 					break;
+                case ".ASF":
+                    clazz += "video";
+                    break;
 				case ".png":
+					clazz += "img";
+					break;
+				case ".jpg":
+					clazz += "img";
+					break;
+				case ".jpeg":
 					clazz += "img";
 					break;
 				case ".gif":
 					clazz += "img";
 					break;
+                case ".JPEG":
+                    clazz += "img";
+                    break;
+                case ".PNG":
+                    clazz += "img";
+                    break;
+                case ".JPG":
+                    clazz += "img";
+                    break;
+                case ".GIF":
+                    clazz += "img";
+                    break;
 				case ".zip":
 					clazz += "zip";
 					break;
@@ -1538,27 +1755,60 @@ export default {
 				case ".z":
 					clazz += "zip";
 					break;
-				case ".apk":
+                case ".ZIP":
+                    clazz += "zip";
+                    break;
+                case ".RAR":
+                    clazz += "zip";
+                    break;
+                case ".ARJ":
+                    clazz += "zip";
+                    break;
+                case ".Z":
+                    clazz += "zip";
+                    break;
+                case ".apk":
+                    clazz += "apk";
+                    break;
+				case ".APK":
 					clazz += "apk";
 					break;
 				case ".mmap":
 					clazz += "mmap";
 					break;
+                case ".MMAP":
+                    clazz += "mmap";
+                    break;
 				case ".mpg":
 					clazz += "mpg";
 					break;
+                case ".MPG":
+                    clazz += "mpg";
+                    break;
 				case ".csv":
 					clazz += "csv";
 					break;
+                case ".CSV":
+                    clazz += "csv";
+                    break;
 				case ".mpp":
 					clazz += "mpp";
 					break;
+                case ".MPP":
+                    clazz += "mpp";
+                    break;
 				case ".html":
 					clazz += "html";
 					break;
+                case ".HTML":
+                    clazz += "html";
+                    break;
 				case ".dwg":
 					clazz += "dwg";
 					break;
+                case ".DWG":
+                    clazz += "dwg";
+                    break;
 				default:
 					clazz += "unkown";
 					break;
@@ -1572,10 +1822,10 @@ export default {
 				text: text
 			};
 			setDishSort(val);
-			_self.curSort = val;
-			_self.pageParams.sortType = type;
-			_self.sortShow = false;
-			refreshPage();
+			this.curSort = val;
+			this.pageParams.sortType = type;
+			this.sortShow = false;
+			_self.refreshPage();
 		},
 		goSelectMode: function(e) {
 			var _self = this;
@@ -1586,9 +1836,9 @@ export default {
 			_self.showEdit = false;
 			//监听返回键
 			appApi.stopBack(function() {
-				app.selectMode = false;
+				selectMode = false;
 				appApi.resetBack();
-				app.backSelectMode();
+				backSelectMode();
 			})
 			//监听选中
 			//取消所有多选
@@ -1720,10 +1970,21 @@ export default {
             console.info(5)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要删除的文件或者文件夹");
+                // msg("请选择要删除的文件或者文件夹");
+                layer.open({
+					content:"请选择要删除的文件或者文件夹"
+					,skin: 'msg'
+					,time: 1 //2秒后自动关闭
+					,anim:false
+				});
 				return;
 			}
-			loading("删除中..")
+			// loading("删除中..")
+			Toast({
+				message: '删除中..',
+				position: 'center',
+				duration: 1000
+			});
 			itemStr = items.join(",");
 			//批量删除
 			var _self = this;
@@ -1737,14 +1998,32 @@ export default {
 						layer.closeAll();
 						var rs = response.data.result;
 						if(rs.fail_num != 0) {
-							msg("已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！");
+                            // msg("已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！");
+                            layer.open({
+                                content:"已成功删除" + rs.success_num + "项，" + rs.fail_num + "项删除失败！"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						} else {
-							msg("已成功删除" + rs.success_num + "项");
+                            // msg("已成功删除" + rs.success_num + "项");
+                            layer.open({
+                                content:"已成功删除" + rs.success_num + "项"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						}
 						//msg("已成功删除" + response.data.result + "个文件或者文件夹");
-						refreshPage();
+						_self.refreshPage();
 					} else {
-						msg(response.data.message);
+                        // msg(response.data.message);
+                        layer.open({
+                                content:response.data.message
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 					}
 				}).catch(function(error) {
 					layer.closeAll();
@@ -1756,8 +2035,26 @@ export default {
 			_self.dishConfirm("文件（夹）删除", qmsg, okFun);
 			_self.backSelectMode();
 		},
+		refreshPage() {
+			// console.log(this.isIndex)
+            if(this.pullWidget) {
+                this.pullWidget.pullDownLoading();
+            }
+            if(this.isIndex == 1) {
+                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
+                    initFirstData(projectId, getFirstData, roomId);//, roomId
+                else
+                    initFirstData(projectId, getFirstData);//, roomId
+            }
+        },
 		batchCopy: function() {
-			msg("功能开发中");
+            // msg("功能开发中");
+            layer.open({
+                content:"功能开发中"
+                ,skin: 'msg'
+                ,time: 1 //2秒后自动关闭
+                ,anim:false
+            });
 		},
 		batchCut: function(ids) {
 			//移动
@@ -1771,7 +2068,13 @@ export default {
 				items = _self.getSelectVal();
 			}
 			if(items.length == 0) {
-				msg("请选择要移动的文件或者文件夹");
+                // msg("请选择要移动的文件或者文件夹");
+                layer.open({
+                    content:"请选择要移动的文件或者文件夹"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			//loading("移动中..")
@@ -1781,7 +2084,13 @@ export default {
 			var moveType = 0;
 			if(_self.isSys) {
 				if(_self.selectHasDir) {
-					msg("标准目录下文件夹不允许移动");
+                    // msg("标准目录下文件夹不允许移动");
+                    layer.open({
+                        content:"标准目录下文件夹不允许移动"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 					return;
 				} else {
 					moveType = 1;
@@ -1817,7 +2126,13 @@ export default {
             console.info(7)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要发送的文件");
+                // msg("请选择要发送的文件");
+                layer.open({
+                    content:"请选择要发送的文件"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1838,7 +2153,13 @@ export default {
             console.info(8)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要分享的文件或者文件夹");
+                // msg("请选择要分享的文件或者文件夹");
+                layer.open({
+                    content:"请选择要分享的文件或者文件夹"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1857,7 +2178,12 @@ export default {
 			_self.shareSetShow = true;
 		},
 		subShare: function() {
-			loading("创建分享中...")
+			// loading("创建分享中...")
+			Toast({
+				message: '创建分享中..',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			var type = 1;
 			var types = document.getElementsByName("deadType");
@@ -1882,12 +2208,19 @@ export default {
 				deadTime: deadTime
 			};
 			this.$http.post("/cdish/share", params).then(function(response) {
+				console.log(response);
 				if(response.data.code == 0) {
 					console.info(response.data.result);
 					var rs = response.data.result;
 					console.info("创建分享成功");
-					msg("分享创建成功");
-					/*var url = "/share/detail?shareId=" + rs.shareId;
+                    // msg("分享创建成功");
+                    layer.open({
+                        content:"分享创建成功"
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
+					/*var url = getUrl() + "/share/detail?shareId=" + rs.shareId;
 					 var name = 'Hi，我正在使用建云信融，给大家分享"'+rs.shareName;
 					 if(rs.shareSize = 1){
 					 name+='"，快来看看吧~';
@@ -1895,16 +2228,25 @@ export default {
 					 name+='"(等"'+rs.shareSize+'"个文件)，快来看看吧~';
 					 }*/
 					//var share id =
-					var url = setting.getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
-					appApi.openNewWindow(url);
+					// var url = setting.getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
+					// appApi.openNewWindow(url);
+					this.$router.push({path:'/static/webstatic/contacts/select_friend.html',query:{operate:1,token:rs.shareId}})
 					setTimeout(function() {
 						appApi.resetBack();
 						history.go(0);
 					}, 1000)
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content:response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
-				layer.closeAll();
+				setTimeout(function () {
+                    layer.closeAll();
+                },1000)
 			}).catch(function(error) {
 				layer.closeAll();
 				warm("创建分享出错")
@@ -1951,7 +2293,13 @@ export default {
 							})
 						}
 						if(_self.externalPerson.length == 0) {
-							msg("外部人员均未设置，无法发起文件确认")
+                            // msg("外部人员均未设置，无法发起文件确认")
+                            layer.open({
+                                content:"外部人员均未设置，无法发起文件确认"
+                                ,skin: 'msg'
+                                ,time: 1 //2秒后自动关闭
+                                ,anim:false
+                            });
 						} else {
 							//显示外部人员列表
 						}
@@ -1962,7 +2310,13 @@ export default {
 			});
 		},
 		batchAffirm: function() {
-			msg("功能开发中");
+            // msg("功能开发中");
+            layer.open({
+                content:"功能开发中"
+                ,skin: 'msg'
+                ,time: 1 //2秒后自动关闭
+                ,anim:false
+            });
 		},
 		batchCollect: function() {
 			var _self = this,
@@ -1971,7 +2325,13 @@ export default {
             console.info(9)
 			items = _self.getSelectVal();
 			if(items.length == 0) {
-				msg("请选择要收藏的文件");
+                // msg("请选择要收藏的文件");
+                layer.open({
+                    content:"请选择要收藏的文件"
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                    ,anim:false
+                });
 				return;
 			}
 			itemStr = items.join(",");
@@ -1979,8 +2339,9 @@ export default {
 			_self.backSelectMode();
 		},
 		doSearch: function() {
-			var _self = this;
-			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			// var _self = this;
+			// appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			this.$router.push({path:'/static/webstatic/dish/search.html',query:{projectSN:this.projectId}})
 		},
 		collectCheck: function(_id, _type) {
 			var _self = this;
@@ -2005,7 +2366,13 @@ export default {
 					}
 					_self.showCollect = true;
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+                    layer.open({
+                        content:response.data.message
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                        ,anim:false
+                    });
 				}
 				layer.closeAll();
 			}).catch(function(error) {
@@ -2030,10 +2397,20 @@ export default {
 						_self.editItem.collectStatus = false;
 					}
 				} else {
-					msg(response.data.message);
+                    // msg(response.data.message);
+					Toast({
+						message: response.data.message,
+						position: 'bottom',
+						duration: 1000
+					});
 				}
 				layer.closeAll();
-				msg(response.data.message);
+                // msg(response.data.message);
+                Toast({
+					message: response.data.message,
+					position: 'bottom',
+					duration: 1000
+				});
 				_self.showEditBox = false;
 			}).catch(function(error) {
 				layer.closeAll();
@@ -2045,125 +2422,132 @@ export default {
 </script>
 
 <style scoped>
-    .mui-pull-top-pocket {
-        top: 0 !important;
-    }
-    .empty-content{
-        padding: 30px 15px;
-        text-align: center;
-        color: #ccc;
-        padding-right: 45px;
-    }
-    html,
-    .mui-bar~.mui-content .mui-fullscreen {
-        top: 44px;
-        height: auto;
-    }
-    .mui-pull-top-tips {
-        position: absolute;
-        top: -20px;
-        left: 50%;
-        margin-left: -25px;
-        width: 40px;
-        height: 40px;
-        border-radius: 100%;
-        z-index: 3;
-    }
-    .mui-bar~.mui-pull-top-tips {
-        top: 24px;
-    }
-    .mui-segmented-control{top:0px}
-    .mui-pull-top-wrapper {
-        width: 42px;
-        height: 42px;
-        display: block;
-        text-align: center;
-        background-color: #efeff4;
-        border: 1px solid #ddd;
-        border-radius: 25px;
-        background-clip: padding-box;
-        box-shadow: 0 4px 10px #bbb;
-        overflow: hidden;
-    }
-    .mui-pull-top-tips.mui-transitioning {
-        -webkit-transition-duration: 200ms;
-        transition-duration: 200ms;
-    }
-    .mui-pull-top-tips .mui-pull-loading {
-        /*-webkit-backface-visibility: hidden;
-        -webkit-transition-duration: 400ms;
-        transition-duration: 400ms;*/
+.mui-pull-top-pocket {
+			top: 0 !important;
+		}
+		.empty-content{
+			padding: 30px 15px;
+			text-align: center;
+			color: #ccc;
+			padding-right: 45px;
+		}
+		html,
+		.mui-bar~.mui-content .mui-fullscreen {
+			top: 44px;
+			height: auto;
+		}
+		.mui-pull-top-tips {
+			position: absolute;
+			top: -20px;
+			left: 50%;
+			margin-left: -25px;
+			width: 40px;
+			height: 40px;
+			border-radius: 100%;
+			z-index: 3;
+		}
+		.mui-bar~.mui-pull-top-tips {
+			top: 24px;
+		}
+		.mui-segmented-control{top:0px}
+		.mui-pull-top-wrapper {
+			width: 42px;
+			height: 42px;
+			display: block;
+			text-align: center;
+			background-color: #efeff4;
+			border: 1px solid #ddd;
+			border-radius: 25px;
+			background-clip: padding-box;
+			box-shadow: 0 4px 10px #bbb;
+			overflow: hidden;
+		}
+		.mui-pull-top-tips.mui-transitioning {
+			-webkit-transition-duration: 200ms;
+			transition-duration: 200ms;
+		}
+		.mui-pull-top-tips .mui-pull-loading {
+			/*-webkit-backface-visibility: hidden;
+			-webkit-transition-duration: 400ms;
+			transition-duration: 400ms;*/
 
-        margin: 0;
-    }
-    .mui-pull-top-wrapper .mui-icon,
-    .mui-pull-top-wrapper .mui-spinner {
-        margin-top: 7px;
-    }
-    .mui-pull-top-wrapper .mui-icon.mui-reverse {
-        /*-webkit-transform: rotate(180deg) translateZ(0);*/
-    }
-    .mui-pull-bottom-tips {
-        text-align: center;
-        font-size: 15px;
-        line-height: 40px;
-        color: #777;
-    }
-    .mui-pull-top-canvas {
-        overflow: hidden;
-        border-radius: 40px;
-        box-shadow: 0 4px 10px #bbb;
-        width: 40px;
-        height: 40px;
-        margin: 0 auto;
-    }
-    .mui-pull-top-canvas canvas {
-        width: 40px;
-    }
-    .mui-fullscreen .mui-segmented-control~.mui-slider-group{
-        bottom:0px !important;
-    }
-    .mui-slider-item{
-        border-top: 0px !important;
-    }
-    .menu-item-name{
-        text-align: center;
-    }
-    /*.menu-item{
-        background: #fff;
-        border-radius: 4px;
-    }*/
-    .mui-table-view-cell:after{
-        height: 0;
-    }
-    .mui-row{
-        background: #f6f6f6;
-    }
-    .remov{
-        width: 100%;
-        height: 3rem;
-        font-size: 1.2rem;
-        text-align: center;
-        line-height: 3rem;
-        background: #fff;
-        margin-bottom: 0;
-    }
-    .floorzr{
-        z-index: 1001;
-    }
-    .mask{
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        background: #000;
-        opacity: 0;
-        z-index: 1000;
-        display: none;
-    }
-    .list_select{padding-bottom:158px}
-    .img_move{
-        transform:rotate(90deg);
-        -ms-transform:rotate(90deg); 	/* IE 9 */
-        -webkit-transform:rotate(90deg);
-    }
+			margin: 0;
+		}
+		.mui-pull-top-wrapper .mui-icon,
+		.mui-pull-top-wrapper .mui-spinner {
+			margin-top: 7px;
+		}
+		/* .mui-pull-top-wrapper .mui-icon.mui-reverse {
+			-webkit-transform: rotate(180deg) translateZ(0);
+		} */
+		.mui-pull-bottom-tips {
+			text-align: center;
+			font-size: 15px;
+			line-height: 40px;
+			color: #777;
+		}
+		.mui-pull-top-canvas {
+			overflow: hidden;
+			border-radius: 40px;
+			box-shadow: 0 4px 10px #bbb;
+			width: 40px;
+			height: 40px;
+			margin: 0 auto;
+		}
+		.mui-pull-top-canvas canvas {
+			width: 40px;
+		}
+		.mui-fullscreen .mui-segmented-control~.mui-slider-group{
+			bottom:0px !important;
+		}
+		.mui-slider-item{
+			border-top: 0px !important;
+		}
+		.menu-item-name{
+			text-align: center;
+		}
+		/*.menu-item{
+			background: #fff;
+			border-radius: 4px;
+		}*/
+		.mui-table-view-cell:after{
+			height: 0;
+		}
+		.mui-row{
+			background: #f6f6f6;
+		}
+		.remov{
+			width: 100%;
+			height: 3rem;
+			font-size: 1.2rem;
+			text-align: center;
+			line-height: 3rem;
+			background: #fff;
+			margin-bottom: 0;
+		}
+		.floorzr{
+			z-index: 1001;
+		}
+		.mask{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			background: #000;
+			opacity: 0;
+			z-index: 1000;
+			display: none;
+		}
+		.list_select{padding-bottom:158px}
+		.img_move{
+			transform:rotate(90deg);
+			-ms-transform:rotate(90deg); 	/* IE 9 */
+			-webkit-transform:rotate(90deg);
+        }
+		.mint-loadmore{
+			min-height: 590px
+		}
+		.mui-scroll-wrapper{
+			position: static;
+			margin-top: 45px;
+		}
 </style>

@@ -13,7 +13,7 @@
 		<div v-for="(m, key) in search_items" :key="key">
 		<div class="module01" v-if="m.items.length>0">
 			<div class="module01-head text"><span class="title line-title">{{m.fenzutitle}}</span></div>
-			<ul class="mui-table-view mui-grid-view module-body">
+			<ul class="mui-table-view mui-grid-view module-body flex">
 				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-text-center" @click="onFuwuclick(mm.url)" v-for="(mm,index) in m.items" :key="index">
 					<div class="menu-item">
 						<span :class="['mui-icon iconfont '+ (mm.iconname==''?'icon-zixun':mm.iconname)]"></span>
@@ -114,6 +114,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .flex{
+        display: flex;
+        flex-wrap: wrap;
+    }
 </style>

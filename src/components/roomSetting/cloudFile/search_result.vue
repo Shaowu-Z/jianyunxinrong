@@ -20,7 +20,7 @@
                     <div id="js-dish-con" class="cloud-content">
                         <div v-if="curList.length != 0 && status == 1">
                             <ul class="mui-table-view mui-table-view-striped">
-                                <div v-for="obj in curList">
+                                <div v-for="(obj,index) in curList" :key="index">
                                     <li class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
                                         <a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
                                             <div class="oa-contact-cell mui-table">
