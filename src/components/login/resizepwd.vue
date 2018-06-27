@@ -40,6 +40,9 @@ export default {
             wait:60
         }
     },
+    created(){
+        
+    },
     methods:{
         getcaptcode:function(){
             var self = this;
@@ -163,6 +166,10 @@ export default {
     html,
     body {
         height: 100%;
+        background-color: #ffffff!important;
+    }
+    #app .mui-content{
+        background-color: #ffffff!important;
     }
     .register-form{
         background: #ffffff;

@@ -79,7 +79,7 @@ export default {
 		var _self=this
 		setTimeout(function(){
             _self.loginParams.deviceInfo = _self.getDeviceInfo();
-        },500)
+		},500)
 	},
     methods:{
 		doLogin:function(params){
@@ -193,7 +193,8 @@ export default {
                 params.invType = url_params.type;
 			}
 			console.log("...........",this.regParams)
-			if(!this.myreg.test(this.params)){
+			alert(this.regParams.certCode)
+			if(!this.myreg.test(this.regParams.certCode)){
 				alert('请正确填写手机号')
 				return false;
 			} else if(this.regParams.eventId == '' || this.regParams.eventId == null){
@@ -255,7 +256,9 @@ export default {
 				alert('请正确填写手机号');
 				$("#msgbutton").attr("disabled", true);
 			} else {
-				this.$http.post('/common_api/fetch_captcha',param)
+				var obj=new Object()
+				obj.phoneNum=$("#phonenum").val()
+				this.$http.post('/common_api/fetch_captcha',obj)
 				.then(function(response){
 					if (response.data.code == 200) {
 						console.log("yanshengma",response)
@@ -300,5 +303,11 @@ export default {
     @import "../../assets/css/common/layer.less";
 	.register-form{
 		margin-top: 0
+	}
+	.mui-content{
+		background:#fff
+	}
+	label{
+		text-align: left
 	}
 </style>
