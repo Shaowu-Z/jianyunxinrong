@@ -23,11 +23,19 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+
   routes: [
     {
       path: '/',
       redirect: '/static/webstatic/register/login.html'
     },
+    
+      { 
+        path: '*', 
+        redirect: "/index.html"
+      },
+     
+    
     work,
     market,
     myHome,

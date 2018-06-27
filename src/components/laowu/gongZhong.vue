@@ -57,7 +57,7 @@ export default {
     var _self = this;
     $.ajax({
       type: "post",
-      url: "/api/project_work_api/get_all_gongzhong",
+      url: "/project_work_api/get_all_gongzhong",
       data: {
         keyword: ""
       },
@@ -100,7 +100,7 @@ export default {
       var _self=this
       $.ajax({
         type: "post",
-        url: "/api/project_work_api/get_all_gongzhong",
+        url: "/project_work_api/get_all_gongzhong",
         data: {
           keyword: keyword
         },
@@ -133,7 +133,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 html,
 body {
   height: 100%;

@@ -628,7 +628,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .mui-content {
   background: #fff;
   text-align: left;

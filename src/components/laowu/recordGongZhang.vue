@@ -284,7 +284,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 section {
   padding-bottom: 40px;
 }

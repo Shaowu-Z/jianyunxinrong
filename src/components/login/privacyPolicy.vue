@@ -157,7 +157,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     @import '../../assets/css/common/style.less';
     @import '../../assets/css/common/icons-extend.less';
     p{text-align: left}

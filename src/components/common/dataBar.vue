@@ -1,29 +1,30 @@
 <template>
     <div id="databox">
     
-        <ul>
+        <!-- <ul> -->
     
-            <li class="mui-table-view-cell mui-input-row" >
+            <!-- <li class="mui-table-view-cell mui-input-row" >
     
                 <a class="mui-navigate-right" href="#">
     
-                    <label v-text="title">日期</label>
+                    <label v-text="title">日期</label> -->
     
                     <!-- <input type="text" v-model="form.MissionStartDate" @click="app.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
-                    <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="openPicker">
+                    <input type="text" name="start" id="start" v-model='form.MissionStartDate' readonly="readonly" placeholder="请选择" @click="openPicker">
 
                     <mt-datetime-picker  ref="picker" v-model="pickerVisible" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm">
                     </mt-datetime-picker>
     
-                </a>
+                <!-- </a>
     
             </li>
     
-        </ul>
+        </ul> -->
     
     </div>
 </template>
 <script>
+import util from "../../playform/util.js";
 import { DatetimePicker } from "mint-ui";
 import { Toast } from "mint-ui";
     export default {
@@ -37,6 +38,7 @@ import { Toast } from "mint-ui";
         },
         data(){
             return{
+                util:util,
                 // datanow:'',
                 pickerVisible: new Date(),
                 form:{MissionStartDate:''}
@@ -44,6 +46,7 @@ import { Toast } from "mint-ui";
         },
         created:function(){
             this.form.MissionStartDate=this.datanow
+
         },
         methods:{
             openPicker() {
@@ -59,7 +62,8 @@ import { Toast } from "mint-ui";
         //向父组件传值
         // this.$emit('upup',localtime);
         this.$emit('datatoParent',localtime)
-        _self.form.MissionStartDate = localtime;
+        // _self.form.MissionStartDate = localtime;
+        _self.form.MissionStartDate =util.fnFormat(localtime,"yyyy-MM-dd")
 		_self.show = true;
 		// Toast({
 		// 	message: "已选择 " + localtime,
@@ -70,7 +74,7 @@ import { Toast } from "mint-ui";
         }
     };
 </script>
-<style>
+<style scoped>
     #databox{
         float: left
     }

@@ -187,7 +187,7 @@ var laowu_main = {
         console.log("参数",_self.reqParams)
         $.ajax({
             type: "post",
-            url: "/api/project_work_api/find_record",
+            url: "/project_work_api/find_record",
             async: false,
             data:  JSON.stringify(_self.reqParams),
             datatype: "json",

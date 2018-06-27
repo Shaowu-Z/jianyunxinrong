@@ -503,9 +503,13 @@ export default {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
     .txt{
         border-bottom:1px solid #ccc;
         padding-left:10px 15px; 
         margin-left:11px
     }
+=======
+
+>>>>>>> f0d54a0c625f49e7c07f15fa5f4d88895fa16cfe
 </style>

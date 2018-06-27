@@ -617,7 +617,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 @import "../../../assets/css/common/mint";
 .mui-inner-wrap {
   padding-top: 44px;

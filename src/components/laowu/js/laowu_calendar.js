@@ -25,7 +25,7 @@ var laowu_calendar={
     getDataByMonthForManage:function(month) {
         $.ajax({
             type: "get",
-            url: "/api/attendance_api/calendar_commonList",
+            url: "/attendance_api/calendar_commonList",
             async: false,
             data: {
                 "userid":laowu_common.userId,
@@ -78,7 +78,7 @@ var laowu_calendar={
 
     $.ajax({
         type: "post",
-        url: "/api/project_work_api/find_record_month",
+        url: "/project_work_api/find_record_month",
         async: false,
         data: JSON.stringify(obj),
         datatype: "json",
@@ -129,7 +129,7 @@ var laowu_calendar={
 
     $.ajax({
         type: "post",
-        url: "/api/project_work_api/find_att_record_month",
+        url: "/project_work_api/find_att_record_month",
         async: false,
         data: JSON.stringify(obj),
         datatype: "json",
