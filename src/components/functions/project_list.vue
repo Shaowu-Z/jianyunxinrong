@@ -17,14 +17,14 @@
                         <ul class="mui-table-view eg-table-view search-list">
                             <!--工头、材料采购商项目列表-->
                             <div v-for="(item,index) in items" :key="index">
-                                <li class="mui-table-view-cell">
+                                <li class="mui-table-view-cell txt">
                                     <a @click="jump(item.serialNum,index)">
                                         <div class="view-pic">
                                             <img v-if="item.img_url!=undefined && item.img_url!='undefined'" v-bind:src=item.img_url>
                                             <img v-if="item.img_url==undefined || item.img_url=='undefined'" src="../../assets/images/defualt.png">
                                             <!--<img src="../../images/defualt.png">-->
                                         </div>
-                                        <h4 class="oa-title" v-text="item.ProjectName"></h4>
+                                        <h4 class="oa-title text" v-text="item.ProjectName"></h4>
                                         <p class="mui-clearfix"><span class="mui-pull-left">开工日期：<span class="data" v-text="item.MissionStartDateOriginal"></span></span>
                                         </p>
                                     </a>
@@ -55,7 +55,7 @@
                                             </div>
                                             <div class="oa-contact-content mui-table-cell">
                                                 <h4 class="oa-contact-name" v-text="site.name"></h4>
-                                                <p class="oa-contact-email"><span v-text='(new Date(site.updateDate))'></span><span v-text="site.size"></span></p>
+                                                <p class="oa-contact-email text"><span v-text='site.updateDate'></span><span v-text="site.size"></span></p>
                                             </div>
                                         </div>
                                     </a>
@@ -88,7 +88,7 @@
                                         </div>
                                         <div class="oa-contact-content mui-table-cell">
                                             <h4 class="oa-contact-name" v-text="site.name+site.suffix"></h4>
-                                            <p class="oa-contact-email"><span v-text='(new Date(site.updateDate))'></span><span v-text="site.size"></span></p>
+                                            <p class="oa-contact-email text"><span v-text='site.updateDate'></span><span v-text="site.size"></span></p>
                                         </div>
                                     </div>
                                 </li>
@@ -105,6 +105,7 @@
 <script>
 import {BackCookie} from '../../playform/common'
 import setting from '../../playform/config'
+import util from '../../playform/util'
 export default {
     data () {
         return {
@@ -124,7 +125,8 @@ export default {
             parentid:[],
             backzr:'',
             backstart:'',
-            userid : BackCookie.getCookie("userid")   
+            userid : BackCookie.getCookie("userid"),
+            // filesize: "0KB", //选中文件的大小   
         }
     },
     created() {
@@ -191,8 +193,10 @@ export default {
                 if(response.data.code == 0) {
                     //								console.log(response.data)
                     // layer.close(loading("加载中"))
-                                                    console.log(response.data.result.data.firstList);
                     _self.sites = response.data.result.data.firstList;
+                    for(let i=0;i<_self.sites.length;i++){
+                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                    }
 //								_self.parentid.push(response.data.result.data.firstList[0].id)
                     _self.projectname = response.data.result.data.projectName;
                     //										_self.parentId=response.data.result.data.firstList[0].parentId
@@ -211,6 +215,9 @@ export default {
                     _self.parentid.push(response.data.result.data.result[0].parentId)
                     _self.sites = response.data.result.data.result
                 }
+                for(let i=0;i<_self.sites.length;i++){
+                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                    }
             })
         },
         sonflie: function(size, name, urls, index, nameid, fileType) {
@@ -232,9 +239,11 @@ export default {
                 }
             } else {
                 //删除取消选中的附件
-                _self.list.remove(nameid)
-                _self.listsize.remove(size)
-                console.log("nameid="+nameid)
+                console.log(index,11111111111111)
+                console.log(_self.list)
+                _self.list.splice(index,1)
+                _self.listsize.splice(index,1)
+                // console.log("nameid="+nameid)
                 for(var i=0;i<_self.fileshares.length;i++){
                     if(_self.fileshares[i].id==nameid){
                         _self.fileshares.splice(i,1)
@@ -246,7 +255,7 @@ export default {
 
             _self.filenum = _self.list.length
             //filenum filesizeshow 
-            app.filesize()
+            this.filesize()
         },
         //计算选中文件的大小
         filesize: function() {
@@ -291,7 +300,6 @@ export default {
             _self.parentid.splice(_self.parentid.length-1,1);
             console.log(_self.parentid)
             var parid=_self.parentid[_self.parentid.length-1]
-                console.log(parid)
                 if(parid==undefined){
                     back="&userid=" + this.userid
                 }else{
@@ -303,6 +311,9 @@ export default {
                         console.log(response.data)
                         if(parid==undefined){
                             _self.sites = response.data.result.data.firstList;
+                            for(let i=0;i<_self.sites.length;i++){
+                                _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                            }
                             _self.backstart=1
                         }else{
                             _self.sites = response.data.result.data.result
@@ -339,10 +350,11 @@ export default {
                     "fileSize":_self.fileshares[i].size,
                     "fileType":_self.fileshares[i].fileType
                 })
-//							if(i==(_self.fileshares.length-1)){
-//			//					console.log(param);
-////								appApi.setSelectData(param);
-//							}
+                console.log(_self.fileshares,'发名片');
+							if(i==(_self.fileshares.length-1)){
+								
+								appApi.setSelectData(param);
+							}
             }
 //						alert(JSON.stringify(param))
             appApi.setSelectData(param)
@@ -490,6 +502,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .txt{
+        border-bottom:1px solid #ccc;
+        padding-left:10px 15px; 
+        margin-left:11px
+    }
 </style>

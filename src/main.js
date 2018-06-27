@@ -11,6 +11,7 @@ import mui from "./playform/mui.js";
 import phonePy from "./playform/py.js";
 import "./playform/alert.js";
 import "./playform/layer.js";
+import "./playform/util.js";
 import './assets/css/common/mui.less'
 import './assets/css/common/mui.min.less'
 import './assets/css/common/icons-extend.less';

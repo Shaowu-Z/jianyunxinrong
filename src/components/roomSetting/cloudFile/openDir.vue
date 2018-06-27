@@ -31,7 +31,7 @@
                     <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
                 </ul>
             </div>
-			<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore>
+			<!-- <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore> -->
             <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top:51px" v-bind:class="{list_select:selectMode}">
                 <div class="mui-scroll">
 					<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="50">
@@ -39,12 +39,12 @@
 						
                         <!--搜索入口-->
                         <div class="cloud-search">
-                            <a class="search-inner" href="javascript:;" @tap="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
+                            <a class="search-inner" href="javascript:;" @click="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
                         </div>
                         <div v-if="curList.length != 0 && status == 1">
 								<ul class="mui-table-view mui-table-view-striped">
 									<div v-for="(obj,index) in curList" :key="index">
-										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
+										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
 											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
 												<div class="oa-contact-cell mui-table">
 													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
@@ -76,13 +76,12 @@
 													</div>
 													<div class="oa-contact-content mui-table-cell">
 														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
-														<p class="oa-contact-email">
+														<p class="oa-contact-email text">
 															<span v-text="obj.createName"></span>
 															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
 															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
-															<span>{{obj.updateDate | formDate}}</span>
+															<span>{{obj.updateDate}}</span>
 															<span v-text="obj.size"></span>
-
 														</p>
 													</div>
 												</div>
@@ -360,7 +359,8 @@ import setting from '../../../playform/config'
 import {getParam,BackCookie,setDishSort,getDishSort} from '../../../playform/common'
 import mui from '../../../playform/mui'
 // import  '../../../playform/mui.pullToRefresh'
-import { Loadmore } from 'mint-ui'
+import { Loadmore,Toast } from 'mint-ui'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -574,7 +574,10 @@ export default {
 					var rs = response.data;
 					var allPage = rs.result.endPage;
 					_self.curList = response.data.result.list;
-					console.log(_self.curList.length);
+					for(let i=0;i<_self.curList.length;i++){
+						_self.curList[i].updateDate = util.fnFormat(_self.curList[i].updateDate,'yyyy-MM-dd')
+					}
+					console.log(_self.curList,111111111111111);
 				} else {
                     layer.open({
                         content:"系统出了点小状况，请稍后再试!"
@@ -698,8 +701,8 @@ export default {
 			var _self = this;
 			_self.pageParams.curPage = 1;
 			// mui.init();
-			mui.ready(function() {
-			});
+			// mui.ready(function() {
+			// });
             $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
               this.click();
             });
@@ -751,7 +754,7 @@ export default {
 				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.curInfo.createTime = _self.formDate(rs.updateTime);
+			_self.curInfo.createTime = util.fnFormat(rs.updateTime,'yyyy-MM-dd')
 			_self.curInfo.id = rs.id;
 			_self.curInfo.name = rs.name;
 			_self.curInfo.size = rs.size;
@@ -1038,7 +1041,12 @@ export default {
                     });
 				return;
 			}
-			loading("文件签署中，请不要进行任何操作");
+			// loading("文件签署中，请不要进行任何操作");
+			Toast({
+				message: '文件签署中，请不要进行任何操作',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			this.$http.post("/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
 				console.info(response.data.result);
@@ -1079,36 +1087,6 @@ export default {
 				fun();
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
 		uploadInit: function() {
 			var _self = this;
 			var html = '<form id="uploadFrom" enctype="multipart/form-data">' +
@@ -1143,7 +1121,12 @@ export default {
 				return;
 			}
 			//			console.log(event.files[0])
-			loading("正在上传，请稍后...");
+			// loading("正在上传，请稍后...");
+			Toast({
+				message: '正在上传，请稍后...',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			//添加文件
 			/*var params = {
@@ -1513,7 +1496,7 @@ export default {
 			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
-			return getUrl() + "/cdish/file/download?id=" + id;
+			return "http://java.winfreeinfo.com/cdish/file/download?id=" + id;
 		},
 		downloadFile: function(id, type, name, suffix, event) {
 			var _self = this;
@@ -1954,14 +1937,19 @@ export default {
 			if(items.length == 0) {
                 // msg("请选择要删除的文件或者文件夹");
                 layer.open({
-                                content:"请选择要删除的文件或者文件夹"
-                                ,skin: 'msg'
-                                ,time: 1 //2秒后自动关闭
-                                ,anim:false
-                            });
+					content:"请选择要删除的文件或者文件夹"
+					,skin: 'msg'
+					,time: 1 //2秒后自动关闭
+					,anim:false
+				});
 				return;
 			}
-			loading("删除中..")
+			// loading("删除中..")
+			Toast({
+				message: '删除中..',
+				position: 'center',
+				duration: 1000
+			});
 			itemStr = items.join(",");
 			//批量删除
 			var _self = this;
@@ -2154,7 +2142,12 @@ export default {
 			_self.shareSetShow = true;
 		},
 		subShare: function() {
-			loading("创建分享中...")
+			// loading("创建分享中...")
+			Toast({
+				message: '创建分享中..',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			var type = 1;
 			var types = document.getElementsByName("deadType");
@@ -2309,8 +2302,9 @@ export default {
 			_self.backSelectMode();
 		},
 		doSearch: function() {
-			var _self = this;
-			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			// var _self = this;
+			// appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			this.$router.push({path:'/static/webstatic/dish/search.html',query:{projectSN:this.projectId}})
 		},
 		collectCheck: function(_id, _type) {
 			var _self = this;

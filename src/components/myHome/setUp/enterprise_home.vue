@@ -2,6 +2,7 @@
     <div id='main_content'>
         <header class="mui-bar mui-bar-nav">
             <div>
+                <button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
                 <!-- {{lastlog.zhiyeCompany[lastlog.zy.zhiyetagid].teamName | substring(6)}} -->
                 <h1 class="mui-title "><label>{{companyList.teamName}}</label></h1>
             </div>
@@ -60,6 +61,9 @@ export default {
         this.queryProjectlist()
     },
     methods:{
+        goBack(){
+            this.$router.go(-1)
+        },
         //查询当前用户的职业标签
         Occupation(){
             this.$http.post('/work_api/queryTag',).then(function(res){

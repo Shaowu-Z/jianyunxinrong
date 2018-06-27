@@ -78,6 +78,7 @@ export default {
     created() {//初始化方法
         this.paramMap = getParam(window.location.href)//获取地址栏参数
         this.projectSN=this.paramMap.projectSN;
+        console.log(this.projectSN)
         this.method=this.paramMap.method;
     },
     methods:{
@@ -211,14 +212,14 @@ export default {
          * 确认
          */
         window.confirm=function () {
-            if(app.data.selectUserList.length<=0){
+            if(this.data.selectUserList.length<=0){
                 msg("请选择工人")
                 return;
             }
-            localStorage.setItem("lastname", JSON.stringify(app.data.selectUserList));
+            localStorage.setItem("lastname", JSON.stringify(this.data.selectUserList));
             setTimeout(function () {
                 appApi.closeNewWindow();
-                appApi.broadcast("setMemberList("+JSON.stringify(app.data.selectUserList)+")");//返回上一页并设置标准工资页面
+                appApi.broadcast("setMemberList("+JSON.stringify(this.data.selectUserList)+")");//返回上一页并设置标准工资页面
             },100);
         }
 

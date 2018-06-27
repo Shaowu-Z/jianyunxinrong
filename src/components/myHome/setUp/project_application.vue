@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 	<header class="mui-bar mui-bar-nav">
-		<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide"></button>
+		<button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
 		<div class="search-box">
 			<div class="search-inner input-row" style="margin-left:55px;">
 				<span class=" mui-icon mui-icon-search"></span>
@@ -56,6 +56,9 @@ export default {
         });
     },
     methods : {
+        goBack(){
+            this.$router.go(-1)
+        },
         onFuwuclick: function (url) {//点击分组服务\
             var params = getParam(window.location.href);
             var teamCode = "";

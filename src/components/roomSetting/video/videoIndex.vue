@@ -9,7 +9,7 @@
 			<!--<a class="mui-icon iconfont icon-shaixuan mui-pull-right" onclick="openFilter()"></a>-->
 			<!--<button class="mui-btn  mui-btn-link mui-pull-right">筛选</button>
 			<a class="mui-icon iconfont icon-add mui-pull-right" onclick="javascript:showProject();"></a>-->
-			<input style="display: none" id="upfile" type="file" accept="video/*" capture="camcorder" onclick="window.appApi.openCamera(3,1);" onchange="uploadImageAndVideo(this)">
+			<input style="display: none" id="upfile" type="file" accept="video/*" capture="camcorder" @change="uploadImageAndVideo($event)" ref="file">
 		</header>
         		<!-- 形象视频 -->
 		<section class="mui-content" id="video_list">
@@ -25,42 +25,46 @@
 					<li class="mui-table-view-cell" onclick="selectProject(0)">非项目视频</li>-->
 				</ul>
 			</div>
+			
+			
 			<div class="mui-scroll content">
 				<div class=" video-list mui-table-view mui-table-view-chevron lists">
-					<div v-for="(item, a) in items" :key="a">
-						<div class="video-item">
-							<div class="video-content">
-								<div class="video-pic" :data-a="a">
-									<div class="pic_bg" style="position:absolute;top: 0;height:100%;width:100% ;background-size: 100% 100%;"></div>
-									<div style="line-height: 200px;text-align: center;">
-										<!--<img v-if="item.thumbImage==null || item.thumbImage==''" src="../../images/detals.jpg" style="max-width: 100%;max-height: 200px;vertical-align: middle" />
-										<img v-else :src="item.thumbImage" />-->
-										<!--<img class="lazy" :data-src="item.thumbImage"  style="max-width: 100%;max-height: 250px;vertical-align: middle"/>-->
-										<img class="lazy" :data-src="item.thumbImage"   style="max-width: 100%;max-height: 250px;vertical-align: middle"/>
+					<mt-loadmore :bottom-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="10">
+						<div v-for="(item, a) in items" :key="a">
+							<div class="video-item">
+								<div class="video-content">
+									<div class="video-pic" :data-a="a">
+										<div class="pic_bg" style="position:absolute;top: 0;height:100%;width:100% ;background-size: 100% 100%;"></div>
+										<div style="line-height: 200px;text-align: center;">
+											<!--<img v-if="item.thumbImage==null || item.thumbImage==''" src="../../images/detals.jpg" style="max-width: 100%;max-height: 200px;vertical-align: middle" />
+											<img v-else :src="item.thumbImage" />-->
+											<!-- <img class="lazy" :data-src="item.thumbImage"  style="max-width: 100%;max-height: 250px;vertical-align: middle"/> -->
+											<img class="lazy" :src="item.thumbImage"   style="max-width: 100%;max-height: 250px;vertical-align: middle"/>
+										</div>
+										<span class="label-selected"></span>
 									</div>
-									<span class="label-selected"></span>
-								</div>
-								<div class="video-con">
-									<h3 class="video-title" v-text="item.title"></h3>
-									<p class="secondary" v-text="format_Date(item.createTime)"></p>
-									<p class="secondary">浏览数：<span v-text="item.seeNum"></span></p>
-								</div>
-								<div class="video-footer" style="">
-									<div class="user-info text" :data-a="item.userId">
-										<img class="user-pic" :src="item.headImg">
-										<span class="user-name" v-text="item.userName"></span>
+									<div class="video-con">
+										<h3 class="video-title text" v-text="item.title"></h3>
+										<p class="secondary text" v-text="format_Date(item.createTime)"></p>
+										<p class="secondary text">浏览数：<span v-text="item.seeNum"></span></p>
 									</div>
-									<div class="operation-box">
-										<span class="iconfont icon-shoucang" :data-a="a" :class="{active:item.collect}"></span>
-										<span class="iconfont icon-comment" :data-a="a"></span>{{item.commentNum}}
-										<span class="iconfont icon-share" :data-img="item.thumbImage" :data-name="item.userName" :data-project="item.title" :data-url="item.videoUrl" :data-id="item.id"></span>
-										<span class="iconfont icon-zan" :class="{active:item.praise}" :data-a="a"></span>{{item.praiseNum}}
+									<div class="video-footer" style="">
+										<div class="user-info text" :data-a="item.userId">
+											<img class="user-pic" :src="item.headImg">
+											<span class="user-name" v-text="item.userName"></span>
+										</div>
+										<div class="operation-box">
+											<span class="iconfont icon-shoucang" :data-a="a" :class="{active:item.collect}"></span>
+											<span class="iconfont icon-comment" :data-a="a"></span>{{item.commentNum}}
+											<span class="iconfont icon-share" :data-img="item.thumbImage" :data-name="item.userName" :data-project="item.title" :data-url="item.videoUrl" :data-id="item.id"></span>
+											<span class="iconfont icon-zan" :class="{active:item.praise}" :data-a="a"></span>{{item.praiseNum}}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-					</div>
+						</div>
+					</mt-loadmore>
 				</div>
 			</div>
 		</section>
@@ -71,6 +75,7 @@
 import '../../../playform/dropload'
 import {getParam,BackCookie} from '../../../playform/common'
 import setting from '../../../playform/config'
+import { Toast,Loadmore  } from 'mint-ui';
 export default {
     data(){
         return{
@@ -79,8 +84,9 @@ export default {
 				curPage: 1,
 				pageSize: 10,
 				projectSN: '',
-				project:""
-			}
+				project:"",
+			},
+			allLoaded: false,
         }
     },
     created() {
@@ -105,10 +111,185 @@ export default {
                 if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
 		}
-		this.initMui();
+		this.loadData()
+		// this.initMui();
     },
     methods: {
+		loadTop(){
+			var _self = this;
+			var pageParams = _self.pageParams;
+			pageParams.curPage = pageParams.curPage+1;
+			this.pageParams.projectSN = this.$route.query.projectSn
+			this.$http.post("/community/video/find_page",
+				this.pageParams, {
+					headers: {
+						'Content-Type': 'application/json'
+					},
+				}).then(function(response) {
+					if(type == "up"){
+//						$('.lists').empty();
+                        this.items = [];
+					}
+				var page = response.data.result;
+				var curPage=_self.pageParams.curPage
+//				console.log(response);
+//				console.log(videoApp)
+				console.log(page);
+				if(page==null){
+					var html=''
+							html+='<div id="empty-view" class="no-group"><div class="no-record-img no-record-cloud"></div><p>无记录</p></div>'
+							$(".content").empty()
+							$("#video_list").append(html)
+				}
+				// 渲染数据
+				_self.diposeData(page);
+				if(page.list && page.list.length > 0) {
+					// 页数加1
+					_self.pageParams.curPage = _self.pageParams.curPage + 1;
+					
+					// 上拉刷新
+					if(type == "up") {
+						// 更新分页插件
+						me.resetload();
 
+						// 解锁loadDownFn里锁定的情况
+						me.unlock();
+
+						me.noData(false);
+
+					}else{
+						// 更新分页插件
+						me.resetload();
+					}
+					// 如果没有数据
+
+				} else {
+					if(_self.pageParams.curPage == 1){
+//						alert(type);
+//						alert(2);
+						// 无数据div显示
+						console.log($("#empty-view").length)
+						if($("#empty-view").length == 0){
+							var html=''
+							html+='<div id="empty-view" class="no-group"><div class="no-record-img no-record-cloud"></div><p>无记录</p></div>'
+							$(".content").empty()
+							$("#video_list").append(html)
+						}
+						// 锁定
+							me.lock();
+													// 更新分页插件
+							me.resetload();
+
+							// 无数据,不会再执行加载
+							me.noData();
+
+					}else{
+						// 下拉刷新
+						if(type == "up") {
+
+							// 更新分页插件
+							me.resetload();
+
+							me.noData(true);
+							// 上拉加载
+						} else {
+							// 锁定
+							me.lock();
+							// 无数据
+							me.noData();
+							// 更新分页插件
+							me.resetload();
+						}
+					}
+				}
+
+
+			}).catch(function(error) {
+//				console.log(error);
+				// 即使加载出错，也得重置
+//				me.resetload();
+			});
+		},
+		//上传视屏
+		uploadImageAndVideo(e) {
+			console.log(e.target.files[0])
+			window.appApi.openCamera(3,1);
+			if(e.target.files[0].size<=15728640){
+				if (e.target.files[0] == null || e.target.files[0].type.indexOf("video") == -1) {
+					msg("请选择视频类型");
+				} else {
+					// var index_ = layer.open({
+					// 	type: 2
+					// 	, content: '上传中'
+					// });
+					// uploadFile(th, getUrl() + '/community/video/save', {projectSN: psn}, function (resp) {
+					// 	console.info(resp);
+					// 	if (resp.code == 0) {
+					// 		msg("上传成功");
+					// 		setTimeout(function () {
+					// 			projectSN = "";
+					// 			layer.closeAll();
+					// 			//refreshPage("video");
+					// 			appApi.refreshNav(0);
+					// 			appApi.closeNewWindow();
+					// 			th.value = "";
+					// 		}, 1000);
+					// 	} else {
+					// 		layer.closeAll();
+					// 		msg(resp.message);
+					// 	}
+					// })
+					layer.open({
+						content: "后台运行中，处理完自动更新"
+						,skin: 'msg'
+						,time: 3 //3秒后自动关闭
+					});
+		//			alert(projectSN)
+					console.log()
+					var html='';
+					html+='<span>视频处理中</span><span class='+"mui-loading"+'><div class='+"mui-spinner"+'></div></span>';
+					document.getElementsByClassName("mui-title")[0].innerHTML=html;
+					var formparam = new FormData();
+					formparam.append("projectSN",this.$route.query.projectSn);
+					console.log(e.target.files[0].name)
+					formparam.append("file",e.target.files[0]);
+					this.$http.post('/community/video/save',formparam).then(function(resp){
+												if (resp.code == 0) {
+							// msg("上传成功！");
+							Toast({
+								message: "上传成功！",
+								position: 'bottom',
+								duration: 1000
+							});
+							document.getElementsByClassName("mui-title")[0].innerText = "形象视频";
+							setTimeout(function(){
+								projectSN = "";
+								layer.closeAll();
+								appApi.refreshNav(0);
+		//			    		appApi.closeNewWindow();
+								e.target.value = "";
+								location.reload(true)
+							},1000);
+						}else{
+							layer.closeAll();
+							// msg(resp.message);
+							Toast({
+								message: resp.message,
+								position: 'bottom',
+								duration: 1000
+							});
+						}
+					})
+				}
+			}else{
+				// msg("视频超过一分钟，请重新拍摄")
+				Toast({
+					message: '视频超过一分钟，请重新拍摄',
+					position: 'bottom',
+					duration: 1000
+				});
+			}
+		},
         selectProject (type) {
                 function hideProject() {
 					document.getElementsByTagName("html")[0].setAttribute("style", "overflow:")
@@ -128,6 +309,7 @@ export default {
 		},
 		// 加载数据
 		loadData: function(type,me) {
+			this.pageParams.projectSN = this.$route.query.projectSn
 			var _self = this;
 			this.$http.post("/community/video/find_page",
 				this.pageParams, {
@@ -332,10 +514,6 @@ export default {
 						},       // 加载图片成功后的回调函数(默认：不执行任何操作)
 						error: function (imgObj) { }         // 加载图片失败后的回调函数(默认：不执行任何操作)
 					});
-
-				
-				
-
 		},
 		clickPraise: function(a) {
 			var v = this.items[a];

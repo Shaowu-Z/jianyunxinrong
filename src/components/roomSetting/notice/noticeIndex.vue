@@ -12,7 +12,7 @@
                 <a class="mui-control-item mui-active" @click="getNotice(1,$event)">群内公告</a>
                 <a class="mui-control-item" @click="getNotice(0,$event)">项目公告</a>
             </div>
-            <div id="item1" class="mui-control-content mui-active">
+            <div id="item1" class="mui-control-content mui-active" style="min-height:0">
                 <ul class="mui-table-view table-view-line">
 
                     <div v-for="(notice,index) in notices" :key="index">

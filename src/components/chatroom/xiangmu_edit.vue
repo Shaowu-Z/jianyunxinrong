@@ -81,6 +81,7 @@
                         <input type="text" name="missionStartDate" v-model="form.missionStartDate" @click="selectDate('s')"
                             readonly="readonly"
                             placeholder="请选择">
+                        <data-bar :title="kaigong" :datanow="cc"></data-bar>
                     </a>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
@@ -142,10 +143,16 @@
 <script>
 import {getParam,BackCookie} from '../../playform/common'
 import setting from '../../playform/config'
+import util from '../../playform/util'
+import dataBar from "../common/dataBar"
 // import regions from '../../playform/regions'
 export default {
+    components:{
+        dataBar
+    },
     data () {
         return {
+            cc:'',
             form:{
                 PlaceZuobiao:"",//地图坐标
                 projectSN:"",
@@ -205,6 +212,7 @@ export default {
             urlProjectmanageNames:'',
             opt : {"type": "date", "beginYear": 2000, "endYear": new Date().getFullYear()+10},
             uploadStatus : false,
+            kaigong:'开工日期',
         }
     },
     created() {
@@ -222,12 +230,11 @@ export default {
         //根据ID查询记录
         if(this.$route.query.projectSN){
             _self.showRecordById();
-
         }
         //初始化职业标签
         _self.showzhiyeType();
         appApi.imgPreview.init();
-
+        
     },
     methods:{
         imagesAdd(){
@@ -336,28 +343,28 @@ export default {
                 }
             }else if(t==='e'){
                 if(o.form.missionEndDate != ""){
-                    this.opt.value = o.form.missionEndDate;
+                    this.opt.value = util.fnFormat(o.form.missionEndDate,'yyyy-MM-dd');
                 }
             }
-            var picker = new mui.DtPicker(this.opt);
-            picker.show(function (rs) {
-                /*
-                 * rs.value 拼合后的 value
-                 * rs.text 拼合后的 text
-                 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
-                 * rs.m 月，用法同年
-                 * rs.d 日，用法同年
-                 * rs.h 时，用法同年
-                 * rs.i 分（minutes 的第二个字母），用法同年
-                 */
-                opt["value"] = rs.value; //控件同步
-                if(t=="s"){
-                    o.form.missionStartDate = rs.value;
-                }else if(t==='e'){
-                    o.form.missionEndDate = rs.value;
-                }
-                picker.dispose(); //释放资源
-            })
+            // var picker = new mui.DtPicker(this.opt);
+            // picker.show(function (rs) {
+            //     /*
+            //      * rs.value 拼合后的 value
+            //      * rs.text 拼合后的 text
+            //      * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+            //      * rs.m 月，用法同年
+            //      * rs.d 日，用法同年
+            //      * rs.h 时，用法同年
+            //      * rs.i 分（minutes 的第二个字母），用法同年
+            //      */
+            //     opt["value"] = rs.value; //控件同步
+            //     if(t=="s"){
+            //         o.form.missionStartDate = rs.value;
+            //     }else if(t==='e'){
+            //         o.form.missionEndDate = rs.value;
+            //     }
+            //     picker.dispose(); //释放资源
+            // })
         },
         popup:function(content){
             // msg(content);
@@ -602,10 +609,12 @@ export default {
                             _self.form.xiangmuguanliyuanId = _self.form.projectManagerId;
                         }
                         if(result[0].missionStartDate!=null){
-                        _self.form.missionStartDate=formDate(result[0].missionStartDate);
+                        _self.form.missionStartDate=util.fnFormat(result[0].missionStartDate,'yyyy-MM-dd')
+                        _self.cc=util.fnFormat(result[0].missionStartDate,'yyyy-MM-dd')
+                        alert(_self.form.missionStartDate)
                         }
                         if(result[0].missionEndDate!=null) {
-                            _self.form.missionEndDate = formDate(result[0].missionEndDate);
+                            _self.form.missionEndDate =util.fnFormat(result[0].missionEndDate,'yyyy-MM-dd')
                         }
                         //判断是否有权限修改项目信息
                         if(_self.form.xiangmuguanliyuan==null||_self.form.xiangmuguanliyuan==""){
@@ -613,7 +622,7 @@ export default {
                             if(_self.userId==_self.form.userID){
                                 _self.isEdit = true;
                             }
-                        }else if(userName==_self.form.xiangmuguanliyuan){//当前登录人和项目管理员相等时，可以编辑
+                        }else if(_self.form.userName==_self.form.xiangmuguanliyuan){//当前登录人和项目管理员相等时，可以编辑
                             _self.isEdit = true;
                         }
                         //_self.showAttment(result[0].uploadIds);
@@ -686,10 +695,10 @@ export default {
             }
             // Base.load({url:"http://java.winfreeinfo.com/pro_api/getProImg",data:{"projectSN":_self.fm.projectSN},dataType:"json",method:"post"},function(response){
             
-            // },function(error){
-            //     console.info(error);
-            // })
-            this.$http.post('/pro_api/getProImg',_self.fm.projectSN).then(function(response) {
+
+            var fromd=new FormData()
+            fromd.append("projectSN",_self.fm.projectSN)
+            this.$http.post('/pro_api/getProImg',fromd).then(function(response) {
                 console.log("查询照片",response)
                 if (response.code == 200) {
                     console.log("查询照片",response.result)

@@ -4,6 +4,8 @@ const noticeIndex = resolve => require(['@/components/roomSetting/notice/noticeI
 const Announcements = resolve => require(['@/components/roomSetting/notice/Announcements'], resolve)
 const viewTheDetails = resolve => require(['@/components/roomSetting/notice/viewTheDetails'], resolve)
 const cloudFile = resolve => require(['@/components/roomSetting/cloudFile'], resolve)
+const search = resolve => require(['@/components/roomSetting/cloudFile/search'], resolve)
+const search_result = resolve => require(['@/components/roomSetting/cloudFile/search_result'], resolve)
 const cloudFileIndex = resolve => require(['@/components/roomSetting/cloudFile/cloudFileIndex'], resolve)
 const openDir = resolve => require(['@/components/roomSetting/cloudFile/openDir'], resolve)
 const create_dir = resolve => require(['@/components/roomSetting/cloudFile/create_dir'], resolve)
@@ -58,6 +60,14 @@ const roomSettingConfig = {
         {
           path: '/static/webstatic/dish/create_dir.html',
           component: create_dir
+        },
+        {
+          path: '/static/webstatic/dish/search.html',
+          component: search
+        },
+        {
+          path: '/dish/search_result.html',
+          component: search_result
         },
       ]
     },
