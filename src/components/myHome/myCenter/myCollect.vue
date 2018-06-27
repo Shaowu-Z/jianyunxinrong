@@ -353,6 +353,7 @@
 </div>
 </template>
 <script>
+	import setting from "../../../playform/config"
 	import { BackCookie,getParam } from '../../../playform/common.js';
 	import {Toast} from "mint-ui";
 	var sUserAgent = navigator.userAgent.toLowerCase();
@@ -531,8 +532,8 @@
 	            if(isApp){
 	                window.appApi.openVideo("/playVideo",url,"视频详情",thumb);
 	            }else{
-	                setCookie("vUrl", url);
-	                console.log(getCookie("vUrl"));
+	                BackCookie.setCookie("vUrl", url);
+	                console.log(BackCookie.getCookie("vUrl"));
 	                window.appApi.openNewWindow( "/community/play_video.html");
 	            }
 	        },
@@ -681,7 +682,7 @@
                         _self.dishDownLoad(id);
                     }else if(type == 5){
                         /*视频*/
-                        axios.get(getUrl() + "/community/video/detail", {
+                        this.$http.get("/community/video/detail", {
                             params: {id:id}
                         }).then(function (response) {
                             if (response.data.code == 0) {
@@ -1165,7 +1166,7 @@
 						var param = "types="+types+"&lat="+lat+"&lng="+lng+"&addr="+addr+"&msg="+msg+"&filename="+filename
 							+"&url="+FileUrl+"&lengthSize="+length+"&thumb="+thumb;
 						//打开转发选人页面
-						window.appApi.openNewWindow(getUrl() + "/static/webstatic/mycenter/select_member_share.html?"+param);
+						window.appApi.openNewWindow(setting.getUrl() + "/static/webstatic/mycenter/select_member_share.html?"+param);
 			        }else{
 						Toast({
 							message: '暂时不支持这种类型的收藏转发',

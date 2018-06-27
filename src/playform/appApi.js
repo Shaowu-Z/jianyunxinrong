@@ -505,7 +505,7 @@ window.appApi = {
 	 *  回调方法 setLocationResult
 	 */
 	getLocation: function() {
-
+		alert(1)
 		if(isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetLocation(");
@@ -1862,7 +1862,7 @@ window.setContactsResult = function(result, iosIfrObjStrT) {
  *QQ 微信登录结果返回 授权信息
  * @param {Object} result json
  */
-var setQQWXLoginResult = function(result, iosIfrObjStrT) {
+	window.setQQWXLoginResult = function(result, iosIfrObjStrT) {
 	// if (typeof appApi.callBackFun == "function") {
 	//     var CONTENT = {};
 	//     CONTENT.result = result;
