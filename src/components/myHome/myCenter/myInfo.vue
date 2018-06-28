@@ -73,7 +73,7 @@
 	</div>
 </template>
 
-<script>
+<script >
 	import { BackCookie } from '../../../playform/common.js'
 	import { Picker } from 'mint-ui';
 	import myaddress from "../../project/js/city";
