@@ -8,17 +8,17 @@
             <div class="stopmove" style="position: absolute;overflow: scroll;width: 100%;height: 100%;">
             <div class="video-list" style="">
                 <div class="video-item">
-                    <div class="video-content">
+                    <div class="">
                         <div class="video-pic device-flag mui-hidden">
-                            <div style="line-height: 200px;text-align: center;" class="zr_box">
+                            <div style="line-height: 200px;text-align: center;" class="zr_box" @click="doPlay">
                                 <img v-if="item.thumbImage==null || item.thumbImage==''" src="../../../assets/images/detals.jpg"  style="vertical-align: middle;width: auto;max-height: 200px;max-width: 100%;"/>
                                 <img v-else :src="item.thumbImage" style="vertical-align: middle;width: auto;max-height: 200px;max-width: 100%;"/>
                                 <span class="label-selected"></span>
                             </div>
                         </div>
                         <div class="video-con detail-con">
-                            <h3 class="video-title" v-text="item.title"></h3>
-                            <div class="push-info">
+                            <h3 class="video-title text" v-text="item.title"></h3>
+                            <div class="push-info text">
                                 <img class="user-img" :src="item.headImg">
                                 <span class="user-name" v-text="item.userName"></span>
                                 <p class="secondary mui-pull-right" v-text="format_Date(item.createTime)"></p>
@@ -28,18 +28,18 @@
                             <div class="user-info">
                                 <span class="secondary">浏览数：<span v-text="item.seeNum"></span></span>
                             </div>
-                            <div class="operation-box" style="display: none" v-show="vshow && hasUser">
+                            <div class="operation-box">
                                 <span class="iconfont icon-shoucang" @click="collect()"  :class="{active:item.collect}"></span>
-                                <span class="iconfont icon-comment" ></span>{{item.commentNum}}
+                                <span class="iconfont icon-comment" @click="replyComment" ></span>{{item.commentNum}}
                                 <span class="iconfont icon-share" :data-img="item.thumbImage" :data-name="item.userName" :data-project="item.title" :data-url="item.videoUrl" :data-id="item.id"></span>
-                                <span class="iconfont icon-zan" :class="{active:item.praise}" ></span>{{item.praiseNum}}
+                                <span class="iconfont icon-zan" @click="clickPraise" :class="{active:item.praise}" ></span>{{item.praiseNum}}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="pinlun" style="position: absolute;overflow: scroll;width:100% ;">
-            <div class="index-comment" v-show="hasUser" style="padding: 10px 0px;width: 100%;">
+            <div class="index-comment" style="padding: 10px 0px;width: 100%;">
                 <div class="comment-list">
                     <div v-if="comments.length > 0">
                             <div v-for="(c,c_index) in comments" :key="c_index">
@@ -47,11 +47,11 @@
                                     <div class="comment-item-info">
                                         <img class="name user-header" :src="[c.commentUserIcon==null ? '../../../static/images/60x60.gif' : imgHost + c.commentUserIcon]" :data-a="c.commentUserId">
                                         <div class="user-info">
-                                            <p class="name comment-item-author" :data-a="c.commentUserId">{{c.commentUserName}}</p>
-                                            <span class="secondary" v-text="format_Date(c.createTime)"></span>
+                                            <p class="name comment-item-author text" :data-a="c.commentUserId">{{c.commentUserName}}</p>
+                                            <span class="secondary text" v-text="format_Date(c.createTime)"></span>
                                         </div>
                                     </div>
-                                    <div class="comment-item-content sppd-left-con">
+                                    <div class="comment-item-content sppd-left-con text">
                                         <div class="content">
                                             <div v-if="c.replyUserId == null || c.replyUserId ==''">
                                                 <label class="comment-content" :data-a="item.id" :data-b="c.commentUserId" :data-c="c.commentUserName" :data-cindex="c_index" style="white-space: pre-wrap;">{{c.commentContent}}</label>
@@ -96,7 +96,7 @@
                 <div class="fixed-bottom group-chat comment-chat-input" style="display: none;z-index: 1000;-webkit-user-select:text;" :style="{display:comment_box_display}">
                     <div class="chat-input" style="-webkit-user-select:text;user-select:text;padding-top: 8px;" >
                         <!--<textarea style="min-height: 40px;resize: none;" type="text" placeholder="输入评论内容" value="评论输入框的内容可以折行，最多显示4行文字，再多就滑动"></textarea>-->
-                        <div id="commentIpt" class="div-textarea" contenteditable="true" :placeholder="comm_placeholder"  style="-webkit-user-select:text;user-select:text;margin: 0;padding: 0;max-height: 88px;">
+                        <div id="commentIpt" class="div-textarea text" contenteditable="true" :placeholder="comm_placeholder"  style="-webkit-user-select:text;user-select:text;margin: 0;padding: 0;max-height: 88px;">
                             <!--<div v-if="comm_placeholder != ''">x
                                 <span style="color: #ccc;" v-text="comm_placeholder"></span>
                             </div>-->
@@ -113,6 +113,7 @@
 import setting from '../../../playform/config'
 import {getParam,BackCookie} from '../../../playform/common'
 import { Toast } from 'mint-ui';
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -138,14 +139,17 @@ export default {
 			map : getParam(window.location.href),
 			autoComment : this.map===undefined ? false : true,//进入是否自动播放
 			id : this.map===undefined ? "" : this.map,//当前id
-            infoId : this.id,//当前评论的日志id
+			infoId : this.id,//当前评论的日志id
+			commentUserName : '',
         }
     },
     created:function () {
         this.param = getParam(this.href);
-        this.user_id = BackCookie.getCookie("userid");
-        this.user_name = decodeURI(BackCookie.getCookie("username"));
-	    this.getDetail(this.initEvent);
+        this.user_id = setting.getCookie("userid");
+		this.user_name = decodeURI(setting.getCookie("username"));
+		this.commentUserName = decodeURI(setting.getCookie("username"))
+		console.log(this.commentUserName)
+		this.getDetail(this.initEvent);
     },
     methods: {
         po_Last_Div(that) {
@@ -172,13 +176,14 @@ export default {
             }, 1)
         },
     	doPlay:function () {
-		    var _self = this;
-		    var obj = _self.item;
+			var _self = this;
+			var obj = _self.item;
+			alert(appApi.isApp)
 		    if(appApi.isApp){
 			    window.appApi.openVideo(window.location.href,obj.videoUrl,"视频详情",obj.thumbImage);
 		    }else{
-			    BackCookie.setCookie("videoUrl", obj.videoUrl);
-			    window.appApi.openNewWindow(getPagePath() + "/community/play_video.html");
+			    setting.setCookie("videoUrl", obj.videoUrl);
+			    window.appApi.openNewWindow("/static/webstatic/community/play_video.html");
 		    }
 	    },
         initEvent:function () {
@@ -190,45 +195,44 @@ export default {
         	if(this.autoComment){
         		//自动打开评论
 		       // infoIndex = this.getAttribute("data-i");
-		       setTimeout( infoApp.replyComment,500)
+		       setTimeout( this.replyComment,500)
 		        //appApi.showKeyboard();
 
 	        }
 
             //绑定事件
-	        mui.ready(function() {
-		        if(!isApp){
-			        mui(".device-flag")[0].classList.remove("mui-hidden");
-			        mui(".device-flag")[1].classList.remove("mui-hidden");
+		        if(!appApi.isApp){
+			        $(".device-flag")[0].classList.remove("mui-hidden");
+			        $(".device-flag")[1].classList.remove("mui-hidden");
 		        }else{
 			        document.getElementById("comment_list").style.paddingTop = "0px"
 		        }
-		        mui("#comment_list").on('tap','.icon-zan', function () {//绑定点赞事件
-			        infoApp.clickPraise();
+		        $("#comment_list").on('tap','.icon-zan', function () {//绑定点赞事件
+			        this.clickPraise();
 		        });
-		        mui("#comment_list").on('tap','.log-header', function () {//绑定头像事件
-			        infoApp.lookUserInfo();
+		        $("#comment_list").on('tap','.log-header', function () {//绑定头像事件
+			        this.lookUserInfo();
 		        });
-		        mui("#comment_list").on('tap','.name', function () {//绑定评论姓名事件
+		        $("#comment_list").on('tap','.name', function () {//绑定评论姓名事件
 			        var user_id = this.getAttribute("data-a");
-			        infoApp.lookUserInfo(user_id);
+			        this.lookUserInfo(user_id);
 		        });
-		        mui("#comment_list").on('tap','.comment-content', function () {//绑定评论内容，点击回复
+		        $("#comment_list").on('tap','.comment-content', function () {//绑定评论内容，点击回复
 			        //infoId = this.getAttribute("data-a");
-			        replyUserId = this.getAttribute("data-b");
-			        replyUserName = this.getAttribute("data-c");
+			        this.replyUserId = this.getAttribute("data-b");
+			        this.replyUserName = this.getAttribute("data-c");
 			        infoIndex = this.getAttribute("data-i");
-			        cIndex = this.getAttribute("data-cindex");
-			        infoApp.replyComment();
+			        this.cIndex = this.getAttribute("data-cindex");
+			        this.replyComment();
 
 		        });
-		        mui("#comment_list").on('tap','.icon-comment', function () {//绑定评论
+		        $("#comment_list").on('tap','.icon-comment', function () {//绑定评论
 			        //infoId = this.getAttribute("data-a");
 			        infoIndex = this.getAttribute("data-i");
-			        infoApp.replyComment();
+			        this.replyComment();
 
 		        });
-		        mui("#comment_list").on('tap','.icon-share', function () {//绑定更多事件
+		        $("#comment_list").on('tap','.icon-share', function () {//绑定更多事件
 			        var url = this.getAttribute("data-url");
 			        var img = this.getAttribute("data-img");
 			        var name = this.getAttribute("data-name");
@@ -245,7 +249,7 @@ export default {
 			        var shareUrl = getPagePath() + "/community/community_comment.html?id="+id;
 			        appApi.shareVideo(0, name + "发布了一段工程项目的形象视频，赶快来看看吧", project, shareUrl, img, url,"视频详情", null);
 		        });
-		        mui("#comment_list").on('tap','.video-pic', function () {//绑定视频播放事件
+		        $("#comment_list").on('tap','.video-pic', function () {//绑定视频播放事件
 			        _self.doPlay();
 		        });
 		        document.getElementById("comment_list").addEventListener("swipeup",function(){
@@ -254,7 +258,6 @@ export default {
 		        document.getElementById("comment_list").addEventListener("swipedown",function(){
 			        _self.hideInput();
 		        })
-	        })
         },
         getDetail:function (callback) {
 			var _self = this;
@@ -265,8 +268,9 @@ export default {
 	        }).then(function (response) {
 		        if (response.data.code == 0) {
 		            var rs = response.data.result;
-			        _self.item = rs.item;
-			        _self.comments = rs.comments;
+					_self.item = rs.item;
+					_self.comments = rs.comments;
+					console.log(_self.comments,11111111111111)
 			        _self.vshow = true;
 			        if(callback) callback();
 		        }else{
@@ -286,7 +290,7 @@ export default {
 	    },
 	    clickPraise:function(){//点赞
 	    	appApi.broadcast()
-		    var v = infoApp.item;
+		    var v = this.item;
 		    v.praise = !v.praise;
 		    //v.seeNum = v.seeNum+1;
 		    v.praiseNum = v.praiseNum + (v.praise ? 1:-1);
@@ -298,9 +302,9 @@ export default {
 		    });
 	    },
 	    replyComment: function () {//回复/评论点击
-		    var _self =  infoApp;
-		    console.info(replyUserId+"======="+this.commentUserId);
-		    if(replyUserId==this.commentUserId  && cIndex != undefined){//自己的评论再次点击是删除
+		    var _self =  this;
+		    console.info(this.replyUserId+"======="+this.commentUserId);
+		    if(this.replyUserId==this.commentUserId  && this.cIndex != undefined){//自己的评论再次点击是删除
 			    confirmLayer("是否删除该条评论？", function(){
 				    layer.closeAll();
 				    //组装请求参数
@@ -308,7 +312,7 @@ export default {
 				    var tid =  _self.comments[cIndex].id;
 				    param.append("id",tid);
 				    param.append("communityId", _self.item.id);
-				    _self.comments.splice(cIndex, 1);
+				    _self.comments.splice(this.cIndex, 1);
 				    //删除子评论
 				    /*var newArr = [];
 				    for(var i =0;i<_self.comments.length;i++) {
@@ -317,38 +321,38 @@ export default {
 					    }
 				    }
 				    _self.comments = newArr;*/
-				    infoApp.initCommentParam();
+				    this.initCommentParam();
 				    this.$http.post("/community/video/delcomment", param).then(function (resp) {
 					    console.info(resp.data);
 					    _self.item.commentNum = _self.item.commentNum - 1;
-					    cIndex ="";
+					    this.cIndex ="";
 				    })
 			    })
-		    }else if(replyUserId && replyUserId != ""){//回复
+		    }else if(this.replyUserId && this.replyUserId != ""){//回复
 //		    	var stopmove=document.getElementsByClassName("stopmove")[0];
 //		    	stopmove.style.overflow="hidden";
 			    _self.comment_box_display="block";
 			    document.getElementById("commentIpt").innerText= "";
-			    _self.comm_placeholder = "回复"+replyUserName+"：";
+			    _self.comm_placeholder = "回复"+this.replyUserName+"：";
 			    document.getElementById("commentIpt").focus();
 //			    var commentIptq=document.getElementById("commentIpt");
 //				     commentIptq.addEventListener('touchstart',function(){
 //				        commentIptq.focus();                                       
 //				})
-			    po_Last_Div(document.getElementById("commentIpt"));
+			    this.po_Last_Div(document.getElementById("commentIpt"));
 		    }else{//评论
 //		    	var stopmove=document.getElementsByClassName("stopmove")[0];
 //		    	stopmove.style.overflow="hidden";
 			    _self.comment_box_display="block";
 			    _self.comm_placeholder = "";
 //			    document.getElementById("commentIpt").innerText= "";
-			    infoApp.inputtext()
+			    this.inputtext()
 //			    document.getElementById("commentIpt").focus();
 //			     var commentIptq=document.getElementById("commentIpt");
 //				     commentIptq.addEventListener('touchstart',function(){
 //				        commentIptq.focus();                                       
 //				})
-			    po_Last_Div(document.getElementById("commentIpt"));
+			    this.po_Last_Div(document.getElementById("commentIpt"));
 		    }
 	    },
 	    inputtext:function(){
@@ -395,7 +399,7 @@ export default {
             }
 	    },
 	    sendComment:function () {//发送评论信息
-		    var _data = infoApp;
+		    var _data = this;
 		    var _self = this;
 		    var msgText =  document.getElementById("commentIpt");
 	    	var pinmsdk=document.getElementsByClassName("pinlun")[0];
@@ -409,20 +413,26 @@ export default {
 				        commentIptq.blur();                                       
 				})
 		    if(!_data.send_content || _data.send_content==""){
-			    msg("评论内容不能为空！");
+				// msg("评论内容不能为空！");
+				Toast({
+					message: '评论内容不能为空！',
+					position: 'bottom',
+					duration: 5000
+				});
 //			    var stopmove=document.getElementsByClassName("stopmove")[0];
 //		    	stopmove.style.overflow="hidden";
 			    return;
 		    }
-		    _data.comment_box_display="none";
-		    var reId = undefined == cIndex || "" == cIndex   ? "":_data.comments[cIndex].id;
+			_data.comment_box_display="none";
+			console.log(_data.comments,11111111111111)
+		    var reId = undefined == this.cIndex || "" == this.cIndex   ? "":_data.comments[cIndex].id;
 		    var comment_format = {
-			    communityId:infoId,
+			    communityId:this.infoId,
 			    commentUserId:this.commentUserId,
-			    commentUserName:commentUserName,
+			    commentUserName:this.commentUserName,
 			    replyId:reId,
-			    replyUserId:replyUserId,
-			    replyUserName:replyUserName,
+			    // replyUserId:this.replyUserId,
+			    // replyUserName:this.replyUserName,
 			    commentContent:_data.send_content};//重置评论json
 		    this.$http.post("/community/video/savecomment", comment_format).then(function (resp) {
 			    console.info(resp.data);
@@ -441,20 +451,20 @@ export default {
 //		    	stopmove.style.overflow="hidden";
 		    	document.getElementById("commentIpt").innerText= "";
 		    })
-		    infoApp.initCommentParam();
+		    this.initCommentParam();
 
 	    },
 	    format_Date: function (val) {//格式化时间
 		    if(!val){
 		    	return "";
-		    }
-		    return new Date(val).Format("yyyy-MM-dd hh:mm:ss ");
+		    }   
+		    return util.fnFormat(val,"yyyy-MM-dd hh:mm:ss ") 
 	    },
 	    conductData:function (array) {//处理获取的列表数据
 		    for(var i=0; i<array.length; i++){
 			    console.info(array.length);
-			    var s = array[i];
-			    s.createTime = new Date(s.createTime).Format("yyyy-MM-dd hh:mm:ss");
+			    var s = array[i];  
+			    s.createTime = util.fnFormat(s.createTime,"yyyy-MM-dd hh:mm:ss ") 
 			    s.userIcon = imageHost + s.userIcon;
 			    var imgJson= JSON.parse(s.resourcesJ);
 			    if(imgJson && imgJson != "" && imgJson.length > 0) {
@@ -472,13 +482,13 @@ export default {
 			    s.resourcesJ = imgJson;
 			    s.commentJ = JSON.parse(s.commentJ);
 		    }
-		    infoApp.items = infoApp.items.concat(array);
+		    this.items = this.items.concat(array);
 	    },
 	    initCommentParam:function () {
 		    //infoId = null;//当前评论的日志id
-		    replyUserId = null;//被回复的用户id
-		    replyUserName = null;//被回复的用户名称
-		    infoIndex = null;//当前日志所在数组的下标
+		    this.replyUserId = null;//被回复的用户id
+		    this.replyUserName = null;//被回复的用户名称
+		    this.infoIndex = null;//当前日志所在数组的下标
 		    this.send_content="";
 	    },
 	    hideInput:function () {
@@ -497,26 +507,31 @@ export default {
 	    },
 	    collect:function () {
 		    var _self = this;
-		    this.$http.get("/collect/do?id=" + id +"&type=5" ).then(function (response) {
+		    this.$http.get("/collect/do?id=" + this.$route.query.id +"&type=5" ).then(function (response) {
 			    if (response.data.code == 4001) { // 收藏成功
-				    _self.item.collect = true;
+					_self.item.collect = true;
+					Toast({
+						message: "收藏成功",
+						position: 'bottom',
+						duration: 1000
+					});
 			    }else if(response.data.code == 4003){ //取消收藏
-				    _self.item.collect = false;
+					_self.item.collect = false;
+					Toast({
+						message: "取消收藏",
+						position: 'bottom',
+						duration: 1000
+					});
 			    }else{
-				    msg(response.data.message);
+					Toast({
+						message: response.data.message,
+						position: 'bottom',
+						duration: 1000
+					});
 			    }
 			    layer.closeAll();
 			    appApi.broadcast()
-			    msg(response.data.message);
-		    }).catch(function (error) {
-			    layer.closeAll();
-				// warm("收藏出错")
-				Toast({
-					message: "收藏出错",
-					position: 'bottom',
-					duration: 1000
-				});
-		    });
+		    })
 	    }
     }
 }

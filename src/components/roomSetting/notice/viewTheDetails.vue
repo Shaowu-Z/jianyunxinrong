@@ -35,7 +35,7 @@
                             <ul class="mui-table-view mui-table-view-striped container-average">
                                 <div v-for="(pic,index) in pics" :key="index">
                                     <li class="mui-table-view-cell">
-                                        <div class="oa-contact-cell mui-table" @tap="open_file(pic.id)">
+                                        <div class="oa-contact-cell mui-table" @click="open_file(pic.id)">
                                             <div class="oa-contact-avatar mui-table-cell">
                                                 <span class="my-list-icon label-word"></span>
                                             </div>
@@ -139,26 +139,29 @@ export default {
                             //     },
                             //     success: function(response) {
                             //         if(imgs.toString()!=""){
-                            //             _self.$data.imgs = response.result.slice(0, imgs.length)
-                            //             _self.$data.pics = response.result.slice(imgs.length, response.result.length)
+                            //             _self.imgs = response.result.slice(0, imgs.length)
+                            //             _self.pics = response.result.slice(imgs.length, response.result.length)
                             //         }else{
-                            //             _self.$data.pics = response.result.slice(0, response.result.length)
+                            //             _self.pics = response.result.slice(0, response.result.length)
                             //         }
-                            //         _self.$data.imgUrl =xk_util.getArrayProperty(_self.$data.imgs,"thumbnailurl");
+                            //         _self.imgUrl =xk_util.getArrayProperty(_self.imgs,"thumbnailurl");
                             //         console.log(response)
                             //     }
                                 
                             // })
-                            let data = { "fileIdStr": fileIdStr}
-                            _self.$http.post("/sass_api/get_uploadfile_info",data).then(function(response){
+                            var formparam = new FormData();
+                            formparam.append("fileIdStr", fileIdStr);
+                            _self.$http.post("/sass_api/get_uploadfile_info",formparam).then(function(response){
+                                console.log(response,11111111111)
                                 if(imgs.toString()!=""){
-                                        _self.$data.imgs = response.result.slice(0, imgs.length)
-                                        _self.$data.pics = response.result.slice(imgs.length, response.result.length)
+                                        _self.imgs = response.data.result.slice(0, imgs.length)
+                                        _self.pics = response.data.result.slice(imgs.length, response.data.result.length)
                                     }else{
-                                        _self.$data.pics = response.result.slice(0, response.result.length)
+                                        console.log(response.data.result)
+                                        _self.pics = response.data.result.slice(0, response.data.result.length)
                                     }
-                                    _self.$data.imgUrl =xk_util.getArrayProperty(_self.$data.imgs,"thumbnailurl");
-                                    console.log(response)
+                                    // _self.imgUrl =xk_util.getArrayProperty(_self.imgs,"thumbnailurl");
+                                    // console.log(response)
                             })
                         }
 
@@ -207,5 +210,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

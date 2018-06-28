@@ -368,6 +368,7 @@ window.appApi = {
 	 */
 
 	setSelectData: function(arr) {
+		alert(arr)
 		var json = {
 			data: arr
 		};

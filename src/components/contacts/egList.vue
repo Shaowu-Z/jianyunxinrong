@@ -35,9 +35,9 @@
 					<div v-for="(item,index1) in items" :key="index1">
 						<div v-if="item.name">
 							<div v-if="item.isp == 1">
-								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group" v-text="item.first"></li>
+								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc" v-text="item.first"></li>
 							</div>
-							<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item">
+							<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item" style="border-bottom:1px solid #ccc" >
 								<a @click="pagepaths(items,index1)">
 									<div class="mui-slider-cell">
 										<div class="oa-contact-cell mui-table">
@@ -47,7 +47,7 @@
 											</div>
 											<div class="oa-contact-content mui-table-cell">
 												<h4 class="oa-contact-name" v-text="item.name"></h4>
-												<p class="oa-contact-email" v-text="item.phone"></p>
+												<p class="oa-contact-email text" v-text="item.phone"></p>
 											</div>
 										</div>
 									</div>
@@ -86,7 +86,8 @@ export default {
             this.$router.go(-1)
         },
         searchUser(){
-            var _self = this;
+			var _self = this;
+			console.log(this.key)
             var param = new FormData();
             param.append("userId", "");
             param.append("key", _self.key);

@@ -4,32 +4,32 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
-            <h1 class="mui-title" v-text="page_title">资质管理</h1>
+            <h1 class="mui-title" >资质管理</h1>
         </header>
         <section  id="add_issue" class="mui-content mycenter-content">
             <!-- <input type="hidden" name="id" v-model="fm.id"> -->
             <ul class="mui-table-view mui-table-view-chevron eg-table-view">
                 <li class="mui-table-view-cell">
                     <div class="mui-input-row">
-                        <label>企业名称</label>
+                        <label class="text">企业名称</label>
                         <input type="text" name="organizeName" v-model="fm.organizeName" placeholder="请输入企业名称">
                     </div>
                 </li>
                 <li class="mui-table-view-cell">
                     <div class="mui-input-row">
-                        <label>资质等级</label>
+                        <label class="text">资质等级</label>
                         <input type="text" name="gradeNames" v-model="fm.gradeNames" placeholder="请输入资质等级">
                     </div>
                 </li>
                 <li class="mui-table-view-cell">
                     <div class="mui-input-row">
-                        <label>证书编号</label>
+                        <label class="text">证书编号</label>
                         <input type="text" name="certificateCode" v-model="fm.certificateCode" placeholder="请输入证书编号">
                     </div>
                 </li>
                 <li class="mui-table-view-cell">
                     <div class="mui-input-row">
-                        <label>发证时间</label>
+                        <label class="text">发证时间</label>
                         <input type="text" name="issueTime" v-model="fm.issueTime" id="selectDate" @click="selectDate()" readonly="readonly" placeholder="请选择发证时间">
                         <mt-popup v-model="one_popupVisible" position="bottom" class="picker-slot-center">
                             <mt-datetime-picker ref="picker1" type="date" style="display:block" @confirm="handleConfirm" v-model="pickerVisible" @cancel="checkinCancel" :startDate="startDate" :endDate="endDate">
@@ -39,7 +39,7 @@
                 </li>
                 <li class="mui-table-view-cell">
                     <div class="mui-input-row">
-                        <label>发证机关</label>
+                        <label class="text">发证机关</label>
                         <input type="text" name="issueUnit" v-model="fm.issueUnit" placeholder="请输入发证机关">
                     </div>
                 </li>
@@ -48,16 +48,16 @@
                         <span class="mui-badge mui-badge-inverted badge-file" style="z-index:0;">
                             <img class="img-upload" style="width: 33px;display: none" id="img_view" v-show="fm.issueUrl!=''" :src="fm.issueUrl"/>
                             <button class="mui-btn">上传照片</button>
-                            <input type="file" id="upfile" value="" accept="image/png,image/gif,image/jpeg" v-on:change="selectCertImg(this)" class="input-file">
+                            <input type="file" id="upfile" value="" accept="image/png,image/gif,image/jpeg" @change="selectCertImg($event)" class="input-file">
                         </span>
                     </a>
                 </li>
             </ul>
             <div class="fixed-bottom">
                 <div id="toastBtn" class="mui-table mui-text-center">
-                        <div style="display: none" v-show="fm.id == undefined||fm.id==''" class="mui-table-cell"><button type="button" @click="submitCert()" class="mui-btn mui-btn-primary">添加资质</button></div>
-                        <div style="display: none" v-show="fm.id && fm.id!=''" class="mui-table-cell"><button type="button" @click="submitCert()" class="mui-btn mui-btn-primary">修改资质</button></div>
-                        <div style="display: none" v-show="fm.id && fm.id!=''" class="mui-table-cell"><button type="button" @click="deleteCert()" class="mui-btn">删除资质</button></div>
+                        <div v-show="fm.id == undefined || fm.id==''" class="mui-table-cell"><button type="button" @click="submitCert()" class="mui-btn mui-btn-primary">添加资质</button></div>
+                        <div v-show="fm.id && fm.id!=''" class="mui-table-cell"><button type="button" @click="submitCert()" class="mui-btn mui-btn-primary">修改资质</button></div>
+                        <div v-show="fm.id && fm.id!=''" class="mui-table-cell"><button type="button" @click="deleteCert()" class="mui-btn">删除资质</button></div>
                 </div>
             </div>
         </section>
@@ -95,7 +95,8 @@ export default {
         }
     },
     created () {
-		var _self = this;
+        var _self = this;
+        this.fm.id = this.$route.query.id
         var url_paramsid = this.$route.query.Id;
         var url_paramsteamId = this.$route.query.teamId;
 		if(url_paramsid != ''){
@@ -110,11 +111,18 @@ export default {
 		}
         this.fm.teamId = url_paramsteamId;
         console.log(this.fm)
-        
+        this.$http.get('/app_team_rz/get_issue?issueId='+this.$route.query.id).then(function(res){
+            console.log(res.data.code)
+            if(res.data.code == 0){
+                _self.fm = res.data.result.issue
+                console.log(_self.fm)
+            }
+        })
     },
     methods: {
         getObjectURL(file) {
             var url = null;
+            console.log(window,1111111111111111111111111)
             if (window.createObjectURL != undefined) { // basic
                 url = window.createObjectURL(file);
             } else if (window.URL != undefined) { // mozilla(firefox)
@@ -125,10 +133,13 @@ export default {
             return url;
         },
         selectCertImg (that) {
+            // console.log(that)
             try {
-                var imgUrl = this.getObjectURL(document.getElementById("upfile").files[0]);
-                console.log(document.getElementById("upfile").files[0])
-                lrz(that.files[0], {
+                var imgUrl = this.getObjectURL(that.target.files[0]);
+                // console.log(document.getElementById("upfile").files[0])
+                // console.log(that.target.files[0])
+                this.fm.issueUrl = imgUrl
+                lrz(that.target.files[0], {
                     width: 800,
                     height: 600
                 }).then(function (rst) {
@@ -188,26 +199,31 @@ export default {
             }
             return true;
         },
+        goToList(){
+            appApi.broadcast("reLoad()"); //刷新页面
+            appApi.closeNewWindow();
+        },
         submitCert() {
+            let _self = this
             if (this.validator(this.fm)) {
                 //校验成功，异步提交数据
-                axios.post(getUrl() + "/app_team_rz/save_issue", this.fm).then(function (response) {
+                this.$http.post("/app_team_rz/save_issue", this.fm).then(function (response) {
                     if (response.data.code != 0) {
                         // msg(add_issue.oper + "资质失败,请重试")
                         Toast({
-                            message: this.oper + "资质失败,请重试",
+                            message: _self.oper + "资质失败,请重试",
                             position: 'middle',
                             duration: 1000
                         });
                     } else {
                         // msg(add_issue.oper + "成功！");
                         Toast({
-                            message: this.oper + "成功！",
+                            message: _self.oper + "成功！",
                             position: 'middle',
                             duration: 1000
                         });
                         setTimeout(function () {
-                            goToList();
+                            _self.goToList();
                         }, 2000)
                     }
                 }).catch(function (error) {
@@ -296,14 +312,14 @@ export default {
 					console.info(error);
 				})
 			}
-		}
-		,deleteCert:function (id) {
-			var _self = this;
+        },
+        deleteCert:function (id) {
+	    	var _self = this;
 			if(undefined == id){
 				id = _self.fm.id;
 			}
 			if(confirm("确认要删除此资质吗？")){
-				axios.get(getUrl() + "/app_team_rz/remove_issue?issueId=" + id + "&teamId=" + _self.fm.teamId).then(function (response) {
+				this.$http.get("/app_team_rz/remove_issue?issueId=" + id + "&teamId=" + _self.fm.teamId).then(function (response) {
 					if (response.data.code == 0) {
                         // msg("已成功删除此资质");
                         Toast({
@@ -312,7 +328,7 @@ export default {
                             duration: 1000
                         });
 						setTimeout(function () {
-							goToList();
+							_self.goToList();
 						}, 1500)
 					} else {
                         // msg(response.data.message);
