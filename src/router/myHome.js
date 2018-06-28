@@ -23,6 +23,8 @@ const serviceAgreement = resolve => require(['@/components/myHome/setting/servic
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
+const myCodecard=resolve => require(['@/components/myHome/myCenter/my_codecard'], resolve)
+const change_phone = resolve => require(['@/components/myHome/myCenter/change_phone'], resolve)
 const selectMemberShare = resolve => require(['@/components/myHome/myCenter/selectMemberShare'], resolve)
 const myCollectionDetail = resolve => require(['@/components/myHome/myCenter/myCollectionDetail'], resolve)
 const playVideo = resolve => require(['@/components/myHome/myCenter/playVideo'], resolve)
@@ -94,6 +96,14 @@ const myHomeConfig = {
         {
           path: '/static/webstatic/mycenter/my_collect.html',
           component: myCollect
+        },
+        {
+          path: '/static/webstatic/mycenter/my_codecard.html',
+          component: myCodecard
+        },
+        {
+          path: '/register/change_phone.html',
+          component: change_phone
         },
         {
           path: '/selectMemberShare',

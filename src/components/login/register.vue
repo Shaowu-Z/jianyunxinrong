@@ -181,7 +181,7 @@ export default {
 		},
 		subReg() {
 			// /user_api/user_register
-			// this.$router.push('/login/personApprove');
+			// this.$router.push('/login/personApprove');		
 			const myreg=/^[1][3,4,5,7,8][0-9]{9}$/; 
 			var _self = this;
             var params = _self.regParams;
