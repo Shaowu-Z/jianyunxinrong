@@ -384,8 +384,8 @@ export default {
 		this.$router.push({path:'/phoneList'})
 	},
 	sweepQrCode(){
-		console.log(111);
 		window.appApi.sweepQrCode();
+		this.show = !this.show
 	},
     clickshow(submenu) {
 			console.log(submenu);

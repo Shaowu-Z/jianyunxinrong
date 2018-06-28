@@ -636,17 +636,16 @@ export default {
             // },function(error){
             //     console.info(error);
             // })
-            // var parame = new FormData();
-            // parame.append("projectSN",_self.fm.projectSN)
-            let data={"projectSN":_self.fm.projectSN}
-            this.$http.post('/pro_api/getProImg',data).then(function(response) {
-                console.log("查询照片",response)
-                if (response.code == 200) {
-                    console.log("查询照片",response.result)
-                    if(response.result){
-                        var data = response.result.data;
+            var parame = new FormData();
+            parame.append("projectSN",_self.fm.projectSN)
+            // let data={"projectSN":_self.fm.projectSN}
+            this.$http.post('/pro_api/getProImg',parame).then(function(response) {
+                if (response.data.code == 200) {
+                    console.log("查询照片",response.data.result)
+                    if(response.data.result){
+                        var data = response.data.result.data;
                         if(data){
-                            _self.image_host = response.result.image_host;
+                            _self.image_host = response.data.result.data.image_host;
                             _self.fm.imgUrl = data.imgUrl;
                             _self.fm.imgSmallUrl = data.imgSmallUrl;
                             _self.fm.serialNum = data.serialNum;

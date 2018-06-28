@@ -14,6 +14,7 @@ const select_friend = resolve => require(['@/components/roomSetting/cloudFile/se
 const openDir = resolve => require(['@/components/roomSetting/cloudFile/openDir'], resolve)
 const create_dir = resolve => require(['@/components/roomSetting/cloudFile/create_dir'], resolve)
 const video = resolve => require(['@/components/roomSetting/video'], resolve)
+const play_video = resolve => require(['@/components/roomSetting/video/play_video'], resolve)
 const videoIndex = resolve => require(['@/components/roomSetting/video/videoIndex'], resolve)
 const videoComment = resolve => require(['@/components/roomSetting/video/videoComment'], resolve)
 const meetings = resolve => require(['@/components/roomSetting/meetings'], resolve)
@@ -98,6 +99,10 @@ const roomSettingConfig = {
         {
           path: '',
           component: videoIndex
+        },
+        {
+          path: '/static/webstatic/community/play_video.html',
+          component: play_video
         },
         {
           path: '/static/webstatic/community/community_comment.html',

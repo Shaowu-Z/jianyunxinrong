@@ -254,7 +254,7 @@
 				<!--</li>-->
 			</template>
 		</ul>
-		<p class="remov" onclick="app.showEditBox = false">取消</p>
+		<p class="remov" @click="showEditBox = false">取消</p>
 	</div>
 	<!--编辑文件夹弹框结束-->
 
