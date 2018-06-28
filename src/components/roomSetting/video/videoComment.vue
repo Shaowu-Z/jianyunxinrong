@@ -112,6 +112,7 @@
 <script>
 import setting from '../../../playform/config'
 import {getParam,BackCookie} from '../../../playform/common'
+import { Toast } from 'mint-ui';
 export default {
     data () {
         return {
@@ -125,24 +126,26 @@ export default {
                 title: ""
             },
             comments:[],
-            vshow:false,
-            hasUser:undefined == commentUserId || commentUserId == "" ?false:true,
+			vshow:false,
+			commentUserId: BackCookie.getCookie("userid"),
+            hasUser:undefined == this.commentUserId || this.commentUserId == "" ?false:true,
             share_key:"SHARE_KEY",
             imageHost:"",
             cIndex: '',//点击回复/删除评论的数组下标
             infoIndex:'',//当前日志所在数组的下标
             replyUserName:'',//被回复的用户名称
-            replyUserId:'',//被回复的用户id
-            autoComment : map.autoComment===undefined ? false : true,//进入是否自动播放
-            infoId : id,//当前评论的日志id
-            id : map.id===undefined ? "" : map.id,//当前id
+			replyUserId:'',//被回复的用户id
+			map : getParam(window.location.href),
+			autoComment : this.map===undefined ? false : true,//进入是否自动播放
+			id : this.map===undefined ? "" : this.map,//当前id
+            infoId : this.id,//当前评论的日志id
         }
     },
     created:function () {
         this.param = getParam(this.href);
         this.user_id = BackCookie.getCookie("userid");
         this.user_name = decodeURI(BackCookie.getCookie("username"));
-	    this.getDetail(_self.initEvent);
+	    this.getDetail(this.initEvent);
     },
     methods: {
         po_Last_Div(that) {
@@ -170,8 +173,8 @@ export default {
         },
     	doPlay:function () {
 		    var _self = this;
-		    var obj = _self.$data.item;
-		    if(isApp){
+		    var obj = _self.item;
+		    if(appApi.isApp){
 			    window.appApi.openVideo(window.location.href,obj.videoUrl,"视频详情",obj.thumbImage);
 		    }else{
 			    BackCookie.setCookie("videoUrl", obj.videoUrl);
@@ -184,7 +187,7 @@ export default {
         		//自动播放
 		        _self.doPlay();
 	        }*/
-        	if(autoComment){
+        	if(this.autoComment){
         		//自动打开评论
 		       // infoIndex = this.getAttribute("data-i");
 		       setTimeout( infoApp.replyComment,500)
@@ -233,7 +236,7 @@ export default {
 			        if(project == undefined || project == ""){
 				        project = "非项目视频"
 			        }
-			        var logo = getUrl() + "/static/images/app-logo.jpg";
+			        var logo = "http://java.winfreeinfo.com/static/images/app-logo.jpg";
 			        if(img == undefined || img == ""){
 			        	img = logo;
 			        }
@@ -254,9 +257,10 @@ export default {
 	        })
         },
         getDetail:function (callback) {
-            var _self = this;
+			var _self = this;
+			let id = this.$route.query.id
             //获取视频详情
-	        axios.get(getUrl() + "/community/video/detail", {
+	        this.$http.get("/community/video/detail", {
 		        params: {id:id}
 	        }).then(function (response) {
 		        if (response.data.code == 0) {
@@ -266,7 +270,12 @@ export default {
 			        _self.vshow = true;
 			        if(callback) callback();
 		        }else{
-		            warm(response.data.message)
+					// warm(response.data.message)
+					Toast({
+						message: response.data.message,
+						position: 'bottom',
+						duration: 1000
+					});
                 }
 	        }).catch(function (error) {
 		        console.log(error);
@@ -277,21 +286,21 @@ export default {
 	    },
 	    clickPraise:function(){//点赞
 	    	appApi.broadcast()
-		    var v = infoApp.$data.item;
+		    var v = infoApp.item;
 		    v.praise = !v.praise;
 		    //v.seeNum = v.seeNum+1;
 		    v.praiseNum = v.praiseNum + (v.praise ? 1:-1);
 		    var param = new FormData();
 		    param.append("id", v.id);
 		    param.append("praise", v.praise);
-		    axios.post(getUrl() + "/community/video/praise", param).then(function (response) {
+		    this.$http.post("/community/video/praise", param).then(function (response) {
 			    console.info(response.data);
 		    });
 	    },
 	    replyComment: function () {//回复/评论点击
-		    var _self =  infoApp.$data;
-		    console.info(replyUserId+"======="+commentUserId);
-		    if(replyUserId==commentUserId  && cIndex != undefined){//自己的评论再次点击是删除
+		    var _self =  infoApp;
+		    console.info(replyUserId+"======="+this.commentUserId);
+		    if(replyUserId==this.commentUserId  && cIndex != undefined){//自己的评论再次点击是删除
 			    confirmLayer("是否删除该条评论？", function(){
 				    layer.closeAll();
 				    //组装请求参数
@@ -309,7 +318,7 @@ export default {
 				    }
 				    _self.comments = newArr;*/
 				    infoApp.initCommentParam();
-				    axios.post(getUrl() + "/community/video/delcomment", param).then(function (resp) {
+				    this.$http.post("/community/video/delcomment", param).then(function (resp) {
 					    console.info(resp.data);
 					    _self.item.commentNum = _self.item.commentNum - 1;
 					    cIndex ="";
@@ -386,7 +395,7 @@ export default {
             }
 	    },
 	    sendComment:function () {//发送评论信息
-		    var _data = infoApp.$data;
+		    var _data = infoApp;
 		    var _self = this;
 		    var msgText =  document.getElementById("commentIpt");
 	    	var pinmsdk=document.getElementsByClassName("pinlun")[0];
@@ -409,13 +418,13 @@ export default {
 		    var reId = undefined == cIndex || "" == cIndex   ? "":_data.comments[cIndex].id;
 		    var comment_format = {
 			    communityId:infoId,
-			    commentUserId:commentUserId,
+			    commentUserId:this.commentUserId,
 			    commentUserName:commentUserName,
 			    replyId:reId,
 			    replyUserId:replyUserId,
 			    replyUserName:replyUserName,
 			    commentContent:_data.send_content};//重置评论json
-		    axios.post(getUrl() + "/community/video/savecomment", comment_format).then(function (resp) {
+		    this.$http.post("/community/video/savecomment", comment_format).then(function (resp) {
 			    console.info(resp.data);
 			    comment_format.id = resp.data.result;
 			    if(_data.comments){
@@ -463,7 +472,7 @@ export default {
 			    s.resourcesJ = imgJson;
 			    s.commentJ = JSON.parse(s.commentJ);
 		    }
-		    infoApp.$data.items = infoApp.$data.items.concat(array);
+		    infoApp.items = infoApp.items.concat(array);
 	    },
 	    initCommentParam:function () {
 		    //infoId = null;//当前评论的日志id
@@ -479,16 +488,16 @@ export default {
 	    	pinmsdk.style.overflow="auto"
 			document.body.classList.remove("addtext");
         	document.getElementsByTagName("html")[0].classList.remove("addtext");
-		    _self.$data.comment_box_display = "none";
-		    //_self.$data.send_content = "";
-		    _self.$data.comm_placeholder = "";
+		    _self.comment_box_display = "none";
+		    //_self.send_content = "";
+		    _self.comm_placeholder = "";
 //		    document.getElementById("commentIpt").innerText = "";
 //		     var stopmove=document.getElementsByClassName("stopmove")[0];
 //		    	stopmove.style.overflow="hidden";
 	    },
 	    collect:function () {
 		    var _self = this;
-		    axios.get(getUrl() + "/collect/do?id=" + id +"&type=5" ).then(function (response) {
+		    this.$http.get("/collect/do?id=" + id +"&type=5" ).then(function (response) {
 			    if (response.data.code == 4001) { // 收藏成功
 				    _self.item.collect = true;
 			    }else if(response.data.code == 4003){ //取消收藏
@@ -501,7 +510,12 @@ export default {
 			    msg(response.data.message);
 		    }).catch(function (error) {
 			    layer.closeAll();
-			    warm("收藏出错")
+				// warm("收藏出错")
+				Toast({
+					message: "收藏出错",
+					position: 'bottom',
+					duration: 1000
+				});
 		    });
 	    }
     }

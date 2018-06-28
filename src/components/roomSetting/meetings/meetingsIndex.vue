@@ -57,6 +57,7 @@ export default {
         }
     },
     created() {
+        console.log(util);
         this.paramMap = getParam(window.location.href);
         this.projectSN=this.paramMap.projectSN
         if(!this.projectSN){
@@ -73,7 +74,9 @@ export default {
             console.log("查询会议列表");
             var parame = new FormData();
             var userId = BackCookie.getCookie("userid")
+            this.projectSN=this.$route.query.projectSn
             parame.append("roomId",this.projectSN)
+            console.log(this.projectSN)
             if(userstatus==null){
                 userstatus = 1;
             }
@@ -87,11 +90,11 @@ export default {
                                 console.log(_self.form.meetingList[i])
                                 var status = _self.form.meetingList[i].mstatus;
                                 var timeShow = "";
-                                var newDate = new Date().Format("yyyy-MM-dd");
-                                var createDate = new Date( _self.form.meetingList[i].mcreateDate).Format("yyyy-MM-dd");
-                                var mm = new Date( _self.form.meetingList[i].mcreateDate).Format("MM");
-                                var dd = new Date( _self.form.meetingList[i].mcreateDate).Format("dd");
-                                var hours = new Date( _self.form.meetingList[i].mcreateDate).Format("hh:mm");
+                                var newDate = new Date()
+                                var createDate = util.fnFormat( _self.form.meetingList[i].mcreateDate,"yyyy-MM-dd");
+                                var mm = util.fnFormat(_self.form.meetingList[i].mcreateDate,"MM");
+                                var dd = util.fnFormat(_self.form.meetingList[i].mcreateDate,"dd");
+                                var hours = util.fnFormat(_self.form.meetingList[i].mcreateDate,"hh:mm");
                                 if(status=='1'){//进行中
                                     //timeShow = mm+"月"+dd+"日  "+hours;
                                     timeShow = mm+"月"+dd+"日";
@@ -100,7 +103,7 @@ export default {
                                         timeShow = hours;
                                     }
                                 }else if(status=='2'){//已结束
-                                    var endHours = new Date( _self.form.meetingList[i].mendDate).Format("hh:mm");
+                                    var endHours =util.fnFormat( _self.form.meetingList[i].mendDate,"hh:mm");
                                     //timeShow = mm+"月"+dd+"日  "+hours+"-"+endHours;
                                     timeShow = mm+"月"+dd+"日";
                                     if(newDate==createDate){
@@ -109,6 +112,7 @@ export default {
                                     }
                                 }
                                 _self.form.meetingList[i].mcreateDate = timeShow;
+                                console.log(_self.form.meetingList);
                             }
                     }else {
                         setTimeout(function () {

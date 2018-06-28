@@ -44,7 +44,7 @@ const contactsConfig = {
       component: orgStructure
     },
     {
-      path: '/addstyle',
+      path: '/static/newwebstatic/add_style.html',
       component: addstyle
     },
     {

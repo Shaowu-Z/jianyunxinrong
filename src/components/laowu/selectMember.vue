@@ -1103,7 +1103,7 @@ export default {
 	.mui-page{
 		display: inline;
 		top:44px;
-		height:auto;
+		/* height:auto; */
 	}
 	.mui-content-padded{
 		text-align: left
