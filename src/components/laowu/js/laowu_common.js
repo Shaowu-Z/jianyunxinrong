@@ -648,6 +648,7 @@ showUnitLists: function () {//加载单位列表
     document.getElementById("backdrop").style.display='block';
 },
   showwindow:function() {
+    
     if(document.getElementById("window")!=null)
     document.getElementById("window").style.display='block';
 },
@@ -675,6 +676,15 @@ showUnitLists: function () {//加载单位列表
     if(document.getElementById("remind")!=null)
     document.getElementById("remind").style.display='block';
 },
+cancel:function() {
+    this.hidebackdrop();
+    this.hidewindow();
+},
+ confirm:function(phone,remark) {
+    var list=[];
+    list.push(phone);
+    this.findTotgetinvite(list,remark);
+   },
 
 
  confirmLayer:function(msg, Fn,cFn,cancelText,confirmText) {

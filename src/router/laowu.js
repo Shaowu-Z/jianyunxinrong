@@ -122,7 +122,7 @@ const laowuConfig = {
       component: contractList
     },
     {
-      path: '/static/webstatic/new_laowu/select_member.html',//日历列表
+      path: '/static/webstatic/new_laowu/select_member.html',//建云联系人
       component: selectMember
     },
     {

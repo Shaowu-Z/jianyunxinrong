@@ -113,7 +113,7 @@
 
 import project_sign from  "./js/project_sign.js"
 import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
-// import tipApi from 	'../../playform/tipApi.js' 
+import tipApi from 	'../../playform/tipApi.js' 
 export default {
     data(){
         return {
