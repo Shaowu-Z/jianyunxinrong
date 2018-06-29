@@ -20,7 +20,7 @@
                     <div class="mui-table-cell"><button type="button" @click="submit_data" class="mui-btn mui-btn-primary">立即创建</button></div>
                 </div>
             </div>
-            <section class="mui-page-content">
+            <section class="mui-page-content" style="position:initial">
                 <div class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <ul class="mui-table-view eg-table-view eg-detail-list" style="margin-top:44px">
@@ -83,10 +83,10 @@
 
             </section>
             <!--遮罩层-->
-            <div class="mui-popup-backdrop" style="display: none; opacity: 0.5" v-show="shade" v-on:click="hide_shade"></div>
+            <div class="mui-popup-backdrop" style="display: none; opacity: 0.5" v-if="shade" v-on:click="hide_shade"></div>
 
             <!--选择方式弹框开始-->
-            <div id="add-style" class="mui-popup mui-popup-in" style="display: none" v-show="add_type">
+            <div id="add-style" class="mui-popup mui-popup-in" style="display: none" v-if="add_type">
                 <div class="mui-popup-title mui-text-left">请选择添加成员的方式</div>
                 <ul class="mui-popup-content mui-table-view mui-text-left eg-table-view">
                     <!--<li class="mui-table-view-cell"><a href="team-address.html">从通讯录批量选择</a></li>-->
@@ -96,7 +96,7 @@
             <!--选择方式弹框结束-->
 
             <!--手动输入弹框开始-->
-            <div id="handwritten" class="mui-popup popup-pure mui-popup-in" style="display: none" v-show="handwritten">
+            <div id="handwritten" class="mui-popup popup-pure mui-popup-in" style="display: none" v-if="handwritten">
                 <div class="mui-popup-title">添加成员</div>
                 <form class="mui-input-group">
                     <div class="sppd-5">
@@ -119,7 +119,7 @@
             <!--手动输入弹框结束-->
 
             <!--修改成员弹框开始-->
-            <div id="updateMember" class="mui-popup popup-pure mui-popup-in" style="display: none" v-show="updateMember">
+            <div id="updateMember" class="mui-popup popup-pure mui-popup-in" style="display: none" v-if="updateMember">
                 <div class="mui-popup-title">修改成员</div>
                 <form class="mui-input-group">
                     <div class="sppd-5">
@@ -142,7 +142,7 @@
             <!--修改成员弹框结束-->
 
             <!--组织标签开始-->
-            <div class="pop-up" style="display: none;" id="select_tags" v-show="select_tags">
+            <div class="pop-up" style="display: none;" id="select_tags" v-if="select_tags">
                 <div class="pop-title"><a href="javascript:app.select_tags = false;">取消</a>   选择组织标签（单选）</div>
                 <div class="pop-content select-box col-xs-6 mui-clearfix" id="tagsHtml">
 
@@ -154,7 +154,7 @@
             <!--组织标签结束-->
 
             <!--行业选择开始-->
-            <div class="pop-up" style="display: none;" id="select_industry" v-show="select_industry">
+            <div class="pop-up" style="display: none;" id="select_industry" v-if="select_industry">
                 <div class="pop-title"><a href="javascript:app.select_industry = false;">取消</a>   选择所在行业（单选）</div>
                 <div class="pop-content select-box col-xs-6 mui-clearfix" id="industryHtml">
 
@@ -166,7 +166,7 @@
             <!--行业选择结束-->
 
             <!--专业开始-->
-            <div class="pop-up" style="display: none;" id="select_major" v-show="select_major">
+            <div class="pop-up" style="display: none;" id="select_major" v-if="select_major">
                 <div class="pop-title"><a href="javascript:app.select_major = false;">取消</a>     选择专业（多选）</div>
                 <div class="pop-content select-box col-xs-6 mui-clearfix" id="majorHtml">
 
@@ -178,7 +178,7 @@
             <!--专业结束-->
 
         </div>
-        <div id="manage_auth" class="mui-page" v-show="show">
+        <div id="manage_auth" class="mui-page" v-if="show">
             <div class="mui-navbar-inner mui-bar mui-bar-nav">
                 <button type="button" id="btn-back" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click="hideshow">
                     <span class="mui-icon mui-icon-left-nav"></span>返回
@@ -194,7 +194,7 @@
                 <div class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <div class="module01" style="margin-top:15px;">
-                            <div class="module01-head">1、请将如下内容手抄或打印到一张A4纸上，所填写的姓名和身份证号码需与本人实名认证一致（管理员必须是本组织人员），加盖公司公章。平台在1-2工作日内核实信息，如非本组织人员，该账户将被封号处理，该账号在平台操作数据将被作废。</div>
+                            <div class="module01-head" style="margin-top:45px">1、请将如下内容手抄或打印到一张A4纸上，所填写的姓名和身份证号码需与本人实名认证一致（管理员必须是本组织人员），加盖公司公章。平台在1-2工作日内核实信息，如非本组织人员，该账户将被封号处理，该账号在平台操作数据将被作废。</div>
                             <div class="module01-body mui-clearfix">
                                 <div class="example-box">
                                     <h4 class="title">管理员授权函</h4>
@@ -214,7 +214,7 @@
                                 </div>
                                 <div class="upload-btn mui-text-center">
                                     <button class="mui-btn mui-btn-success">拍照/上传照片</button>
-                                    <input type="file" value="" class="input-file" accept="image/png,image/gif,image/jpeg" @click="selectCertImg(this)">
+                                    <input type="file" value="" class="input-file" accept="image/png,image/gif,image/jpeg" @change="selectCertImg($event)">
                                 </div>
                             </div>
                         </div>
@@ -228,6 +228,7 @@
 </template>
 
 <script>
+import  '../../playform/lrz.bundle';
 export default {
     data(){
         return{
@@ -262,7 +263,7 @@ export default {
             members:[
                 //{memberName:"1", phoneNumber:"1"},
                 //{}
-            ]
+            ],
         }
     },
     created:function (){
@@ -381,15 +382,18 @@ export default {
             return flag;
         },
         selectCertImg (that) {
+            console.log(that.target.files[0])
             try {
-                lrz(that.files[0], {
+                lrz(that.target.files[0], {
                     width: 800,
                     height: 600
                 }).then(function (rst) {
+                    console.log(rst.base64)
                     uploadStatus = true;
-                    app.$data.accreditImg = rst.base64;
-                    document.getElementById("uploadImg").style.backgroundImage =  "url('" + rst.base64 + "')";
+                    this.accreditImg = rst.base64;
+                    document.getElementById("uploadImg").style.backgroundImage = "url('" + rst.base64 + "')";
                 })
+                console.log(document.getElementById("uploadImg").style.backgroundImage)
             }catch (e){
                 alert(e)
             }
@@ -700,5 +704,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .mui-page{
+        display: block;
+    }
 </style>
