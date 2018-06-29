@@ -28,8 +28,7 @@
 					<li class="img-item">
 						<div class="img-item-inner">
 							<img v-bind:src="img">
-						</div> <span class="btn-roll btn-delete iconfont icon-delete"
-						@click="deleteFile(number,'img')"></span>
+						</div> <span class="btn-roll btn-delete" @click="deleteFile(number,'img')"></span>
 					</li>
 					</div>
 					<li class="upload-btn">
@@ -54,7 +53,7 @@
 							</div>
 							<div class="oa-contact-content mui-table-cell">
 								<h4 class="oa-contact-name" v-text="pic.name"></h4>
-								<p class="oa-contact-email">
+								<p class="oa-contact-email text">
 									<span v-text="pic.size"></span>
 								</p>
 							</div>

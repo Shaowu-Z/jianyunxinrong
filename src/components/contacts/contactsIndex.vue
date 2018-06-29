@@ -384,8 +384,8 @@ export default {
 		this.$router.push({path:'/phoneList'})
 	},
 	sweepQrCode(){
-		console.log(111);
 		window.appApi.sweepQrCode();
+		this.show = !this.show
 	},
     clickshow(submenu) {
 			console.log(submenu);
@@ -409,10 +409,10 @@ export default {
 		}
 	},
 	project(submenu){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
+		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
 	},	
 	Office(submenu){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
+		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
 	},
 	participate(submenu){
 		appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);

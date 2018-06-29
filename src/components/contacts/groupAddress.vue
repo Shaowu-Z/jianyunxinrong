@@ -5,7 +5,7 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left" @click="goBack"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
-            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">批量操作</a>
+            <a id="menu" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right" @click="showhide">批量操作</a>
         </header>
 
 
@@ -64,16 +64,17 @@
                 </ul>
             </div>-->
         </section>
-
+        <!--遮罩层-->
+        <div class="mui-backdrop" style="z-index: 999;" v-show="show"  @click="showhide"></div>
         <!--右上角弹出菜单-->
-        <div id="popover-more" class="mui-popover top-menu">
-            <div class="mui-popover-arrow"></div>
+        <div id="popover-more" class="mui-popover top-menu dis" v-show="show">
+            <div class="mui-popover-arrow arrowrighr"></div>
             <ul class="mui-table-view">
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/batchOpeMember.html?type=1&teamId='+window.location.href.split('?')[1].split('=')[1])"><span class="mui-icon iconfont icon-piliang-add"></span>好友中批量添加</a>
+                <li class="mui-table-view-cell" @click="showhide"><a @click="one" href="javascript:;"><span class="mui-icon iconfont icon-piliang-add"></span>好友中批量添加</a>
                 </li>
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/batchOpeMember.html?type=2&teamId='+window.location.href.split('?')[1].split('=')[1])"><span class="mui-icon iconfont icon-piliang-move"></span>批量转移成员</a>
+                <li class="mui-table-view-cell" @click="showhide"><a @click="tow" href="javascript:;"><span class="mui-icon iconfont icon-piliang-move"></span>批量转移成员</a>
                 </li>
-                <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl()+'/static/webstatic/contacts/batchOpeMember.html?type=3&teamId='+window.location.href.split('?')[1].split('=')[1])"><span class="mui-icon iconfont icon-piliang-delete"></span>批量删除成员</a>
+                <li class="mui-table-view-cell" @click="showhide"><a @click="three" href="javascript:;"><span class="mui-icon iconfont icon-piliang-delete"></span>批量删除成员</a>
                 </li>
             </ul>
         </div>
@@ -99,7 +100,8 @@ export default {
             shade:false,
             items:[],
             newJson:[],
-            none:[] 
+            none:[],
+            show:false 
         }
     },
     created() {
@@ -138,6 +140,21 @@ export default {
 
     },
     methods:{
+        one(){
+            // appApi.openNewWindow('/batchOpeMember?type=1&teamId='+window.location.href.split('?')[1].split('=')[1])
+            this.$router.push({path:'/batchOpeMember',query:{type:1,teamId:this.$route.query.teamId}})
+        },
+        tow(){
+            // appApi.openNewWindow('/batchOpeMember?type=2&teamId='+window.location.href.split('?')[1].split('=')[1])
+            this.$router.push({path:'/batchOpeMember',query:{type:2,teamId:this.$route.query.teamId}})
+        },
+        three(){
+            // appApi.openNewWindow('/batchOpeMember?type=3&teamId='+window.location.href.split('?')[1].split('=')[1])
+            this.$router.push({path:'/batchOpeMember',query:{type:3,teamId:this.$route.query.teamId}})
+        },
+        showhide(){
+            this.show = !this.show
+        },
         manual(){
             this.$router.push({path:'/add_manually',query:{teamId:this.$route.query.teamId,type:0}});
         },
@@ -186,5 +203,14 @@ export default {
     .mui-active{
         display: block;
         opacity: 1;
+    }
+    .dis{
+        display: block;
+        opacity:1;
+        top: 44px;
+        right: 7px;
+    }
+    .arrowrighr{
+        left: 150px;
     }
 </style>

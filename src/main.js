@@ -10,7 +10,7 @@ import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import phonePy from "./playform/py.js";
 // import "./playform/alert.js";
-// import "./playform/layer.js";
+import "./playform/layer.js";
 import MintUI from 'mint-ui'
 import tipApi from "./playform/tipApi.js";
 import "./assets/css/common/mui.less"

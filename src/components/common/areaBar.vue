@@ -150,7 +150,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
 @import "../../assets/css/common/mint";
 .picker {
   width: 100%;
@@ -189,5 +189,8 @@ export default {
 }
 .mui-input-row.areas {
   padding-right: 36px;
+}
+.mint-button:nth-child(2) .mint-button-text{
+  color: #fff
 }
 </style>

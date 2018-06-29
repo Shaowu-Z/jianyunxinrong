@@ -69,7 +69,7 @@ export default {
         var memberId = this.$route.query.memberId;
         //var param = {memberId:memberId};
         this.$http.get("/concats_api/query_member?memberId="+memberId).then(function (response) {
-            _self.$data.none = response.data.result;
+            _self.none = response.data.result;
             console.info(response.data.result);
             //this.date.memberName =
             // console.log(this);

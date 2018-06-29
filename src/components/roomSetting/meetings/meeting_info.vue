@@ -109,21 +109,21 @@ export default {
                         _self.form.meeting = result;
                         var status = _self.form.meeting.mstatus;
                         var timeShow = "";
-                        var newDate = new Date().Format("yyyy-MM-dd");
-                        var createDate = new Date( _self.form.meeting.mcreateDate).Format("yyyy-MM-dd");
-                        var endDate = new Date( _self.form.meeting.mendDate).Format("yyyy-MM-dd");
-                        var mm = new Date( _self.form.meeting.mcreateDate).Format("MM");
-                        var dd = new Date( _self.form.meeting.mcreateDate).Format("dd");
-                        var hours = new Date( _self.form.meeting.mcreateDate).Format("hh:mm");
+                        var newDate = new Date()
+                        var createDate = util.fnFormat(_self.form.meeting.mcreateDate,"yyyy-MM-dd");
+                        var endDate = util.fnFormat(_self.form.meeting.mcreateDate,"yyyy-MM-dd");
+                        var mm = util.fnFormat(_self.form.meeting.mcreateDate,"MM");
+                        var dd = util.fnFormat(_self.form.meeting.mcreateDate,"dd");
+                        var hours = util.fnFormat(_self.form.meeting.mcreateDate,"hh:mm");
                         if(status=='1'){
                             timeShow = mm+"月"+dd+"日  "+hours;
                             if(newDate==createDate){
                                 timeShow = "今天  "+hours;
                             }
                         }else if(status=='2'){//已结束
-                            var endmm = new Date( _self.form.meeting.mendDate).Format("MM");
-                            var enddd = new Date( _self.form.meeting.mendDate).Format("dd");
-                            var endHours = new Date( _self.form.meeting.mendDate).Format("hh:mm");
+                            var endmm = util.fnFormat(_self.form.meeting.mcreateDate,"MM");
+                            var enddd = util.fnFormat(_self.form.meeting.mcreateDate,"dd");
+                            var endHours = util.fnFormat(_self.form.meeting.mendDate,"hh:mm");
                             timeShow = mm+"月"+dd+"日  "+hours+"  -  "+endmm+"月"+enddd+"日  "+endHours;
                             if(newDate==createDate){
                                 timeShow = "今天  "+hours+"-"+endHours;

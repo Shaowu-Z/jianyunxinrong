@@ -148,8 +148,8 @@ export default {
                     setThirdInfoForQq(rs.result);
                       _this.$router.push({path:'third_bind.vue'});
                 }else{
-                    warm(rs.message);
-                    layer.close(index_);
+                    alert(rs.message);
+                    // layer.close(index_);
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -280,7 +280,7 @@ export default {
                         window.location.href = getUrl() + "/static/webstatic/register/person_approve.html";
                     }
                 }else{
-                    warm(rs.message);
+                    alert(rs.message);
                     //layer.closeAll();
                 }
             }).catch(function (error) {alert("调用服务异常!");

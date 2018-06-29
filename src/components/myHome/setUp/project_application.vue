@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 	<header class="mui-bar mui-bar-nav">
-		<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide"></button>
+		<button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
 		<div class="search-box">
 			<div class="search-inner input-row" style="margin-left:55px;">
 				<span class=" mui-icon mui-icon-search"></span>
@@ -13,7 +13,7 @@
 		<div v-for="(m, key) in search_items" :key="key">
 		<div class="module01" v-if="m.items.length>0">
 			<div class="module01-head text"><span class="title line-title">{{m.fenzutitle}}</span></div>
-			<ul class="mui-table-view mui-grid-view module-body">
+			<ul class="mui-table-view mui-grid-view module-body flex">
 				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-text-center" @click="onFuwuclick(mm.url)" v-for="(mm,index) in m.items" :key="index">
 					<div class="menu-item">
 						<span :class="['mui-icon iconfont '+ (mm.iconname==''?'icon-zixun':mm.iconname)]"></span>
@@ -56,6 +56,9 @@ export default {
         });
     },
     methods : {
+        goBack(){
+            this.$router.go(-1)
+        },
         onFuwuclick: function (url) {//点击分组服务\
             var params = getParam(window.location.href);
             var teamCode = "";
@@ -111,6 +114,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .flex{
+        display: flex;
+        flex-wrap: wrap;
+    }
 </style>

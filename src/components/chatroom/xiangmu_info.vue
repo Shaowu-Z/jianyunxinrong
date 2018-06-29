@@ -3,66 +3,66 @@
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">项目信息</h1>
             <!--<a class="mui-action-back mui-icon iconfont icon-back"></a>-->
-            <button v-if="isEdit" class="mui-btn mui-btn-nav mui-btn-link mui-pull-right" @click="editProject()">完善信息</button>
+            <button class="mui-btn mui-btn-nav mui-btn-link mui-pull-right" @click="editProject()">完善信息</button>
         </header>
         <section class="mui-content mycenter-content">
 
 
             <ul class="mui-table-view eg-table-view tight-table-view">
                 <li class="mui-table-view-cell">
-                    <label class="text">工程全称</label><span class="con" v-text="project.projectName"></span>
+                    <label class="text">工程全称</label><span class="con text" v-text="project.projectName"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">工程简称</label><span class="con" v-text="project.projectNameShort"></span>
+                    <label class="text">工程简称</label><span class="con text" v-text="project.projectNameShort"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">工程类别</label><span class="con" v-text="project.leibie"></span>
+                    <label class="text">工程类别</label><span class="con text" v-text="project.leibie"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">所在地区</label><span class="con" v-text="project.fullArea"></span>
+                    <label class="text">所在地区</label><span class="con text" v-text="project.fullArea"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">工程地点</label><span class="con" v-text="project.placeShenbao"></span>
+                    <label class="text">工程地点</label><span class="con text" v-text="project.placeShenbao"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">协作管理方</label><span class="con" v-text="project.projectManageRoomClassName"></span>
+                    <label class="text">协作管理方</label><span class="con text" v-text="project.projectManageRoomClassName"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">项目管理员</label><span class="con" v-text="project.projectManager"></span>
+                    <label class="text">项目管理员</label><span class="con text" v-text="project.projectManager"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">子管理员</label><span class="con" v-text="sonManage"></span>
+                    <label class="text">子管理员</label><span class="con text" v-text="sonManage"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">建设单位</label><span class="con" v-text="project.companyFinalName"></span>
-                </li>
-            <!-- <li class="mui-table-view-cell">
-                    <label style="line-height: 1;">社会信用代码<br/>组织机构代码</label><span class="con" v-text="project.companyFinalNashuihao"></span>
-                </li>-->
-                <li class="mui-table-view-cell">
-                    <label class="text">施工单位</label><span class="con" v-text="project.companyShigongName"></span>
+                    <label class="text">建设单位</label><span class="con text" v-text="project.companyFinalName"></span>
                 </li>
             <!-- <li class="mui-table-view-cell">
-                    <label>信用代码</label><span class="con" v-text="project.companyShigongNashuihao"></span>
+                    <label style="line-height: 1;">社会信用代码<br/>组织机构代码</label><span class="con text" v-text="project.companyFinalNashuihao"></span>
                 </li>-->
                 <li class="mui-table-view-cell">
-                    <label class="text">工程造价</label><span class="con" v-text="project.zaojia"></span><span class="mui-badge mui-badge-inverted">(万元)</span>
+                    <label class="text">施工单位</label><span class="con text" v-text="project.companyShigongName"></span>
+                </li>
+            <!-- <li class="mui-table-view-cell">
+                    <label>信用代码</label><span class="con text" v-text="project.companyShigongNashuihao"></span>
+                </li>-->
+                <li class="mui-table-view-cell">
+                    <label class="text">工程造价</label><span class="con text" v-text="project.zaojia"></span><span class="mui-badge mui-badge-inverted">(万元)</span>
 
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">建筑面积</label><span class="con" v-text="project.mianji"></span><span class="mui-badge mui-badge-inverted">(平米)</span>
+                    <label class="text">建筑面积</label><span class="con text" v-text="project.mianji"></span><span class="mui-badge mui-badge-inverted">(平米)</span>
                 </li>
                 <!--<li class="mui-table-view-cell">
-                    <label>计划开工</label><span class="con" v-text="project.missionStartDate"></span>
+                    <label>计划开工</label><span class="con text" v-text="project.missionStartDate"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label>计划竣工</label><span class="con" v-text="project.missionEndDate"></span>
+                    <label>计划竣工</label><span class="con text" v-text="project.missionEndDate"></span>
                 </li>-->
                 <li class="mui-table-view-cell">
-                    <label class="text">开工日期</label><span class="con" v-text="project.missionStartDate"></span>
+                    <label class="text">开工日期</label><span class="con text" v-text="project.missionStartDate"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">竣工日期</label><span class="con" v-text="project.missionEndDate"></span>
+                    <label class="text">竣工日期</label><span class="con text" v-text="project.missionEndDate"></span>
                 </li>
             </ul>
         <div class="module01">
@@ -99,6 +99,8 @@
 <script>
 import {getParam,BackCookie} from '../../playform/common'
 import setting from '../../playform/config'
+import { Toast } from 'mint-ui';
+import util from '../../playform/util'
 export default {
     data () {
         return {
@@ -174,15 +176,15 @@ export default {
 
         var _self = this;
         _self.form.userID=this.userId;
-        _self.form.userName=this.form.userName;
-        console.log(this.$route.query.projectSN);
+        console.log(_self.form.userID,'用户ID');
+        _self.form.userName=userName;
         //根据ID查询记录
-        if(this.$route.query.projectSN){
-            _self.showRecordById();
+        if(this.$route.query.projectSn){
+            this.showRecordById();
 
         }
         //初始化职业标签
-        _self.showzhiyeType();
+        this.showzhiyeType();
         appApi.imgPreview.init();
 
     },
@@ -314,7 +316,11 @@ export default {
             })
         },
         popup:function(content){
-            msg(content);
+            Toast({
+                message: content,
+                position: 'bottom',
+                duration: 1000
+            });
         },
         selectProject:function () {//工程类别
             var _self=this;
@@ -342,11 +348,21 @@ export default {
                             _self.form.leibie=SelectedItem[0].text;
                         });
                     }else {
-                        msg("未查询到工程类别!")
+                        // msg("未查询到工程类别!")
+                        Toast({
+                            message: '未查询到工程类别!',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return
                     }
                 }else {
-                    msg("查询工程类别失败!")
+                    // msg("查询工程类别失败!")
+                    Toast({
+                        message: '查询工程类别失败!',
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -454,11 +470,21 @@ export default {
                         //console.log(result)
                         _self.data.zuzhiList=result;
                     }else {
-                        msg("未查询到组织类型!")
+                        // msg("未查询到组织类型!")
+                        Toast({
+                            message: '未查询到组织类型!',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return
                     }
                 }else {
-                    msg("查询组织类型失败!")
+                    // msg("查询组织类型失败!")
+                    Toast({
+                        message: "查询组织类型失败!",
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -468,7 +494,7 @@ export default {
             var _self = this;
             var formdata = new FormData();
             if(_self.projectmanage.length==0){
-                formdata.append("projectSn", _self.$route.query.projectSN)
+                formdata.append("projectSn", _self.$route.query.projectSn)
                 this.$http.post("/pcontact_api/findprojectmanage", formdata).then(function (response) {
                     console.log(response,'查询项目子管理员');
                     if (response.data.code == 0) {
@@ -488,14 +514,19 @@ export default {
                         }
                     }
                 }).catch(function (error) {
-                    msg(error)
+                    // msg(error)
+                    Toast({
+                        message: error,
+                        position: 'bottom',
+                        duration: 1000
+                    });
                     console.info(error);
                 });
             }
         },
         showRecordById:function () {//查询项目
             var _self=this;
-            _self.form.serialNum=this.$route.query.projectSN;
+            _self.form.serialNum=this.$route.query.projectSn;
             var formdata=new FormData();
             formdata.append("json",JSON.stringify(_self.form));
             this.$http.post("/project_room_api/find_project",formdata).then(function (response) {
@@ -520,32 +551,44 @@ export default {
                             _self.form.xiangmuguanliyuanId = _self.form.projectManagerId;
                         }
                         if(result[0].missionStartDate!=null){
-                        _self.form.missionStartDate=formDate(result[0].missionStartDate);
+                        _self.form.missionStartDate=util.fnFormat(result[0].missionStartDate,'yyyy-MM-dd')
                         }
                         if(result[0].missionEndDate!=null) {
-                            _self.form.missionEndDate = formDate(result[0].missionEndDate);
+                            _self.form.missionEndDate = util.fnFormat(result[0].missionEndDate,'yyyy-MM-dd')
                         }
                         //判断是否有权限修改项目信息
                         if(_self.form.xiangmuguanliyuan==null||_self.form.xiangmuguanliyuan==""){
                             //项目管理员等于创建者的时候，可以编辑
+                            console.log(_self.userId,'管理员')
+                            console.log(_self.form.userID)
                             if(_self.userId==_self.form.userID){
                                 _self.isEdit = true;
                             }
-                        }else if(userName==_self.form.xiangmuguanliyuan){//当前登录人和项目管理员相等时，可以编辑
+                        }else if(_self.form.userName==_self.form.xiangmuguanliyuan){//当前登录人和项目管理员相等时，可以编辑
                             _self.isEdit = true;
                         }
                         //_self.showAttment(result[0].uploadIds);
                         //初始化子管理员
                         _self. findroomuserlist();
                     }else {
-                        msg("未查询到项目信息，请核对记录ID是否正确!")
+                        // msg("未查询到项目信息，请核对记录ID是否正确!")
+                        Toast({
+                            message: '未查询到项目信息，请核对记录ID是否正确!',
+                            position: 'bottom',
+                            duration: 5000
+                        });
                         return
                     }
                     setTimeout(function () {
                         _self.showImage();
                     },100)
                 }else {
-                    msg("查询项目失败!")
+                    // msg("查询项目失败!")
+                    Toast({
+                        message: '查询项目失败!',
+                        position: 'bottom',
+                        duration: 5000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -565,7 +608,12 @@ export default {
                     console.log("附件",result);
 
                 }else{
-                    msg("查询附件失败");
+                    // msg("查询附件失败");
+                    Toast({
+                        message: '查询附件失败',
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -575,7 +623,12 @@ export default {
             var _self = this;
             _self.fm.projectSN=_self.form.serialNum;
             if(!_self.fm.projectSN){
-                msg("参数有误，没有项目ID");
+                // msg("参数有误，没有项目ID");
+                Toast({
+                    message: '参数有误，没有项目ID',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
             // Base.load({url:"http://java.winfreeinfo.com/pro_api/getProImg",data:{"projectSN":_self.fm.projectSN},dataType:"json",method:"post"},function(response){
@@ -583,14 +636,16 @@ export default {
             // },function(error){
             //     console.info(error);
             // })
-            this.$http.post('/pro_api/getProImg',_self.fm.projectSN).then(function(response) {
-                console.log("查询照片",response)
-                if (response.code == 200) {
-                    console.log("查询照片",response.result)
-                    if(response.result){
-                        var data = response.result.data;
+            var parame = new FormData();
+            parame.append("projectSN",_self.fm.projectSN)
+            // let data={"projectSN":_self.fm.projectSN}
+            this.$http.post('/pro_api/getProImg',parame).then(function(response) {
+                if (response.data.code == 200) {
+                    console.log("查询照片",response.data.result)
+                    if(response.data.result){
+                        var data = response.data.result.data;
                         if(data){
-                            _self.image_host = response.result.image_host;
+                            _self.image_host = response.data.result.data.image_host;
                             _self.fm.imgUrl = data.imgUrl;
                             _self.fm.imgSmallUrl = data.imgSmallUrl;
                             _self.fm.serialNum = data.serialNum;
@@ -598,7 +653,12 @@ export default {
                         }
                     }
                 }else{
-                    msg("获取数据失败！请稍后重试");
+                    // msg("获取数据失败！请稍后重试");
+                    Toast({
+                        message: '获取数据失败！请稍后重试',
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -608,7 +668,12 @@ export default {
 
             var _self = this;
             if(!_self.fm.projectSN){
-                msg("参数有误，没有项目ID");
+                // msg("参数有误，没有项目ID");
+                Toast({
+                    message: '参数有误，没有项目ID',
+                    position: 'bottom',
+                    duration: 5000
+                });
                 return;
             }
             if (!uploadStatus && _self.$data.fm.imgUrl == "") {
@@ -634,7 +699,12 @@ export default {
 
                         },500)
                     }else{
-                        msg("工程照片上传失败");
+                        // msg("工程照片上传失败");
+                        Toast({
+                            message: '工程照片上传失败',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                     }
                 }).catch(function (error) {
                     console.info(error);
@@ -648,55 +718,105 @@ export default {
         saveProject:function (type) {//保存项目
             var _self=this;
             if(!_self.form.projectName){
-                msg("工程名称不能为空")
+                // msg("工程名称不能为空")
+                Toast({
+                    message: '工程名称不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }else {
                 _self.form.projectNameShenbao=_self.form.projectName;
             }
             if(!_self.form.projectNameShort){
-                msg("工程简称不能为空")
+                // msg("工程简称不能为空")
+                Toast({
+                    message: '工程简称不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
             if(!_self.form.leibie){
-                msg("工程不能为空")
+                // msg("工程不能为空")
+                Toast({
+                    message: '工程不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
             if(!_self.form.fullArea){
-                msg("所在城市不能为空")
+                // msg("所在城市不能为空")
+                Toast({
+                    message: '所在城市不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
             if(!_self.form.placeShenbao){
-                msg("工程地点不能为空")
+                // msg("工程地点不能为空")
+                Toast({
+                    message: '工程地点不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
 
             if(!_self.form.gongChengFangID){
-                msg("我的组织类型不能为空")
+                // msg("我的组织类型不能为空")
+                Toast({
+                    message: '我的组织类型不能为空',
+                    position: 'bottom',
+                    duration: 1000
+                });
                 return;
             }
 
             if(!_self.$route.query.projectSN){//创建项目
                 if(_self.form.gongChengFangID=='9'){
                     if(!_self.roomform.roomName){
-                        msg("专业不能为空")
+                        // msg("专业不能为空")
+                        Toast({
+                            message: '专业不能为空',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return;
                     }
 
                 }else  if(_self.form.gongChengFangID=='7'){
                     if(!_self.roomform.description){
-                        msg("供应材料不能为空")
+                        // msg("供应材料不能为空")
+                        Toast({
+                            message: '供应材料不能为空',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return;
                     }
                 }else  if(_self.form.gongChengFangID=='13'){
                     if(!_self.roomform.description){
-                        msg("专业不能为空")
+                        // msg("专业不能为空")
+                        Toast({
+                            message: '专业不能为空',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                         return;
                     }
                 }else{
                     if(!_self.roomform.companyName) {//||!_self.roomform.companyCreditCode
                         if (type=='save') {
                             if (!_self.roomform.companyName) {
-                                msg("公司名称不能为空");
+                                // msg("公司名称不能为空");
+                                Toast({
+                                    message: '公司名称不能为空',
+                                    position: 'bottom',
+                                    duration: 1000
+                                });
                                 return;
                             }
                         }
@@ -744,7 +864,12 @@ export default {
                             console.info(error);
                         });
                     }else {
-                        msg("项目创建失败!")
+                        // msg("项目创建失败!")
+                        Toast({
+                            message: '项目创建失败!',
+                            position: 'bottom',
+                            duration: 1000
+                        });
                     }
                 }).catch(function (error) {
                     console.info(error);
@@ -774,7 +899,12 @@ export default {
             this.$http.post("/project_room_api/update_project",formdata).then(function (response) {
                 console.log(response,'项目更新')
                 if(response.data.code==200){
-                    msg("项目更新成功!");
+                    // msg("项目更新成功!");
+                    Toast({
+                        message: '项目更新成功!',
+                        position: 'bottom',
+                        duration: 1000
+                    });
                     setTimeout(function () {
                         appApi.broadcast("reLoad()"); //刷新页面
                         appApi.closeNewWindow();
@@ -782,7 +912,12 @@ export default {
 
 
                 }else {
-                    msg("项目更新失败!")
+                    // msg("项目更新失败!")
+                    Toast({
+                        message: '项目更新失败!',
+                        position: 'bottom',
+                        duration: 1000
+                    });
                 }
             }).catch(function (error) {
                 console.info(error);
@@ -854,7 +989,8 @@ export default {
         editProject() {
 
             // appApi.openNewWindow(setting.pagepath+'/chatroom/xiangmu_edit.html?projectSN='+this.$route.query.projectSN);
-            this.$router.push({path:'/static/webstatic/chatroom/xiangmu_edit.html',query:{projectSN:this.$route.query.projectSN}});
+            // console.log(this.$route.query.projectSn);
+            this.$router.push({path:'/static/webstatic/chatroom/xiangmu_edit.html',query:{projectSN:this.$route.query.projectSn}});
         },
         /**
          * 接收子管理员列表

@@ -28,11 +28,11 @@
 						<div v-for="(item,index2) in items" :key="index2">
 							<div v-if="item.name">
 								<div v-if="item.isp == 1">
-								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group">
+								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
 										{{item.first}}
 									</li>
 								</div>
-								<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item">
+								<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item" style="border-bottom: 1px solid #ccc">
 									<a :href="['javascript:appApi.openNewWindow(pagepath+\'/contacts/eg_details.html?phone='+item.phone+'&name='+item.name+'\')']">
 									<div class="mui-slider-cell">
 											<div class="oa-contact-cell mui-table">
@@ -65,10 +65,11 @@
 
 <script>
 import contacts from '../../playform/contacts_comm'
+import { Toast } from 'mint-ui';
 export default {
 	data(){
 		return{
-			phones:[1]
+			phones:[]
 		}
 	},
 	mounted(){
@@ -128,11 +129,10 @@ export default {
 		addFriends(index1, index2) {
 			
 			var phoneMap = this.phones[index1][index2];
-			alert(json.stringify(phoneMap))
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
             this.$http.post("/concats_api/insert_add_info", addVo).then(function (response) {
-                var friendVO = response.data.result;
+				var friendVO = response.data.result;
                 if(friendVO.isOwnOrFriend=="0"){
 					// msg("不可添加自己为好友!");
 					Toast({
