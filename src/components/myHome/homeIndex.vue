@@ -276,6 +276,7 @@
 
 <script>
 // import footerBar from '../common/footerBar'
+// /* import tipApi from '../../playform/tipApi'; */
 export default {
 //   components: {
 //     footerBar

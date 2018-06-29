@@ -44,7 +44,7 @@ const loginConfig = {
       component: resizepwd
     },
     {
-      path: '/personApprove',
+      path: '/static/webstatic/register/person_approve.html',
       component: personApprove,
     },
   ]

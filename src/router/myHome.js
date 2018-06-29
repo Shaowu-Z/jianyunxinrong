@@ -22,6 +22,7 @@ const privacy_policy = resolve => require(['@/components/myHome/setting/privacy_
 const serviceAgreement = resolve => require(['@/components/myHome/setting/serviceAgreement'], resolve)
 const myCenter = resolve => require(['@/components/myHome/myCenter'], resolve)
 const myInfo = resolve => require(['@/components/myHome/myCenter/myInfo'], resolve)
+const search = resolve => require(['@/components/myHome/myCenter/search'], resolve)
 const myCollect = resolve => require(['@/components/myHome/myCenter/myCollect'], resolve)
 const myCodecard=resolve => require(['@/components/myHome/myCenter/my_codecard'], resolve)
 const change_phone = resolve => require(['@/components/myHome/myCenter/change_phone'], resolve)
@@ -92,6 +93,10 @@ const myHomeConfig = {
         {
           path: '/myInfo',
           component: myInfo
+        },
+        {
+          path: '/search',
+          component: search
         },
         {
           path: '/static/webstatic/mycenter/my_collect.html',

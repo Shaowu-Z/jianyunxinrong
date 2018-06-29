@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import tipApi from 	'../../playform/tipApi.js' 
 export default {
     data(){
         return {
@@ -76,6 +77,7 @@ export default {
         }
 	},
 	created: function() {
+		
 		var _self=this
 		setTimeout(function(){
             _self.loginParams.deviceInfo = _self.getDeviceInfo();
@@ -180,8 +182,10 @@ export default {
 			this.$router.push({path:'/privacy_policy'});
 		},
 		subReg() {
+			
 			// /user_api/user_register
-			// this.$router.push('/login/personApprove');		
+			// this.$router.push('/login/personApprove');
+			
 			const myreg=/^[1][3,4,5,7,8][0-9]{9}$/; 
 			var _self = this;
             var params = _self.regParams;
@@ -192,8 +196,10 @@ export default {
                 params.invUserId = url_params.invUser;
                 params.invType = url_params.type;
 			}
-			console.log("...........",this.regParams)
-			alert(this.regParams.certCode)
+			console.log("...........",JSON.stringify(params))
+			localStorage.setItem("loginParams", JSON.stringify(params));
+			return
+			appApi.openNewWindow("/static/webstatic/register/person_approve.html");
 			if(!this.myreg.test(this.regParams.certCode)){
 				alert('请正确填写手机号')
 				return false;
@@ -212,21 +218,22 @@ export default {
 			} else{
 				this.$http.post('/user_api/user_register',params)
 				.then(function(response){
+					console.log("注册结果",response)
 					var rs = response.data;
 					if(rs.code == 0){
-						msg("注册成功");
+						tipApi.success("注册成功",2);
 						//注册成功
 						if(url_params_length>0){
 							//执行回调
 							_self.regCallBack(params,rs.result);
 						}else{
-
-							//保存一些信息到注册页面中
-							localStorage.setItem("loginParams", JSON.stringify(params));
-
-							//注册成功后直接跳转到登录页面
-							this.$router.push({path:'/static/webstatic/register/login.html'});
-							// window.location.href = getUrl() + "/static/webstatic/register/person_approve.html";
+							 //保存一些信息到注册页面中
+							   localStorage.setItem("loginParams", JSON.stringify(params));
+							   /**
+								 * 必须用openNewWindow打开，不然iOS无法调用原生方法获设备信息
+								 */
+								appApi.openNewWindow("/static/webstatic/register/person_approve.html");
+							
 						}
 					}else{
 						alert(rs.message);
@@ -238,6 +245,37 @@ export default {
 				});
 			}
 		},
+		regCallBack:function (params,rs) {
+            if(url_params.type == "1" || url_params.type == 1){
+                //好友申请
+                var addVo = {
+                    addUserId: url_params.invUser,
+                    receivedUserId:rs.userId,
+                    receivedUserName:rs.userNick,
+                    cellPhone:rs.userPhone,
+                    applyType:"wx"
+                };
+                axios.post(getUrl() + "/concats_api/insert_add_info", addVo).then(function (response) {
+                    window.location.href = DOWN_LOAD_APP_URL;
+                }).catch(function (error) {
+                    console.info(error);
+                });
+            }else{
+                //团队邀请
+                var param = {
+                    createType:"2",
+                    userId:rs.userId,
+                    memberName:rs.userNick,
+                    phoneNumber:rs.userPhone,
+                    teamId:url_params.invTeam};
+                axios.post(getUrl()+"/concats_api/create_member", param).then(function (response) {
+                    window.location.href = DOWN_LOAD_APP_URL;
+                    console.info(response);
+                }).catch(function(error){
+                    console.log('操作失败-'+error);
+                });
+            }
+        },
 		JSONLength:function(obj) {
 			var size = 0, key;
 			for (key in obj) {

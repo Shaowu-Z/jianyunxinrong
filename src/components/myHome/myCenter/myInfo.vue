@@ -231,9 +231,11 @@
 			});
 
 			function uploadHeadImg(imgFile) {
-				loading("请稍后...")
+				var fileBase64
+				var _self=this
+				alert("请稍后...")
 				//拍照角度矫正
-				selectFileImage(imgFile);
+				// selectFileImage(imgFile);
 				setTimeout(function() {
 					var file = imgFile.files['0'];
 					if(!file) {
@@ -244,7 +246,7 @@
 					params.append("imageName", file.name);
 					params.append("width", 96);
 					params.append("height", 96);
-					this.$http.post("/user_api/upload_user_base64icon", params).then(function(response) {
+					_self.$http.post("/user_api/upload_user_base64icon", params).then(function(response) {
 
 						if(response.data.code == 0) {
 							var map = response.data.result;

@@ -1154,11 +1154,13 @@ export default {
             //console.log(JSON.stringify(_self.gongdanTabs))
             //_self.gongdanTabs = response.data.result.gdmx
             // _self.startDate = new Date(response.data.result.bl.end_date).Format("yyyy-MM-dd")
+            console.log(response.data.result)
             _self.startDate = util.fnFormat(
               response.data.result.bl.end_date,
               "yyyy-MM-dd"
             );
-            console.log("_self.startDate" + _self.startDate);
+            // _self.startDate="2016-02-02"
+            // console.log("_self.startDate" + _self.startDate);
           }
         });
     },

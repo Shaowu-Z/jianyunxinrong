@@ -33,7 +33,7 @@
 							<div v-for="(item,index) in select_member.projects" :key="index">
 								<ul class="mui-table-view">
 									<li class="mui-table-view-cell mui-collapse" style="    border-bottom: 1px solid #efeff4;">
-										 <a @click ="clickshow(index)" style="border-bottom: 1px solid #ccc;">
+										 <a @click ="clickProshow(index)" style="border-bottom: 1px solid #ccc;">
 											<div class="mui-slider-cell">
 												<div class="oa-contact-cell mui-table">
 													<div class="oa-contact-avatar mui-table-cell">
@@ -45,7 +45,7 @@
 												</div>
 											</div>
 										</a>
-										<ul class="mui-table-view" :class="{'dis' : select_member.Listshow.indexOf(index) !== -1}">
+										<ul class="mui-table-view" :class="{'dis' : select_member.proListshow.indexOf(index) !== -1}">
 											<li class="mui-table-view-cell">
 												<div class="mui-slider-cell">
 													<div class="oa-contact-cell mui-table">
@@ -71,7 +71,7 @@
 							<div v-for="(item,index) in select_member.items" :key="index">
 								<ul class="mui-table-view">
 									<li class="mui-table-view-cell mui-collapse fold-title">
-										<a @click ="clickshow">
+										<a @click ="clickTeamshow(index)">
 											<div class="mui-slider-cell">
 												<div class="oa-contact-cell mui-table">
 													<div class="oa-contact-avatar mui-table-cell">
@@ -83,7 +83,7 @@
 												</div>
 											</div>
 										</a>
-										<ul class="mui-table-view" v-show="true">
+										<ul class="mui-table-view" :class="{'dis' : select_member.teamListshow.indexOf(index) !== -1}">
 											<li class="mui-table-view-cell">
 												<div class="mui-slider-cell">
 													<div class="oa-contact-cell mui-table">
@@ -91,7 +91,7 @@
 															<img src="../../assets/images/ico_second.gif" />
 														</div>
 														<div class="oa-contact-content mui-table-cell">
-															<a href="#select_children"  :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
+															<a @click="openChind('select_children',item)"  :data-team-id="item.teamId" :data-team-name="item.teamName"  class="oa-contact-name"><span class="oa-contact-content mui-table-cell">组织架构</span></a>
 														</div>
 													</div>
 												</div>
@@ -137,44 +137,17 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="member_div2" style="display: none;">
-		<ul class="mui-table-view eg-table-view eg-detail-list">
-			<li class="mui-table-view-cell mui-input-row">
-				<label>群名称</label>
-				<input id="group_name_id" type="text" v-model="select_member.groupName" />
-			</li>
-			<li class="member-box box-border">
-				<div class="member-header mui-table-view-cell">
-					<div class="mui-navigate-right">群成员<span class="mui-badge mui-badge-inverted" v-text="select_member.selectNumStr"></span></div>
-				</div>
-				<div id="member_image_id" class="member-list">
-					<div class="mui-table-cell"><div onclick="javascript:controlUpdate(1);"><img src="../../assets/images/ico_add.png"></div></div>
-				</div>
-			</li>
-		</ul>
-		<ul class="mui-table-view eg-table-view eg-detail-list">
-			<li class="mui-table-view-cell">
-				群类型<span class="mui-badge mui-badge-inverted">普通群</span>
-			</li>
-		</ul>
-
-		<div class="fixed-bottom">
-			<div id="toastBtn" class="mui-table mui-text-center">
-				<div class="mui-table-cell"><button onclick="app.createGroup()" type="button" class="mui-btn mui-btn-primary">完成创建</button></div>
-			</div>
-		</div>
-	</div>
 </div>
-
+<mt-popup
+  v-model="popupTeamVisible"
+  position="right" :modal="false">
 <div id="select_children" class="mui-page" style="display:none">
 	<div class="mui-navbar-inner mui-bar mui-bar-nav">
 		<div class="mui-navbar-inner mui-bar mui-bar-nav">
-			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-				<span class="mui-icon mui-icon-left-nav"></span>返回
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click="returnback('team')">
+				<span class="mui-icon mui-icon-left-nav" ></span>返回
 			</button>
 			<h1 class="mui-center mui-title">组织架构</h1>
-			<!--<button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" onclick="app.trueSelectUser()">完成</button>-->
 		</div>
 	</div>
 	<div class="mui-page-content">
@@ -184,18 +157,18 @@
 					<div id="dept_head" class="group-header">
 						<div id="select_children_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
 							<div id="children_scroll" class="mui-scroll">
-								<div class="mui-control-item selected">
-									联系人 &gt;
+								<div class="mui-control-item selected teamback1"  @click="firstback('team')">
+									联系人&gt;
 								</div>
 								<div v-for="(obj,index) in select_children.navList" :key="index">
-									<div v-if="index == 0">
-										<div v-if="index == (select_children.navList.length-1)">
+									  
+										<div v-if="index == 0 && index == (select_children.navList.length-1)">
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
 										</div>
-										<div v-else>
-											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+										<div v-if="index == 0 && index != (select_children.navList.length-1)">
+											<div @click="secondback('team',obj)" class="mui-control-item selected teamback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
 										</div>
-									</div>
+								
 									<div v-if="index > 0">
 										<div v-if="index == (select_children.navList.length-1)">
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
@@ -208,6 +181,7 @@
 							</div>
 						</div>
 					</div>
+					
 					<div class="mui-control-content address-list mui-active">
 						<div v-if="select_children.deptList.length > 0">
 							<h5 class="mui-content-padded">子部门列表</h5>
@@ -231,6 +205,9 @@
 								<div class="sub-btn" @click="selectDept(item.deptId,item.deptName,$event)"><span class="mui-icon iconfont icon-sub"></span>下级</div>
 							</ul>
 						</div>
+						<!-- <mt-popup
+						v-model="popupTeamVisible3"
+						position="right" :modal="false"> -->
 						<div v-if="select_children.memberList.length > 0">
 							<h5 class="mui-content-padded">部门成员</h5>
 							<div class="address-list">
@@ -261,6 +238,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- </mt-popup> -->
 					</div>
 				</section>
 			</div>
@@ -273,14 +251,15 @@
 		</div>
 	</div>
 </div>
+</mt-popup>
 <mt-popup
-  v-model="popupVisible"
-  position="right">
+  v-model="popupProVisible"
+  position="right" :modal="false">
 <div id="select_project" class="mui-page" style="display:none">
 	<div class="mui-navbar-inner mui-bar mui-bar-nav">
 		<div class="mui-navbar-inner mui-bar mui-bar-nav">
-			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-				<span class="mui-icon mui-icon-left-nav"></span>返回
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left" @click="returnback('pro')">
+				<span class="mui-icon mui-icon-left-nav" ></span>返回
 			</button>
 			<h1 class="mui-center mui-title">组织架构</h1>
 			<!--<button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled ok-btn" onclick="app.trueSelectUser()">完成</button>-->
@@ -293,50 +272,34 @@
 					<div id="dept_head" class="group-header">
 						<div id="select_project_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
 							<div id="project_scroll" class="mui-scroll">
-								<div class="mui-control-item selected" @click="firstback">
+								<div class="mui-control-item selected proback1" @click="firstback('pro')">
 									联系人&gt;
 								</div>
-								<div v-for="(obj,index) in select_project.navList" :key="index" class="text-right">
+								<div  v-for="(obj,index) in select_project.navList" :key="index" class="text-right">
 									<div v-if="index == 0 && index == (select_project.navList.length-1)">
-										
-										<!-- <div v-if="index == (select_project.navList.length-1)"> -->
-											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
-										<!-- </div>
-										<div v-else>
-											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
-										</div> -->
+										<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName" ></div>
 									</div>
 									<div v-if="index == 0 && index != (select_project.navList.length-1)">
-										
-										<!-- <div v-if="index == (select_project.navList.length-1)">
-											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
-										</div>
-										<div v-else> -->
-											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
-										<!-- </div> -->
+										<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
 									</div>
 
-
-
-
 									<div v-if="index > 0">
+										
 										<div v-if="index == (select_project.navList.length-1)">
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
 										</div>
 										<div v-else>
-											<div class="mui-control-item selected" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+											<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- <mt-popup
-					v-model="popupVisible3"
-					position="right"> -->
+					
 					<div class="mui-control-content address-list mui-active">
 						<div v-if="select_project.selDept.length > 0">
-							<h5 class="mui-content-padded">项目联系人555</h5>
+							<h5 class="mui-content-padded">项目联系人</h5>
 						</div>
 						<ul class="mui-table-view" v-if="select_project.selDept.length > 0">
 							<div  v-for="(item,index) in select_project.selDept" :key="index">
@@ -364,7 +327,7 @@
 											</div>
 										</div>
 									</a>
-									<div class="mui-collapse-content" style="padding-top: 0px;" v-if="openProjectChildtrue" @click="jump3">
+									<div class="mui-collapse-content" style="padding-top: 0px;" v-if="openProjectChildtrue" @click="thirdback">
 										<ul class="mui-table-view" style="margin-top: 0px;">
 											<div v-for="(it,i) in item.items" :key="i">
 												<li class="mui-table-view-cell" v-if="it.roomMembers.items.length>0">
@@ -388,44 +351,28 @@
 							</div>
 						</ul>
 						<mt-popup
-					v-model="popupVisible3"
-					position="right">
+					v-model="popupProVisible3"
+					position="right" :modal="false">
 						<div v-if="select_project.memberList.length > 0">
 							<div id="dept_head" class="group-header">
 						<div id="select_project_scroll" class="mui-scroll-wrapper member mui-segmented-control mui-segmented-control-inverted">
 							<div id="project_scroll" class="mui-scroll">
-								<div class="mui-control-item selected" @click="firstback">
+								<div class="mui-control-item selected proback1" @click="firstback('pro')">
 									联系人&gt;
 								</div>
-								<div v-for="(obj,index) in select_project.navList" :key="index" class="text-right">
+								<div  v-for="(obj,index) in select_project.navList" :key="index" class="text-right">
 									<div v-if="index == 0 && index == (select_project.navList.length-1)">
-										
-										<!-- <div v-if="index == (select_project.navList.length-1)"> -->
-											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
-										<!-- </div>
-										<div v-else>
-											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
-										</div> -->
+										<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
 									</div>
 									<div v-if="index == 0 && index != (select_project.navList.length-1)">
-										
-										<!-- <div v-if="index == (select_project.navList.length-1)">
-											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
-										</div>
-										<div v-else> -->
-											<div class="mui-control-item selected" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
-										<!-- </div> -->
+										<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
 									</div>
-
-
-
-
 									<div v-if="index > 0">
 										<div v-if="index == (select_project.navList.length-1)">
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
 										</div>
 										<div v-else>
-											<div class="mui-control-item selected" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+											<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
 										</div>
 									</div>
 								</div>
@@ -464,7 +411,6 @@
 						</div>
 						</mt-popup>
 					</div>
-					<!-- </mt-popup> -->
 				</section>
 			</div>
 			
@@ -473,7 +419,7 @@
 </div>
 </mt-popup>
 <!--遮罩层-->
-<div id="backdrop" class="mui-backdrop" style="display:none ;z-index: 999;"></div>
+<div id="backdrop" class="mui-backdrop" style="display:none ;"></div>
 
 <!--长按收藏弹框-->
 <div id="window" class="mui-popup mui-popup-in" style="display:none ;">
@@ -507,19 +453,32 @@
 </div>
 
   </div>
+  
 </template>
 
 <script>
 import { Popup } from 'mint-ui';
 import laowu_common from './js/laowu_common.js';
+import setting from '../../playform/config.js'
 var paramMap;
 var historyArr = new Array();
+var selectArr = new Array();
+var selectDept = new Array();
+var userId=null;
+var proCount=1;
+var teamCount=1;
 export default {
   data () {
     return {
-		popupVisible:false,
-		popupVisible3:false,
+		// modal:false,
+		popupProVisible:false,
+		popupProVisible3:false,
+		popupTeamVisible:false,
+		popupTeamVisible3:false,
 		openProjectChildtrue:false,
+		thirdbackVisible:false,
+		cunt:0,
+
 	select_member:{
 		
 		items:[],
@@ -533,7 +492,8 @@ export default {
 		projects:[],
 		projectListStatus:true,
 		teamListStatus:true,
-		Listshow:[],
+		proListshow:[],
+		teamListshow:[],
 	},
 	select_children:{
 		deptList:[],
@@ -541,7 +501,8 @@ export default {
 		navList:[],
 		selArr:[],
 		myId:"",
-		selDept:[]
+		selDept:[],
+		test:[],
 	  },
 	invite_user:{
 		names:[],
@@ -561,12 +522,15 @@ export default {
 		selArr:[],
 		myId:"",
 		selDept:[],
+		test:[],
 	 } ,
     }
   },
   created: function () {
-    var _self = this;
-    paramMap=laowu_common.paramMap
+	var _self = this;
+	userId=setting.getCookie("userid");
+	laowu_common.initVue(this);
+	paramMap=laowu_common.paramMap;
     _self.myId=paramMap.userId
 		_self.$http.post("/chart/column/table_swprojectinfo?used=getPro",{}).then(function (response) {
          console.log("数据1",response.data.result)
@@ -597,36 +561,168 @@ export default {
     //	document.getElementById("list").style.display = "block";
   },
   methods:{
-	  jump3:function(){
-		   this.popupVisible3=!this.popupVisible3
+	  cancel:function(){
+		  laowu_common.cancel()
 	  },
-	  firstback:function(){
-		  this.popupVisible=!this.popupVisible
-		//   $("#select_member").hide()
-		$("#select_project").show()
+	  confirm:function(){
+		  laowu_common.confirm(this.invite_user.phone,this.invite_user.remark)
+	  },
+	  thirdback:function(){
+		   if(!this.popupProVisible3){
+			   this.popupProVisible3=true
+		   }
+	  },
+	  firstback:function(type){
+		  if(type=='pro'){
+		    this.popupProVisible=!this.popupProVisible
+			$("#select_project").show()
+		  }else if(type=='team'){
+			   this.popupTeamVisible=!this.popupTeamVisible
+			   $("#select_children").show()
+		  }
+		  this.backFun()
+	
+	  },
+	    returnback:function(type){
+		  if(type=='pro'){
+		    if(proCount==3){//如果当前是第三层，就返回第二层
+				document.getElementsByClassName("proback2")[0].click()
+				proCount=2;
+			  }else if(proCount==2){//如果当前是第二层，返回第一层
+				document.getElementsByClassName("proback1")[0].click()
+				proCount=1;
+			  }
+		  }else if(type=='team'){
+			  if(teamCount==3){//如果当前是第三层，就返回第二层
+				document.getElementsByClassName("teamback2")[0].click()
+				teamCount=2;
+			  }else if(teamCount==2){//如果当前是第二层，返回第一层
+				document.getElementsByClassName("teamback1")[0].click()
+				teamCount=1;
+			  }
+		  }
+		  console.log("proCount",proCount)
+		  console.log("teamCount",teamCount)
+	
+	  },
+	  secondback:function(type,team){
+		  if(type=='pro'){
+  			this.select_project.selDept=this.select_project.test;
+			this.popupProVisible=true;
+			this.popupProVisible3=false;
+			historyArr.pop();
+			proCount=2;
+			$("#select_project").show()
+		  }else if(type=='team'){
+			this.initChildDept(team.teamId,team.deptId,team.deptName);
+			this.popupTeamVisible=true;
+			historyArr.pop();
+			$("#select_children").show();
+			teamCount=2;
+		  }
+		
 	  },
 	  openProjectChild:function(){
 		  this.openProjectChildtrue=!this.openProjectChildtrue
 	  },
 	  openChind:function(type,item){
-		var _self=this
+		    var _self=this
 			if(type== "select_project"){
 					var obj = {teamId:item.serialNum,teamName:item.ProjectName,type:1}
 					_self.getProjectMembers(obj.teamId, obj.teamName);
-					appApi.hideBack();
-					_self.popupVisible=!_self.popupVisible
-					// $("#select_member").hide()
-					$("#select_project").show()
+					 appApi.hideBack();
+					_self.popupProVisible=!_self.popupProVisible;
+					_self.popupProVisible3=false;
+					$("#select_project").show();
+					proCount=2;
+					
 				}
 			else if (type == "select_children") {
-					var obj = {teamId:target.getAttribute("data-team-id"),teamName:target.getAttribute("data-team-name"),deptId:target.getAttribute("data-dept-id"),deptName:target.getAttribute("data-dept-name"),type:2}
+				
+				   _self.popupTeamVisible=!_self.popupTeamVisible
+					var obj = {teamId:item.teamId,teamName:item.teamName,deptId:item.deptId,deptName:item.deptName,type:2}
+					var teamId=item.teamId;
 					historyArr.push(obj);
-					var _self = capp;
-					_self.$data.navList = historyArr;
-					initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
+					 _self.select_children.navList = historyArr;
+					_self.initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
+					$("#select_children").show()
 					appApi.hideBack();
+					teamCount=2;
 				};
-	  },
+	 		 },
+	
+			backFun:function () {
+			
+				historyArr = new Array();
+			},
+	
+	   initChildDept:function(teamId,deptId,deptName) {
+		   var _self = this;
+		if(undefined == teamId){
+			teamId = 0;
+		}
+		if(undefined == deptId){
+			deptId = 0;
+		}
+		//清除原有选中
+		_self.select_children.selDept = selectDept;
+		_self.select_member.selDept = selectDept;
+		var par = {deptId:deptId,teamId:teamId};
+		this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
+			_self.select_children.deptList = response.data.result;
+			console.log("团队",_self.select_children.deptList)
+			setTimeout(function () {
+				$(".dept-select").each(function(){
+					var id = $(this).val();
+					if(selectDept.contains(id)){
+						$(this).attr("checked","checked");
+					}else{
+						$(this).removeAttr("checked");
+					}
+				});
+				//mui('.dept-select').input();
+			},200)
+		}).catch(function (error) {
+			console.info(error);
+		});
+		if(deptId!=0){
+			par = {deptId:deptId};
+		}else{
+			par = {teamId:teamId};
+		}
+		this.$http.post("/concats_api/query_team_members",par).then(function (response) {
+			_self.select_children.memberList = response.data.result;
+		}).catch(function (error) {
+			console.info(error);
+		});
+	
+
+	},
+	selectDept:function (deptId,deptName,event) {
+			var obj = {teamId:undefined,deptId:deptId,deptName:deptName,type:2};//type2表示时团队，1表示时项目
+			//i=0为联系人页面
+			var flag = false;
+			var nArr = new Array();
+			for(var i=0;i<historyArr.length;i++){
+				nArr.push(historyArr[i]);
+				if(undefined != deptId && deptId == historyArr[i].deptId){
+					flag = true;
+					break;
+				}
+
+			}
+			if(!flag){
+				nArr.push(obj);
+			}
+			historyArr = nArr;
+			var _self = this;
+			_self.select_children.navList = historyArr;
+			teamCount=3;
+			_self.initChildDept(undefined,deptId,deptName);
+			event.preventDefault();
+			event.stopPropagation();
+
+		},
 	  /**
 		 * 获取房间数据
 		 * @param {Object} leave1 第一层
@@ -634,6 +730,7 @@ export default {
 		 */
 		getRoomMembers:function(leave1,leave2,className){
 			
+			this.popupProVisible3=true
 			var obj = {teamId:undefined,deptId:undefined,deptName:className,type:1};//type2表示时团队，1表示时项目
 			//i=0为联系人页面
 			
@@ -647,31 +744,21 @@ export default {
 			historyArr.push(obj)
 			_self.select_project.navList = historyArr;
 			var deptList = _self.select_project.deptList;
+			
 			_self.select_project.selDept = [];
 			if (leave2==-1) {
-//				console.log(deptList[leave1].roomMembers.items)
 				_self.select_project.memberList = deptList[leave1].roomMembers.items;
 			}else{
-//				console.log(deptList[leave1].items[leave2].roomMembers.items)
 				_self.select_project.memberList = deptList[leave1].items[leave2].roomMembers.items;
 			}
+			console.log("联系人",_self.select_project.memberList.length)
 			//解决上拉太多点击后回不到顶部问题
 			document.getElementById("sc").style.transform="translate3d(0px, 0px, 0px) translateZ(0px)";
-			console.log(document.body.scrollTop || document.documentElement.scrollTop)
-			console.log(111)
-// 			if(c_scroll){
-// 				setTimeout(function () {
-// //					mui('#select_project_scroll').scroll().refresh();
-// //					var w = document.getElementById("project_scroll").scrollWidth;
-// //					var s = c_scroll.wrapperWidth - w;
-// //					if(s<0){
-// //						mui('#select_project_scroll').scroll().scrollTo(s,0,100);
-// //					}
-// //					var _self = capp;
-// 				},200)
-// 			}
+			proCount=3;
+
 		},
 	  getProjectMembers:function(projectSN,projectName){
+		 
 			var _self = this;
 			_self.select_project.memberList = [];
 			var obj = {teamId:projectSN,teamName:projectName,type:1};
@@ -686,7 +773,7 @@ export default {
 			document.getElementById("sc").style.transform="translate3d(0px, 0px, 0px) translateZ(0px)";
 			$.ajax({
 	            type: "post",
-	            url: "/pcontact_api/findallroomlist",
+	            url: "/api/pcontact_api/findallroomlist",
 	            data: {
 	                "projectSn":projectSN,
 	                "flag":2,//1: 包涵会议室、招聘室 2 不包含会议室和招聘室
@@ -698,6 +785,7 @@ export default {
 	            	if(data.code==0){
 	            		_self.select_project.deptList = data.result.roomItems;
 	            		_self.select_project.selDept = data.result.roomItems;
+	            		_self.select_project.test = data.result.roomItems;
 					}
 					console.log("部门",_self.select_project.selDept)
 
@@ -708,29 +796,32 @@ export default {
 	        });
 		},
  	selectUser:function(item,type) {
-	if(type=='project'){
-        windowVue.name=item.nickName;
-        windowVue.phone=item.cellPhone;
-        windowVue.ucon=item.userIcon;
-        windowVue.userId=item.userId;
-	}else if(type=='team'){
-        windowVue.name=item.memberName;
-        windowVue.phone=item.phoneNumber;
-        windowVue.ucon=item.userAvatar;
-        windowVue.userId=item.userId;
-	}else if(type=='friends'){
-        windowVue.name=item.name;
-        windowVue.phone=item.phone;
-        windowVue.ucon=item.headerImage;
-        windowVue.userId=item.friendsUserId;
-	}
+		 var _self=this;
+		 console.log(type,item)
+		if(type=='project'){
+			_self.invite_user.name=item.nickName;
+			_self.invite_user.phone=item.cellPhone;
+			_self.invite_user.ucon=item.userIcon;
+			_self.invite_user.userId=item.userId;
+		}else if(type=='team'){
+			_self.invite_user.name=item.memberName;
+			_self.invite_user.phone=item.phoneNumber;
+			_self.invite_user.ucon=item.userAvatar;
+			_self.invite_user.userId=item.userId;
+		}else if(type=='friends'){
+			_self.invite_user.name=item.name;
+			_self.invite_user.phone=item.phone;
+			_self.invite_user.ucon=item.headerImage;
+			_self.invite_user.userId=item.friendsUserId;
+		}
+		
 
-	if(windowVue.userId==userId){
-		msg("不能邀请自己")
+	if(_self.invite_user.userId==userId){
+		alert("不能邀请自己")
 		return
 	}
-    showbackdrop();
-    showwindow();
+    laowu_common.showbackdrop();
+    laowu_common.showwindow();
 
 },
     showProjectList:function(){
@@ -743,119 +834,32 @@ export default {
 			if(val==null || val=="") return getUrl()+"/static/images/60x60.gif";
 			return val;
 		},
-		clickshow: function (index) {
-		
-			const newIndex = this.select_member.Listshow.indexOf(index);
-                if (newIndex === -1) {
-                    this.select_member.Listshow.push(index);
-                    console.log('aaaaa',newIndex)
-                } else {
-                    this.select_member.Listshow.splice(newIndex);
-                }
-		},
+	clickProshow: function (index) {
+	
+		const newIndex = this.select_member.proListshow.indexOf(index);
+			if (newIndex === -1) {
+				this.select_member.proListshow.push(index);
+			} else {
+				this.select_member.proListshow.splice(newIndex);
+			}
+	},
+	clickTeamshow: function (index) {
+	
+		const newIndex = this.select_member.teamListshow.indexOf(index);
+			if (newIndex === -1) {
+				this.select_member.teamListshow.push(index);
+			} else {
+				this.select_member.teamListshow.splice(newIndex);
+			}
+	},
 		updated:function () {//DOM更新时，进行调用的方法
 			document.getElementById("list").style.display = "block";
 			// mui.ready(function () {
 			// 	window.indexedList = new mui.IndexedList(list)
 			// });
 		},
-		//确定选中的userIds
-		trueSelectUser: function () {
-			/**
-			 * 必须选人
-			 */
-			if(selectArr.length<1){
-				msg("请选择要邀请的人员")
-				return;
-			}
-            showbackdrop();
-            showwindow()
-            var names=[];
-            var ucons=[];
-            windowVue.count=selectArr.length+"(人)";
-            for (var i=0;i<selectArr.length;i++){
-                names.push(selectArr[i].name);
-                ucons.push(selectArr[i].ucon);
-			}
-            windowVue.name=names.join(",");
-			console.log(selectArr)
-			return
-			var l = loading("创建中，请稍等");
-			var selectUserIdsEvy = "";
-			for(var i=0;i<selectArr.length;i++){
-				if(i==selectArr.length-1){
-					selectUserIdsEvy+=selectArr[i];
-				}else{
-					selectUserIdsEvy+=selectArr[i]+",";
-				}
-			}
-			selectUserIds = selectUserIdsEvy;
-			var param = {userIds:selectUserIds};//查询头像list返回
-			var _self = this;
-//			var groupName = this.groupName;
-			var groupName = "";
-			axios.post(getUrl()+"/concats_api/query_gms_info_select",param).then(function (response) {
-				var reps = response.data.result;
-				_self.$data.none = reps;
-				var mList = reps.groupMemberTempVOList;
-				var lengths = mList.length;
-				for(var i=0;i<lengths;i++){
-					if(i==lengths-1){
-						groupName+=mList[i].nickName;
-					}else{
-						groupName+=mList[i].nickName+"、";
-					}
-				}
-				if(groupName.length>18){
-					groupName = groupName.substring(0,17)+"...";
-				}
-				console.log(groupName)
-				_self.createGroup(groupName,l)
-//				console.info(response.data.result);
-			}).catch(function (error) {
-				layer.close(l)
-				console.info(error);
-			});
-			viewApi.back();//关闭选择子部门div
-		},
-		createGroup: function (groupName,l) {
-			
-//			if(groupName == null || groupName ==''){
-//				layer.open({
-//					content: "请填写群组名称"
-//					,skin: 'msg'
-//					,time: 1 //2秒后自动关闭
-//					,anim:false
-//				});
-//				return;
-//			}
-
-			//创建群组
-			//var tempId = window.location.href.split("?")[1].split("=")[1];
-			var pram = {groupType:"2",userIds:selectUserIds,groupName:groupName};//自主创建群组
-			axios.post(getUrl()+"/concats_api/create_group",pram).then(function (response) {
-				console.log(response.data.result.sdkChatId)
-				if(response.data.code==200){
-					var userAvatar = getUrl()+"/static/images/ico_groupchat.png";
-					appApi.openChat(response.data.result.sdkChatId,userAvatar,groupName,2);//群聊
-//					layer.open({
-//						content: "创建成功!"
-//						,skin: 'msg'
-//						,time: 1 //2秒后自动关闭
-//						,anim:false
-//					});
-				}else{
-					mui.toast("创建群组失败,请联系管理员!")
-				}
-				layer.close(l);
-			}).catch(function (error) {
-				layer.close(l)
-//				alert("创建群组失败,请联系管理员!");
-				mui.toast("创建群组失败,请联系管理员!")
-				console.info(error);
-			});
-			viewApi.back();//关闭选择子部门div
-    },
+		
+		
      convertData:function(friendArray) {
 	    if (friendArray && friendArray.length > 0) {
 
@@ -1136,6 +1140,21 @@ export default {
 	}
 	.mui-table-view-cell:after{
 		height:1px
+	}
+	#select_children_scroll div{
+		float:left
+	}
+	.oa-contact-email{
+		text-align: left
+	}
+	.mui-popup{
+		z-index:9999
+	}
+	.mui-backdrop{
+		z-index:9998
+	}
+	.group-list .sub-btn{
+		top:4px
 	}
 </style>
 

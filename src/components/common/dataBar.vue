@@ -44,6 +44,13 @@ import { Toast } from "mint-ui";
                 form:{MissionStartDate:''}
             }
         },
+        watch:{
+            datanow:{
+                handler:function(val,oldval){
+                    this.form.MissionStartDate=val
+                }
+            }
+        },
         created:function(){
             this.form.MissionStartDate=this.datanow
 

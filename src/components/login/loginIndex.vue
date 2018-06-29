@@ -159,6 +159,7 @@ export default {
         this.$router.push({path:'/register'});
     },
     backpwd(){
+        // this.$router.push({path:'/search'});
         this.$router.push({path:'/resizepwd'});
     },
     thirdLogin:function (type) {
