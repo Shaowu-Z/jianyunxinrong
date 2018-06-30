@@ -731,7 +731,7 @@ export default {
 				selectDept.push(value);
 			}
 		}else{
-			 removeUser(selectDept,value);
+			 remove(selectDept,value);
 		}
 		_self.select_children.selDept = selectDept;
 		_self.select_member.selDept = selectDept;
