@@ -1223,5 +1223,12 @@ export default {
 	#select_children_scroll div{
 		display: inline-block
 	}
+	.group-header {
+    color: #999;
+    line-height: 34px;
+    padding:0px;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
 </style>
 

@@ -48,7 +48,7 @@
 					</div>
 					<div class="oa-contact-avatar mui-table-cell">
 						<!-- <img v-if="user.ucon==null" src="../../../static/images/60x60.gif" alt="" /> -->
-						aaa<img v-if="user.ucon!=null" v-bind:src="user.ucon" alt="..." />
+						<img v-if="user.ucon!=null" v-bind:src="user.ucon" alt="..." />
 					</div>
 					<div class="oa-contact-content mui-table-cell">
 						<h4 class="oa-contact-name user-name" v-text="user.userName"></h4>
