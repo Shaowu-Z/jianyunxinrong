@@ -41,6 +41,7 @@
 <script>
 import { Indicator } from 'mint-ui';
 import laowu_common from '../laowu/js/laowu_common';
+import  '../../playform/lrz.bundle';
 export default {
     data(){
         return{
@@ -93,10 +94,33 @@ export default {
             let el = document.getElementById('testFile')
             console.log(el,111111111111111)
             console.log('******************************')
-            el.addEventListener('change', (e) => {
-                this.sealInfo.sealData = e.path[0].value.slice(12)
-                console.log(e.path[0].value.slice(12))
-                console.log(e)
+            el.addEventListener('change', (that) => {
+                    let _self = this
+                    try {
+                        // var imgUrl = getObjectURL(document.getElementById("upfile").files[0]);
+                        // console.log(imgUrl)
+                        lrz(that.target.files[0], {
+                            width: 800,
+                            height: 600
+                        }).then(function (rst) {
+                            // uploadStatus = true;
+                            console.log(rst.base64)
+                            _self.sealInfo["imgData"] = rst.base64;
+                            _self.sealInfo["width"] = 800;
+                            _self.sealInfo["height"] = 600;
+                            var v = document.getElementById("testImg")
+                            _self.sealInfo.sealData = rst.base64
+                            v.src = rst.base64;
+                            v.style.display = "inline-block"
+                //			console.info(JSON.stringify(app.$data.fm));
+                        })
+                    }catch (e){
+                        alert(e)
+                    }
+
+                // this.sealInfo.sealData = e.path[0].value.slice(12)
+                // console.log(e.path[0].value.slice(12))
+                // console.log(e)
             })
         },
         goBack(){
@@ -140,14 +164,14 @@ export default {
                 params.append("operateType",operateType);
                 console.log(params);
                 _self.$http.post("/sign/save_seal_info",params).then(function (response) {
-                   laowu_common.loading('保存成功，跳转中...！');
-                    // Indicator.open('保存成功，跳转中...！');
+                //    laowu_common.loading('保存成功，跳转中...！');
+                    Indicator.open('保存成功，跳转中...！');
                     //msg("保存成功");
                     
                     setTimeout(function () {
                         appApi.broadcast("reLoad()"); //刷新页面
                         appApi.closeNewWindow();
-                        // Indicator.close();
+                        Indicator.close();
                     },1500)
                 }).catch(function (error) {
                     console.info(error);
