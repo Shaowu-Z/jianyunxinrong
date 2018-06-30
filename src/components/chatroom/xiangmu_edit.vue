@@ -29,7 +29,7 @@
             </li>
             <li class="mui-table-view-cell mui-input-row">
                 <label class="text">工程地点</label>
-                <input type="text" name="PlaceShenbao" v-model="form.placeShenbao" value="" @click="choicePlace()" placeholder="必填" readonly="readonly" />
+                <input type="text" name="PlaceShenbao" v-model="form.place" value="" @click="choicePlace()" placeholder="必填" readonly="readonly" />
             </li>
 
                 <li class="mui-table-view-cell mui-input-row" @click="selectManageRoom()">
@@ -78,18 +78,19 @@
                 <li class="mui-table-view-cell mui-input-row">
                     <a class="mui-navigate-right">
                         <label class="text">开工日期</label>
-                        <input type="text" name="missionStartDate" v-model="form.missionStartDate" @click="selectDate('s')"
+                        <!-- <input type="text" name="missionStartDate" v-model="form.missionStartDate" @click="selectDate('s')"
                             readonly="readonly"
-                            placeholder="请选择">
-                        <data-bar :title="kaigong" :datanow="cc"></data-bar>
+                            placeholder="请选择"> -->
+                        <data-bar :title="kaigong" :datanow="cc" style="width:240px"></data-bar>
                     </a>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
                     <a class="mui-navigate-right">
                         <label class="text">竣工日期</label>
-                        <input type="text" name="missionEndDate" v-model="form.missionEndDate" @click="selectDate('e')"
+                        <!-- <input type="text" name="missionEndDate" v-model="form.missionEndDate" @click="selectDate('e')"
                             readonly="readonly"
-                            placeholder="请选择">
+                            placeholder="请选择"> -->
+                            <data-bar :title="jungong" :datanow="form.missionEndDate" style="width:240px"></data-bar>
                     </a>
                 </li>
         </ul>
@@ -98,11 +99,12 @@
                 <div class="module01-head">工程概况照片</div>
                     <div class="module01-body">
                         <div class="upload-img">
-                            <img @click="stopEvt(event),disposeLogImg(0,fm.imgSmallUrl)" class="" style="display: none;" id="img_view" v-show="fm.imgUrl!=''" :src="fm.imgUrl"/>
+                            <img @click="stopEvt(event),disposeLogImg(0,fm.imgSmallUrl)" class="" id="img_view" v-show="fm.imgUrl!=''" :src="fm.imgUrl"/>
                         </div>
                         <div class="upload-btn mui-text-center">
                             <button class="mui-btn mui-btn-success">拍照/选择相册</button>
-                            <input name="need_hide_div" type="file" id="upfile" value="" @click="imagesAdd" accept="image/png,image/gif,image/jpeg" @clcik="selectimgUrl(this)" class="input-file">
+                             <!-- @click="imagesAdd" -->
+                            <input name="need_hide_div" type="file" id="upfile" value="" accept="image/png,image/gif,image/jpeg" @change="selectimgUrl($event)" class="input-file">
                         </div>
                     </div>
 
@@ -145,7 +147,7 @@ import {getParam,BackCookie} from '../../playform/common'
 import setting from '../../playform/config'
 import util from '../../playform/util'
 import dataBar from "../common/dataBar"
-// import regions from '../../playform/regions'
+import '../../playform/lrz.bundle'
 export default {
     components:{
         dataBar
@@ -213,6 +215,7 @@ export default {
             opt : {"type": "date", "beginYear": 2000, "endYear": new Date().getFullYear()+10},
             uploadStatus : false,
             kaigong:'开工日期',
+            jungong:'竣工日期',
         }
     },
     created() {
@@ -542,10 +545,35 @@ export default {
                         ,time: 1 //2秒后自动关闭
                         ,anim:false
                     });
-                }
+                } 
             }).catch(function (error) {
                 console.info(error);
             });
+        },
+        selectimgUrl (that) {
+            let _self = this
+            console.log(that.target.files[0])
+            try {
+                // var imgUrl = getObjectURL(document.getElementById("upfile").files[0]);
+                lrz(that.target.files[0], {
+                    width: 800,
+                    height: 600
+                }).then(function (rst) {
+                    console.log(rst.base64)
+                    // uploadStatus = true;
+                    _self.fm["imgData"] = rst.base64;
+                    _self.fm["width"] = 800;
+                    _self.fm["height"] = 600; 
+                    var v = document.getElementById("img_view")
+                    v.src = rst.base64;
+                    v.style.display = "inline-block"
+        //			console.info(JSON.stringify(_self.fm));
+                })
+                console.log(_self.fm)
+            }catch (e){
+                alert(e)
+            }
+
         },
         findroomuserlist:function () {//查询项目子管理员
             var _self = this;
@@ -611,7 +639,7 @@ export default {
                         if(result[0].missionStartDate!=null){
                         _self.form.missionStartDate=util.fnFormat(result[0].missionStartDate,'yyyy-MM-dd')
                         _self.cc=util.fnFormat(result[0].missionStartDate,'yyyy-MM-dd')
-                        alert(_self.form.missionStartDate)
+                        // alert(_self.form.missionStartDate)
                         }
                         if(result[0].missionEndDate!=null) {
                             _self.form.missionEndDate =util.fnFormat(result[0].missionEndDate,'yyyy-MM-dd')
@@ -700,17 +728,18 @@ export default {
             fromd.append("projectSN",_self.fm.projectSN)
             this.$http.post('/pro_api/getProImg',fromd).then(function(response) {
                 console.log("查询照片",response)
-                if (response.code == 200) {
-                    console.log("查询照片",response.result)
-                    if(response.result){
-                        var data = response.result.data;
+                if (response.data.code == 200) {
+                    console.log("查询照片",response.data.result)
+                    if(response.data.result.length != 0){
+                        var data = response.data.result.data;
                         if(data){
-                            _self.image_host = response.result.image_host;
+                            _self.image_host = response.data.result.image_host;
                             _self.fm.imgUrl = data.imgUrl;
                             _self.fm.imgSmallUrl = data.imgSmallUrl;
                             _self.fm.serialNum = data.serialNum;
 
                         }
+                        console.log(_self.fm.imgUrl,'图片地址')
                     }
                 }else{
                     // msg("获取数据失败！请稍后重试");
@@ -738,7 +767,7 @@ export default {
                 });
                 return;
             }
-            if (!this.uploadStatus && _self.$data.fm.imgUrl == "") {
+            if (!this.uploadStatus && _self.fm.imgUrl == "") {
                // msg("请上传照片");
                 //return false;
             }
@@ -822,7 +851,7 @@ export default {
                 });
                 return;
             }
-            if(!_self.form.placeShenbao){
+            if(!_self.form.place){
                 // msg("工程地点不能为空")
                 layer.open({
                     content: '工程地点不能为空!'

@@ -26,10 +26,9 @@
                         <ul class="mui-table-view eg-table-view eg-detail-list" style="margin-top:44px">
                             <li class="mui-table-view-cell">
                                 <a class="mui-navigate-right text">组织类型:<span class="mui-badge mui-badge-inverted">
-                                    <select name="teamType" id="teamType" v-model="teamType" @click="selectTeamType(this.value)" style="font-size: 16px;margin-bottom: 0;">
+                                    <select name="teamType" id="teamType" v-model="teamType" @change="selectTeamType($event)" style="font-size: 16px;margin-bottom: 0;">
                                         <!--<option class="mui-badge mui-badge-inverted" value="0">请选择</option>-->
-                                        <option value="1">企业</option>
-                                        <option value="2">政府/事业单位</option>
+                                        <option v-for="(option,index) in options" :key="index" v-bind:value="option.value">{{option.text}}</option>
                                         <!--<option value="3">其他组织</option>-->
                                     </select>
                                 </span></a>
@@ -264,6 +263,10 @@ export default {
                 //{memberName:"1", phoneNumber:"1"},
                 //{}
             ],
+            options: [
+                { text: '企业', value: '1' },
+                { text: '政府/事业单位', value: '2' },
+            ]
         }
     },
     created:function (){
@@ -279,7 +282,7 @@ export default {
                     '<label>'+tagsName+'</label><input type="radio" name="checkbox1" value="'+tagsId+'-'+tagsName+'"/>'+
                     '</div>';
             }
-            document.getElementById("tagsHtml").innerHTML=tagsHtml;
+            $("#tagsHtml").innerHTML=tagsHtml;
         }).catch(function (error) {
             //alert("获取标签失败!");
             console.info(error);
@@ -297,7 +300,7 @@ export default {
                     '<label>'+industryName+'</span></label><input type="radio" name="radio1" value="'+industryId+'-'+industryName+'"/>'+
                     '</div>';
             }
-            document.getElementById("industryHtml").innerHTML=industryHtml;
+            $("#industryHtml").innerHTML=industryHtml;
             }).catch(function (error) {
                 //alert("获取行业失败!");
             console.info(error);
@@ -316,7 +319,7 @@ export default {
                     '<label>'+majorName+'</span></label><input type="checkbox" name="checkbox2" value="'+majorId+'-'+majorName+'"/>'+
                     '</div>';
             }
-            document.getElementById("majorHtml").innerHTML=majorHtml;
+            $("#majorHtml").innerHTML=majorHtml;
         }).catch(function (error) {
             //alert("获取行业失败!");
             console.info(error);
@@ -389,7 +392,7 @@ export default {
                     height: 600
                 }).then(function (rst) {
                     console.log(rst.base64)
-                    uploadStatus = true;
+                    // uploadStatus = true;
                     this.accreditImg = rst.base64;
                     document.getElementById("uploadImg").style.backgroundImage = "url('" + rst.base64 + "')";
                 })
@@ -407,16 +410,16 @@ export default {
         goBack(){
             this.$router.go(-1)
         },
-        selectTeamType:function (val) {
-            console.log(e);
+        selectTeamType:function (option) {
+            console.log(option.target.value);
             var _self = this;
-            if(val == 1){
+            if(option.target.value == 1){
                 //document.getElementById("org_code").style.display="none";//企业时隐藏
 	            _self.authph_1 = "必须与证件上一致(必填)";
                 document.getElementById("label_code").innerHTML ="社会信用代码";
 	            //_self.authph_2 = "必须与证件上一致(可不填)";
 	            //_self.authph_3 = "法人代表姓名(必填)";
-            }else if(val == 2){
+            }else if(option.target.value == 2){
                 //document.getElementById("org_code").style.display="block";
 	            _self.authph_1 = "必须与证件上一致(必填)";
                 document.getElementById("label_code").innerHTML ="社会信用代码(组织机构代码)";
@@ -429,7 +432,7 @@ export default {
 	            //_self.authph_2 = "必须与证件上一致(可不填)";
 	            //_self.authph_3 = "法人代表姓名(可不填)";
             }
-            this.teamType = val;
+            this.teamType = option.target.value;
         },
         hide_shade: function(){
             this.handwritten = false;

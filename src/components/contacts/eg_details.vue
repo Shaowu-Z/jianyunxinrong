@@ -185,11 +185,13 @@ export default {
             this.show = !this.show
         },
         chat() {
+            // alert(this.items.imId)
             var imId = this.items.imId;
             if (appApi.isApp && appApi.isIphoneOs) {//IOS
             
             } else if (appApi.isApp && appApi.isAndroid) {
-                window.webactivity.openChat(imId,app.items.userAvatar,app.items.nickName,1);
+                
+                window.webactivity.openChat(imId,this.items.userAvatar,this.items.nickName,1);
             }
                 appApi.openChat(imId,this.items.userAvatar,this.items.nickName,1);
         },

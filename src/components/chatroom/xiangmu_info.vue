@@ -22,7 +22,7 @@
                     <label class="text">所在地区</label><span class="con text" v-text="project.fullArea"></span>
                 </li>
                 <li class="mui-table-view-cell">
-                    <label class="text">工程地点</label><span class="con text" v-text="project.placeShenbao"></span>
+                    <label class="text">工程地点</label><span class="con text" v-text="project.place"></span>
                 </li>
                 <li class="mui-table-view-cell">
                     <label class="text">协作管理方</label><span class="con text" v-text="project.projectManageRoomClassName"></span>

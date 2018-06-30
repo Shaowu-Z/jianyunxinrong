@@ -232,7 +232,9 @@ export default {
                 document.getElementById("strHtml").innerHTML=strHtml;
                 console.log(document.getElementById("strHtml"))
                $(".mui-checkbox").on("click",function($event){
-                    console.log($event)
+                //    console.log($event)
+                //     console.log($event.originalEvent.target.innerHTML)
+                //     console.log($event.originalEvent.target.previousSibling.innerHTML)
                 })
             }).catch(function (error) {
                 console.info(error);
