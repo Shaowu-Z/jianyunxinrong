@@ -186,7 +186,7 @@
             </div>
             <div class="fixed-bottom">
                 <div class="mui-table mui-text-center">
-                    <div class="mui-table-cell"><button type="button" @click="viewApi.back();" class="mui-btn mui-btn-primary">保存</button></div>
+                    <div class="mui-table-cell"><button type="button" @click="hideshow" class="mui-btn mui-btn-primary">保存</button></div>
                 </div>
             </div>
             <section class="mui-page-content">
@@ -228,6 +228,7 @@
 
 <script>
 import  '../../playform/lrz.bundle';
+import { Toast } from 'mint-ui';
 export default {
     data(){
         return{
@@ -385,15 +386,16 @@ export default {
             return flag;
         },
         selectCertImg (that) {
+            let _self = this
             console.log(that.target.files[0])
             try {
                 lrz(that.target.files[0], {
                     width: 800,
                     height: 600
                 }).then(function (rst) {
-                    console.log(rst.base64)
+                    console.log(_self)
                     // uploadStatus = true;
-                    this.accreditImg = rst.base64;
+                    _self.accreditImg = rst.base64;
                     document.getElementById("uploadImg").style.backgroundImage = "url('" + rst.base64 + "')";
                 })
                 console.log(document.getElementById("uploadImg").style.backgroundImage)
@@ -652,9 +654,19 @@ export default {
 
 	        }
 	        if(team_name_value != "" && _self.orgCode != ""){
-		        loading("正在认证中...");
+                // loading("正在认证中...");
+                Toast({
+                    message: '正在认证中...',
+                    position: 'center',
+                    duration: 1000
+                });
 	        }else{
-		        loading("正在创建组织中...");
+                // loading("正在创建组织中...");
+                Toast({
+                    message: '正在创建组织中...',
+                    position: 'center',
+                    duration: 1000
+                });
 	        }
 	        subCreate();
 	        var members = [];

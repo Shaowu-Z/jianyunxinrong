@@ -231,11 +231,30 @@ export default {
 
                 document.getElementById("strHtml").innerHTML=strHtml;
                 console.log(document.getElementById("strHtml"))
-               $(".mui-checkbox").on("click",function($event){
-                //    console.log($event)
-                //     console.log($event.originalEvent.target.innerHTML)
-                //     console.log($event.originalEvent.target.previousSibling.innerHTML)
-                })
+            //    $(".mui-checkbox").on("click",function($event){
+            //     //    console.log($event)
+            //     //     console.log($event.originalEvent.target.innerHTML)
+            //     //     console.log($event.originalEvent.target.previousSibling.innerHTML)
+            //     })
+                var list = document.getElementById('list');
+                var done = document.getElementById('done');
+                $('.mui-indexed-list-inner').bind('click','input', function() {
+                    // console.log(1111)
+                    var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
+                    console.info(list.querySelectorAll('input[type="checkbox"]:checked'));
+                    console.log(done.innerHTML)
+                    var value = count ? "完成(" + count + ")" : "完成";
+                    done.innerHTML = value;
+                    if (count) {
+                        if (done.classList.contains("mui-disabled")) {
+                            done.classList.remove("mui-disabled");
+                        }
+                    } else {
+                        if (!done.classList.contains("mui-disabled")) {
+                            done.classList.add("mui-disabled");
+                        }
+                    }
+                });
             }).catch(function (error) {
                 console.info(error);
             });
