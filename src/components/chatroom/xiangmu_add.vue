@@ -42,10 +42,10 @@
                         <label class="text">我所在方性质</label>
                         <input type="text" value="" name="gongChengFangName" v-model="form.gongChengFangName" placeholder="请选择" readonly="readonly" @click.stop="selectProject(2)"/>
                         <mt-popup v-model="tow_popupVisible" position="bottom" class="picker-slot-center col-xs-6 mui-clearfix" @change="onValuesChange">
-                            <p>我的组织类型<span style="border-bottom:1px solid,display:block,width:100px,height:10px;"></span></p>
+                            <div class="s-title text">我的组织类型<span class="bader"></span></div>
                             <div v-for="(item,index) in slots1[0].values" :key="index" class="mui-input-row mui-radio mui-left" @click="handleClicks(item)">
                                     <input type="radio" name="selecttype"  style="position: absolute;top: 13px;">
-                                    <label v-text="item.roomClassName" style="width: 140px;"></label>
+                                    <label v-text="item.roomClassName" style="width: 140px;text-align:left;padding-left: 30px;color:#000"></label>
                             </div> 
                         </mt-popup>
                     </a>
@@ -1099,5 +1099,25 @@ export default {
   .picker-toolbar {
     height: 45px;
      background-color: #eee;
+  }
+  .bader{
+        position: absolute;
+        left: 85px;
+        right: 15px;
+        top: 28px;
+        height: 1px;
+        content: '';
+        -webkit-transform: scaleY(.5);
+        transform: scaleY(.5);
+        background-color: #c8c7cc;
+  }
+  .font{
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .s-title{
+    padding-left: 15px;
+    margin-top: 15px;
+    margin-bottom: 10px;
   }
 </style>
