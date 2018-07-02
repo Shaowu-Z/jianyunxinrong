@@ -14,7 +14,7 @@ var tipApi={
         insertText.id =textid;
         dom.style.cssText='position:fixed;width:100%;height:100%;z-index:9999;background:#fff;top:0;opacity:0;display:block'; 
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center';
-        insertDiv.style.cssText='position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 1001;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgb(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px';
+        insertDiv.style.cssText='position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -30%;z-index: 10001;width:60%;height:100px;line-height:100px;overflow:hidden;background: rgba(0,0,0,0.6) url('+'"../../../../static/images/ico-warning.png"'+') no-repeat center 15px;;color:#fff;background-size:24px 24px;padding-top:54px';
         document.body.appendChild(insertDiv);
         insertDiv.appendChild(insertText);
         document.body.appendChild(dom);   
@@ -28,7 +28,7 @@ var tipApi={
         var btn2=document.createElement("button");
         dom.style.cssText='position:fixed;width:100%;height:100%;z-index:1000;background:#666;top:0;opacity:0.6;display:block'; 
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center;margin:6px auto;width:80%';
-        insertDiv.style.cssText='background:#fff;position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 1001;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px';
+        insertDiv.style.cssText='background:#fff;position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 10001;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px';
         btn1.style.cssText="padding:0 0 0 20px;right:32%;border:0;height:36px;position:absolute;bottom:0;color:#ccc"
         btn2.style.cssText="padding:0 0 0 20px;right:9%;border:0;height:36px;position:absolute;bottom:0;color:#4ba9e9"
         insertText.innerHTML=content
@@ -58,7 +58,7 @@ var tipApi={
         insertText.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center;margin:6px auto;width:80%;border-bottom:1px solid #4ba9e9;padding-bottom:6px;color:#4ba9e9';
         insertnews.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: center;margin:6px auto;width:80%;padding-bottom:6px;font-size:14px'
         insertinput.style.cssText='width: auto;font-size: 16px;line-height: 23px;text-align: left;margin:6px auto;width:80%;padding-bottom:6px;font-size:14px;border:0.5px solid #ccc;display:block;padding:0 5px;'
-        insertDiv.style.cssText='border-radius:5px;background:#fff;position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 1001;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px';
+        insertDiv.style.cssText='border-radius:5px;background:#fff;position: fixed;top: 50%;margin-top: -50px;left: 50%;margin-left: -40%;z-index: 10001;width:80%;padding-bottom:46px;line-height:100px;overflow:hidden;padding-top:10px';
         btn1.style.cssText="font-size:16px;width:50%;left:0;border-top:0.1px solid #ccc;height:36px;border-radius:0;position:absolute;bottom:0;color:#4ba9e9"
         btn2.style.cssText="font-size:16px;width:50%;right:0;border-top:0.1px solid #ccc;border-left:0.1px solid #ccc;border-radius:0;height:36px;position:absolute;bottom:0;color:#4ba9e9"
         insertText.innerHTML=title
@@ -201,7 +201,6 @@ var tipApi={
     waring:function(content,time,objOk,objFail){
         tipApi.newDom("waringmask_zr","waring_zr","waring_text_zr")
         document.getElementById("waring_text_zr").innerHTML=content
-        console.log(objOk)
         if(time!=undefined && time!=''){
             setTimeout(function(){
                 tipApi.close("waring")

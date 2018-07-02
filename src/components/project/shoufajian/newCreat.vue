@@ -1,7 +1,7 @@
 <template>
-<div class="mui-fullscreen">
+<div class="mui-fullscreen" id="app">
     <!-- 侧滑导航根容器 -->
-		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+		<div class="mui-off-canvas-wrap mui-draggable mui-fullscreen mui-slide-in">
 			<!-- 菜单容器 -->
 			<div class="mui-right mui-fullscreen" :class="leibiemove ? 'leibiemove-left' : 'leibiemove-right'">
 				<header class="mui-bar mui-bar-nav">
@@ -40,7 +40,7 @@
 
 				</header>
 						<div v-if="backicon==0">
-							<div class="step step1 fix_content">
+							<div class="step step1 fix_content ">
 								<ul class="mui-table-view eg-table-view">
 									<li class="mui-table-view-cell mui-input-row">
 										<label>标题</label>
@@ -109,7 +109,7 @@
 						</div>
 						<!--------第三步---------->
 						<div class="mui-content mui-scroll-wrapper" v-if="backicon==2">
-					<div class="mui-scroll">
+					<div class="">
 						<div v-if="backicon==2">
 							<div class="step step3 ">
 								<div class="publish-container">
@@ -164,7 +164,7 @@
 import { BackCookie } from "../../../playform/common.js";
 import setting from "../../../playform/config.js";
 import danjuApi from "../js/danjuAPi.js";
-import tipApi from "../js/tipApi.js";
+import tipApi from "../../../playform/tipApi.js";
 
 export default {
   data() {
@@ -225,7 +225,7 @@ export default {
       baocun: "",
       first: "",
       imgsrc: [],
-      leibiemove: false
+      leibiemove: false,
     };
   },
   created: function() {
@@ -352,6 +352,7 @@ export default {
       _self.shenqing = year + "-" + mouth + "-" + day;
       _self.nowtime = nowshi + ":" + noefen + ":" + nowmiao;
       _self.form.MissionStartDate = formDate(year + "-" + mouth + "-" + day);
+      _self.pickerVisible=formDate(year + "-" + mouth + "-" + day);
     },
     //获取业务类别
     getnews: function() {
@@ -368,6 +369,7 @@ export default {
             //								console.log(response)
             _self.sites = response.data.result;
           } else {
+            tipApi.waring("获取业务类别失败",1)
             // ludan("获取业务类别失败", 1, 1);
           }
         });
@@ -415,8 +417,10 @@ export default {
       var _self = this;
       appApi.hideBack();
       if (_self.title == "") {
+        tipApi.waring("请输入标题",1)
         // ludan("请输入标题", 1, 1);
       } else if (_self.yewu == "") {
+        tipApi.waring("请选择类别",1)
         // ludan("请选择类别", 1, 1);
       } else {
         //							_self.beizhuzhuan = _self.beizhu.replace(/<\/?.+?>/g, "#.%#");
@@ -428,12 +432,13 @@ export default {
     //点击第二步
     step2: function(n) {
       var _self = this;
-    //   appApi.hideBack();
-    //   if (_self.nowCompany.length == 0) {
-    //     // ludan("请选择接收单位", 1, 1);
-    //   } else {
-    //     _self.backicon = n;
-    //   }
+      // appApi.hideBack();
+      // if (_self.nowCompany.length == 0) {
+      //   tipApi.waring("请选择接收单位",1)
+      //   // ludan("请选择接收单位", 1, 1);
+      // } else {
+      //   _self.backicon = n;
+      // }
       _self.backicon = n
     },
     //点击返回按钮
@@ -479,6 +484,7 @@ export default {
           }
         })
         .catch(function(error) {
+          tipApi.waring(error,1)
           //   ludan(error, 1, 3);
         });
     },
@@ -518,7 +524,7 @@ export default {
       window.appApi.openProjectContactSelectPage(
         this.pa_projectsn,
         "",
-        "",
+        _self.$data.nowCompanyroomid.toString(),
         3,
         true,
         true
@@ -618,7 +624,7 @@ export default {
 };
 </script>
 <style scoped>
-@import "../../../assets/css/common/mint";
+/* @import "../../../assets/css/common/mint"; */
 .mui-inner-wrap {
   padding-top: 44px;
 }
@@ -721,5 +727,16 @@ export default {
 
 .add-contain .mui-btn-primary {
   padding: initial;
+}
+.mui-fullscreen{
+  background:#efeff4
+}
+.mult-btn-box{
+  position: fixed;
+  bottom: 10px
+}
+.mui-scroll-wrapper{
+  overflow: scroll;
+  margin-bottom: 56px
 }
 </style>

@@ -1,17 +1,17 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import $ from 'jquery'
-import Vue from 'vue'
+import $ from 'jquery';
+import Vue from 'vue';
 import Mint from 'mint-ui';
-import App from './App'
-import router from './router'
-import axios from 'axios'
+import App from './App';
+import router from './router';
+import axios from 'axios';
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
 import phonePy from "./playform/py.js";
 // import "./playform/alert.js";
 import "./playform/layer.js";
-import MintUI from 'mint-ui'
+import MintUI from 'mint-ui';
 import tipApi from "./playform/tipApi.js";
 import "./assets/css/common/mui.less"
 // import "./assets/css/common/mui.min.less"
@@ -43,6 +43,7 @@ Vue.use(mui)
 Vue.use(Mint)
 Vue.use(MintUI)
 // Vue.prototype.$http = axios
+// Vue.prototype.tipApi=tipApi
 Vue.prototype.$http = http
 Vue.config.productionTip = false
 Vue.prototype.HOST = ''

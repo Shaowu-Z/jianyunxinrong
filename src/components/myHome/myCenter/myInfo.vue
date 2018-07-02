@@ -78,7 +78,7 @@
 	import { Picker } from 'mint-ui';
 	import myaddress from "../../project/js/city";
 	import areaBar from "../../common/areaBar"
-	import tipApi from "../../../playform/tipApi.js"
+	// import tipApi from "../../../playform/tipApi.js"
 	export default {
 		 components: {
             'mt-picker': Picker,
@@ -124,6 +124,7 @@
 				sex: "",
 				auth: "未认证",
 				areas: [],
+				test:'',
 			}
 		},
 		mounted() {
@@ -315,13 +316,22 @@
 			});
 			this.$http.post("/common_api/area_list").then(function(response) {
 				_self.$data.areas = response.data.result;
-				// _self.initAddr();
+				_self.initAddr();
 			}).catch(function(error) {
 				console.info(error);
 			});
 			appApi.imgPreview.init();
 		},
 		methods: {
+			//选地区
+			childValue:function(val){
+                console.log("value"+val)
+                // this.test=val;
+            },
+			initAddr:function(){
+				this.updateInfo({provinceId:items[0].value,cityId:items[1].value});
+				this.user.areaInfo = items[0].text + "-" + items[1].text;
+			},
 			 goBack(){
 				this.$router.go(-1)
 			},
@@ -413,10 +423,6 @@
 					fun(value)
 				})
 			},
-			childValue:function(val){
-                console.log("value"+val)
-                // this.test=val;
-            },
 			mycode:function(){
 				this.$router.push({path:"/static/webstatic/mycenter/my_codecard.html"})
 			},

@@ -21,7 +21,7 @@
 								</li>
 								<li class="mui-table-view-cell mui-input-row">
 									<!--<a class="mui-navigate-right" href="#">-->
-									<!-- <label>承诺完成日期</label> -->
+									<label>承诺完成日期</label>
 									<!-- <input type="text" v-model="form.MissionStartDate" @click="_self.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
 									<!--</a>-->
                                     <data-bar :title="returntitle" @datatoParent="childValue"></data-bar>
@@ -30,7 +30,8 @@
 									<label class="mui-pull-left">承诺类型</label>
 									<div class="select-box col-xs-6" style="overflow: hidden;">
 										<div class="mui-input-row mui-radio mui-left" @click="xuanren('单方承诺')">
-											<label>单方</label><input type="radio" name="checkbox1" checked="checked" value="1" v-if="chec==1" />
+											<label>单方</label>
+                      <input type="radio" name="checkbox1" checked="checked" value="1" v-if="chec==1" />
 											<input type="radio" name="checkbox1" value="1" v-else-if="chec==2" />
 										</div>
 										<div class="mui-input-row mui-radio mui-left" @click="xuanren('双方承诺')">
@@ -1108,7 +1109,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style >
 .mui-table-view-cell label{
     text-align: left
 }
@@ -1137,4 +1138,8 @@ export default {
 .mui-action-back{
     float: left;
 }
+#databox input{
+  padding-left: 0
+}
+
 </style>
