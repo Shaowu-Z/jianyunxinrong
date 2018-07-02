@@ -3,7 +3,7 @@
     <!-- 侧滑导航根容器 -->
 		<div class="mui-off-canvas-wrap mui-draggable mui-fullscreen mui-slide-in">
 			<!-- 菜单容器 -->
-			<div class="mui-right mui-fullscreen" :class="leibiemove ? 'leibiemove-left' : 'leibiemove-right'">
+			<div class="mui-rights mui-fullscreen" :class="leibiemove ? 'leibiemove-left' : 'leibiemove-right'">
 				<header class="mui-bar mui-bar-nav">
 					<h1 class="mui-title">选择业务类别</h1>
 					<!-- <button class="mui-btn mui-btn-link mui-pull-right" v-if="tapyewu" @click="makeyewu(0)">完成</button>

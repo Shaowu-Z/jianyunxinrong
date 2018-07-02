@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="mui-content mui-scroll-wrapper" id="mui-scroll-wrapper">
-					<div class="mui-scroll">
+					<div class="">
 						<!--------第一步---------->
 						<div v-if="backicon==0">
 							<section style="display: block;" class="mui-content publish-box mycenter-content">
@@ -440,7 +440,7 @@ export default {
 							fileReader.onload = function(ev) {
 								var bytes = new Uint8Array(fileReader.result);
 									var length = bytes.byteLength;
-									console.log("结果",fileReader.result)
+									console.log("结果",bytes)
 									console.log(length)
 								//console.log(ev.target.result)
 								try {
@@ -450,6 +450,8 @@ export default {
 										}), // 以二进制流方式读取得到整份excel表格对象
 										persons = []; // 存储获取到的数据
 								} catch(e) {
+									tipApi.closeAll()
+									tipApi.failure("文件类型不正确",2)
 									console.log('文件类型不正确');
 									return;
 								}
@@ -687,7 +689,7 @@ export default {
 								if(d.code == 200) {
                                     tipApi.success("提交成功", 3,function() {
                                         appApi.refreshData(2);
-										/*window.appApi.closeNewWindow()*/
+										window.appApi.closeNewWindow()
 									})
 									// ludan("提交成功", 3, 2, function() {
                                     //     appApi.refreshData(2);
@@ -1014,5 +1016,13 @@ export default {
 }
 .mui-pull-right{
 	float: right;
+}
+.mult-btn-box{
+  position: fixed;
+  bottom: 10px
+}
+.mui-scroll-wrapper{
+  overflow: scroll;
+  margin-bottom: 56px
 }
 </style>
