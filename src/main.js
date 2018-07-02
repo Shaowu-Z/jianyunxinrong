@@ -3,8 +3,12 @@
 import $ from 'jquery';
 import Vue from 'vue';
 import Mint from 'mint-ui';
-import App from './App';
-import router from './router';
+import "./assets/css/common/mui.less";
+import "./assets/css/common/common.less";
+import "./assets/css/common/icons-extend.less";
+import "./assets/css/common/style.less";
+// import App from './App';
+// import router from './router';
 import axios from 'axios';
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
@@ -13,17 +17,18 @@ import phonePy from "./playform/py.js";
 import "./playform/layer.js";
 import MintUI from 'mint-ui';
 import tipApi from "./playform/tipApi.js";
-import "./assets/css/common/mui.less"
+// import "./assets/css/common/mui.less"
 // import "./assets/css/common/mui.min.less"
-import "./assets/css/common/icons-extend.less";
-import "./assets/css/common/common.less";
-import "./assets/css/common/style.less";
+// import "./assets/css/common/icons-extend.less";
+// import "./assets/css/common/common.less";
+// import "./assets/css/common/style.less";
 import "./assets/css/common/layer.less";
 import "./assets/css/common/mint.css";
 import "./assets/css/common/page.css";
 import "./assets/css/common/calendar-pro.css";
 import "mint-ui/lib/style.css"
-
+import App from './App';
+import router from './router';
 
 let http = axios.create({
   baseURL: '/api',

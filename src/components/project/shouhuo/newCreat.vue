@@ -851,6 +851,7 @@ export default {
 							var files = e.target.files;
 							var fileReader = new FileReader();
 							fileReader.onload = function(ev) {
+								console.log(ev)
 								try {
 									var data = ev.target.result,
 										workbook = XLSX.read(data, {
@@ -1401,5 +1402,8 @@ export default {
 }
 .title{
     text-align: left
+}
+.mui-fullscreen{
+  background:#efeff4
 }
 </style>
