@@ -95,6 +95,7 @@ export default {
         }
     },
     created() {
+        appApi.hideMenu()
         var _self = this;
         this.from = this.$route.query.from;
         console.log(this.from);
@@ -198,7 +199,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align:left;
     }

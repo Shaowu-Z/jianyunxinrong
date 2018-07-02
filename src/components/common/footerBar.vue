@@ -1,6 +1,4 @@
-<style lang="less" scoped>
-    @import '../../assets/css/common/footerBar.less';
-</style>
+
 
 <template>
   <div id="active">
@@ -70,3 +68,7 @@ export default {
   }
 }
 </script>
+
+<style  scoped>
+    @import '../../assets/css/common/footerBar.less';
+</style>

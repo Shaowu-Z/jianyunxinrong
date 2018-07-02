@@ -19,7 +19,7 @@ export default {
             username: setting.getCookie("username"),
             urlcan:'',
             url:window.location.href.split("?")[1]
-            
+
         }
     },
     created: function() {
@@ -91,7 +91,7 @@ export default {
 //											appApi.openNewWindow(getUrl()+"/static/newwebstatic/lianxi/work_content.html?id="+this.$route.query.id)
 //										}
 //									}else{
-//										
+//
 //									}
 //								}
                 }
@@ -134,6 +134,6 @@ export default {
     }
 }
 </script>
-<style>
+<style type="text/css" scoped>
 
 </style>

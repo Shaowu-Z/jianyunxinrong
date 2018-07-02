@@ -2,7 +2,10 @@
     <div>
 	<header class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">服务协议</h1>
-		<a class="mui-action-back mui-icon iconfont icon-back mui-pull-left"></a>
+		<!-- <a class="mui-action-back mui-icon iconfont icon-back mui-pull-left" @click="goBack"></a> -->
+		<button @click="goBack" id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left ">
+			<span class="mui-icon mui-icon-back"></span>返回
+		</button>
 	</header>
 	<section class="mui-content about-info">
 		<div class="about-content">
@@ -177,7 +180,7 @@ export default {
      }
 }
 </script>
-<style>
+<style scoped>
     body,.mui-content,.about-content{background: #ffffff;}
     	ol {padding-left:18px;}
     	ol li{list-style-type: decimal;}

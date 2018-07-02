@@ -24,7 +24,7 @@
 		</section>
   </div>
 </template>
-	
+
 <script>
 import laowu_common from "./js/laowu_common.js";
 import calendar_work from "./js/calendar_work.js";
@@ -61,7 +61,7 @@ export default {
   }
 }
 </script>
-		<style>
+		<style type="text/css" scoped>
 			.ht-rili-td {
 				width: 14.25%;
 				width: calc(14.25% - 4px);

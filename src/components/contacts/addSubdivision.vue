@@ -15,7 +15,7 @@
                     <span class="mui-icon mui-icon-clear mui-hidden"></span>
                 </li>
                 <li class="mui-table-view-cell text" @click="show_depts">
-                    <a class="mui-navigate-right" >上级部门<span class="mui-badge mui-badge-inverted" v-text="parentDeptName"></span></a>
+                    <a class="mui-navigate-right" >上级部门<span class="mui-badge mui-badge-inverted" style="font-size:16px;padding-right: 210px;color:#000" v-text="parentDeptName"></span></a>
                 </li>
             </ul>
             <!--<div class="singlebox">-->
@@ -25,7 +25,7 @@
                 <!--</div>-->
             <!--</div>-->
             <!--<h5 class="mui-content-padded content-added">创建后，部门群会自动关联本部门，新人入职后自动加群</h5>-->
-            
+
         </section>
         <!--选择上级部门开始-->
         <div class="pop-up" style="display: none; height: 100%;" id="select_dept" v-show="select_dept">
@@ -81,7 +81,7 @@ export default {
 			this.$http.post("/concats_api/query_team_dept",param).then(function (response) {
 				var resp = response.data.result;
 				_self.data = resp;
-				app.parentDeptName = resp.deptName;//新建部门时，默认的上级部门为进入的部门
+				_self.parentDeptName = resp.deptName;//新建部门时，默认的上级部门为进入的部门
 				console.info(resp);
 			}).catch(function (error) {
 				console.info(error);
@@ -101,8 +101,8 @@ export default {
             appApi.hideBack();//隐藏返回键
             // getSubDept(teamId,0);
             function getSubDept(teamId,deptInId) {//查询下级部门列表(部门ID为空或者0时，查询团队ID下的一级部门列表)
-                var deptInId = 0;
-                var par = {deptId:that.parentDeptId,teamId:that.teamId,parentDeptId:deptInId};
+                let deptInIds = 0;
+                var par = {deptId:that.parentDeptId,teamId:that.teamId,parentDeptId:deptInIds};
                 console.info(par);
                 that.$http.post("/concats_api/query_dept_list",par).then(function (response) {
                     that.newJson =response.data.result;
@@ -194,7 +194,7 @@ export default {
 
             var hrefPar = window.location.href.split('?')[1].split('=')[1];
             var teamId = hrefPar.split("&")[0];
-            var par = {parentDeptId:this.paDeptId,teamId:teamId,deptName:this.deptName,hasGroup:0};
+            var par = {parentDeptId:0,teamId:teamId,deptName:this.deptName,hasGroup:0};
             console.info(par);
             this.$http.post("/concats_api/add_dept_info",par).then(function (response) {
                 var respCode = response.data.code;
@@ -221,7 +221,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left
     }

@@ -368,6 +368,7 @@ window.appApi = {
 	 */
 
 	setSelectData: function(arr) {
+		alert(arr)
 		var json = {
 			data: arr
 		};
@@ -483,29 +484,29 @@ window.appApi = {
 	//          window.webactivity.vibrator();
 	//      }
 	//  },
-	//隐藏菜单
-	//  hideMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://hideMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.hideMenu();
-	//      }
-	//  },
-	//显示菜单
-	//  showMenu: function () {
-	//      if (isApp && isIphoneOs) {
-	//          loadURL("hidemenu://showMenu");
-	//      } else if (isApp && isAndroid) {
-	//          window.webactivity.showMenu();
-	//      }
-	//  },
+	// 隐藏菜单
+	 hideMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://hideMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.hideMenu();
+	     }
+	 },
+	// 显示菜单
+	 showMenu: function () {
+	     if (isApp && isIphoneOs) {
+	         loadURL("hidemenu://showMenu");
+	     } else if (isApp && isAndroid) {
+	         window.webactivity.showMenu();
+	     }
+	 },
 
 	/**
 	 *  获得地理位置信息
 	 *  回调方法 setLocationResult
 	 */
 	getLocation: function() {
-
+		alert(1)
 		if(isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetLocation(");
@@ -1483,7 +1484,6 @@ window.appApi = {
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState == 4) {
 					if(xhr.status == 200) {
-						alert(xhr.responseText)
 						if(JSON.parse(xhr.responseText).code == 200) {
 							var isSendToMyRoom = false;
 							var tJson = JSON.parse(xhr.responseText).result;	
@@ -1538,9 +1538,7 @@ window.appApi = {
 							}
 							success && success(JSON.parse(xhr.responseText));
 						}
-						alert("shibai1")
 					} else {
-						alert("shibai12")
 						err && err(JSON.parse(xhr.responseText));
 					}
 
@@ -1865,7 +1863,7 @@ window.setContactsResult = function(result, iosIfrObjStrT) {
  *QQ 微信登录结果返回 授权信息
  * @param {Object} result json
  */
-var setQQWXLoginResult = function(result, iosIfrObjStrT) {
+	window.setQQWXLoginResult = function(result, iosIfrObjStrT) {
 	// if (typeof appApi.callBackFun == "function") {
 	//     var CONTENT = {};
 	//     CONTENT.result = result;

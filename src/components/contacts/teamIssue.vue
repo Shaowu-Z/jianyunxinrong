@@ -43,7 +43,7 @@ export default {
 			_self.$data.teamId = url_params.teamId;
 			this.$http.get("/app_team_rz/get_issues?teamId=" + url_params).then(function (response) {
 				if (response.data.code == 0) {
-                    var rs = response.data.result;  
+                    var rs = response.data.result;
 					_self.issue_list = rs.issue_list;
                     _self.image_host = rs.image_host;
                     console.log(_self.issue_list);
@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
         .mui-fullscreen {
 			position: fixed;
 			z-index: 20;
@@ -78,6 +78,6 @@ export default {
 		}
 		.oper{
 			display: inline-block;
-			float: right;
+            float:right;
 		}
 </style>

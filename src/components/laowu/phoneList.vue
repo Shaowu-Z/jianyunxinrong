@@ -101,7 +101,7 @@ export default {
     };
   },
   created: function() {
-   
+
     var _self=this
     laowu_common.initVue(this);
     window.appApi.getContacts();
@@ -110,7 +110,7 @@ export default {
        _self.findFrieds(CONTENT);
       }
     };
-   
+
   },
    methods: {
      searchPhone:function(){
@@ -135,7 +135,7 @@ export default {
             console.info(error);
           });
         },
-        
+
         importPhones:function () {
             //loading("同步中...");
             window.appApi.getContacts()
@@ -396,7 +396,7 @@ export default {
 };
 </script>
 
-<style>
+<style type="text/css" scoped>
 .oa-contact-email{
   text-align: left
 }

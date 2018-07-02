@@ -124,7 +124,7 @@
 
               </div>
 
-					
+
 						</div>
 					</div>
 			   </div>
@@ -271,7 +271,7 @@ export default {
 };
 </script>
 
-<style>
+<style type="text/css" scoped>
 .trend-list:before {
   top: 15px;
   height: calc(100% - 15px);

@@ -1198,4 +1198,4 @@ function disposeLogImg(index, longurl) {
 function stopEvt(e) {
     e.stopPropagation();//阻止点击事件向上冒泡
 }
-export {Base,BackCookie,removeThirdInfo,getParam,setDishSort,getDishSort,disposeLogImg,disposeLogImgMutil}
+export {Base,BackCookie,removeThirdInfo,getParam,setDishSort,getDishSort,disposeLogImg,disposeLogImgMutil,removeClass,addClass,cmApi}

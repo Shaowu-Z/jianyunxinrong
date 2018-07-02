@@ -18,6 +18,7 @@ const contact_edit = resolve => require(['@/components/contacts/contact_edit'], 
 const subdivision = resolve => require(['@/components/contacts/subdivision'], resolve)
 const orgStructure = resolve => require(['@/components/contacts/enterprise/orgStructure'], resolve)
 const teamIssue = resolve => require(['@/components/contacts/teamIssue'], resolve)
+const send_card_list = resolve => require(['@/components/contacts/send_card_list'], resolve)
 const addTeamIssue = resolve => require(['@/components/contacts/addTeamIssue'], resolve)
 const select_team_admin = resolve => require(['@/components/contacts/select_team_admin'], resolve)
 const eg_details = resolve => require(['@/components/contacts/eg_details'], resolve)
@@ -30,6 +31,8 @@ const select_phone_list = resolve => require(['@/components/contacts/select_phon
 const add_manually = resolve => require(['@/components/contacts/add_manually'], resolve)
 const batchOpeMember = resolve => require(['@/components/contacts/batchOpeMember'], resolve)
 const test = resolve => require(['@/components/contacts/test'], resolve)
+const branch_set = resolve => require(['@/components/contacts/branch_set'], resolve)
+const org_structure = resolve => require(['@/components/contacts/org_structure'], resolve)
 
 const contactsConfig = {
   path: '/static/webstatic/contacts/address_list.html',
@@ -44,12 +47,24 @@ const contactsConfig = {
       component: orgStructure
     },
     {
-      path: '/addstyle',
+      path: '/static/newwebstatic/add_style.html',
       component: addstyle
     },
     {
       path:'/egList',
       component: egList
+    },
+    {
+      path:'/send_card_list',
+      component: send_card_list
+    },
+    {
+      path:'/org_structure',
+      component: org_structure
+    },
+    {
+      path:'/branch_set',
+      component: branch_set
     },
     {
       path:'/newFriends',

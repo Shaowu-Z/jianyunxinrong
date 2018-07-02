@@ -38,13 +38,13 @@
 				<input type="text" name="createTimeStr" v-model="form.createTimeStr" readonly="readonly" placeholder="请选择日期">
 			</li>
 
-     
+
     <li class="mui-table-view-cell mui-input-row">
 				<label>项目<small>*</small></label>
 				<input type="text" name="projectName" readonly="readonly" value="" placeholder="请输入(必填)" v-model="form.projectName"/>
 			</li>
-   
-   
+
+
       <li v-if="form.recordType==1" class="mui-table-view-cell mui-input-row" @click="openNormalHtml(null,1)">
           <a class="mui-navigate-right">
               <div class="oa-contact-cell mui-table namelist">
@@ -85,7 +85,7 @@
 					<span name="unit" v-text="form.unit"></span><span  class="mui-icon mui-icon-arrowdown"></span>
 				</button>
 			</div>
-    
+
       <li v-if="form.recordType==3" class="mui-table-view-cell mui-input-row">
 				<label>借支金额<small>*</small></label>
 				<input type="number" name="money" value="" v-on:input="setJiZhangMoney()" placeholder="请输入" v-model="form.money"/>
@@ -94,7 +94,7 @@
 				<label>结算金额<small>*</small></label>
 				<input type="number" name="money" value="" v-on:input="setJiZhangMoney()" placeholder="请输入" v-model="form.money"/>
 			</li>
-    
+
 			<li v-if="save_type=='update'||save_type=='save'" class="mui-table-view-cell mui-input-row" >
 				<label>工资金额</label>
 				<input type="number" name="money" readonly="readonly" value=""  v-model="form.money"/>
@@ -127,7 +127,7 @@
 		</ul>
 
 	</section>
-	
+
 
   <mt-popup v-model="unitpopup" position="bottom">
   	<div class="pop-up2">
@@ -154,7 +154,7 @@
 
 </mt-popup>
 
-   
+
 
   </div>
 </template>
@@ -282,7 +282,7 @@ export default {
     laowu_main.initData();
   },
   mounted:function(){
-    
+
     laowu_main.setTitle();
   },
   methods: {
@@ -304,7 +304,7 @@ export default {
     childValue:function(obj){
        laowu_main.timeClick(obj,obj.timeType,1)
     },
-   
+
     open_unit_popver:function(){
        this.unitpopup=true
     },
@@ -327,7 +327,7 @@ export default {
 };
 </script>
 
-    <style>
+    <style type="text/css" scoped>
 .cus-icon-pst {
   float: left;
   width: 25px;

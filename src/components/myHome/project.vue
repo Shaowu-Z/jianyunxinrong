@@ -11,7 +11,8 @@
 				<li class="mui-table-view-cell" >
 					<div @click="onProjectDetail(item)">
 						<div class="view-pic">
-							<img src="../../assets/images/defualt.png">
+							<img src="../../assets/images/defualt.png" v-if="item.img_url==undefined">
+							<img :src="item.img_url" v-else>
 						</div>
 						<h4 class="oa-title" v-text="item.projectName"></h4>
 						<section>
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import setting from "../../playform/config.js";
 export default {
     data(){
         return{
@@ -36,25 +38,29 @@ export default {
     methods:{
 		goBack(){
 			this.$router.go(-1);
+		},
+		onProjectDetail:function(item){
+			appApi.openChat(item.imId,setting.getCookie('usericon'),item.name,2)
 		}
     },
     created(){
-			const _self=this
-            this.$http.post("/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
-				console.log(response);
-				_self.list = response.data.result;
-				console.log(_self.list);
-            }).catch(function (error) {
-                console.info(error);
-            });
-    }
+		appApi.hideMenu()
+		const _self=this
+		this.$http.post("/chart/column/table_swprojectinfo?used=getMyPro",{}).then(function (response) {
+			console.log(response);
+			_self.list = response.data.result;
+			console.log(_self.list);
+		}).catch(function (error) {
+			console.info(error);
+		});
+	},
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 .mui-table-view-cell div{
 	display: flex;
-	
+
 }
 .view-pic{
 	width:60px;

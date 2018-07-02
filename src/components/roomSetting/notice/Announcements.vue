@@ -28,8 +28,7 @@
 					<li class="img-item">
 						<div class="img-item-inner">
 							<img v-bind:src="img">
-						</div> <span class="btn-roll btn-delete iconfont icon-delete"
-						@click="deleteFile(number,'img')"></span>
+						</div> <span class="btn-roll btn-delete" @click="deleteFile(number,'img')"></span>
 					</li>
 					</div>
 					<li class="upload-btn">
@@ -54,7 +53,7 @@
 							</div>
 							<div class="oa-contact-content mui-table-cell">
 								<h4 class="oa-contact-name" v-text="pic.name"></h4>
-								<p class="oa-contact-email">
+								<p class="oa-contact-email text">
 									<span v-text="pic.size"></span>
 								</p>
 							</div>
@@ -222,7 +221,7 @@ export default {
         },
         //点击遮罩层
         mask() {
-            
+
             $(".mui-backdrop").css("display", "none")
             $(".mui-backdrop").animate({
                 left : "0%"
@@ -328,11 +327,11 @@ export default {
                                     });
                                     appApi.closeNewWindow()
                                     // alert.remin("提交成功",2,function(){
-                                        
+
                                     //     // this.$router.go(-1)
                                     // })
                                 }
-                                
+
                             })
 
                         } else {
@@ -455,7 +454,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left
     }

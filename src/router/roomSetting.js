@@ -4,10 +4,17 @@ const noticeIndex = resolve => require(['@/components/roomSetting/notice/noticeI
 const Announcements = resolve => require(['@/components/roomSetting/notice/Announcements'], resolve)
 const viewTheDetails = resolve => require(['@/components/roomSetting/notice/viewTheDetails'], resolve)
 const cloudFile = resolve => require(['@/components/roomSetting/cloudFile'], resolve)
+const search = resolve => require(['@/components/roomSetting/cloudFile/search'], resolve)
+const search_result = resolve => require(['@/components/roomSetting/cloudFile/search_result'], resolve)
 const cloudFileIndex = resolve => require(['@/components/roomSetting/cloudFile/cloudFileIndex'], resolve)
+const file_detail = resolve => require(['@/components/roomSetting/cloudFile/file_detail'], resolve)
+const rename_file = resolve => require(['@/components/roomSetting/cloudFile/rename_file'], resolve)
+const move_select = resolve => require(['@/components/roomSetting/cloudFile/move_select'], resolve)
+const select_friend = resolve => require(['@/components/roomSetting/cloudFile/select_friend'], resolve)
 const openDir = resolve => require(['@/components/roomSetting/cloudFile/openDir'], resolve)
 const create_dir = resolve => require(['@/components/roomSetting/cloudFile/create_dir'], resolve)
 const video = resolve => require(['@/components/roomSetting/video'], resolve)
+const play_video = resolve => require(['@/components/roomSetting/video/play_video'], resolve)
 const videoIndex = resolve => require(['@/components/roomSetting/video/videoIndex'], resolve)
 const videoComment = resolve => require(['@/components/roomSetting/video/videoComment'], resolve)
 const meetings = resolve => require(['@/components/roomSetting/meetings'], resolve)
@@ -52,12 +59,36 @@ const roomSettingConfig = {
           component: cloudFileIndex
         },
         {
+          path: '/static/webstatic/dish/file_detail.html',
+          component: file_detail
+        },
+        {
+          path: '/static/webstatic/contacts/select_friend.html',
+          component: select_friend
+        },
+        {
+          path: '/static/webstatic/dish/move_select.html',
+          component: move_select
+        },
+        {
+          path: '/static/webstatic/dish/rename_file.html',
+          component: rename_file
+        },
+        {
           path: '/static/webstatic/dish/open_dir.html',
           component: openDir
         },
         {
           path: '/static/webstatic/dish/create_dir.html',
           component: create_dir
+        },
+        {
+          path: '/static/webstatic/dish/search.html',
+          component: search
+        },
+        {
+          path: '/dish/search_result.html',
+          component: search_result
         },
       ]
     },
@@ -70,7 +101,11 @@ const roomSettingConfig = {
           component: videoIndex
         },
         {
-          path: '/videoComment',
+          path: '/static/webstatic/community/play_video.html',
+          component: play_video
+        },
+        {
+          path: '/static/webstatic/community/community_comment.html',
           component: videoComment
         },
       ]

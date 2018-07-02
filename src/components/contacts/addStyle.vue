@@ -48,7 +48,9 @@
 
 <script>
 // import QRCode from 'qrcodejs2'
-import xyqrcode from '../../playform/xyqrcode'
+// import xyqrcode from '../../playform/xyqrcode'
+import qrcode from '../../playform/qrcode'
+import setting from '../../playform/config'
 export default {
     data(){
         return{
@@ -62,6 +64,47 @@ export default {
     goBack(){
         this.$router.go(-1)
     },
+    xyqrcode(options){
+            var _self=this
+			 var settings = {
+				dom:'',
+				render: 'canvas',   //生成二维码的格式还有image、div
+				ecLevel:"H",
+				text:"",
+				background:"#ffffff", 
+				fill:"#333333", //二维码纹路的颜色
+				fontcolor:"#ff9818",
+				fontname:"Ubuntu",
+				image:{},
+				label:"",
+				mPosX:0.5,   //图片在X轴的位置
+				mPosY:0.5,    //图片在X轴的位置
+				mSize:0.17,   //图片大小
+				minVersion:10,
+				mode:4,
+				quiet:1,
+				radius:1,
+				size:250   
+			};
+			console.log(options)
+				if (options) {
+					$.extend(settings, options);//options对象跟settings比较，相同的就替换，没有的就添加
+				}
+				if(settings.dom.length==0){
+					window.console.log("Error: dom empty!");
+					return;
+				}
+				if(settings.url.length==0){
+					window.console.log("Error: url empty!");
+					return;
+				}
+				console.log(settings)
+				settings.text=settings.url; //在qrcode生成二维码的地址是text。这里就把url赋值给text
+				// document.getElementById(settings.dom)[.qrcode(settings);
+                console.log(settings)
+                _self.shows=1
+				$(settings.dom).qrcode(settings);
+		},
     initData() {
         //获取数据
         this.type = this.$route.query.dataType;
@@ -109,16 +152,17 @@ export default {
                     type = ic_t[1];
                 }
                 var options={};
+                _self.sites.projectName=response.data.result.projectName
 //                                options.url=getUrl()+"/q/aw?t="+type+"&c="+ic_t; //二维码的链接
-                options.url="/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode
+                options.url="http://java.winfreeinfo.com/static/newwebstatic/ext/app-weixin.html?type="+type+"&inviteCode="+inviteCode
                 options.dom="#qrcode";//二维码生成的位置
-                options.image=_self.$refs.images.src;//图片id
+                options.image=$('#img-buffer')[0];//图片id
                 options.render="image";//设置生成的二维码是canvas格式，也有image、div格式
-                _self.$data.codeinfo = "#快来加入“建云项目协作群”，协作最方便#复制此信息，打开“建云信融”app即可加入"+_self.sites.projectName+"项目！" + inviteCode;
+                _self.codeinfo = "#快来加入“建云项目协作群”，协作最方便#复制此信息，打开“建云信融”app即可加入"+_self.sites.projectName+"项目！" + inviteCode;
                 console.log(options.image);
-                xyqrcode(options);
+                _self.xyqrcode(options);
                 _self.sites = response.data.result;
-                _self.$data.type=_self.$route.query.dataType
+                _self.type=_self.$route.query.dataType
 //								alert(response.data.result.inviteQrcode)
             } else {
                 //							msg("获取云盘目录信息失败")
@@ -147,12 +191,13 @@ export default {
     }
     },
     created(){
+        appApi.hideMenu()
         this.initData();
     },
 }
 </script>
 
-<style>
+<style scoped>
     body,
     .mui-content {
         background: #fff;

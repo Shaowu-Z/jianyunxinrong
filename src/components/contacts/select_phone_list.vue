@@ -140,7 +140,7 @@ export default {
             var deptId;
             var locationUrl ="";
             if(type==1){//部门中添加
-                teamId = this.$route.query.teamId; 
+                teamId = this.$route.query.teamId;
                 deptId = this.$route.query.deptId;
                 this.$router.push({path:'/subdivision',query:{teamId:teamId,deptId:deptId}})
             }else{
@@ -438,6 +438,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 
 </style>

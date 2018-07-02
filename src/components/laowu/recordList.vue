@@ -32,7 +32,7 @@
         <p class="cc" hidden="hidden"></p>
     </div>
     <div id="uldiv"  >
-		
+
         <ul  class="mui-table-view mui-table-view-striped confirm-list sign-view">
             <li :id="item.id"  v-for="(item,index) in data.confirmList" :key="index"  class="mui-table-view-cell" @click="open_calendar_popver(item.recordType,item.createTimeStr,item)">
 
@@ -587,7 +587,7 @@
 </section>
   </div>
 </template>
-	
+
  <script>
 
 // var VueTouch = require('vue-touch')
@@ -655,7 +655,7 @@ export default {
       this.screenWidth=document.body.clientWidth
 	  laowu_confirm.initVue();
       laowu_confirm.initData();
-     
+
     //   alert(this.$route.query.queryTime.split("-")[2])
   },
   mounted:function(){
@@ -710,7 +710,7 @@ export default {
   },
 }
 </script>
-<style>
+<style type="text/css" scoped>
         .trend-list:before {
             top: 15px;
             height: calc(100% - 15px);
@@ -860,4 +860,4 @@ export default {
             width: 20%;
             float: left;
         }
-    </style>		
+    </style>

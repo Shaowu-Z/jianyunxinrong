@@ -31,7 +31,7 @@
 							<p class="oa-contact-email mui-ellipsis" v-text="item.place"></p>
 							<p class="oa-contact-email mui-ellipsis" v-if="item.gps!=null && item.gps!=''" >距离上次上工地址&nbsp;&nbsp;<span v-text="item.gps"></span></p>
 						</div>
-					</div>  
+					</div>
             <span  :class="item.type==0 ? 'disabled' : 'signing'"  @click.stop="existProjects(item)"></span>
         </li>
 		</ul>
@@ -41,7 +41,7 @@
 </template>
 <script>
 import project_sign from  "./js/project_sign.js"
-import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
+import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js'
 import laowu_common from './js/laowu_common.js';
 export default {
     data(){
@@ -68,7 +68,7 @@ export default {
             img_url:"",//项目图片
             remindTime:"",//提醒期限
             remindName:"",//提醒期限
-            
+
         },
         reqWorkParamsVO:{
             userId:"",
@@ -103,8 +103,8 @@ export default {
 	   project_sign._self=this;
      project_sign.initVue()
      project_sign.initData()
-     
-       
+
+
     },
      methods:{
         goback(){
@@ -118,7 +118,7 @@ export default {
         },
 		  openImg:function(index,ary){
 			console.log("ary",ary)
-			
+
 			disposeLogImgMutil(index,ary);
 		},
       existProjects:function(item){
@@ -131,12 +131,12 @@ export default {
       }
     },
     mounted(){
-    
+
     }
 }
 
 </script>
-<style>
+<style type="text/css" scoped>
   .oa-contact-email{
     text-align: left;
   }
@@ -156,7 +156,7 @@ export default {
     right: 0;
     display: block;
     width: 40px;
-    height: 40px; 
+    height: 40px;
    background: url(../../../static/images/label-unsign.png);
    background-size: 100%;
  }

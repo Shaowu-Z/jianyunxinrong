@@ -15,7 +15,7 @@
 				<ul class="mui-table-view mui-table-view-striped container-average">
 
 					<li v-for="(user,index) in form.users" :key="index" class="mui-table-view-cell">
-						<span class="btn-roll btn-delete iconfont icon-delete" @click="deleteMember(user)"></span>
+						<span class="btn-roll btn-delete iconfont icon-delete" @click="deleteMember(user,index)"></span>
 						<a :href="['javascript:appApi.openNewWindow(pagepath+\'/contacts/eg_details.html?type=f&userId='+user.userId+'\')']">
 						<div class="oa-contact-cell mui-table">
 							<div class="oa-contact-avatar mui-table-cell">
@@ -152,9 +152,9 @@ export default {
             });
 
         },
-        deleteMember:function(val){
+        deleteMember:function(val,index){
             var _self = this;
-            _self.form.users.remove(val);
+            _self.form.users.splice(index,1);
         },
         meetingMember:function(CONTENT){
 
@@ -177,12 +177,12 @@ export default {
                     }
                 }
             }
-            appApi.openProjectContactSelectPage(this.projectSN,'',userIds,1,true,false); 
+            appApi.openProjectContactSelectPage(this.projectSN,'',userIds,1,true,false);
             appApi.callBackFun = function(callFlag, CONTENT) {
                 if(callFlag == appApi.callBackFlag.GONGSI) {
                     _self.meetingMember(CONTENT);
                 }
-            } 
+            }
         },
         test:function(){
             var formdata=new FormData();
@@ -244,6 +244,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 
 </style>

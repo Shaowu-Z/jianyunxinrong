@@ -43,8 +43,13 @@ module.exports = {
   // },
   dev: {
     env: require('./dev.env'),
+<<<<<<< HEAD
     host:"192.168.0.110",
     port: 8100,
+=======
+    host:"192.168.0.99",
+    port: 8080,
+>>>>>>> 90235f4a8dae091cfeefc8bbf9519fe5c34efb8f
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -63,6 +68,7 @@ module.exports = {
       // },
       "/api": {
         target: "http://java.winfreeinfo.com",
+        // target: "http://192.168.0.32",
         changeOrigin:true,
         pathRewrite: {"^/api" : ""}
       }
@@ -71,6 +77,7 @@ module.exports = {
   },
 
   build: {
+    env: require('./dev.env'),
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
@@ -83,7 +90,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

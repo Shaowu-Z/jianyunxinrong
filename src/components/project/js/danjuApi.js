@@ -5,6 +5,7 @@
 	 */
 	import { DatetimePicker } from "mint-ui";
 	import { Toast } from "mint-ui";
+	import tipApi from "../../../playform/tipApi.js";
 var _self
 var danjuApi={
 	initVue:function(){
@@ -179,11 +180,12 @@ var danjuApi={
 	 */
 	upfile: function(event) {
 		// loading("上传中")
+		tipApi.waring("上传中")
 		sessionStorage.removeItem("cunnews")
 		// var _self = this
 		var file = document.getElementById(event.target.id).files;
 		var zrid = document.getElementById(event.target.id).getAttribute("id")
-		var url = "/api/sass_api/upload_file";
+		var url = "/sass_api/upload_file";
 		var form = new FormData();
 		var forimg = []
 		var forfile = []
@@ -236,6 +238,7 @@ var danjuApi={
 		xhr.onload = function(evt) {
 			//请求完成
 			// layer.close(loading("上传中"))
+			tipApi.close("waring")
 		};
 		xhr.onreadystatechange = function(evt) {
 			if(xhr.readyState == 4 && xhr.status == 200) {
@@ -261,13 +264,16 @@ var danjuApi={
 
 				}
 				// ludan("上传成功", 1, 1)
+				tipApi.success("上传成功",1)
 			} else if(xhr.readyState == 4 && xhr.status == 500) {
 				// ludan("上传失败", 1, 1)
+				tipApi.failure("上传失败",1)
 			}
 		}
 		xhr.onerror = function(evt) {
 			//请求失败
 			var data = JSON.parse(evt.target.responseText);
+			tipApi.failure("请求失败",1)
 			// ludan("请求失败", 1, 1)
 			console.log("data");
 		};
@@ -286,22 +292,10 @@ var danjuApi={
 		_self.$http.post("/sass_api/delete_file?userId="+_self.userid+"&fileId=" + _self.imgid[n-1]).then(function(response) {
 			if(response.data.code == 0) {
 				console.log(response.data)
-				// ludan("删除成功",1,2)
-				layer.open({
-					type:1,
-					time:2,
-					title:"删除成功",
-					content:""
-				})
+				tipApi.success("删除成功",2)
 			}
 		}).catch(function(error) {
-			// ludan(error, 1, 3);
-			layer.open({
-					type:1,
-					time:2,
-					title:"请求失败",
-					content:error
-				})
+			tipApi.failure("请求失败",2)
 		})
 		_self.imgs.splice(n-1,1)
 		_self.imgid.splice(n - 1, 1)
@@ -326,23 +320,11 @@ var danjuApi={
 		  .then(function(response) {
 			if (response.data.code == 0) {
 			  console.log(response.data);
-			  // ludan("删除成功",1,2)
-			  layer.open({
-				type: 1,
-				time: 2,
-				title: "删除成功",
-				content: ""
-			  });
+			  tipApi.success("删除成功",2)
 			}
 		  })
 		  .catch(function(error) {
-			// ludan(error, 1, 3);
-			layer.open({
-			  type: 1,
-			  time: 2,
-			  title: "请求失败",
-			  content: error
-			});
+			tipApi.failure("请求失败",2)
 		  });
 		_self.fujians.splice(n - 1, 1);
 		_self.fujianid.splice(n - 1, 1)
@@ -415,7 +397,6 @@ var danjuApi={
 			if(_self.tijao == 1 && _self.baocun != 1) { //保存不提交
 				danjuApi.save_send(n)
 			} else if(_self.tijao != 1 && _self.baocun == 1) { //直接提交
-				alert(n)
 				danjuApi.save_send(n)
 			} else if(_self.tijao == 1 && _self.baocun == 1) { //保存 再提交
 				danjuApi.save_send(n)
@@ -428,18 +409,10 @@ var danjuApi={
 	save_send:function(n){
 		// var _self = this;
 		if(n==1){
-			var baocun=layer.open({
-				type:1,
-				title:"保存中",
-				content:""
-			})
 			// ludan("提交中",0,1)
+			tipApi.waring("保存中")
 		}else{
-			var tijaio=layer.open({
-				type:1,
-				title:"提交中",
-				content:""
-			})
+			tipApi.waring("提交中")
 			// ludan("保存中",0,1)
 		}
 		//获取数据
@@ -573,7 +546,6 @@ var danjuApi={
 		console.log(param)
 		// alert(569)
 		// alert(JSON.stringify(_self.imgurl))
-		alert(JSON.stringify(param))
 		_self.$http.post("/contract/save", param).then(function(response) {
 			if(response.data.code == 200) {
 				console.log(response.data)
@@ -582,17 +554,12 @@ var danjuApi={
 				// var succname = []
 				// var faliename = []
 				if(n == 2) {
-					alert(5896)
+					tipApi.closeAll()
 					// layer.clsose(ludan("提交中",0,1))
 					danjuApi.sendtodo(toimid)
 				} else {
-					layer.close(baocun)
-					layer.open({
-						type:1,
-						title:"保存成功",
-						content:"",
-						time:2
-					})
+					tipApi.closeAll()
+					tipApi.success("保存成功",2)
 					// ludan("保存成功", 2, 2)
 				}
 			} else {
@@ -635,8 +602,7 @@ var danjuApi={
 				  todo_url="/static/newwebstatic/chengnuo/transfer.html?id="
 			  }
 		}
-
-		console.log()
+		
 		var todojson = {
 			"title":todo_title,
 			"titileTwo": _self.currRoomClassName + "-" + _self.pa_isroomname,
@@ -666,6 +632,7 @@ var danjuApi={
 		console.log(todojson)
 		window.appApi.sendTodo(todojson, function(d) {
 			if(d.code == 200) {
+				tipApi.success("提交成功",2)
 				// ludan("提交成功", 2, 2, function() {
 					appApi.refreshData(2);
 					// setTimeout(function(){window.location.reload(),200})

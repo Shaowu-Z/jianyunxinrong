@@ -1,6 +1,6 @@
 <template>
   <div>
-  
+
 <header class="mui-bar mui-bar-nav">
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
 		<span class="mui-icon mui-icon-back"></span>
@@ -54,10 +54,10 @@
 
 	</section>
 
- 
 
-   
-   
+
+
+
   </div>
 </template>
 
@@ -70,7 +70,7 @@ var app=null
 export default {
   data() {
     return {
-      
+
       form: {
         workHour: "", //正常上班几个时长算一个工(ID)
         workHourName: "", //正常上班几个时长算一个工(名称)
@@ -81,7 +81,7 @@ export default {
         gongzhongId: "",
         gongzhongName: "",
         userId: "",
-        
+
       },
       data: {
         timeList: []
@@ -134,7 +134,7 @@ export default {
         this.over_popupVisible=false
     },
     handleClick:function(type){//确定
-    
+
     console.log(this.pickervalues)
         if(this.pickervalues){
          if(this.timeType==1){
@@ -144,7 +144,7 @@ export default {
           this.form.overHourName=this.pickervalues.value+laowu_common.time_name;
           this.form.overHour=this.pickervalues.value;
           }
-       
+
         }else{
           if(this.timeType==1){
             this.form.workHourName=this.data.timeList[0].value+laowu_common.time_name;
@@ -156,7 +156,7 @@ export default {
         }
         this.work_popupVisible=false
         this.over_popupVisible=false
-       
+
     },
     databot:function(type){
       if(type==1){
@@ -166,18 +166,18 @@ export default {
         this.over_popupVisible=true
         this.work_popupVisible=false
       }
-      
+
       this.timeType=type;
       this.selectTime(type)
     },
      onValuesChange(picker, values) {
-      
+
       // if(values.length>0){
         this.pickervalues=values[0];
       // }
-        
+
     },
-    
+
       showTimeLists:function () {//加载时间列表
                 var _self=this;
                 var obj=new Object();
@@ -193,7 +193,7 @@ export default {
                                 obj.value=result[i].baseId;
                                 if(result[i].baseId!=0){
                                     values.push(obj);
-                                   
+
                                 }
 
                             }
@@ -223,7 +223,7 @@ export default {
                 }else if(type==2){
                     select_time=_self.form.overHour;
                 }
-                
+
                 //获取当前时间选中的下标
                 if(_self.$data.data.timeList.length>0 && select_time){
                     for(var i=0;i<_self.$data.data.timeList.length;i++){
@@ -234,7 +234,7 @@ export default {
                     }
                 }
                  _self.slots[0].defaultIndex=selectindex;
-         
+
             },
             saveData:function() {/*返回到记工页面*/
                 var _self = this;
@@ -279,7 +279,7 @@ export default {
           var url = "/static/webstatic/new_laowu/gongzhong_list.html";
           appApi.openNewWindow(url);
         },
-        
+
   }
 };
 
@@ -290,14 +290,14 @@ export default {
         }
 </script>
 
-<style>
+<style type="text/css" scoped>
   @import "../../assets/css/common/mint";
   .picker-slot-center{
     width: 100%;
   }
   .mint-popup .mint-button .mint-button-text{
     width: 100%;
-    padding: 0; 
+    padding: 0;
   }
   .mint-popup .mint-button{
     margin: 6px;

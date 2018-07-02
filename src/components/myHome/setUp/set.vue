@@ -61,12 +61,13 @@ export default {
             map[param[0]] = decodeURI(param[1]);
         }
     }
-    
+
     function reLoad(){
         window.location.reload();
     }
   },
   created() {
+    appApi.hideMenu()
       this.loadData();
       var _self = this;
       var formparam = new FormData();
@@ -80,7 +81,7 @@ export default {
   },
   methods:{
     enterprise(item){
-      this.$router.push({path:'/mycenter/enterprise_home.html',query:{teamId:item.id,teamCode:item.teamCode,tagName:item.tagName}})
+      this.$router.push({path:'/static/webstatic/mycenter/enterprise_home.html',query:{teamId:item.id,teamCode:item.teamCode,tagName:item.tagName}})
     },
     hide_shade: function(){
         this.jsTeamDiv = false;
@@ -95,7 +96,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
   .top{
      margin-bottom:10px
   }

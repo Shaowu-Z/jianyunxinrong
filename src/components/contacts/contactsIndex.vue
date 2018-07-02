@@ -271,17 +271,12 @@
 
 	</div>
 </section>
-	<footer-bar></footer-bar>
+	<!-- <footer-bar></footer-bar> -->
   </div>
 </template>
 
 <script>
-import footerBar from '../common/footerBar'
-// import {findTeamList} from '../../seek'
 export default {
-  components: {
-	footerBar,
-  },
   data () {
     return {
 	show: false,
@@ -289,7 +284,6 @@ export default {
 	show2: false,
     items:[],
     projects:[],
-    //userInfo:window.appApi.getUserInfo()
 	userInfo:[],
 	Listshow: [],
 	Listshow1: [],
@@ -314,12 +308,13 @@ export default {
         window.location.reload();
     }
     appApi.callBackFun = function(callFlag, CONTENT) {
-    if(callFlag == appApi.callBackFlag.USER_INFO) {
-        app.userInfo = JSON.parse(CONTENT);//转换成json对象
-    }
-}
+		if(callFlag == appApi.callBackFlag.USER_INFO) {
+			app.userInfo = JSON.parse(CONTENT);//转换成json对象
+		}
+	}
   },
-      created() {
+    created() {
+		appApi.showMenu()
 		  //  企业信息
         var _self = this;
         this.$http.post('/concats_api/find_team_list',{}).then(function (response) {
@@ -383,8 +378,8 @@ export default {
 		this.$router.push({path:'/phoneList'})
 	},
 	sweepQrCode(){
-		console.log(111);
 		window.appApi.sweepQrCode();
+		this.show = !this.show
 	},
     clickshow(submenu) {
 			console.log(submenu);
@@ -408,10 +403,10 @@ export default {
 		}
 	},
 	project(submenu){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
-	},	
+		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
+	},
 	Office(submenu){
-		this.$router.push({path:'/addstyle',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
+		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
 	},
 	participate(submenu){
 		appApi.openProjectContact(this.projects[submenu].serialNum,this.projects[submenu].ProjectName);
@@ -443,7 +438,7 @@ export default {
 
 </script>
 
-<style> 
+<style type="text/css" scoped>
 	@import "../../assets/css/common/style.less";
 	.hide{
 		display: none
@@ -459,5 +454,8 @@ export default {
 	}
 	.heig{
 		height:63px
+	}
+	.mui-popover{
+		position: fixed;
 	}
 </style>

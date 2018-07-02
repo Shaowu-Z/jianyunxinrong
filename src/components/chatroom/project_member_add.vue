@@ -9,7 +9,7 @@
         <div class="fixed-bottom">
             <div class="confirm-box">
                 <div class="count-con text">已选择<span class="num" id="selectSize">0</span>人</div>
-                <div class="btn-con"><button onclick="confirm()" class="mui-btn mui-btn-primary">确定</button></div>
+                <div class="btn-con"><button @click="confirm()" class="mui-btn mui-btn-primary">确定</button></div>
             </div>
         </div>
         <section class="mui-content">
@@ -17,10 +17,10 @@
                 <!--所有子管理员-->
 
                     <ul class="mui-table-view eg-table-view">
-                        <li v-for="(user,index) in data.memberList" :key="index" class="mui-table-view-cell mui-checkbox" @click="selectUser()">
+                        <li v-for="(user,index) in data.memberList" :key="index" class="mui-table-view-cell mui-checkbox" @click="selectUser(index)">
                             <div class="mui-slider-cell">
                                 <div class="oa-contact-cell mui-table">
-                                    <div class="oa-contact-input mui-table-cell">
+                                    <div class="oa-contact-input mui-table-cell" style="z-index:0">
                                         <input type="checkbox"
                                             name="selectItem"
                                             :cellPhone="user.cellPhone"
@@ -54,6 +54,7 @@
 <script>
 import setting from '../../playform/config'
 import {getParam,BackCookie} from '../../playform/common'
+import { Toast } from 'mint-ui';
 export default {
     data () {
         return {
@@ -72,6 +73,7 @@ export default {
             paramMap : {},
             projectSN: '',
             method:'',
+            select_arr:[]
         }
     },
     created() {//初始化方法
@@ -169,39 +171,40 @@ export default {
         },
 
 
-        selectUser () {//选择工人
+        selectUser (index) {//选择工人
             var _self=this;
             setTimeout(function () {
-                _self.selectIdList=_self.getSelectVal();
-                document.getElementById("selectSize").innerHTML=_self.selectIdList.length;
+                _self.data.selectIdList=_self.getSelectVal(index);
+                document.getElementById("selectSize").innerHTML=_self.data.selectIdList.length;
             },200)
 
         },
         cancel () {//取消选中
             var _self=this;
-            _self.selectIdList=[];
+            _self.data.selectIdList=[];
             _self.selectSize=0;
         },
-        getSelectVal() {//选择工人
+        getSelectVal(index) {//选择工人
             var _self=this
             //获取所有返回的值
             var obj = document.getElementsByName("selectItem");
-            var select_arr = [];
-            _self.selectUserList=[];
-            for(var k in obj) {
-                if(obj[k].checked && undefined != obj[k].value){
+            // var select_arr = [];
+            _self.data.selectUserList=[];
+
+
+                console.log(obj[index])
+                if(obj[index].checked && undefined != obj[index].value){
                     var userobj=new Object();
-                    userobj.userId=obj[k].value;
-                    userobj.cellPhone=obj[k].getAttribute("cellPhone");
-                    userobj.imId=obj[k].getAttribute("imId");
-                    userobj.nickName=obj[k].getAttribute("nickName");
-                    userobj.userIcon=obj[k].getAttribute("userIcon");
+                    userobj.userId=obj[index].value;
+                    userobj.cellPhone=obj[index].getAttribute("cellPhone");
+                    userobj.imId=obj[index].getAttribute("imId");
+                    userobj.nickName=obj[index].getAttribute("nickName");
+                    userobj.userIcon=obj[index].getAttribute("userIcon");
                     _self.data.selectUserList.push(userobj);
-                    select_arr.push(obj[k].value);
+                    this.select_arr.push(obj[index].value);
                 }
-            }
-            console.info(select_arr);
-            return select_arr;
+            // console.info(select_arr);
+            return this.select_arr;
         },
         popup(content){
             msg(content);
@@ -210,22 +213,30 @@ export default {
             var _self=this;
             _self.data.recivememberList.remove(val);
         },
+        confirm:function () {
+            let _self = this
+            if(this.data.selectUserList.length<=0){
+                // msg("请选择工人")
+                Toast({
+                    message: '请选择工人',
+                    position: 'bottom',
+                    duration: 1000
+                });
+                return;
+            }
+            localStorage.setItem("lastname", JSON.stringify(this.data.selectUserList));
+            setTimeout(function () {
+                appApi.closeNewWindow();
+
+                appApi.broadcast("setMemberList("+JSON.stringify(_self.data.selectUserList)+")");//返回上一页并设置标准工资页面
+            },100);
+        }
     },
     mounted(){
         /**
          * 确认
          */
-        window.confirm=function () {
-            if(app.data.selectUserList.length<=0){
-                msg("请选择工人")
-                return;
-            }
-            localStorage.setItem("lastname", JSON.stringify(app.data.selectUserList));
-            setTimeout(function () {
-                appApi.closeNewWindow();
-                appApi.broadcast("setMemberList("+JSON.stringify(app.data.selectUserList)+")");//返回上一页并设置标准工资页面
-            },100);
-        }
+
 
 
 
@@ -270,6 +281,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 
 </style>

@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,6 +24,6 @@ export default {
 }
 body{
   margin:0;
-  
+
 }
 </style>

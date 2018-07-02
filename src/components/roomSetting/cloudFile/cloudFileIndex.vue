@@ -22,7 +22,7 @@
                                                 </div>
                                                 <div class="oa-contact-content mui-table-cell">
                                                     <h4 class="oa-contact-name"><span v-text="obj.name"></span></h4>
-                                                    <p class="oa-contact-email text"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
+                                                    <p class="oa-contact-email text"><span></span>{{obj.updateDate}}<span v-text="obj.size"></span></p>
                                                 </div>
                                             </div>
                                         </a>
@@ -67,6 +67,7 @@
 <script>
 import setting from '../../../playform/config'
 import {getParam,BackCookie} from '../../../playform/common'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -156,7 +157,7 @@ export default {
             affirmId: "",
             isOpeAll:false//文件操作所有权限
             }
-    },
+	},
     mounted() {
         if(window.location.href.split("?")[1]){
             var arrays = window.location.href.split("?")[1].split("&");
@@ -506,8 +507,11 @@ export default {
 				 _self.firstInfo.id = rs.data.first.id;
 				 _self.firstInfo.name = rs.data.first.name;
 				 _self.firstInfo.size = rs.data.first_size;*/
+
 				_self.firstList = rs.data.firstList;
-				console.log(rs.data.firstList)
+				for(let i=0;i<_self.firstList.length;i++){
+					_self.firstList[i].updateDate = util.fnFormat(_self.firstList[i].updateDate,'yyyy-MM-dd')
+				}
 				_self.loadStatus = true;
 			} else {
 				_self.loadStatus = false;
@@ -683,18 +687,26 @@ export default {
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
             var url;
-            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
-            }else{
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
-            }
-            if(isSys) {
-				url = url + "&isSys=true";
+            // if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+			// 	url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
+            // }else{
+			// 	url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+            // }
+            // if(isSys) {
+			// 	url = url + "&isSys=true";
+			// }
+			// if(!isOpe){
+            //     url = url + "&isOpe=false";
+			// }
+			console.log(_self.$router)
+			if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined || isSys == true || !isOpe== true){
+				console.log(1111)
+				_self.$router.push({path:"/static/webstatic/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,roomId:_self.roomId,isSys:true,isOpe:false}})
+			} else {
+				console.log(2222)
+				_self.$router.push({path:"/static/webstatic/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,isSys:true,isOpe:false}})
 			}
-			if(!isOpe){
-                url = url + "&isOpe=false";
-			}
-			window.appApi.openNewWindow(url);
+			// window.appApi.openNewWindow(url);
 		},
 		itemEditShow: function(type) {
 			var _self = this;
@@ -1201,7 +1213,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1331,7 +1343,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -2254,6 +2266,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 
 </style>

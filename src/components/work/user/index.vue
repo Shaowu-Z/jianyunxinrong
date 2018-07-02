@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 .Router {
      position: absolute;
      width: 100%;

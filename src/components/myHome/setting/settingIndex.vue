@@ -4,12 +4,12 @@
 		<h1 class="mui-title">设置</h1>
 		<button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
 	</header>
-	
+
 	<section id="mycenter" class="mui-content mycenter-content">
 		<div class="address-list ">
 			<ul class="mui-table-view mui-table-view-striped" >
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="#">
+					<a class="mui-navigate-right" href='javascript:;'>
 						<div class="oa-contact-cell mui-table">
 							<!--<div class="oa-contact-avatar mui-table-cell">
 								<span class="my-list-icon label-denglu"></span>
@@ -21,7 +21,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="#">
+					<a class="mui-navigate-right" href='javascript:;'>
 						<div class="oa-contact-cell mui-table">
 							<!--<div class="oa-contact-avatar mui-table-cell">
 								<span class="my-list-icon label-reset"></span>
@@ -33,7 +33,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="#">
+					<a class="mui-navigate-right" href='javascript:;'>
 						<div class="oa-contact-cell mui-table">
 							<!--<div class="oa-contact-avatar mui-table-cell">
 								<span class="my-list-icon label-exit"></span>
@@ -54,8 +54,8 @@
 					推荐给好友
 				</a>
 			</div>
-			<div class="singlebox" @click="cmApi.customerOpen()">
-				<a class="mui-navigate-right" href="#">
+			<div class="singlebox" @click="customerOpen()">
+				<a class="mui-navigate-right" href='javascript:;'>
 					<!--<span class="my-list-icon label-service"></span>-->
 					联系客服
 				</a>
@@ -67,14 +67,14 @@
 					关于我们
 				</a>
 			</div>
-			<div class="singlebox" @click="addproject">
+			<!-- <div class="singlebox" @click="addproject">
 				<a class="mui-navigate-right">
-					<!--<span class="my-list-icon label-guanyu"></span>-->
-					收付款
+					<span class="my-list-icon label-guanyu"></span>-->
+					<!-- 收付款
 				</a>
-			</div>
+			</div> -->
 		</div>
-		
+
 		<!--遮罩层-->
 	<div class="mui-backdrop" style="display: none;z-index: 999;" v-if="cookes==1"></div>
 
@@ -113,13 +113,31 @@ export default {
 		}
 	},
 	created(){
+		appApi.hideMenu();
 	},
 	methods:{
 		goBack(){
 			this.$router.go(-1);
 		},
 		login(){
-			this.$router.push({path:'/static/webstatic/register/login.html'});
+			let _self = this
+			this.$http.post("/user_api/user_loginout").then(function(resp) {
+
+				//清除cookie
+				var date = new Date();
+				date.setTime(date.getTime() - 10000);
+				document.cookie = "userid" + "=; expire=" + date.toGMTString() + "; path=/";
+				localStorage.clear();
+				if(appApi.isApp) {
+					window.appApi.relogin();
+				} else {
+					_self.$router.push({path:'/static/webstatic/register/login.html'});
+				}
+
+			}).catch(function(error) {
+				console.info(error);
+				remin(error);
+			});
 		},
 		backpwd(){
 			this.$router.push({path:'/backpwd'});
@@ -152,14 +170,15 @@ export default {
 			this.$data.cookes=2
 		},
 		loginout() {
+			let _self = this
 			if(!confirm("确定要退出登录吗？")) {
 				return false;
 			}
-			axios.post(getUrl() + "/user_api/user_loginout").then(function(resp) {
-				if(isApp) {
+			this.$http.post("/user_api/user_loginout").then(function(resp) {
+				if(appApi.isApp) {
 					window.appApi.loginout();
 				} else {
-					window.location.href = "../register/login.html";
+					_self.$router.push({path:'/static/webstatic/register/login.html'});
 				}
 				// if (resp.data.code == 200) {
 				//     console.info(resp.message);
@@ -169,16 +188,16 @@ export default {
 				//     remin(resp.data.message);
 				// }
 			}).catch(function(error) {
-				console.info(error.date.message);
-				remin(error.data.message);
+				console.info(error);
+				// remin(error.data);
 			});
 		},
-		
+
 	}
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 body{
 	background: #efeff4 !important;
 }

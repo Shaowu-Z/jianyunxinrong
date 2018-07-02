@@ -24,27 +24,27 @@
                     <div class="tab-item" v-bind:class="{disabled:(isSys || isSys == 'true')}" @click="createDir">新建文件夹</div>
                 </div>
                 <ul class="mui-table-view sub-sort" id="sort-list" style="display:none;" v-show="sortShow">
-                    <li class="mui-table-view-cell item name" v-bind:class="{ active: curSort.type == sorts.NAME_SORT}" @click="selectSort(sorts.NAME_SORT,'名称排序')">名称排序</li>
-                    <li class="mui-table-view-cell item size" v-bind:class="{ active: curSort.type == sorts.SIZE_ASC}" @click="selectSort(sorts.SIZE_ASC,'大小升序排序')">大小升序排序</li>
-                    <li class="mui-table-view-cell item size" v-bind:class="{ active: curSort.type == sorts.SIZE_DESC}" @click="selectSort(sorts.SIZE_DESC,'大小倒序排序')">大小倒序排序</li>
-                    <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_ASC}" @click="selectSort(sorts.DATE_ASC,'时间升序排序')">时间升序排序</li>
-                    <li class="mui-table-view-cell item time" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
+                    <li class="mui-table-view-cell item name text" v-bind:class="{ active: curSort.type == sorts.NAME_SORT}" @click="selectSort(sorts.NAME_SORT,'名称排序')">名称排序</li>
+                    <li class="mui-table-view-cell item size text" v-bind:class="{ active: curSort.type == sorts.SIZE_ASC}" @click="selectSort(sorts.SIZE_ASC,'大小升序排序')">大小升序排序</li>
+                    <li class="mui-table-view-cell item size text" v-bind:class="{ active: curSort.type == sorts.SIZE_DESC}" @click="selectSort(sorts.SIZE_DESC,'大小倒序排序')">大小倒序排序</li>
+                    <li class="mui-table-view-cell item time text" v-bind:class="{ active: curSort.type == sorts.DATE_ASC}" @click="selectSort(sorts.DATE_ASC,'时间升序排序')">时间升序排序</li>
+                    <li class="mui-table-view-cell item time text" v-bind:class="{ active: curSort.type == sorts.DATE_DESC}" @click="selectSort(sorts.DATE_DESC,'时间倒序排序')">时间倒序排序</li>
                 </ul>
             </div>
-			<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore>
+			<!-- <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="1"></mt-loadmore> -->
             <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top:51px" v-bind:class="{list_select:selectMode}">
                 <div class="mui-scroll">
 					<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="50">
                     <div id="js-dish-con" class="cloud-content">
-						
+
                         <!--搜索入口-->
                         <div class="cloud-search">
-                            <a class="search-inner" href="javascript:;" @tap="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
+                            <a class="search-inner" href="javascript:;" @click="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
                         </div>
                         <div v-if="curList.length != 0 && status == 1">
 								<ul class="mui-table-view mui-table-view-striped">
 									<div v-for="(obj,index) in curList" :key="index">
-										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}" v-longtouch="timeOutEvent">
+										<li v-if="operateShow()" class="mui-table-view-cell mui-checkbox" v-bind:class="{disabled:obj.status==1}">
 											<a class="" href="javascript:;" @click="openDir(obj.id,obj.type,obj.name,obj.suffix,obj.status,$event)">
 												<div class="oa-contact-cell mui-table">
 													<div v-show="selectMode && obj.status==0" class="oa-contact-input mui-table-cell">
@@ -76,13 +76,12 @@
 													</div>
 													<div class="oa-contact-content mui-table-cell">
 														<h4 class="oa-contact-name" v-text="obj.name + obj.suffix"></h4>
-														<p class="oa-contact-email">
+														<p class="oa-contact-email text">
 															<span v-text="obj.createName"></span>
 															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
 															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
-															<span>{{obj.updateDate | formDate}}</span>
+															<span>{{obj.updateDate}}</span>
 															<span v-text="obj.size"></span>
-
 														</p>
 													</div>
 												</div>
@@ -127,7 +126,7 @@
 															<span v-text="obj.createName"></span>
 															<span class="ico-txt" v-if="obj.sendReceive==0"><span class="mui-icon iconfont icon-except"></span>收件</span>
 															<span class="ico-txt" v-if="obj.sendReceive==1"><span class="mui-icon iconfont icon-send02"></span>发件</span>
-															<span>{{obj.updateDate | formDate}}</span>
+															<span>{{obj.updateDate}}</span>
 															<span v-text="obj.size"></span>
 
 														</p>
@@ -164,100 +163,100 @@
             </div>
             <!--上传文件弹框结束-->
 
-            <!--编辑文件夹弹框开始-->
-            <div class="mui-backdrop" v-show="showEditBox" @click="showEditBox=!showEditBox" style="display: none;z-index: 999;"></div>
-            <div id="editBox" class="floorzr" style="position: fixed;bottom: 0;width: 100%;margin-bottom: 0;display: none;" v-show="showEditBox">
-                <p class="floorzr-title" v-text="editItem.name + editItem.suffix"></p>
-                <ul class="mui-row mui-grid-view mui-grid-12">
-                    <!--<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
-                        <!--<div class="menu-item" @click="sendFile(editItem.id)">-->
-                            <!--<span class="mui-icon iconfont icon-send"></span>-->
-                            <!--<span class="menu-item-name" >文件发送</span>-->
-                        <!--</div>-->
-                    <!--</li>-->
-                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                        <div class="menu-item" @click="itemShare(editItem.id)">
-                            <span class="mui-icon iconfont icon-share"></span>
-                            <span class="menu-item-name" >分享</span>
-                        </div>
-                    </li>
-                    <div v-if="!isSys || (isSys && editItem.type == 2)">
-                        <!--<li v-if="editItem.auth" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
-                            <!--<div class="menu-item" @click="moveItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">-->
-                                <!--<span class="mui-icon iconfont icon-move"></span>-->
-                                <!--<span class="menu-item-name">移动</span>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                        <div v-if="(editItem.auth ||isOpeAll)">
-                            <div v-if="(isSys || isSys == 'true')">
-                                <div v-if="editItem.status==0">
-                                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                        <div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                            <span class="mui-icon iconfont icon-zuofei"></span>
-                                            <span class="menu-item-name">作废</span>
-                                        </div>
-                                    </li>
-                                </div>
-                                <div v-else>
-                                    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                        <div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                            <span class="mui-icon iconfont icon-zuofei active"></span>
-                                            <span class="menu-item-name">恢复</span>
-                                        </div>
-                                    </li>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <li v-show="(!isSys&&isOpeAll)" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel">
-                                    <div class="menu-item quxiao1" @click="delItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-delete"></span>
-                                        <span class="menu-item-name">删除</span>
-                                    </div>
-                                </li>
-                            </div>
-                        </div>
-                        <div v-if="showCollect && editItem.type == 2">
-                            <div v-if="editItem.collectStatus">
-                                <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                    <div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-shoucang active"></span>
-                                        <span class="menu-item-name">取消收藏</span>
-                                    </div>
-                                </li>
-                            </div>
-                            <div v-else>
-                                <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                                    <div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                        <span class="mui-icon iconfont icon-shoucang"></span>
-                                        <span class="menu-item-name">收藏</span>
-                                    </div>
-                                </li>
-                            </div>
-                        </div>
-                        <li v-if="(editItem.auth||isOpeAll)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item" @click="renameItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
-                                <span class="mui-icon iconfont icon-edit"></span>
-                                <span class="menu-item-name">重命名</span>
-                            </div>
-                        </li>
-                        <li v-show="(editItem.type == 2||isOpeAll)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
-                            <div class="menu-item"  @click="itemDetail(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event,editItem.isOpe)">
-                                <span class="mui-icon iconfont icon-help"></span>
-                                <span class="menu-item-name">文件详情</span>
-                            </div>
-                        </li>
-                        <!-- 电子签署-->
-                        <!--<li v-show="1 == 1" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
-                            <!--<div class="menu-item"  @click="sign(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">-->
-                                <!--<span class="mui-icon iconfont icon-qianzhang"></span>-->
-                                <!--<span class="menu-item-name">电子签署</span>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                    </div>
-                </ul>
-                <p class="remov" @click="showEditBox = false">取消{{isSys}}</p>
-            </div>
-            <!--编辑文件夹弹框结束-->
+	<!--编辑文件夹弹框开始-->
+	<div class="mui-backdrop" v-show="showEditBox" @click="showEditBox=!showEditBox" style="display: none;z-index: 999;"></div>
+	<div id="editBox" class="floorzr" style="position: fixed;bottom: 0;width: 100%;margin-bottom: 0;display: none;" v-show="showEditBox">
+		<p class="floorzr-title" v-text="editItem.name + editItem.suffix"></p>
+		<ul class="mui-row mui-grid-view mui-grid-12">
+			<!--<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
+				<!--<div class="menu-item" @click="sendFile(editItem.id)">-->
+					<!--<span class="mui-icon iconfont icon-send"></span>-->
+					<!--<span class="menu-item-name" >文件发送</span>-->
+				<!--</div>-->
+			<!--</li>-->
+			<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+				<div class="menu-item" @click="itemShare(editItem.id)">
+					<span class="mui-icon iconfont icon-share"></span>
+					<span class="menu-item-name" >分享</span>
+				</div>
+			</li>
+			<template v-if="!isSys || (isSys && editItem.type == 2)">
+				<li v-if="editItem.auth||isOpeAll" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item" @click="moveItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+						<span class="mui-icon iconfont icon-move"></span>
+						<span class="menu-item-name">移动</span>
+					</div>
+				</li>
+				<template v-if="(editItem.auth ||isOpeAll)">
+					<template v-if="(isSys || isSys == 'true')">
+						<template v-if="editItem.status==0">
+							<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+								<div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+									<span class="mui-icon iconfont icon-zuofei"></span>
+									<span class="menu-item-name">作废</span>
+								</div>
+							</li>
+						</template>
+						<template v-else>
+							<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+								<div class="menu-item" @click="cancelItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+									<span class="mui-icon iconfont icon-zuofei active"></span>
+									<span class="menu-item-name">恢复</span>
+								</div>
+							</li>
+						</template>
+					</template>
+					<template v-else>
+						<li v-show="(!isSys&&isOpeAll)" class="mui-table-view-cell  mui-col-xs-3 mui-col-sm-4 quxiao" @click="batchDel">
+							<div class="menu-item quxiao1" @click="delItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-delete"></span>
+								<span class="menu-item-name">删除</span>
+							</div>
+						</li>
+					</template>
+				</template>
+				<template v-if="showCollect && editItem.type == 2">
+					<template v-if="editItem.collectStatus">
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+							<div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-shoucang active"></span>
+								<span class="menu-item-name">取消收藏</span>
+							</div>
+						</li>
+					</template>
+					<template v-else>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+							<div class="menu-item" @click="collect(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+								<span class="mui-icon iconfont icon-shoucang"></span>
+								<span class="menu-item-name">收藏</span>
+							</div>
+						</li>
+					</template>
+				</template>
+				<li v-if="(editItem.auth||isOpeAll||!isSys)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item" @click="renameItem(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">
+						<span class="mui-icon iconfont icon-edit"></span>
+						<span class="menu-item-name">重命名</span>
+					</div>
+				</li>
+				<li v-show="(editItem.type == 2||isOpeAll)" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">
+					<div class="menu-item"  @click="itemDetail(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event,editItem.isOpe)">
+						<span class="mui-icon iconfont icon-help"></span>
+						<span class="menu-item-name">文件详情</span>
+					</div>
+				</li>
+				<!-- 电子签署-->
+				<!--<li v-show="1 == 1" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-4">-->
+					<!--<div class="menu-item"  @click="sign(editItem.id,editItem.type,editItem.name,editItem.suffix,editItem.status,$event)">-->
+						<!--<span class="mui-icon iconfont icon-qianzhang"></span>-->
+						<!--<span class="menu-item-name">电子签署</span>-->
+					<!--</div>-->
+				<!--</li>-->
+			</template>
+		</ul>
+		<p class="remov" @click="showEditBox = false">取消</p>
+	</div>
+	<!--编辑文件夹弹框结束-->
 
             <!--手动输入弹框开始-->
             <div style="position:absolute; top:0px; width: 100%; height: 100%; background-color: #000; z-index: 999; opacity: 0.3; display: none"  v-show="showDelBox" @click="showDelBox=!showDelBox"></div>
@@ -360,10 +359,12 @@ import setting from '../../../playform/config'
 import {getParam,BackCookie,setDishSort,getDishSort} from '../../../playform/common'
 import mui from '../../../playform/mui'
 // import  '../../../playform/mui.pullToRefresh'
-import { Loadmore } from 'mint-ui'
+import { Loadmore,Toast } from 'mint-ui'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
+			widget: '',
 			pullWidget: '',
             orixy: '',
             loadStatus: false,
@@ -455,6 +456,9 @@ export default {
             affirmId: "",
             isOpeAll:false//文件操作所有权限
             }
+	},
+	created(){
+		this.init();
 	},
     mounted() {
 		var _self = this;
@@ -564,7 +568,37 @@ export default {
 				console.log(err);
 			})
 		}
-		
+
+		var pageParams = _self.pageParams;
+		pageParams.nodeId = this.$route.query.id
+		pageParams.projectId = this.$route.query.projectSN
+		this.$http.post("/cdish/list", pageParams).then(function(response) {
+			// console.log(response.data)
+			if(response.data.code == 200) {
+				var rs = response.data;
+				var allPage = rs.result.endPage;
+				_self.curList = response.data.result.list;
+				for(let i=0;i<_self.curList.length;i++){
+					_self.curList[i].updateDate = util.fnFormat(_self.curList[i].updateDate,'yyyy-MM-dd')
+				}
+				console.log(_self.curList,111111111111111);
+			} else {
+				layer.open({
+					content:"系统出了点小状况，请稍后再试!"
+					,skin: 'msg'
+					,time: 1 //2秒后自动关闭
+					,anim:false
+				});
+			}
+			_self.pageParams.curPage++;
+			_self.status = 1;
+		}).catch(function(error) {
+			console.log(error);
+		});
+	},
+    methods: {
+		init(){
+			let _self = this
 			var pageParams = _self.pageParams;
 			pageParams.nodeId = this.$route.query.id
 			pageParams.projectId = this.$route.query.projectSN
@@ -574,22 +608,24 @@ export default {
 					var rs = response.data;
 					var allPage = rs.result.endPage;
 					_self.curList = response.data.result.list;
-					console.log(_self.curList.length);
+					for(let i=0;i<_self.curList.length;i++){
+						_self.curList[i].updateDate = util.fnFormat(_self.curList[i].updateDate,'yyyy-MM-dd')
+					}
+					console.log(_self.curList,111111111111111);
 				} else {
-                    layer.open({
-                        content:"系统出了点小状况，请稍后再试!"
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
+					layer.open({
+						content:"系统出了点小状况，请稍后再试!"
+						,skin: 'msg'
+						,time: 1 //2秒后自动关闭
+						,anim:false
+					});
 				}
 				_self.pageParams.curPage++;
 				_self.status = 1;
 			}).catch(function(error) {
 				console.log(error);
 			});
-	},
-    methods: {
+		},
 		loadTop () {
 			var _self = this;
 			var pageParams = _self.pageParams;
@@ -698,8 +734,8 @@ export default {
 			var _self = this;
 			_self.pageParams.curPage = 1;
 			// mui.init();
-			mui.ready(function() {
-			});
+			// mui.ready(function() {
+			// });
             $("#pullrefresh").on('tap','.mui-checkbox a', function () {//绑定点赞事件
               this.click();
             });
@@ -751,7 +787,7 @@ export default {
 				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.curInfo.createTime = _self.formDate(rs.updateTime);
+			_self.curInfo.createTime = util.fnFormat(rs.updateTime,'yyyy-MM-dd')
 			_self.curInfo.id = rs.id;
 			_self.curInfo.name = rs.name;
 			_self.curInfo.size = rs.size;
@@ -940,6 +976,17 @@ export default {
 			}
 			_self.showEditBox = false;
 		},
+		refreshPage() {
+            if(this.pullWidget) {
+                this.pullWidget.pullDownLoading();
+            }
+            if(this.isIndex == 1) {
+                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
+                    initFirstData(projectId, getFirstData, roomId);//, roomId
+                else
+                    initFirstData(projectId, getFirstData);//, roomId
+            }
+        },
 		cancelItem: function(id, type, name, suffix, status, event) {
 			//标识作废 或取消作废
 			var _self = this;
@@ -987,7 +1034,7 @@ export default {
 				} else {
 					url ="/cdish/file/delete";
 				}
-				this.$http.post(url, {
+				_self.$http.post(url, {
 					id: parseInt(id)
 				}).then(function(response) {
 					if(response.data.code == 0) {
@@ -1024,7 +1071,8 @@ export default {
 			_self.showEditBox = false;
 		},
 		itemDetail: function(id, type, name, suffix, status, event,isOpe) {
-			appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
+			// appApi.openNewWindow(setting.getPagePath() + "/dish/file_detail.html?from=list&id=" + id+"&isOpe="+isOpe)
+			this.$router.push({path:'/static/webstatic/dish/file_detail.html',query:{from:"list",id:id,isOpe:isOpe}})
 		},
 		//电子签署 2017.11.21
 		sign:function (id,type,name,suffix,status,event) {
@@ -1038,7 +1086,12 @@ export default {
                     });
 				return;
 			}
-			loading("文件签署中，请不要进行任何操作");
+			// loading("文件签署中，请不要进行任何操作");
+			Toast({
+				message: '文件签署中，请不要进行任何操作',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			this.$http.post("/sign/sign",{id:id,projectId:_self.projectId}).then(function (response) {
 				console.info(response.data.result);
@@ -1079,55 +1132,26 @@ export default {
 				fun();
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
 		uploadInit: function() {
 			var _self = this;
 			var html = '<form id="uploadFrom" enctype="multipart/form-data">' +
-				'<input type="file" id="uploadWidget" multiple="multiple" @click="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
+				'<input type="file" id="uploadWidget" multiple="multiple" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 				'</form>';
 			if(appApi.isApp && appApi.isIphoneOs) { //IOS
 				//IOS现在多选有问题，暂先只做单传
 				html = '<form id="uploadFrom" enctype="multipart/form-data">' +
-					'<input type="file" id="uploadWidget" @click="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
+					'<input type="file" id="uploadWidget" onclick="appApi.openCamera(4,4,20)" class="mui-hidden" name="file">' +
 					'</form>';
 			}
 			document.getElementById("dish_content").insertAdjacentHTML('afterend', html);
-			document.getElementById("uploadWidget").addEventListener("change", function(event) {
+			this.widget = document.getElementById("uploadWidget");
+			this.widget.addEventListener("change", function(event) {
 				//上传文件
 				event.preventDefault();
 				if(_self.isIndex == 1) {
 					//选择要上传的目录
 					console.info("选择目录");
-					var url = setting.getPagePath() + "/dish/upload_select.html?projectId=" + _self.projectId;
+					var url = getPagePath() + "/dish/upload_select.html?projectId=" + _self.projectId;
 					appApi.openNewWindow(url);
 				} else {
 					_self.uploadCallBack(this);
@@ -1135,15 +1159,20 @@ export default {
 			}, false);
 		},
 		uploadFile: function() {
-			widget.value = "";
-			return widget.click();
+			this.widget.value = "";
+			return this.widget.click();
 		},
 		uploadCallBack: function(event, id, isSys) {
-			if(widget.value == "") {
+			if(this.widget.value == "") {
 				return;
 			}
 			//			console.log(event.files[0])
-			loading("正在上传，请稍后...");
+			// loading("正在上传，请稍后...");
+			Toast({
+				message: '正在上传，请稍后...',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			//添加文件
 			/*var params = {
@@ -1214,16 +1243,16 @@ export default {
 			 });*/
 			setTimeout(function() {
 				//为保证能获取到base64，延时调用服务
-				if(fileBase64) {
-					formData.append('imageBase64', fileBase64);
-				}
+				// if(fileBase64) {
+				// 	formData.append('imageBase64', fileBase64);
+				// }
 
 				console.info("imageBase64====" + formData.imageBase64);
                 // var params = getParam(window.location.href);
                 // var roomId = params.roomId*1;
 				// formData.append('roomId', roomId);
 
-				this.$http.post("/cdish/file/upload", formData, config).then(function(res) {
+				_self.$http.post("/cdish/file/upload", formData, config).then(function(res) {
 					layer.closeAll();
 					console.log(res);
 					if(res.data.code == 0) {
@@ -1236,7 +1265,7 @@ export default {
                                 ,skin: 'msg'
                                 ,time: 1 //2秒后自动关闭
                                 ,anim:false
-                            });
+							});
 						} else {
 							console.log(res)
                             // msg("已上传成功" + rs.success_num + "个文件");
@@ -1292,15 +1321,15 @@ export default {
 				}
 				// var URL = URL || webkitURL;
 				//获取照片方向角属性，用户旋转控制
-				EXIF.getData(file, function() {
-					// alert(EXIF.pretty(this));
-					EXIF.getAllTags(this);
-					//alert(EXIF.getTag(this, 'Orientation'));
-					//          alert(EXIF.getTag(this, 'Orientation'));
-					Orientation = EXIF.getTag(this, 'Orientation');
-					//                  alert(Orientation)
-					//return;
-				});
+				// EXIF.getData(file, function() {
+				// 	// alert(EXIF.pretty(this));
+				// 	EXIF.getAllTags(this);
+				// 	//alert(EXIF.getTag(this, 'Orientation'));
+				// 	//          alert(EXIF.getTag(this, 'Orientation'));
+				// 	Orientation = EXIF.getTag(this, 'Orientation');
+				// 	//                  alert(Orientation)
+				// 	//return;
+				// });
 
 				var oReader = new FileReader();
 				oReader.onload = function(e) {
@@ -1329,7 +1358,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1406,7 +1435,7 @@ export default {
 						//		              img.src=base64
 						//uploadImage(base64);
 						//              $("#myImage").attr("src", base64);
-						fileBase64 = base64; //赋值给全局变量
+						var fileBase64 = base64; //赋值给全局变量
 						var base64Data = base64;
 
 						function getBlobBydataURI(dataURI, type) {
@@ -1459,7 +1488,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -1513,7 +1542,7 @@ export default {
 			// downloadWidget = document.getElementById("downloadWidget");
 		},
 		getFileUrl: function(id) {
-			return getUrl() + "/cdish/file/download?id=" + id;
+			return "http://java.winfreeinfo.com/cdish/file/download?id=" + id;
 		},
 		downloadFile: function(id, type, name, suffix, event) {
 			var _self = this;
@@ -1798,7 +1827,6 @@ export default {
 			return clazz;
 		},
 		selectSort: function(type, text) {
-			var _self = this;
 			var val = {
 				type: type,
 				text: text
@@ -1807,7 +1835,15 @@ export default {
 			this.curSort = val;
 			this.pageParams.sortType = type;
 			this.sortShow = false;
-			_self.refreshPage();
+			this.refreshPage();
+		},
+		initSort: function() {
+			var _self = this;
+			//获取缓存排序方式
+			if(undefined != getDishSort()) {
+				_self.curSort = getDishSort();
+			}
+			_self.pageParams.sortType = _self.curSort.type;
 		},
 		goSelectMode: function(e) {
 			var _self = this;
@@ -1954,14 +1990,19 @@ export default {
 			if(items.length == 0) {
                 // msg("请选择要删除的文件或者文件夹");
                 layer.open({
-                                content:"请选择要删除的文件或者文件夹"
-                                ,skin: 'msg'
-                                ,time: 1 //2秒后自动关闭
-                                ,anim:false
-                            });
+					content:"请选择要删除的文件或者文件夹"
+					,skin: 'msg'
+					,time: 1 //2秒后自动关闭
+					,anim:false
+				});
 				return;
 			}
-			loading("删除中..")
+			// loading("删除中..")
+			Toast({
+				message: '删除中..',
+				position: 'center',
+				duration: 1000
+			});
 			itemStr = items.join(",");
 			//批量删除
 			var _self = this;
@@ -2012,17 +2053,6 @@ export default {
 			_self.dishConfirm("文件（夹）删除", qmsg, okFun);
 			_self.backSelectMode();
 		},
-		refreshPage() {
-            if(this.pullWidget) {
-                this.pullWidget.pullDownLoading();
-            }
-            if(this.isIndex == 1) {
-                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
-                    initFirstData(projectId, getFirstData, roomId);//, roomId
-                else
-                    initFirstData(projectId, getFirstData);//, roomId
-            }
-        },
 		batchCopy: function() {
             // msg("功能开发中");
             layer.open({
@@ -2154,7 +2184,12 @@ export default {
 			_self.shareSetShow = true;
 		},
 		subShare: function() {
-			loading("创建分享中...")
+			// loading("创建分享中...")
+			Toast({
+				message: '创建分享中..',
+				position: 'center',
+				duration: 1000
+			});
 			var _self = this;
 			var type = 1;
 			var types = document.getElementsByName("deadType");
@@ -2199,8 +2234,9 @@ export default {
 					 name+='"(等"'+rs.shareSize+'"个文件)，快来看看吧~';
 					 }*/
 					//var share id =
-					var url = setting.getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
-					appApi.openNewWindow(url);
+					// var url = setting.getPagePath() + "/contacts/select_friend.html?operate=1&token=" + rs.shareId;
+					// appApi.openNewWindow(url);
+					this.$router.push({path:'/static/webstatic/contacts/select_friend.html',query:{operate:1,token:rs.shareId}})
 					setTimeout(function() {
 						appApi.resetBack();
 						history.go(0);
@@ -2309,8 +2345,9 @@ export default {
 			_self.backSelectMode();
 		},
 		doSearch: function() {
-			var _self = this;
-			appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			// var _self = this;
+			// appApi.openNewWindow(setting.getPagePath() + "/dish/search.html?projectSN=" + _self.projectId);
+			this.$router.push({path:'/static/webstatic/dish/search.html',query:{projectSN:this.projectId}})
 		},
 		collectCheck: function(_id, _type) {
 			var _self = this;
@@ -2367,21 +2404,19 @@ export default {
 					}
 				} else {
                     // msg(response.data.message);
-                    layer.open({
-                        content:response.data.message
-                        ,skin: 'msg'
-                        ,time: 1 //2秒后自动关闭
-                        ,anim:false
-                    });
+					Toast({
+						message: response.data.message,
+						position: 'bottom',
+						duration: 1000
+					});
 				}
 				layer.closeAll();
                 // msg(response.data.message);
-                layer.open({
-                    content:response.data.message
-                    ,skin: 'msg'
-                    ,time: 1 //2秒后自动关闭
-                    ,anim:false
-                });
+                Toast({
+					message: response.data.message,
+					position: 'bottom',
+					duration: 1000
+				});
 				_self.showEditBox = false;
 			}).catch(function(error) {
 				layer.closeAll();
@@ -2392,7 +2427,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 .mui-pull-top-pocket {
 			top: 0 !important;
 		}
@@ -2448,9 +2483,9 @@ export default {
 		.mui-pull-top-wrapper .mui-spinner {
 			margin-top: 7px;
 		}
-		.mui-pull-top-wrapper .mui-icon.mui-reverse {
-			/*-webkit-transform: rotate(180deg) translateZ(0);*/
-		}
+		/* .mui-pull-top-wrapper .mui-icon.mui-reverse {
+			-webkit-transform: rotate(180deg) translateZ(0);
+		} */
 		.mui-pull-bottom-tips {
 			text-align: center;
 			font-size: 15px;
@@ -2514,4 +2549,11 @@ export default {
 			-ms-transform:rotate(90deg); 	/* IE 9 */
 			-webkit-transform:rotate(90deg);
         }
+		.mint-loadmore{
+			min-height: 590px
+		}
+		.mui-scroll-wrapper{
+			position: static;
+			margin-top: 45px;
+		}
 </style>

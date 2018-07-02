@@ -1,6 +1,6 @@
 <template>
   <div>
-     
+
 <header class="mui-bar mui-bar-nav">
 	<h1 class="mui-title">工人签到详情</h1>
 	<button id="btn-referrer" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left hide">
@@ -108,7 +108,7 @@ export default {
       }
       var param = "&projectId=" +_self.projectId + "&confirmId=" + confirmId +"&queryTime=" +laowu_common.queryTime;
       appApi.openNewWindow( pagepath + "/new_laowu/project_sign_detail.html?dataType=signdetail" +param
-          
+
       );
     },
     loadAttDetail: function() {
@@ -129,7 +129,7 @@ export default {
             console.log("结果列表", result);
             setTimeout(function() {
               _self.data.recordList = result;
-             
+
             }, 50);
           } else {
             msg("查询失败!");
@@ -165,7 +165,7 @@ export default {
   }
 };
 </script>
-	<style>
+	<style type="text/css" scoped>
 		.mui-fullscreen {/*大图遮罩*/
 			position: fixed;
 			z-index: 20;

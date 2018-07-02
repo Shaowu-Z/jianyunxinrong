@@ -42,11 +42,11 @@
                         <label class="text">我所在方性质</label>
                         <input type="text" value="" name="gongChengFangName" v-model="form.gongChengFangName" placeholder="请选择" readonly="readonly" @click.stop="selectProject(2)"/>
                         <mt-popup v-model="tow_popupVisible" position="bottom" class="picker-slot-center col-xs-6 mui-clearfix" @change="onValuesChange">
-                            <p>我的组织类型<span style="border-bottom:1px solid,display:block,width:100px,height:10px;"></span></p>
+                            <div class="s-title text">我的组织类型<span class="bader"></span></div>
                             <div v-for="(item,index) in slots1[0].values" :key="index" class="mui-input-row mui-radio mui-left" @click="handleClicks(item)">
                                     <input type="radio" name="selecttype"  style="position: absolute;top: 13px;">
-                                    <label v-text="item.roomClassName" style="width: 140px;"></label>
-                            </div> 
+                                    <label v-text="item.roomClassName" style="width: 140px;text-align:left;padding-left: 30px;color:#000"></label>
+                            </div>
                         </mt-popup>
                     </a>
                 </li>
@@ -128,7 +128,7 @@
 </template>
 
 <script>
-// import regions from '../../playform/regions' 
+// import regions from '../../playform/regions'
 import { Picker,Popup,Toast  } from 'mint-ui';
 import areaBar from '../common/areaBar'
 import {BackCookie,getParam} from '../../playform/common'
@@ -206,7 +206,7 @@ export default {
             City:'所在地区',
             paramMap:[],
             userName : '',
-            userId : '', 
+            userId : '',
             projectSN:'',
             urlProjectmanageIDs : '',
             urlProjectmanageNames : ''
@@ -223,7 +223,7 @@ export default {
         // }
         this.paramMap= getParam(window.location.href),
         this.userName = decodeURI(BackCookie.getCookie("username")),
-        this.userId = BackCookie.getCookie("userid"), 
+        this.userId = BackCookie.getCookie("userid"),
         this.projectSN=this.paramMap.projectSN,
         this.urlProjectmanageIDs = this.paramMap.userIds,
         this.urlProjectmanageNames = this.paramMap.userNames
@@ -239,7 +239,7 @@ export default {
                     let resulList = [];
                     if(result.length>0){
                         // var picker = new mui.PopPicker();
-                        
+
                         for(var i=0;i<result.length;i++){
                             if(_self.form.leibie==result[i].title){
                                 picker.pickers[0].setSelectedIndex(i);
@@ -313,14 +313,14 @@ export default {
         },
         addressRes(val){
             this.address = val;
-        }, 
+        },
         handleClick:function(type){//确定
         if(this.pickervalues){
          if(this.timeType==1){
             this.form.leibie=this.pickervalues.value
             console.log(this.form.leibie);
           }
-       
+
         }
         this.one_popupVisible=false
 
@@ -334,7 +334,7 @@ export default {
         onValuesChange(picker, values) {
             if(values.length>0){
                 this.pickervalues=values[0];
-            }  
+            }
         },
         cancalClick:function(){//取消
             this.one_popupVisible=false
@@ -354,7 +354,7 @@ export default {
             return regions['provincesArr'];
         },
         onProvinceChange(picker, values) {
-                      
+
         },
          type_confirm:function () {//选择组织类型
             // var _self=this;
@@ -412,7 +412,7 @@ export default {
             //                 }
             //             }
             //         }
-                    
+
             //         dataAry.push(provinceobj);//添加所有的省市区
             //         this.City = provinceobj
             //         console.log(provinceobj);
@@ -502,7 +502,7 @@ export default {
             }else if(type===2){
                 this.one_popupVisible=false
                 this.tow_popupVisible=true
-            }  
+            }
             this.timeType=type;
         },
         selectManageRoom:function () {//协作管理方
@@ -596,7 +596,7 @@ export default {
             var _self=this;
             var obj=new Object();
             obj.type=1;
-            
+
         },
         findroomuserlist:function () {//查询项目子管理员
             var _self = this;
@@ -828,7 +828,7 @@ export default {
                 return;
             }
             if(!_self.fm.projectSN){//创建项目
-                
+
                 if(_self.form.gongChengFangID=='9'){
                     if(!_self.roomform.roomName){
                         // msg("专业不能为空")
@@ -896,7 +896,7 @@ export default {
                 this.$http.post("/project_room_api/save_project",formdata).then(function (response) {
                     if(response.data.code==200){
                         var result=response.data.result;
-                        
+
 
                         // loading("项目创建成功，正在初始虚拟办公室信息...");
                         var roomdata=new FormData();
@@ -1065,13 +1065,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 .picker-slot-center{
     width: 100%;
   }
   .mint-popup .mint-button .mint-button-text{
     width: 100%;
-    padding: 0; 
+    padding: 0;
   }
   .mint-popup .mint-button{
     margin: 6px;
@@ -1099,5 +1099,25 @@ export default {
   .picker-toolbar {
     height: 45px;
      background-color: #eee;
+  }
+  .bader{
+        position: absolute;
+        left: 85px;
+        right: 15px;
+        top: 28px;
+        height: 1px;
+        content: '';
+        -webkit-transform: scaleY(.5);
+        transform: scaleY(.5);
+        background-color: #c8c7cc;
+  }
+  .font{
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .s-title{
+    padding-left: 15px;
+    margin-top: 15px;
+    margin-bottom: 10px;
   }
 </style>

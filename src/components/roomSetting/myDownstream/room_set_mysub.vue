@@ -14,7 +14,7 @@
 
                                 <div class="oa-contact-avatar mui-table-cell">
                                     <img v-if="roomclass.iconurl==null" src="../../../assets/images/60x60.gif" alt="" />
-                                    <img v-if="roomclass.iconurl!=null" v-bind:src="roomclass.iconurl" alt="..." />
+                                    <img v-if="roomclass.iconurl!=null" :src="'http://java.winfreeinfo.com'+roomclass.iconurl" alt="..." />
                                 </div>
                                 <div class="oa-contact-content mui-table-cell">
                                     <h4 class="oa-contact-name" v-text="roomclass.roomclassname"></h4>
@@ -46,7 +46,7 @@
                 </ul>
             </div>
         </section>
-    </div> 
+    </div>
 </template>
 <script>
 import {getParam} from '../../../playform/common'
@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .block{
         display: block!important;
     }

@@ -16,7 +16,7 @@
 				<p id="area" v-text="card.areaInfo"></p>-->
 				<!-- <div id="code" ref="code"></div> -->
 				<div id="code"></div>
-				<img id="img-buffer" src="static/images/company_logo.png" >
+				<img id="img-buffer" src="static/images/company_logo.png" style="display:none">
 				<!--<img class="cpic" v-bind:src ="card.imageHost + card.qrUrl"/>-->
 			</div>
 		</div>
@@ -62,6 +62,7 @@ export default {
 			console.log(response)
 			var info = response.data.result;
 			_self.card = info;
+			_self.showQrcode()
 			/*var img = document.createElement("img")
 			img.setAttribute("class","cpic");
 			img.setAttribute("src",_self.$data.card.imageHost + _self.$data.card.qrUrl +"?t=" +new Date().getTime());
@@ -71,7 +72,7 @@ export default {
 			console.info(error);
 		});
 			// this.showQrcode()
-		
+
 		console.log("________"+this.$refs.code)
 	},
     methods:{
@@ -109,7 +110,7 @@ export default {
 				render: 'canvas',   //生成二维码的格式还有image、div
 				ecLevel:"H",
 				text:"",
-				background:"#ffffff", 
+				background:"#ffffff",
 				fill:"#333333", //二维码纹路的颜色
 				fontcolor:"#ff9818",
 				fontname:"Ubuntu",
@@ -122,7 +123,7 @@ export default {
 				mode:4,
 				quiet:1,
 				radius:1,
-				size:250   
+				size:250
 			};
 			console.log(options)
 				if (options) {
@@ -144,12 +145,12 @@ export default {
 		}
     },
     mounted(){
-		this.showQrcode()
+		// this.showQrcode()
     }
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
     #app{
         background: #efeff4;
         width:100%;
@@ -170,7 +171,7 @@ export default {
 			text-align: center;
 			font-size: 16px;
 		}
-		#img-buffer{ 
+		#img-buffer{
 			width: 52px;
 			height: 52px;
 			position: absolute;

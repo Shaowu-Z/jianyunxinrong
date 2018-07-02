@@ -12,7 +12,7 @@
                 <a class="mui-control-item mui-active" @click="getNotice(1,$event)">群内公告</a>
                 <a class="mui-control-item" @click="getNotice(0,$event)">项目公告</a>
             </div>
-            <div id="item1" class="mui-control-content mui-active">
+            <div id="item1" class="mui-control-content mui-active" style="min-height:0">
                 <ul class="mui-table-view table-view-line">
 
                     <div v-for="(notice,index) in notices" :key="index">
@@ -59,9 +59,9 @@ export default {
             var getTime = new Date();
             var nowTime = getTime.toLocaleDateString()
             var currentDateString = Date.parse(nowTime+" 23:59")
-            var currentDate =new Date(currentDateString); 
-            var fallDate = currentDate.getTime() - new Date(value).getTime(); //时间差的毫秒数        
-            //计算出相差天数  
+            var currentDate =new Date(currentDateString);
+            var fallDate = currentDate.getTime() - new Date(value).getTime(); //时间差的毫秒数
+            //计算出相差天数
             var days = Math.floor(fallDate / (24 * 3600 * 1000))
             if(days == 0) {
                 return "今天";
@@ -119,7 +119,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
     body,
     .mui-content {
         background: #ffffff;

@@ -4,7 +4,7 @@
             <li class="mui-table-view-cell mui-input-row">
                 <a class="mui-navigate-right" href="#">
                     <label v-text="title"></label>
-                    
+
                     <input type="text" v-model="area"  name="start"  id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
                     <mt-popup
                         v-model="popupVisible"
@@ -39,7 +39,7 @@ export default {
     timeType:'',
     datanow:"",
     starindex:'',
-    
+
   },
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
       myAddresscounty: "区/县",
       makevalue: "",
       area: "",
-     
+
     };
   },
   created() {
@@ -138,7 +138,7 @@ export default {
     makepass() {
       this.popupVisible = !this.popupVisible;
     },
-      
+
   },
   mounted() {
     this.$nextTick(() => {
@@ -150,7 +150,7 @@ export default {
   }
 };
 </script>
-<style>
+<style type="text/css">
 @import "../../assets/css/common/mint";
 .picker {
   width: 100%;
@@ -189,5 +189,8 @@ export default {
 }
 .mui-input-row.areas {
   padding-right: 36px;
+}
+.mint-button:nth-child(2) .mint-button-text{
+  color: #fff
 }
 </style>

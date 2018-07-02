@@ -22,7 +22,7 @@
 										</div>
 										<div class="oa-contact-content mui-table-cell">
 											<h4 class="oa-contact-name"><span v-text="obj.name"></span></h4>
-											<p class="oa-contact-email"><span>{{obj.updateDate | formDate}}</span><span v-text="obj.size"></span></p>
+											<p class="oa-contact-email text"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
 										</div>
 									</div>
 								</a>
@@ -67,6 +67,7 @@
 <script>
 import setting from '../../../playform/config'
 import {getParam,BackCookie} from '../../../playform/common'
+import util from '../../../playform/util'
 export default {
     data () {
         return {
@@ -510,6 +511,10 @@ export default {
 				 _self.firstInfo.name = rs.data.first.name;
 				 _self.firstInfo.size = rs.data.first_size;*/
 				_self.firstList = rs.data.firstList;
+				for(let i=0;i<_self.firstList.length;i++){
+					_self.firstList[i].updateDate = util.fnFormat(_self.firstList[i].updateDate,'yyyy-MM-dd')
+				}
+
 				console.log(rs.data.firstList)
 				_self.loadStatus = true;
 			} else {
@@ -523,36 +528,6 @@ export default {
                     });
 			}
 		},
-		formDate: function(value) {
-			var date = new Date(value);
-			var Y = date.getFullYear(),
-				m = date.getMonth() + 1,
-				d = date.getDate(),
-				H = date.getHours(),
-				i = date.getMinutes(),
-				s = date.getSeconds();
-			if(m < 10) {
-				m = '0' + m;
-			}
-			if(d < 10) {
-				d = '0' + d;
-			}
-			if(H < 10) {
-				H = '0' + H;
-			}
-			if(i < 10) {
-				i = '0' + i;
-			}
-			if(s < 10) {
-				s = '0' + s;
-			}
-			//<!-- 获取时间格式 2017-01-03 10:13:48 -->
-			//var t = Y+'-'+m+'-'+d+' '+H+':'+i+':'+s;
-			//<!-- 获取时间格式 2017-01-03 -->
-			//var t = Y + '-' + m + '-' + d;
-			var t = Y + '/' + m + '/' + d + ' ' + H + ':' + i;
-			return t;
-		},
 		getCurData: function(rs) {
 			var _self = this;
 			if(rs.hasOwnProperty("sorts")) {
@@ -561,7 +536,8 @@ export default {
 				_self.curUserId = rs.curUserId;
 				rs = rs.data;
 			}
-			_self.curInfo.createTime = this.formDate(rs.updateTime);
+			_self.curInfo.createTime = util.fnFormat(rs.updateTime,'yyyy-MM-dd')
+
 			_self.curInfo.id = rs.id;
 			_self.curInfo.name = rs.name;
 			_self.curInfo.size = rs.size;
@@ -676,7 +652,30 @@ export default {
 			event.stopPropagation();
 			return;
 		},
-		openDirMini: function(id, isSys, isOpe) {
+		// openDirMini: function(id, isSys, isOpe) {
+		// 	var arrays = window.location.href.split("?")[1].split("&");
+		// 	var map = {};
+		// 	for(let i = 0; i < arrays.length; i++) {
+		// 		var param = arrays[i].split("=");
+		// 		map[param[0]] = decodeURI(param[1]);
+		// 	}
+		// 	//document.cookie = "userid" + "=" + map.userId + ";path=/";
+		// 	var _self = this;
+        //     var url;
+        //     if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+		// 		url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
+        //     }else{
+		// 		url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+        //     }
+        //     if(isSys) {
+		// 		url = url + "&isSys=true";
+		// 	}
+		// 	if(!isOpe){
+        //         url = url + "&isOpe=false";
+		// 	}
+		// 	window.appApi.openNewWindow(url);
+		// },
+		openDirMini: function(id, isSys) {
 			var arrays = window.location.href.split("?")[1].split("&");
 			var map = {};
 			for(let i = 0; i < arrays.length; i++) {
@@ -685,17 +684,9 @@ export default {
 			}
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
-            var url;
-            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
-            }else{
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
-            }
-            if(isSys) {
+			var url = setting.getPagePath() + "/dish/open_common.html?id=" + id + "&projectSN="+"null";// + "&roomId=" + _self.$data.roomId
+			if(!_self.$data.isPC) {
 				url = url + "&isSys=true";
-			}
-			if(!isOpe){
-                url = url + "&isOpe=false";
 			}
 			window.appApi.openNewWindow(url);
 		},
@@ -1204,7 +1195,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1334,7 +1325,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -2257,6 +2248,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css" scoped>
 
 </style>

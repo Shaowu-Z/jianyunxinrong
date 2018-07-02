@@ -94,7 +94,7 @@
                 </li>
 
 
-                <li class="mui-table-view-cell">    
+                <li class="mui-table-view-cell">
                     <a class="mui-navigate-right" @click="seal">
                         <div class="mui-slider-cell">
                             <div class="oa-contact-cell mui-table">
@@ -163,6 +163,7 @@ export default {
         }
     },
     created () {
+        appApi.hideMenu()
         //  相当于setDeptHead
         var _self = this;
         this.teamId = this.$route.query.teamId;
@@ -246,7 +247,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align:left;
     }

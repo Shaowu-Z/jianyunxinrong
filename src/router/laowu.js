@@ -122,7 +122,11 @@ const laowuConfig = {
       component: contractList
     },
     {
+<<<<<<< HEAD
       path: '/static/webstatic/new_laowu/select_member.html',//联系人
+=======
+      path: '/static/webstatic/new_laowu/select_member.html',//建云联系人
+>>>>>>> 90235f4a8dae091cfeefc8bbf9519fe5c34efb8f
       component: selectMember
     },
     {

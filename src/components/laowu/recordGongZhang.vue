@@ -6,7 +6,7 @@
 	</button>
 	<h1 class="mui-title">{{title}}</h1>
 </header>
-     
+
 <div id="app">
 
 	<section class="mui-content" style="margin-top:44px;text-align:left">
@@ -106,7 +106,7 @@
 			</div>
 		</div>
 	</section>
-	
+
 
 	<mt-popup v-model="unitpopup" position="bottom">
   	<div class="pop-up2">
@@ -284,7 +284,7 @@ export default {
   }
 };
 </script>
-<style>
+<style type="text/css" scoped>
 section {
   padding-bottom: 40px;
 }

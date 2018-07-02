@@ -11,12 +11,12 @@
 	<section class="mui-content" id="phone_list">
 		<div id='list' class="mui-indexed-lists address-list">
 			<div class="mui-indexed-list-search mui-input-row mui-search">
-				<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
+				<input type="search" class="mui-input-clear mui-indexed-list-search-input" id="sosuo" ref="sosuo" placeholder="搜索">
 			</div>
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
 					<div v-for="(items,index1) in phones" :key="index1">
-						
+
 					</div>
 				</div>
 			</div>
@@ -28,11 +28,11 @@
 						<div v-for="(item,index2) in items" :key="index2">
 							<div v-if="item.name">
 								<div v-if="item.isp == 1">
-								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group">
+								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
 										{{item.first}}
 									</li>
 								</div>
-								<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item">
+								<li :data-value="item.first" class="mui-table-view-cell mui-indexed-list-item" style="border-bottom: 1px solid #ccc">
 									<a :href="['javascript:appApi.openNewWindow(pagepath+\'/contacts/eg_details.html?phone='+item.phone+'&name='+item.name+'\')']">
 									<div class="mui-slider-cell">
 											<div class="oa-contact-cell mui-table">
@@ -59,20 +59,20 @@
 			</div>
 		</div>
 	</section>
-
   </div>
 </template>
 
 <script>
 import contacts from '../../playform/contacts_comm'
+import { Toast,IndexList } from 'mint-ui';
 export default {
 	data(){
 		return{
-			phones:[1]
+			phones:[]
 		}
 	},
 	mounted(){
-		 window.appApi.getContacts();
+		window.appApi.getContacts();
 		let _self = this
 		appApi.callBackFun = function (callFlag, CONTENT) {
 
@@ -95,13 +95,10 @@ export default {
 				}).catch(function (error) {
 					console.info(error);
 				});
-		// let CONTENT = "zhangsan=12321312312,lisi=32132132111"
-		// let resultStr = '12312121211'
-		// this.phones=contacts.convertData(CONTENT, resultStr)
-
-
-
 			}
+<<<<<<< HEAD
+		}	
+=======
 			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
 			var result = CONTENT.result;
 			if(result == true){
@@ -119,20 +116,20 @@ export default {
 			warm('登录失败，请重新登录!');
 			}
 			}*/
-		}	
+		}
+>>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
 	},
 	methods: {
 		goBack(){
 			this.$router.go(-1)
 		},
 		addFriends(index1, index2) {
-			
+
 			var phoneMap = this.phones[index1][index2];
-			alert(json.stringify(phoneMap))
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
             this.$http.post("/concats_api/insert_add_info", addVo).then(function (response) {
-                var friendVO = response.data.result;
+				var friendVO = response.data.result;
                 if(friendVO.isOwnOrFriend=="0"){
 					// msg("不可添加自己为好友!");
 					Toast({
@@ -186,11 +183,11 @@ export default {
 	// mounted(){
 
 	// },
-	
+
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
 	.mui-indexed-lists{
 		position: relative;
@@ -201,6 +198,9 @@ export default {
 		cursor: default;
 	}
 	.showhide{
-		display: block	
+		display: block
+	}
+	.mui-content{
+		width: 100%
 	}
 </style>

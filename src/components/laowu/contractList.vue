@@ -116,7 +116,7 @@ export default {
         laowu_common.initVue(this);
         var list =  laowu_common.findTotgetTherList("");
         _self.$data.friendsList = _self.convertData(list);
-        
+
     },
   mounted:function(){
     this.showList();
@@ -170,7 +170,7 @@ export default {
             if(this.$data.firendsList[index_].length > 0) return false;
             return true;
         },
-        
+
         updated:function () {
               document.getElementById("list").style.display = "block";
               mui.ready(function () {
@@ -402,7 +402,7 @@ export default {
  },
 }
 </script>
-<style>
+<style type="text/css" scoped>
 		html,
 		body {
 			height: 100%;

@@ -92,7 +92,39 @@ export default {
             // $("#select_dept").show();//显示部门选择
             this.select_dept = !this.select_dept;
             appApi.hideBack();//隐藏返回键
-            // getSubDept(teamId,0);
+            this.getSubDept(this.teamId,0);
+        },
+        getSubDept: function (teamId,parentDeptId) {//查询下级部门列表
+            var hrefPar = window.location.href.split('?')[1].split('=')[1];
+            var teamId = hrefPar.split("&")[0];
+            //var deptInId = window.location.href.split('?')[1].split('=')[2];
+            var deptInId = 0;
+            var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
+            console.info(par);
+            this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
+                var newJson =response.data.result;
+                console.info(newJson);
+                var deptHtml = '<ul class="mui-table-view group-list">';
+                for(var j=0;j<newJson.length;j++){
+                    var arrJ = newJson[j];
+                    var deptId = arrJ.deptId;
+                    var deptName = arrJ.deptName;
+                    deptHtml+='<li class="mui-table-view-cell mui-checkbox">'+
+                            '<div class="oa-contact-cell mui-table" onclick="save_dept()">'+
+                            '<div class="oa-contact-input mui-table-cell"><input type="checkbox" name="checkbox1" value="'+deptId+'='+deptName+'"/></div>'+
+                            '<div class="oa-contact-content mui-table-cell">'+
+                            '<h4 class="oa-contact-name">'+deptName+'</h4>'+
+                            '</div>'+
+                            '</div>'+
+                            // '<div class="sub-btn" @click="this.getSubDept('+deptId+')"><span class="mui-icon iconfont icon-sub"></span>下级</div>'+
+                            '</li>';
+                }
+                deptHtml=deptHtml+'</ul>';
+                document.getElementById("deptHtml").innerHTML=deptHtml;
+            }).catch(function (error) {
+                alert("获取部门信息失败,请联系管理员!");
+                console.info(error);
+            });
         },
         save_dept(){
             var arrDept = $('input:radio[name="check1"]:checked').val();
@@ -170,7 +202,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left;
     }
