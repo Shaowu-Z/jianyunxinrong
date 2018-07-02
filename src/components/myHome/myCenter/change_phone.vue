@@ -208,7 +208,7 @@ isNull:function(obj){
     }
 }
 </script>
-<style scoped>
+<style type="text/css" scoped>
 .child-view,.mui-content{
     background: #fff
 }

@@ -72,7 +72,7 @@
 //      this.code=map.VersionCode;
 		this.name=arrays[0].split("=")[1];
         this.code=arrays[1].split("=")[1];
-        
+
     },
     methods:{
         goBack(){
@@ -84,16 +84,16 @@
 		service_agreement(){
 			this.$router.push({path:'/serviceAgreement'});
 		}
-		
+
     },
     mounted(){
     }
 }
-	
+
 //	var content = new Vue({
 //          el: '#content',
 //          data: {
-//              
+//
 //          },
 //          created: function () {
 //              var result= appApi.getVersionInfo();
@@ -114,7 +114,7 @@
 //      });
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 body{
 	background: #ffffff
 }

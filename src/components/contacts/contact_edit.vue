@@ -50,7 +50,7 @@
             <div class="pop-content select-box col-xs-6 mui-clearfix" id="deptHtml">
 
             </div>
-        </div>  
+        </div>
     </div>
 </template>
 
@@ -152,7 +152,7 @@ export default {
 
             console.log(2222222222222);
             function getSubDept(teamId,parentDeptId) {//查询下级部门列表(部门ID为空或者0时，查询团队ID下的一级部门列表)
-             
+
                 var deptInId = 0;
                 var par = {deptId:parentDeptId,teamId:teamId,parentDeptId:deptInId};
                 console.info(par);
@@ -236,7 +236,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
             text-align: left;
         }

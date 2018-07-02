@@ -114,7 +114,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .flex{
         display: flex;
         flex-wrap: wrap;

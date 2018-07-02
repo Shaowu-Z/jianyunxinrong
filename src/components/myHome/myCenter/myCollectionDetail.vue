@@ -189,7 +189,7 @@
         return num;
     }
 </script>
-<style>
+<style type="text/css">
 
 </style>
 

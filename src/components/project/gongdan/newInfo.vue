@@ -269,6 +269,7 @@ import setting from "../../../playform/config.js";
 import util from "../../../playform/util.js";
 import pswipe from "../js/photoSwipe";
 import danjuApi from "../js/danjuAPi.js";
+import tipApi from '../../../playform/tipApi.js';
 export default {
     data(){
         return{
@@ -450,7 +451,8 @@ export default {
                                         if (seeimg[i].roomId == _self.toroomid) {
                                             //签收弹窗
                                             if (seeimg[i].signStatus == 0) {
-                                                ludan("打开即签收", 1, 2)
+												tipApi.success("打开即签收",1)
+                                                // ludan("打开即签收", 1, 2)
                                             }
                                             _self.qianshou = 1
                                             var content;
@@ -462,13 +464,13 @@ export default {
                                             if (seeimg[i].signStatus == 0) {
                                                 var roomname = seeimg[i].roomName
                                                 var par = {
-                                                    docid: this.$route.query.id,
+                                                    docid: _self.$route.query.id,
                                                     //												uid: _self.uid,
                                                     roomid: _self.currroomid,
                                                     projectid: _self.projectid,
                                                 }
                                                 console.log(par)
-                                                this.$http.post( "/contract/set_sign", par).then(function (res_) {
+                                                _self.$http.post( "/contract/set_sign", par).then(function (res_) {
                                                     if (res_.data.code == 200) {
                                                         var parm = {
                                                             "toImId": _self.currRoomImId,
@@ -482,7 +484,7 @@ export default {
                                                         appApi.sendNotifyMsg(parm)
                                                         _self.initdata();
                                                     } else {
-                                                        msg("签收状态验证失败")
+                                                        tipApi.failure("签收状态验证失败",2)
                                                     }
                                                 })
                                             } else {
@@ -520,7 +522,7 @@ export default {
 }
 }
 </script>
-<style>
+<style type="text/css">
 .mui-content {
   background: #fff;
   text-align: left;

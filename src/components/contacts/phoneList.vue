@@ -16,7 +16,7 @@
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
 					<div v-for="(items,index1) in phones" :key="index1">
-						
+
 					</div>
 				</div>
 			</div>
@@ -96,14 +96,35 @@ export default {
 					console.info(error);
 				});
 			}
+<<<<<<< HEAD
 		}	
+=======
+			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
+			var result = CONTENT.result;
+			if(result == true){
+			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
+			// console.info('保存用户信息成功！');
+			// warm('保存用户信息成功！');
+			}else{
+			// console.info('保存用户信息失败！');
+			// warm('保存用户信息到本地失败！');
+			}
+			loading('登录成功！正在跳转到主页！');
+			window.appApi.goHome();
+			}else{
+			layer.close(index);
+			warm('登录失败，请重新登录!');
+			}
+			}*/
+		}
+>>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
 	},
 	methods: {
 		goBack(){
 			this.$router.go(-1)
 		},
 		addFriends(index1, index2) {
-			
+
 			var phoneMap = this.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
@@ -162,11 +183,11 @@ export default {
 	// mounted(){
 
 	// },
-	
+
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
 	.mui-indexed-lists{
 		position: relative;
@@ -177,7 +198,7 @@ export default {
 		cursor: default;
 	}
 	.showhide{
-		display: block	
+		display: block
 	}
 	.mui-content{
 		width: 100%

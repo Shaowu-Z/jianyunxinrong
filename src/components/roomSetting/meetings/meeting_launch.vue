@@ -177,12 +177,12 @@ export default {
                     }
                 }
             }
-            appApi.openProjectContactSelectPage(this.projectSN,'',userIds,1,true,false); 
+            appApi.openProjectContactSelectPage(this.projectSN,'',userIds,1,true,false);
             appApi.callBackFun = function(callFlag, CONTENT) {
                 if(callFlag == appApi.callBackFlag.GONGSI) {
                     _self.meetingMember(CONTENT);
                 }
-            } 
+            }
         },
         test:function(){
             var formdata=new FormData();
@@ -244,6 +244,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

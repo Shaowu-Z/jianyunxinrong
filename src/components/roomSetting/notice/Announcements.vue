@@ -221,7 +221,7 @@ export default {
         },
         //点击遮罩层
         mask() {
-            
+
             $(".mui-backdrop").css("display", "none")
             $(".mui-backdrop").animate({
                 left : "0%"
@@ -327,11 +327,11 @@ export default {
                                     });
                                     appApi.closeNewWindow()
                                     // alert.remin("提交成功",2,function(){
-                                        
+
                                     //     // this.$router.go(-1)
                                     // })
                                 }
-                                
+
                             })
 
                         } else {
@@ -454,7 +454,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left
     }

@@ -55,7 +55,7 @@
                     </ul>
 
                     <ul class="mui-table-view" v-for="(item,index) in items" :key="index">
-                        <li v-if="org=='x'" class="mui-table-view-cell" >    
+                        <li v-if="org=='x'" class="mui-table-view-cell" >
                             <div class="oa-contact-cell mui-table" @click="edit(index,item)">
                                 <div class="oa-contact-avatar mui-table-cell"><img :src="item.userAvatar | getImageUrl"></div>
                                 <div class="oa-contact-content mui-table-cell"><h4 class="oa-contact-name" v-text="item.memberName"></h4></div>
@@ -77,7 +77,7 @@
                         </li>
                     </ul>
                 </div>
-            
+
             <!--添加员工开始-->
             <!--<div class="mui-popup mui-popup-in">
                 <div class="mui-popup-title mui-text-left">选择添加成员的方式</div>
@@ -205,7 +205,7 @@ export default {
                         +deptName+'<span class="mui-badge mui-badge-inverted">'+memberNum+'</span></a>'+
                         '</li>';
                 }
-                
+
             }
             document.getElementById("deptHtml").innerHTML=deptHtml;
         }).catch(function (error) {
@@ -308,7 +308,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .post{
         position: relative;
         left: -163px;

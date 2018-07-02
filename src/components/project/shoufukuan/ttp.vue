@@ -133,7 +133,7 @@ export default {
     test_danju:function(n){
       var patt1 = new RegExp(n);
       return patt1.test(window.location.href)
-    },    
+    },
     sort:function(){
       var _self=this
       if(_self.test_danju("lianxi")){
@@ -596,7 +596,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style type="text/css" scoped>
 .mui-action-back {
   float: left;
 }

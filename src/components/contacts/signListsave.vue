@@ -4,7 +4,7 @@
             <button id="btn-referrer" class="mui-btn mui-action-back mui-btn-link mui-btn-nav mui-pull-left" @click="goBack">
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
-            <h1 class="mui-title">印章信息</h1> 
+            <h1 class="mui-title">印章信息</h1>
         </header>
 
         <div class="fixed-bottom" id="send_message_id">
@@ -61,7 +61,7 @@ export default {
             // $("#del").show();
             var _self = this;
             this.$http.post("/sign/query_seal_list",{id:this.tpId}).then(function (response) {
-               
+
                 var resp = response.data.result[0];
                  console.log(resp.isDefaultSign);
                 _self.sealInfo = resp;
@@ -167,7 +167,7 @@ export default {
                 //    laowu_common.loading('保存成功，跳转中...！');
                     Indicator.open('保存成功，跳转中...！');
                     //msg("保存成功");
-                    
+
                     setTimeout(function () {
                         appApi.broadcast("reLoad()"); //刷新页面
                         appApi.closeNewWindow();
@@ -274,7 +274,7 @@ export default {
             /*get_data: 转换成功后执行的方法*/
             if (typeof (FileReader) === 'undefined') {
                 alert("抱歉，你的浏览器不支持 FileReader，不能将图片转换为Base64，请使用现代浏览器操作！");
-                
+
             } else {
                 try {
                     /*图片转Base64 核心代码*/
@@ -308,11 +308,11 @@ export default {
                 $('#testImg').attr('src', data);
             });
         });
-        
-    }   
+
+    }
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

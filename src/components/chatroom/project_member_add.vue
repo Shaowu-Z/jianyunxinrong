@@ -236,7 +236,7 @@ export default {
         /**
          * 确认
          */
-        
+
 
 
 
@@ -281,6 +281,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

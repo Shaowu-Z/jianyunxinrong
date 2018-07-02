@@ -349,7 +349,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align:left;
     }
@@ -358,7 +358,7 @@ export default {
   }
   .mint-popup .mint-button .mint-button-text{
     width: 100%;
-    padding: 0; 
+    padding: 0;
   }
   .mint-popup .mint-button{
     margin: 6px;

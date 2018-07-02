@@ -144,7 +144,7 @@ export default {
             loadStatus: false,
             imageHost: setting.UPLOAD_SERVER_ADDRESS,
             status: 0,
-            isIndex: 1, 
+            isIndex: 1,
             uploadStatus: 0,
             showUpload: true,
             projectId: "", //项目id
@@ -224,7 +224,7 @@ export default {
             shareInfoList: [],
             /*确认相关参数*/
             affirmId: "",
-            isOpeAll:false//文件操作所有权限  
+            isOpeAll:false//文件操作所有权限
         }
     },
     created: function() {
@@ -1103,7 +1103,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1234,7 +1234,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -2054,6 +2054,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 
 </style>

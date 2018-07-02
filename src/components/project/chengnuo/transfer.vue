@@ -29,7 +29,7 @@ export default {
             fromcome:0,//判断那个地方打开的（房间或者组合查询）
             fromUserid:'',//组合查询打开人的id
             urlcan:''
-            
+
         }
     },
     created: function() {
@@ -88,7 +88,7 @@ export default {
 								}else{
 									_self.referroomid(res.projectId)
 								}
-								
+
 							}
 						})
 					}, //id=4D0Cl9MfDLnXQ3RFUoaTt&currUserId=10165&currRoomId=141
@@ -126,6 +126,6 @@ export default {
     }
 }
 </script>
-<style>
+<style type="text/css">
 
 </style>

@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="mui-content mui-scroll-wrapper" id="mui-scroll-wrapper">
-					<div class="mui-scroll">
+					<div class="">
 						<!--------第一步---------->
 						<div v-if="backicon==0">
 							<section style="display: block;" class="mui-content publish-box mycenter-content">
@@ -222,7 +222,7 @@ export default {
 						reponseId: undefined,
 						attachmentIds:'',
 						excelok:'',
-						
+
 						cfgid:this.$route.query.cfgid,
 						projectName: this.$route.query.projectName,
 						projectSn: this.$route.query.projectSn,
@@ -235,7 +235,7 @@ export default {
                         imgid:[],
                         fujianid:[]
 
-        }               
+        }
     },
     created: function() {
         danjuApi.vue = this;
@@ -243,7 +243,7 @@ export default {
 						var _self = this;
 						if(this.$route.query.id != undefined) {
 							this.informations()
-						} 
+						}
 						_self.getnews()
 						var getTime = new Date()
 						var nowyear = getTime.getUTCFullYear()
@@ -273,7 +273,7 @@ export default {
 //						_self.getHt()
                     },
                     methods: {
-						
+
 						//退回加载数据
 						informations: function() {
 						var _self = this
@@ -314,7 +314,7 @@ export default {
 								_self.tuisongimid = norl.toImid
 								_self.companyBuyRoomID=norl.tablefields.companySaleRoomID,
 								_self.companyBuyClassName=norl.tablefields.companyBuyRoomClassName,
-								
+
 								_self.companyBuyRoomID=norl.tablefields.companySaleRoomID,
 								_self.companyBuyClassName=norl.tablefields.companyBuyRoomClassName,
 								_self.isRoomId=norl.tablefields.companyBuyRoomID,
@@ -323,7 +323,7 @@ export default {
 								_self.companySaleRoomID=norl.tablefields.companySaleRoomID,
 								_self.companySaleName=norl.tablefields.companySaleName,
 								_self.companySaleID=norl.tablefields.companySaleID,
-								
+
 								_self.projectName = norl.tablefields.projectName
 								_self.projectSN = norl.tablefields.projectSN
 								_self.projectSn = norl.table.projectid
@@ -356,7 +356,7 @@ export default {
 						}
 					},
 						/**
-						 * 选择单位  
+						 * 选择单位
 						 * @param {Object} item 清单对象
 						 */
 						selectdUnit: function(item) {
@@ -422,7 +422,7 @@ export default {
 						showSelectdFile: function() {
 							$("#excelFile").click();
 						},
-						
+
 
 
 						//excel表格解析
@@ -440,7 +440,7 @@ export default {
 							fileReader.onload = function(ev) {
 								var bytes = new Uint8Array(fileReader.result);
 									var length = bytes.byteLength;
-									console.log("结果",fileReader.result)
+									console.log("结果",bytes)
 									console.log(length)
 								//console.log(ev.target.result)
 								try {
@@ -450,6 +450,8 @@ export default {
 										}), // 以二进制流方式读取得到整份excel表格对象
 										persons = []; // 存储获取到的数据
 								} catch(e) {
+									tipApi.closeAll()
+									tipApi.failure("文件类型不正确",2)
 									console.log('文件类型不正确');
 									return;
 								}
@@ -495,8 +497,8 @@ export default {
 
 							// 以二进制方式打开文件
 								fileReader.readAsBinaryString(files[0]);
-								
-							
+
+
 						} else {
 							// layer.close(loading("解析中"))
 							tipApi.closeAll()
@@ -569,7 +571,7 @@ export default {
 							} else {
 								fjid = _self.imgid.toString() + "," + _self.fujianid.toString()
 							}
-							
+
 							$.each(_self.tabs, function() {
 								this.shuliang = Number(this.shuliang)
 								this.withShuliang = 0
@@ -634,7 +636,7 @@ export default {
                                         // layer.close(ludan("保存中",0,1))
                                         tipApi.success("保存成功", 2)
 										// ludan("保存成功", 2, 2)
-										
+
 									}
 								} else {
 									alert("推送失败")
@@ -687,7 +689,7 @@ export default {
 								if(d.code == 200) {
                                     tipApi.success("提交成功", 3,function() {
                                         appApi.refreshData(2);
-										/*window.appApi.closeNewWindow()*/
+										window.appApi.closeNewWindow()
 									})
 									// ludan("提交成功", 3, 2, function() {
                                     //     appApi.refreshData(2);
@@ -927,7 +929,7 @@ export default {
 
 
 </script>
-<style scoped>
+<style type="text/css" scoped>
 #one{
     color: #777;
 }
@@ -1014,5 +1016,13 @@ export default {
 }
 .mui-pull-right{
 	float: right;
+}
+.mult-btn-box{
+  position: fixed;
+  bottom: 10px
+}
+.mui-scroll-wrapper{
+  overflow: scroll;
+  margin-bottom: 56px
 }
 </style>

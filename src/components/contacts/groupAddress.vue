@@ -101,7 +101,7 @@ export default {
             items:[],
             newJson:[],
             none:[],
-            show:false 
+            show:false
         }
     },
     created() {
@@ -192,7 +192,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left;
     }

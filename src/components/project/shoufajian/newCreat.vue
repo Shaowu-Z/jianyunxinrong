@@ -3,7 +3,7 @@
     <!-- 侧滑导航根容器 -->
 		<div class="mui-off-canvas-wrap mui-draggable mui-fullscreen mui-slide-in">
 			<!-- 菜单容器 -->
-			<div class="mui-right mui-fullscreen" :class="leibiemove ? 'leibiemove-left' : 'leibiemove-right'">
+			<div class="mui-rights mui-fullscreen" :class="leibiemove ? 'leibiemove-left' : 'leibiemove-right'">
 				<header class="mui-bar mui-bar-nav">
 					<h1 class="mui-title">选择业务类别</h1>
 					<!-- <button class="mui-btn mui-btn-link mui-pull-right" v-if="tapyewu" @click="makeyewu(0)">完成</button>
@@ -57,7 +57,7 @@
 											<label>日期</label>
 											<!-- <input type="text" v-model="form.MissionStartDate" @click="app.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
                                             <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="danjuApi.openPicker">
-                                            <mt-datetime-picker  ref="picker"  
+                                            <mt-datetime-picker  ref="picker"
                                       v-model="pickerVisible"
                                       type="date"
                                       year-format="{value} 年"
@@ -65,7 +65,7 @@
                                       date-format="{value} 日"
                                       @confirm="danjuApi.handleConfirm"
                                       >
-  
+
                                   </mt-datetime-picker>
                                         </a>
 									</li>
@@ -577,7 +577,7 @@ export default {
 								_self.isroomname = norl.curRoomName
 								_self.currRoomImId = norl.currRoomImId
 								_self.isRoomCreditCode = norl.tablefields.companySaleID
-								_self.getnews() 
+								_self.getnews()
 								console.log("123",norl.gongsialllei)
 								//接收单位数据
 								_self.nowCompany = norl.gongsialllei
@@ -623,7 +623,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style type="text/css" scoped>
 /* @import "../../../assets/css/common/mint"; */
 .mui-inner-wrap {
   padding-top: 44px;

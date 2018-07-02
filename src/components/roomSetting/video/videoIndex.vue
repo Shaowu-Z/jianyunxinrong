@@ -25,8 +25,8 @@
 					<li class="mui-table-view-cell" onclick="selectProject(0)">非项目视频</li>-->
 				</ul>
 			</div>
-			
-			
+
+
 			<div class="mui-scroll content">
 				<div class=" video-list mui-table-view mui-table-view-chevron lists">
 						<div v-for="(item, a) in items" :key="a">
@@ -145,7 +145,7 @@ export default {
 				if(page.list && page.list.length > 0) {
 					// 页数加1
 					_self.pageParams.curPage = _self.pageParams.curPage + 1;
-					
+
 					// 上拉刷新
 					if(type == "up") {
 						// 更新分页插件
@@ -337,7 +337,7 @@ export default {
 				if(page.list && page.list.length > 0) {
 					// 页数加1
 					_self.pageParams.curPage = _self.pageParams.curPage + 1;
-					
+
 					// 上拉刷新
 					if(type == "up") {
 						// 更新分页插件
@@ -453,18 +453,18 @@ export default {
 				});
 				//
 				$("#video_list").on('click', '.video-pic', function() { //绑定视频播放事件
-					
+
 					var a = $(this).attr("data-a");
 					console.log(_self.items)
 					var v = _self.items[a];
-					
+
 //					v.seeNum = v.seeNum;
 					//更新播放数量
 					var param = new FormData();
 					param.append("id", v.id);
 //					axios.post(getUrl() + "/community/video/seenum", param).then(function (response) {
 ////						console.info(response);
-//						
+//
 //					});
 					BackCookie.setCookie("videoUrl", v.videoUrl);
 					window.appApi.openVideo(setting.getPagePath() + "/community/community_comment.html?id="+v.id,v.videoUrl,"视频详情",v.thumbImage);
@@ -565,7 +565,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .mui-bar {
         height: 44px;
         display: block;
@@ -739,6 +739,6 @@ export default {
         margin-left: -30px;
         border-radius: 50%;
         color: #FF3300;
-        
+
     }
 </style>

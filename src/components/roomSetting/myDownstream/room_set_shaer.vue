@@ -2,7 +2,7 @@
     <div id="app">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title">设置共享</h1>
-            
+
             <a href="#" class="mui-action-back mui-icon iconfont icon-back mui-pull-left hide" @click="goBack"></a>
             <button class="mui-btn mui-btn-link mui-pull-right" @click="saveroomshaer()">保存</button>
         </header>
@@ -132,6 +132,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

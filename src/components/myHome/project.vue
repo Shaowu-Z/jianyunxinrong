@@ -57,10 +57,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 .mui-table-view-cell div{
 	display: flex;
-	
+
 }
 .view-pic{
 	width:60px;

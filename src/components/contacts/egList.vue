@@ -15,6 +15,21 @@
 		<div class="mui-indexed-list-search mui-input-row mui-search">
 			<input type="search"  @keyup="searchUser" v-model="key" class="" placeholder="搜索">
 		</div>
+<<<<<<< HEAD
+=======
+
+		<div class="mui-indexed-list-bar">
+			<div class="align-middle">
+				<div v-for="(items,index) in friendsList" :key="index">
+					<div v-for="(item,index) in items"  :key="index">
+						<div v-if="item.name && item.isp == 1">
+							<a v-text="item.first" class="xxx"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+>>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
 		<div class="mui-indexed-list-alert"></div>
 		<div class="mui-indexed-list-inner">
 			<div class="mui-indexed-list-empty-alert" :class="{'hide':this.friendsList.length != 0}">没有数据</div>
@@ -97,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
 	.text{
 		text-align: left

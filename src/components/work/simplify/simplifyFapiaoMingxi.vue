@@ -3,7 +3,7 @@
         <section id="" >
             <!---->
             <!--mui-draggable-->
-            
+
             <div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-slide-in">
                 <!--侧滑菜单容器-->
                 <div id='offCanvasSide' class='mui-right' :class= 'sideslip.param.hetongmove ? "move-left" : "move-right"'>
@@ -219,7 +219,7 @@
             // console.log($show_status)
         },
         mounted(){
-            
+
         },
         methods:{
             /**
@@ -236,7 +236,7 @@
     }
 
 </script>
-<style>
+<style type="text/css">
     @import './css/common.css';
 </style>
 

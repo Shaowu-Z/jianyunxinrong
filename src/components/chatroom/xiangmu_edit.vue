@@ -237,7 +237,7 @@ export default {
         //初始化职业标签
         _self.showzhiyeType();
         appApi.imgPreview.init();
-        
+
     },
     methods:{
         imagesAdd(){
@@ -545,7 +545,7 @@ export default {
                         ,time: 1 //2秒后自动关闭
                         ,anim:false
                     });
-                } 
+                }
             }).catch(function (error) {
                 console.info(error);
             });
@@ -563,7 +563,7 @@ export default {
                     // uploadStatus = true;
                     _self.fm["imgData"] = rst.base64;
                     _self.fm["width"] = 800;
-                    _self.fm["height"] = 600; 
+                    _self.fm["height"] = 600;
                     var v = document.getElementById("img_view")
                     v.src = rst.base64;
                     v.style.display = "inline-block"
@@ -722,7 +722,7 @@ export default {
                 return;
             }
             // Base.load({url:"http://java.winfreeinfo.com/pro_api/getProImg",data:{"projectSN":_self.fm.projectSN},dataType:"json",method:"post"},function(response){
-            
+
 
             var fromd=new FormData()
             fromd.append("projectSN",_self.fm.projectSN)
@@ -1165,6 +1165,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

@@ -4,7 +4,7 @@
 		<h1 class="mui-title">修改密码</h1>
 		<button class="mui-btn mui-btn-link mui-pull-left" @click="goback"><span class="mui-icon iconfont icon-back"></span>返回</button>
 	</header>
-	
+
 	<section class="mui-content" id="backpwdform">
 		<div class="register-form">
 			<div class="mui-input-group">
@@ -110,7 +110,7 @@ export default {
 			jsondata["pwd"] = oldpwd;
 			jsondata["newPwd"] = newPwd;
 			var param = JSON.stringify(jsondata);
-			// showloading(); 
+			// showloading();
 			// axios({
 			// 	method:'post',
 			// 	url:getUrl()+"/user_api/update_pwd",
@@ -201,7 +201,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style type="text/css" scoped>
     @import "../../assets/css/common/style.less";
     @import "../../assets/css/common/layer.less";
 	.register-form{

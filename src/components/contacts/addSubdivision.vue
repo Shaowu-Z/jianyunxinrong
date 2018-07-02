@@ -25,7 +25,7 @@
                 <!--</div>-->
             <!--</div>-->
             <!--<h5 class="mui-content-padded content-added">创建后，部门群会自动关联本部门，新人入职后自动加群</h5>-->
-            
+
         </section>
         <!--选择上级部门开始-->
         <div class="pop-up" style="display: none; height: 100%;" id="select_dept" v-show="select_dept">
@@ -221,8 +221,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .text{
         text-align: left
-    }        
+    }
 </style>

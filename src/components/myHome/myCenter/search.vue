@@ -37,7 +37,7 @@ export default {
                     var nu1=Math.round(Math.random()*10)
                     var nu2=Math.round(Math.random()*10)
                     console.log(">>>>>>>>>",pinyin.codefans_net_CC2PY("知道了"))
-                    
+
 
 
 
@@ -59,7 +59,7 @@ export default {
                     }
                 },
                 deep:true//对象内部的属性监听，也叫深度监听
-            },   
+            },
     },
     methods:{
         fenzu:function(){
@@ -68,7 +68,7 @@ export default {
     }
 }
 </script>
-<style>
+<style type="text/css">
 header{
     height: 44px;
 }

@@ -4,7 +4,7 @@
             <li class="mui-table-view-cell mui-input-row">
                 <a class="mui-navigate-right" href="#">
                     <label>日期</label>
-                    
+
                     <input type="text" v-model="area" name="start" id="start" class="areas"  readonly="readonly" placeholder="请选择" @click.stop="chooseCity">
                     <mt-popup
                         v-model="popupVisible"
@@ -39,12 +39,12 @@ import myaddress from "../js/city"
             return {
                 popupVisible:false,
                 showToolbar:[
-                    
+
                 ],
              myAddressSlots: [
                     {
                         flex: 1,
-                        defaultIndex: 1,        
+                        defaultIndex: 1,
                         values: Object.keys(myaddress),    //省份数组
                         className: 'slot1',
                         textAlign: 'center'
@@ -105,7 +105,7 @@ import myaddress from "../js/city"
         },
         mounted(){
             this.$nextTick(() => {  //vue里面全部加载好了再执行的函数   （类似于setTimeout）
-                this.myAddressSlots[0].defaultIndex = 0        
+                this.myAddressSlots[0].defaultIndex = 0
                 // 这里的值需要和 data里面 defaultIndex 的值不一样才能够初始化
                 //因为我没有看过源码（我猜测是因为数据没有改变，不会触发更新）
             });
@@ -113,14 +113,14 @@ import myaddress from "../js/city"
     }
 
 </script>
-<style>
+<style type="text/css">
 @import "../../../assets/css/common/mint";
 .picker{
     width: 100%;
 }
 .mint-popup{
     width: 100%;
-    
+
 }
 .picker-item{
     font-size: 16px

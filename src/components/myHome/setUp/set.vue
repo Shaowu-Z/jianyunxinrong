@@ -61,7 +61,7 @@ export default {
             map[param[0]] = decodeURI(param[1]);
         }
     }
-    
+
     function reLoad(){
         window.location.reload();
     }
@@ -96,7 +96,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
   .top{
      margin-bottom:10px
   }

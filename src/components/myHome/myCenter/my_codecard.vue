@@ -103,7 +103,7 @@ export default {
 				render: 'canvas',   //生成二维码的格式还有image、div
 				ecLevel:"H",
 				text:"",
-				background:"#ffffff", 
+				background:"#ffffff",
 				fill:"#333333", //二维码纹路的颜色
 				fontcolor:"#ff9818",
 				fontname:"Ubuntu",
@@ -116,7 +116,7 @@ export default {
 				mode:4,
 				quiet:1,
 				radius:1,
-				size:250   
+				size:250
 			};
 			console.log(options)
 				if (options) {
@@ -241,7 +241,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style type="text/css" scoped>
     #app{
         background: #efeff4;
         width:100%;
@@ -262,7 +262,7 @@ export default {
 			text-align: center;
 			font-size: 16px;
 		}
-		#img-buffer{ 
+		#img-buffer{
 			width: 52px;
 			height: 52px;
 			position: absolute;

@@ -4,7 +4,7 @@
 		<h1 class="mui-title">设置</h1>
 		<button class="mui-btn mui-btn-link mui-pull-left" @click="goBack"><span class="mui-icon iconfont icon-back"></span>返回</button>
 	</header>
-	
+
 	<section id="mycenter" class="mui-content mycenter-content">
 		<div class="address-list ">
 			<ul class="mui-table-view mui-table-view-striped" >
@@ -74,7 +74,7 @@
 				</a>
 			</div> -->
 		</div>
-		
+
 		<!--遮罩层-->
 	<div class="mui-backdrop" style="display: none;z-index: 999;" v-if="cookes==1"></div>
 
@@ -120,7 +120,7 @@ export default {
 			this.$router.go(-1);
 		},
 		login(){
-			let _self = this 
+			let _self = this
 			this.$http.post("/user_api/user_loginout").then(function(resp) {
 
 				//清除cookie
@@ -192,12 +192,12 @@ export default {
 				// remin(error.data);
 			});
 		},
-		
+
 	}
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 body{
 	background: #efeff4 !important;
 }
