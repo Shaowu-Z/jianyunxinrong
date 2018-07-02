@@ -687,23 +687,26 @@ export default {
 			//document.cookie = "userid" + "=" + map.userId + ";path=/";
 			var _self = this;
             var url;
-            if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
-            }else{
-				url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
-            }
-            if(isSys) {
-				url = url + "&isSys=true";
-			}
-			if(!isOpe){
-                url = url + "&isOpe=false";
-			}
-			// if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined || isSys == true || !isOpe== true){
-			// 	this.$router.push({path:"/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,roomId:_self.roomId,isSys:true,isOpe:false}})
-			// } else {
-			// 	this.$router.push({path:"/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,isSys:true,isOpe:false}})
+            // if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined){
+			// 	url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId + "&roomId=" + _self.roomId;// + "&roomId=" + _self.roomId
+            // }else{
+			// 	url = setting.getPagePath() + "/dish/open_dir.html?id=" + id + "&projectSN=" + _self.projectId;// + "&roomId=" + _self.roomId
+            // }
+            // if(isSys) {
+			// 	url = url + "&isSys=true";
 			// }
-			window.appApi.openNewWindow(url);
+			// if(!isOpe){
+            //     url = url + "&isOpe=false";
+			// }
+			console.log(_self.$router)
+			if(_self.roomId!="" && _self.roomId!="undefined" && _self.roomId!=undefined || isSys == true || !isOpe== true){
+				console.log(1111)
+				_self.$router.push({path:"/static/webstatic/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,roomId:_self.roomId,isSys:true,isOpe:false}})
+			} else {
+				console.log(2222)
+				_self.$router.push({path:"/static/webstatic/dish/open_dir.html",query:{id:id,projectSN:_self.projectId,isSys:true,isOpe:false}})
+			}
+			// window.appApi.openNewWindow(url);
 		},
 		itemEditShow: function(type) {
 			var _self = this;
