@@ -40,13 +40,14 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
 export default {
     data () {
         return {
             items:[],
             type:this.$route.query.type,
             teamId:'',
-            newJson : []
+            newJson: [],
         }
     },
     mounted(){
@@ -90,13 +91,14 @@ export default {
     },
     methods:{
         batchOperate() {
+            let _self = this
             //type -- :1:团队部门主页-好友中批量添加,2:团队部门主页-批量转移，3:团队部门主页-批量删除，4:部门信息页-好友中批量添加:5：部门信息页-部门成员中批量添加，6:部门信息页-批量转移成员，7：部门信息页-批量删除成员
             //var type = window.location.href.split('?')[1].split('=')[1].split("&")[0];
             var checkedObj = list.querySelectorAll('input[type="checkbox"]:checked');
             if(checkedObj== undefined || checkedObj.length<1){
                 return;
             }
-            if(type==1 || type==4){//添加好友进团队或者部门
+            if(this.type==1 || this.type==4){//添加好友进团队或者部门
                 var newJsonMember = [];
                 //var teamId = 0;
                 var userIds = "";
@@ -108,32 +110,34 @@ export default {
                     userIds+=checkedObj[i].value+",";
                     }*/
                     var indexValue = checkedObj[i].value;
-
-                    var objFriend = newJson[indexValue];//获取选中行的数组数据
-                    if(type==4){//部门添加
+                    var objFriend = this.newJson[indexValue];//获取选中行的数组数据
+                    if(this.type==4){//部门添加
                         //var deptId = window.location.href.split('?')[1].split('=')[3];
                         //teamId = window.location.href.split('?')[1].split('=')[2].split("&")[0];
-                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:teamId,deptId:deptId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
+                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:this.teamId,deptId:deptId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
                     }else{
                         //teamId = window.location.href.split('?')[1].split('=')[2];
-                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:teamId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
+                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:this.teamId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
                     }
                 }
                 console.info(newJsonMember);
-                var newJsonTeamVo = {teamId:teamId,projectTeamMemberTList:newJsonMember};
+                var newJsonTeamVo = {teamId:this.teamId,projectTeamMemberTList:newJsonMember};
                 this.$http.post("/concats_api/batch_add_member_f",newJsonTeamVo).then(function (response) {
                     //_self.$data.items = response.data.result;
-                    loading('批量操作成功！');
-                    window.location.href="../contacts/group_address_m.html?teamId="+teamId;
-                }).catch(function (error) {
-                    console.info(error);
-                    alert("系统异常，请联系管理员!");
-                });
+                    // loading('批量操作成功！');
+                    Toast({
+                        message: '批量操作成功！',
+                        position: 'center',
+                        duration: 1000
+                    });
+                    // window.location.href="../contacts/group_address_m.html?teamId="+_self.teamId;
+                    _self.$router.push({path:"/groupAddress",query:{teamId:_self.teamId}})
+                })
             }
 
             var operateUrl = "";
             var newJsonParam ={};
-            if(type==2 || type==3 || type==5 || type==6 || type==7 || type==8 || type==9){//团队成员操作
+            if(this.type==2 || this.type==3 || this.type==5 || this.type==6 || this.type==7 || this.type==8 || this.type==9){//团队成员操作
                 var memberIds = "";
                 //var checkedObj = list.querySelectorAll('input[type="checkbox"]:checked');
                 for(var i=0; i<checkedObj.length;i++){
@@ -144,7 +148,7 @@ export default {
                     }*/
                     var indexValue = checkedObj[i].value;
 
-                    var objFriend = newJson[indexValue];//获取选中行的数组数据
+                    var objFriend = this.newJson[indexValue];//获取选中行的数组数据
                     if(i==checkedObj.length-1){
                         memberIds+=objFriend.memberId;
                     }else{
@@ -152,22 +156,22 @@ export default {
                     }
                 }
 
-                if(type==2 || type==6){//批量转移
+                if(this.type==2 || this.type==6){//批量转移
                     window.location.href="../contacts/select_group.html?teamId="+teamId+"&deptId="+deptId+"&memberIds="+memberIds;
                 }
 
                 var locationUrl = "../contacts/group_address_m.html?teamId="+teamId;
-                if(type==3 || type==7){//批量删除
+                if(this.type==3 || this.type==7){//批量删除
                     operateUrl="/concats_api/delete_member_batch";
                     newJsonParam={memberIds:memberIds};
                     locationUrl = "../contacts/group_address_m.html?teamId="+teamId;
                 }
-                if(type==8){
+                if(this.type==8){
                     operateUrl="/concats_api/update_team_admin";
                     newJsonParam={operateType:"1",memberIds:memberIds};//新增管理员
                     locationUrl = "../contacts/select_team_admin.html?teamId="+teamId;
                 }
-                if(type==9){
+                if(this.type==9){
                     operateUrl="/concats_api/update_team_admin";
                     newJsonParam={operateType:"2",memberIds:memberIds};//删除管理员
                     locationUrl = "../contacts/select_team_admin.html?teamId="+teamId;
@@ -190,11 +194,11 @@ export default {
             let _this = this
             var _self = thisObj;
             this.$http.post(requestUrl).then(function (response) {
-                _self.$data.items = response.data.result;
+                _self.items = response.data.result;
                 console.info(response.data.result);
 
                 //封装页面数据
-                _this.newJson = response.data.result;
+                _self.newJson = response.data.result;
                 var indexSzmT = "";
                 var strHtml = "";
                 for(var j=0;j<_this.newJson.length;j++){
@@ -216,7 +220,7 @@ export default {
                     strHtml+='<li class="mui-table-view-cell mui-checkbox">'+
                             '<div class="mui-slider-cell">'+
                             '<div class="oa-contact-cell mui-table">'+
-                            '<div class="oa-contact-input mui-table-cell"><input type="checkbox" value="'+j+'"/></div>'+
+                            '<div class="oa-contact-input mui-table-cell" style="z-index:1"><input type="checkbox" value="'+j+'"/></div>'+
                             '<div class="oa-contact-avatar mui-table-cell"><img src="'+userAvatar+'"></div>'+
                             /*'<div class="oa-contact-avatar mui-table-cell"><span class="oa-pic-default bgr3">'+remarksName+'</span></div>'+*/
                             '<div class="oa-contact-content mui-table-cell">'+
@@ -238,18 +242,19 @@ export default {
             //     })
                 var list = document.getElementById('list');
                 var done = document.getElementById('done');
-                $('.mui-indexed-list-inner').bind('click','input', function() {
+                $('.mui-indexed-list-inner').bind('change','input', function() {
                     // console.log(1111)
                     var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
-                    console.info(list.querySelectorAll('input[type="checkbox"]:checked'));
-                    console.log(done.innerHTML)
+                    console.info(list.querySelectorAll('input[type="checkbox"]:checked'),1111111111111);
                     var value = count ? "完成(" + count + ")" : "完成";
                     done.innerHTML = value;
                     if (count) {
+                        
                         if (done.classList.contains("mui-disabled")) {
                             done.classList.remove("mui-disabled");
                         }
                     } else {
+
                         if (!done.classList.contains("mui-disabled")) {
                             done.classList.add("mui-disabled");
                         }
@@ -266,10 +271,10 @@ export default {
             var _self = thisObj;
              this.$http.post(requestUrl,param).then(function (response) {
                 _self.$data.items = response.data.result;
-                console.info(response.data.result);
+                console.info(response);
 
                 //封装页面数据
-                _this.newJson = response.data.result;
+                _self.newJson = JSON.parse(response.request.response).result;
                 var indexSzmT = "";
                 var strHtml = "";
                 for(var j=0;j<_this.newJson.length;j++){
@@ -289,7 +294,7 @@ export default {
                         strHtml+='<li class="mui-table-view-cell mui-checkbox">'+
                                 '<div class="mui-slider-cell">'+
                                 '<div class="oa-contact-cell mui-table">'+
-                                '<div class="oa-contact-input mui-table-cell"><input type="checkbox" value="'+j+'" disabled/></div>'+
+                                '<div class="oa-contact-input mui-table-cell" style="z-index:1"><input type="checkbox" value="'+j+'" disabled/></div>'+
                                 '<div class="oa-contact-avatar mui-table-cell"><img src="'+userAvatar+'"></div>'+
                                 '<div class="oa-contact-content mui-table-cell">'+
                                 '<h4 class="oa-contact-name">'+remarksName+'</h4>'+
@@ -303,7 +308,7 @@ export default {
                         strHtml+='<li class="mui-table-view-cell mui-checkbox">'+
                                 '<div class="mui-slider-cell">'+
                                 '<div class="oa-contact-cell mui-table">'+
-                                '<div class="oa-contact-input mui-table-cell"><input type="checkbox" value="'+j+'"/></div>'+
+                                '<div class="oa-contact-input mui-table-cell" style="z-index:1"><input type="checkbox" value="'+j+'"/></div>'+
                                 '<div class="oa-contact-avatar mui-table-cell"><img src="'+userAvatar+'"></div>'+
                                 '<div class="oa-contact-content mui-table-cell">'+
                                 '<h4 class="oa-contact-name">'+remarksName+'</h4>'+
@@ -338,9 +343,26 @@ export default {
                 }
 
                 document.getElementById("strHtml").innerHTML=strHtml;
-                $(".mui-checkbox").addEventListener("click",function(){
-                    alert(5)
-                })
+                var list = document.getElementById('list');
+                var done = document.getElementById('done');
+                $('.mui-indexed-list-inner').bind('@change','input', function() {
+                    // console.log(1111)
+                    var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
+                    console.info(list.querySelectorAll('input[type="checkbox"]:checked'),1111111111111);
+                    var value = count ? "完成(" + count + ")" : "完成";
+                    done.innerHTML = value;
+                    if (count) {
+                        
+                        if (done.classList.contains("mui-disabled")) {
+                            done.classList.remove("mui-disabled");
+                        }
+                    } else {
+
+                        if (!done.classList.contains("mui-disabled")) {
+                            done.classList.add("mui-disabled");
+                        }
+                    }
+                });
             }).catch(function (error) {
                 console.info(error);
             });
