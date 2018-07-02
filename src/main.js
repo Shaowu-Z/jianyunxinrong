@@ -7,8 +7,8 @@ import "./assets/css/common/mui.less";
 import "./assets/css/common/common.less";
 import "./assets/css/common/icons-extend.less";
 import "./assets/css/common/style.less";
-import App from './App';
-import router from './router';
+// import App from './App';
+// import router from './router';
 import axios from 'axios';
 import setting from "./playform/appApi.js";
 import mui from "./playform/mui.js";
@@ -27,7 +27,8 @@ import "./assets/css/common/mint.css";
 import "./assets/css/common/page.css";
 import "./assets/css/common/calendar-pro.css";
 import "mint-ui/lib/style.css"
-
+import App from './App';
+import router from './router';
 
 let http = axios.create({
   baseURL: '/api',
