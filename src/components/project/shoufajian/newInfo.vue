@@ -128,7 +128,7 @@
 									<li class="mui-table-view-cell"  v-for="(n,index) in site_fj" :key="index">
 										<div class="oa-contact-cell mui-table" @click="open_file(n.id)">
 											<div class="oa-contact-avatar mui-table-cell">
-												<span :class="'my-list-icon '+ danjuApi.fieType(n.filename)"></span>
+												<span :class="'my-list-icon '+ danjuApi.fileType(n.filename)"></span>
 											</div>
 											<div class="oa-contact-content mui-table-cell">
 												<h4 class="oa-contact-name" v-text="n.filename"></h4>
@@ -203,7 +203,7 @@
 													<li class="mui-table-view-cell"  v-for="(n,index) in item.attachments" :key="index" v-if="n.type==2">
 														<div class="oa-contact-cell mui-table" @click="open_file(n.id)">
 															<div class="oa-contact-avatar mui-table-cell">
-																<span :class="'my-list-icon '+ danjuApi.fieType(n.filename)"></span>
+																<span :class="'my-list-icon '+ danjuApi.fileType(n.filename)"></span>
 															</div>
 															<div class="oa-contact-content mui-table-cell">
 																<h4 class="oa-contact-name" v-text="n.filename"></h4>

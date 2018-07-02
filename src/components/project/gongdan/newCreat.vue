@@ -20,7 +20,7 @@
 					<a class="mui-action-back mui-icon iconfont icon-back" style="display: none;" v-show="backicon!=0" @click="back"></a>
 					<a class="mui-action-back mui-icon iconfont icon-help2 mui-pull-right" v-show="backicon==0" style="margin-left:0;display: none;"></a>
 					<button class="mui-btn mui-btn-link mui-pull-right" style="margin-left:0;margin-right:0;padding-right:0;display: none;" @click="showSelectdFile" v-show="backicon==0">导入Excel</button>
-					<input id="excelFile" type="file" class="upfile" style="display: none;"   @change="excelAnalysis(event)" />
+					<input id="excelFile" type="file" class="upfile" style="display: none;"   @change="excelAnalysis" />
 				</header>
 
 				<div class=" fixed-bottom" v-show="backicon==0">
@@ -150,7 +150,7 @@
 import { BackCookie } from "../../../playform/common.js";
 import setting from "../../../playform/config.js";
 import danjuApi from "../js/danjuAPi.js";
-import tipApi from "../js/tipApi.js";
+import tipApi from "../../../playform/tipApi.js";
 export default {
     data(){
         return{
@@ -422,51 +422,27 @@ export default {
 						showSelectdFile: function() {
 							$("#excelFile").click();
 						},
+						
+
+
 						//excel表格解析
-//						excelAnalysis: function(e) {
-//							var _self = this;
-//							var files = e.target.files;
-//							var fileReader = new FileReader();
-//							fileReader.onload = function(ev) {
-//								try {
-//									var data = ev.target.result,
-//										workbook = XLSX.read(data, {
-//											type: 'binary'
-//										}), // 以二进制流方式读取得到整份excel表格对象
-//										persons = []; // 存储获取到的数据
-//								} catch(e) {
-//									console.log('文件类型不正确');
-//									return;
-//								}
-//
-//								// 表格的表格范围，可用于判断表头是否数量是否正确
-//								var fromTo = '';
-//								// 遍历每张表读取
-//								for(var sheet in workbook.Sheets) {
-//									if(workbook.Sheets.hasOwnProperty(sheet)) {
-//										fromTo = workbook.Sheets[sheet]['!ref'];
-//										console.log(fromTo);
-//										console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]))
-//										persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
-//										// break; // 如果只取第一张表，就取消注释这行
-//									}
-//								}
-//								_self.tabs = persons
-//
-//								console.log(persons);
-//							};
-//							// 以二进制方式打开文件
-//							fileReader.readAsBinaryString(files[0]);
-//						},
-						//excel表格解析
-					excelAnalysis: function(e) {
-						loading("解析中")
+					excelAnalysis: function() {
+						var e=event
+						if(e.target.files[0] == null) {
+							return false;
+						}
+						tipApi.waring("解析中")
 						var _self = this;
 						var suffix = /\.[^\.]+$/.exec(e.target.files[0].name).toString()
 						if(suffix == '.xlsx') {
 							var files = e.target.files;
 							var fileReader = new FileReader();
 							fileReader.onload = function(ev) {
+								var bytes = new Uint8Array(fileReader.result);
+									var length = bytes.byteLength;
+									console.log("结果",fileReader.result)
+									console.log(length)
+								//console.log(ev.target.result)
 								try {
 									var data = ev.target.result,
 										workbook = XLSX.read(data, {
@@ -496,10 +472,10 @@ export default {
 										if(excelname.indexOf("mingcheng") != -1 && excelname.indexOf("danwei") != -1 && excelname.indexOf("shuliang") != -1 && excelnames.length===3) {
 											persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
 											console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]))
-											layer.close(loading("解析中"))
+											// layer.close(loading("解析中"))
 											_self.excelok = 0
 										} else {
-											layer.close(loading("解析中"))
+											// layer.close(loading("解析中"))
                                             _self.excelok = 1
                                             tipApi.waring("导入的模板格式不正确", 2)
 											// ludan("导入的模板格式不正确", 2, 3)
@@ -522,7 +498,8 @@ export default {
 								
 							
 						} else {
-                            layer.close(loading("解析中"))
+							// layer.close(loading("解析中"))
+							tipApi.closeAll()
                             tipApi.waring("导入的文件格式不正确", 2)
 							// ludan("导入的文件格式不正确", 2, 3)
 						}
@@ -835,7 +812,7 @@ export default {
 						},
 						//上传文件
 						upfile: function(event) {
-							loading("上传中")
+							tipApi.waring("上传中")
 							sessionStorage.removeItem("cunnews")
 							var _self = this
 							var file = document.getElementById(event.target.id).files;
@@ -887,7 +864,7 @@ export default {
 							xhr.open("post", url, true);
 							xhr.onload = function(evt) {
 								//请求完成
-								layer.close(loading("上传中"))
+								tipApi.closeAll()
 							};
 							xhr.onreadystatechange = function(evt) {
 								console.log(xhr)
@@ -945,6 +922,10 @@ export default {
 						}
 					},
 }
+
+
+
+
 </script>
 <style scoped>
 #one{
@@ -1030,5 +1011,8 @@ export default {
 }
 .oa-contact-email{
     text-align: left
+}
+.mui-pull-right{
+	float: right;
 }
 </style>

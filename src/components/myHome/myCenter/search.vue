@@ -21,7 +21,7 @@ export default {
         }
     },
     created:function(){
-        for(var i=0;i<3000;i++){
+        for(var i=0;i<1000;i++){
             var nu1=Math.round(Math.random()*10)
             var nu2=Math.round(Math.random()*10)
             this.result.push({
@@ -82,5 +82,10 @@ header{
     }
     .mint-cell-wrapper .mint-cell-value{
         flex:5
+    }
+    .mint-search-list-warp{
+        position: relative;
+    overflow: scroll;
+    height: 100%;
     }
 </style>

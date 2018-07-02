@@ -52,6 +52,7 @@ import { Toast } from "mint-ui";
             }
         },
         created:function(){
+            alert(this.datanow)
             this.form.MissionStartDate=this.datanow
 
         },
@@ -108,7 +109,7 @@ import { Toast } from "mint-ui";
     border-radius: 5px;
     margin-left: 6px;
 }
-#databox {
+/* #databox {
     width: 100%
-}
+} */
 </style>
