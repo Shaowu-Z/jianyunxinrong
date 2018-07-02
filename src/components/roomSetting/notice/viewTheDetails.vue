@@ -89,8 +89,8 @@ export default {
             var currentDateString = Date.parse(nowTime + " 23:59")
             var currentDate = new Date(currentDateString);
             var fallDate = currentDate.getTime() -
-                new Date(value).getTime(); //时间差的毫秒数        
-            //计算出相差天数  
+                new Date(value).getTime(); //时间差的毫秒数
+            //计算出相差天数
             var days = Math.floor(fallDate / (24 * 3600 * 1000))
             if(days == 0) {
                 return "今天";
@@ -147,7 +147,7 @@ export default {
                             //         _self.imgUrl =xk_util.getArrayProperty(_self.imgs,"thumbnailurl");
                             //         console.log(response)
                             //     }
-                                
+
                             // })
                             var formparam = new FormData();
                             formparam.append("fileIdStr", fileIdStr);
@@ -206,8 +206,8 @@ export default {
                 })
         }
     }
-}   
+}
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 </style>

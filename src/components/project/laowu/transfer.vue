@@ -1,5 +1,5 @@
 <template>
-    
+
 </template>
 <script>
 import setting from '../../../playform/config.js'
@@ -45,7 +45,7 @@ export default {
 //											appApi.openNewWindow("/static/newwebstatic/lianxi/work_content.html?id="+_self.$route.query.id)
 //										}
 //									}else{
-//										
+//
 //									}
 //								}
 							}
@@ -85,6 +85,6 @@ export default {
                 }
 }
 </script>
-<style>
+<style type="text/css">
 
 </style>

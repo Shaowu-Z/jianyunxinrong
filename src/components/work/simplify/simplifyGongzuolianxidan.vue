@@ -215,7 +215,7 @@
             // console.log($show_status)
         },
         mounted(){
-            
+
         },
         methods:{
             /**
@@ -232,7 +232,7 @@
     }
 
 </script>
-<style>
+<style type="text/css">
     @import './css/common.css';
 </style>
 

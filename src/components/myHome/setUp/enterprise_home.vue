@@ -36,7 +36,7 @@
                                         <span class="data">{{item.roomUserName || "null"}}</span>
                                     </span>
                                 </p>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -53,7 +53,7 @@ export default {
             companyList:[],
             ModulesList:[],
             projectList:[]
-        }    
+        }
     },
     created(){
         // this.Occupation()
@@ -123,7 +123,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .top {
         margin-top: 45px;
     }

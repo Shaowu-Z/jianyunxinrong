@@ -1,11 +1,11 @@
 <template>
-    
+
 </template>
-<style>
+<style type="text/css">
 
 </style>
 <script>
 export default {
-    
+
 }
 </script>

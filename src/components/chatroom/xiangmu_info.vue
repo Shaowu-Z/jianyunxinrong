@@ -632,7 +632,7 @@ export default {
                 return;
             }
             // Base.load({url:"http://java.winfreeinfo.com/pro_api/getProImg",data:{"projectSN":_self.fm.projectSN},dataType:"json",method:"post"},function(response){
-            
+
             // },function(error){
             //     console.info(error);
             // })
@@ -1055,7 +1055,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .mui-fullscreen {
         position: fixed;
         z-index: 20;

@@ -1,73 +1,73 @@
 <template>
     <div class="mui-fullscreen">
-    
+
         <!-- 侧滑导航根容器 -->
-    
+
         <div class="mui-off-canvas-wrap mui-draggable mui-slide-in ">
-    
+
             <!-- 菜单容器 -->
     <!-- aside -->
             <div class="mui-right" :class="hetongmove ? 'move-left' : 'move-right'">
-    
+
                 <header class="mui-bar mui-bar-nav">
-    
+
                     <h1 class="mui-title">选择合同</h1>
-    
+
                 </header>
-    
+
                 <div class="mui-scroll-wrapper" :class="tapyewu? 'listup':'listdown'">
-    
+
                     <div class="mui-scroll">
-    
+
                         <!-- 合同类别 -->
-    
+
                         <ul class="mui-table-view eg-table-view category-table" style="margin-bottom: 0;">
-    
+
                             <li class="mui-table-view-cell" v-for="(n,index) in hetongx" :key="index">
-    
+
                                 <a v-text="n.contractName" @click="hetongmore(n)"></a>
-    
+
                             </li>
-    
+
                         </ul>
-    
+
                     </div>
-    
+
                 </div>
     <!-- aside -->
             </div>
-    
+
             <!-- <div id="backdrop" class="mui-off-canvas-backdrop" @click="mask"></div> -->
              <div id="backdrop" class="mask" @click="mask" :class="hetongmove ? 'move-leftmask' : 'move-rightmask'"></div>
-    
+
             <!-- 主页面容器 -->
-    
-    
-    
+
+
+
             <div class="mui-inner-wrap">
-    
+
                 <!-- 主页面标题 -->
-    
+
                 <header class="mui-bar mui-bar-nav">
-    
+
                     <h1 class="mui-title" ref='title_name' name="收付款">收付款</h1>
-    
+
                     <a class="mui-action-back mui-icon iconfont icon-back" style="display: none;" v-show="backicon!=0" @click="back"></a>
-    
+
                 </header>
-    
+
                 <div class="mui-content mui-scroll-wrapper">
-     
+
                     <div class="mui-scroll mui-fullscreen" style="padding-top:44px">
-    
+
                         <div v-if="backicon==0" class="step step1">
-    
+
                             <ul class="mui-table-view eg-table-view">
-    
+
                                 <li class="mui-table-view-cell mui-input-row" >
                                     <label>日期</label>
                                     <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="danjuApi.openPicker">
-                                   <mt-datetime-picker  ref="picker"  
+                                   <mt-datetime-picker  ref="picker"
                                       v-model="pickerVisible"
                                       type="date"
                                       year-format="{value} 年"
@@ -75,170 +75,170 @@
                                       date-format="{value} 日"
                                       @confirm="danjuApi.handleConfirm"
                                       >
-  
+
                                 </mt-datetime-picker>
                                     <!-- <input type="text" name="form.MissionStartDate" v-model="form.MissionStartDate" @click="selectDate" readonly="readonly" placeholder="请选择"> -->
-    
+
                                 </li>
-    
+
                                 <li class="mui-table-view-cell mui-input-row">
-    
+
                                     <label>金额(元)</label>
-    
+
                                     <input type="number" placeholder="选填" class="" name="companySaleName" v-model="jine" />
-    
+
                                 </li>
-    
+
                                 <li class="mui-table-view-cell mui-input-row">
-    
+
                                     <a class="mui-navigate-right" href="#" @click="hetong">
-    
+
                                         <label>合同名称</label>
-    
+
                                         <input type="text" placeholder="必填" class="" name="contractName" v-model="htong" readonly="readonly" />
-    
+
                                     </a>
-    
+
                                 </li>
-    
+
                                 <li class="mui-table-view-cell mui-input-row">
-    
+
                                     <label>支出单位</label>
-    
+
                                     <input type="text" placeholder="必填" class="" name="companyBuyName" v-model="companyBuyName" readonly="readonly" />
-    
+
                                 </li>
-    
+
                                 <li class="mui-table-view-cell mui-input-row">
-    
+
                                     <label>收入单位</label>
-    
+
                                     <input type="text" placeholder="必填" class="" name="companySaleName" v-model="companySaleName" readonly="readonly" />
-    
+
                                 </li>
-    
-    
-    
+
+
+
                                 <li class="mui-table-view-cell mui-input-row">
-    
+
                                     <label>详细说明</label>
-    
+
                                     <textarea class="m-block" rows="6" v-model="beiz" placeholder="请输入说明内容…"></textarea>
-    
+
                                 </li>
-    
+
                             </ul>
-    
-    
-    
+
+
+
                             <div class="btn-box">
-    
+
                                 <button class="mui-btn mui-btn-primary mui-btn-block" @click="jump5">下一步</button>
-    
+
                             </div>
-    
+
                         </div>
-    
-    
-    
+
+
+
                         <!-- 第四步  -->
-    
+
                         <div v-else-if="backicon==1">
-    
+
                             <div class="step step3 ">
-    
+
                                 <div class="publish-container">
-    
+
                                     <div class="title">图片</div>
-    
+
                                     <ul class="container-average container-average-img">
-    
+
                                         <li class="img-item" v-for="(img,number) in imgs" :key="number">
-    
+
                                             <div class="img-item-inner">
-    
+
                                                 <img v-bind:src="img.src">
-    
+
                                             </div>
-    
+
                                             <span class="btn-roll btn-delete" @click="danjuApi.moveimg(number+1)"></span>
-    
+
                                         </li>
-    
+
                                         <li class="upload-btn">
-    
+
                                             <div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" accept="image/*" class="upimg" id="file" v-on:change="danjuApi.upfile" multiple="multiple" /></div>
-    
+
                                         </li>
-    
+
                                     </ul>
-    
+
                                 </div>
-    
-    
-    
+
+
+
                                 <div class="publish-container">
-    
+
                                     <div class="title">附件</div>
-    
+
                                     <ul class="mui-table-view mui-table-view-striped container-average container-file">
-    
+
                                         <li class="mui-table-view-cell" v-for="(img,number) in fujians" :key="number">
-    
+
                                             <span class="btn-roll btn-delete" @click="danjuApi.movefj(number+1)"></span>
-    
+
                                             <div class="oa-contact-cell mui-table">
-    
+
                                                 <div class="oa-contact-avatar mui-table-cell">
-    
+
                                                     <span :class="'my-list-icon '+ danjuApi.fileType(img.name)"></span>
-    
+
                                                 </div>
-    
+
                                                 <div class="oa-contact-content mui-table-cell">
-    
+
                                                     <h4 class="oa-contact-name" v-text="img.name"></h4>
-    
+
                                                     <!--<p class="oa-contact-email"><span>196.4KB</span></p>-->
-    
+
                                                 </div>
-    
+
                                             </div>
-    
+
                                         </li>
-    
+
                                         <li class="upload-btn">
-    
+
                                             <div class="img-item-inner mui-icon mui-icon-plusempty"><input type="file" class="upfile" id="files" v-on:change="danjuApi.upfile" multiple="multiple" /></div>
-    
+
                                         </li>
-    
+
                                     </ul>
-    
+
                                 </div>
-    
+
                                 <div class="mui-table mult-btn-box">
-    
+
                                     <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="danjuApi.initData(1)">保&nbsp;&nbsp;存</button></div>
-    
+
                                     <div class="mui-table-cell space"></div>
-    
+
                                     <div class="mui-table-cell"><button type="button" class="mui-btn mui-btn-primary" @click="danjuApi.initData(2)">提&nbsp;&nbsp;交</button></div>
-    
+
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
-    
+
                     </div>
-    
+
                 </div>
-    
+
             </div>
-    
+
         </div>
-    
+
     </div>
 </template>
 <script>
@@ -255,7 +255,7 @@ export default {
       // startDate: new Date("2014-1-1"),
       // endDate: new Date(),
       pickerVisible: new Date(),
-      tijao:"", 
+      tijao:"",
       baocun:"",
       danjuApi: danjuApi,
       tipApi: tipApi,
@@ -1100,10 +1100,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 @import "../../../assets/css/common/mint";
 body {
-  background: #efeff4;  
+  background: #efeff4;
 }
 
 .mui-off-canvas-right {
@@ -1152,9 +1152,9 @@ body {
 }
 
 /*.mui-scroll-wrapper{
-    
+
     				margin-top: 44px;
-    
+
     			}*/
 
 .listdown {

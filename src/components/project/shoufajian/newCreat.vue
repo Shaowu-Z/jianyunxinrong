@@ -57,7 +57,7 @@
 											<label>日期</label>
 											<!-- <input type="text" v-model="form.MissionStartDate" @click="app.selectDate('s')" readonly="readonly" placeholder="请选择" /> -->
                                             <input type="text" name="start" id="start" v-model="form.MissionStartDate" readonly="readonly" placeholder="请选择" @click="danjuApi.openPicker">
-                                            <mt-datetime-picker  ref="picker"  
+                                            <mt-datetime-picker  ref="picker"
                                       v-model="pickerVisible"
                                       type="date"
                                       year-format="{value} 年"
@@ -65,7 +65,7 @@
                                       date-format="{value} 日"
                                       @confirm="danjuApi.handleConfirm"
                                       >
-  
+
                                   </mt-datetime-picker>
                                         </a>
 									</li>
@@ -577,7 +577,7 @@ export default {
 								_self.isroomname = norl.curRoomName
 								_self.currRoomImId = norl.currRoomImId
 								_self.isRoomCreditCode = norl.tablefields.companySaleID
-								_self.getnews() 
+								_self.getnews()
 								console.log("123",norl.gongsialllei)
 								//接收单位数据
 								_self.nowCompany = norl.gongsialllei
@@ -623,7 +623,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style type="text/css" scoped>
 /* @import "../../../assets/css/common/mint"; */
 .mui-inner-wrap {
   padding-top: 44px;

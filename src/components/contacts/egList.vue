@@ -15,7 +15,7 @@
 		<div class="mui-indexed-list-search mui-input-row mui-search">
 			<input type="search"  @keyup="searchUser" v-model="key" class="" placeholder="搜索">
 		</div>
-		
+
 		<div class="mui-indexed-list-bar">
 			<div class="align-middle">
 				<div v-for="(items,index) in friendsList" :key="index">
@@ -330,7 +330,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
 	.text{
 		text-align: left

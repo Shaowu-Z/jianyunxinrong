@@ -6,7 +6,7 @@
 					class="mui-icon mui-icon-back"></span>返回
 			</button>
 			<button class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right" @click="submitData">完成</button>
-		</header>	
+		</header>
         <section class="mui-content">
             <ul class="mui-table-view eg-table-view eg-detail-list">
                 <li class="mui-table-view-cell mui-input-row">
@@ -180,6 +180,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 
 </style>

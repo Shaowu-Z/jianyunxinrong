@@ -1,6 +1,6 @@
 <template>
   <div>
-   
+
 <header class="mui-bar mui-bar-nav">
 
 	<button id="btn-referrer" class="mui-btn mui-action-back mui-btn-link mui-btn-nav mui-pull-left hide">
@@ -133,7 +133,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 html,
 body {
   height: 100%;

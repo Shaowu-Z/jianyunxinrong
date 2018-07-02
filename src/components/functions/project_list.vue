@@ -84,7 +84,7 @@
                                                 <!--<img v-if="site.thumbnail!=null&&site.thumbnail!=''&&fileType(site.suffix).clazz=='label-img'" v-bind:src="site.thumbnail">-->
                                                 <!--<img v-else src="../../images/defualt.png"/>-->
                                                 <!--<img v-else :class="'my-list-icon'+fileType(site.suffix)"/>-->
-                                            
+
                                         </div>
                                         <div class="oa-contact-content mui-table-cell">
                                             <h4 class="oa-contact-name" v-text="site.name+site.suffix"></h4>
@@ -126,7 +126,7 @@ export default {
             backzr:'',
             backstart:'',
             userid : BackCookie.getCookie("userid"),
-            // filesize: "0KB", //选中文件的大小   
+            // filesize: "0KB", //选中文件的大小
         }
     },
     created() {
@@ -173,7 +173,7 @@ export default {
             _self.filesizeshow=''
             _self.filesizezan=0
             _self.filenum=0
-            
+
             _self.model = 2
             _self.backstart=2
             _self.projectSn = projectSn
@@ -195,7 +195,7 @@ export default {
                     // layer.close(loading("加载中"))
                     _self.sites = response.data.result.data.firstList;
                     for(let i=0;i<_self.sites.length;i++){
-                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')
                     }
 //								_self.parentid.push(response.data.result.data.firstList[0].id)
                     _self.projectname = response.data.result.data.projectName;
@@ -216,7 +216,7 @@ export default {
                     _self.sites = response.data.result.data.result
                 }
                 for(let i=0;i<_self.sites.length;i++){
-                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                        _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')
                     }
             })
         },
@@ -254,7 +254,7 @@ export default {
 //												console.log(_self.fileshares)
 
             _self.filenum = _self.list.length
-            //filenum filesizeshow 
+            //filenum filesizeshow
             this.filesize()
         },
         //计算选中文件的大小
@@ -266,7 +266,7 @@ export default {
                 var pattKB = new RegExp('KB');
                 var pattB = new RegExp('B');
                 var pattM = new RegExp('MB');
-                
+
                 if(pattM.test(_self.listsize[i])) {
                     var size = (parseFloat(_self.listsize[i].split("MB")[0]).toFixed(2) * 100 * 1024 * 1024) / 100
                     _self.filesizezan = parseFloat((_self.filesizezan * 100 + size * 100)).toFixed(2) / 100
@@ -278,8 +278,8 @@ export default {
                         var size = parseFloat(_self.listsize[i].split("B")[0]).toFixed(2)
                         _self.filesizezan = parseFloat((_self.filesizezan * 100 + size * 100)).toFixed(2) / 100
                     }
-                } 
-                
+                }
+
                 //转换微正常单位
                 if(_self.filesizezan>=1048576){
                     _self.filesizeshow=parseFloat((_self.filesizezan*100)/104857600).toFixed(2)+'MB'
@@ -312,14 +312,14 @@ export default {
                         if(parid==undefined){
                             _self.sites = response.data.result.data.firstList;
                             for(let i=0;i<_self.sites.length;i++){
-                                _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')    
+                                _self.sites[i].updateDate = util.fnFormat(_self.sites[i].updateDate,'yyyy-MM-dd')
                             }
                             _self.backstart=1
                         }else{
                             _self.sites = response.data.result.data.result
                         }
-                            
-                            
+
+
 //										_self.parentId = response.data.result.data.result[0].parentId
                     }
                 }).catch(function(error) {
@@ -351,7 +351,7 @@ export default {
                     "fileType":_self.fileshares[i].fileType
                 })
 							if(i==(_self.fileshares.length-1)){
-								 
+
 								appApi.setSelectData(param);
 							}
             }
@@ -501,10 +501,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .txt{
         border-bottom:1px solid #ccc;
-        padding-left:10px 15px; 
+        padding-left:10px 15px;
         margin-left:11px
     }
 </style>

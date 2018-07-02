@@ -404,7 +404,7 @@ export default {
 	},
 	project(submenu){
 		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:2,memberType:2}})
-	},	
+	},
 	Office(submenu){
 		this.$router.push({path:'/static/newwebstatic/add_style.html',query:{projectSn:this.projects[submenu].serialNum,dataType:1,memberType:2,roomId:this.projects[submenu].roomId}})
 	},
@@ -438,7 +438,7 @@ export default {
 
 </script>
 
-<style scoped> 
+<style type="text/css" scoped>
 	@import "../../assets/css/common/style.less";
 	.hide{
 		display: none

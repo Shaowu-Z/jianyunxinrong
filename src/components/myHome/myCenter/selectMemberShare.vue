@@ -193,7 +193,7 @@
 				</div>
 		        <!--完成弹出的弹框-->
 			</div>
-		
+
 			<!--<div id="member_div2" style="display: none;">
 				<ul class="mui-table-view eg-table-view eg-detail-list">
 					<li class="mui-table-view-cell mui-input-row">
@@ -220,7 +220,7 @@
 						群类型<span class="mui-badge mui-badge-inverted">普通群</span>
 					</li>
 				</ul>
-		
+
 				<div class="fixed-bottom">
 					<div id="toastBtn" class="mui-table mui-text-center">
 						<div class="mui-table-cell"><button onclick="createGroup()" type="button" class="mui-btn mui-btn-primary">完成创建</button></div>
@@ -457,7 +457,7 @@
 		<div class="mui-popup mui-popup-in" id ="send_collect" style="display:none;">
 		    <div class="send-box">
 		        <div class="send-title">发送给：</div>
-		
+
 		        <!--<div class="oa-contact-cell mui-table">
 		            <div class="oa-contact-avatar mui-table-cell">
 		                <img src="../../static/images/ico_project-sg.jpg">
@@ -489,9 +489,9 @@
 		                    </div>
 		                </div>
 		            </li>
-		
+
 		        </ul>
-		
+
 		        <div class="send-con">
 		            <div class="mui-ellipsis-2 mui-text-left" v-if="types==2">
 						<div class="img-content video-content" v-if="types==2">
@@ -517,7 +517,7 @@
 						{{msg}}的名片
 					</p>
 		        </div>
-		
+
 		        <ul class="mui-table-view input-box">
 		            <li class="mui-table-view-cell mui-input-row">
 		                <input type="text" id="note" placeholder="我想说"/>
@@ -533,7 +533,7 @@
 </template>
 
 <script>
-	
+
 	var userId = "10632";
 	export default {
 	  	data () {
@@ -556,7 +556,7 @@
 				selArr:[],
 				selDept:[],
 				types:0,
-				
+
 	    	}
 	    },
 	    created(){
@@ -574,7 +574,7 @@
 					console.info(error);
 				});
 	        },200);
-			
+
 			setTimeout(function(){
 	        	_self.$http.post("/concats_api/query_group_list?queryType=0", {}).then(function (response) {
 	//				console.log(response.data.result)
@@ -583,7 +583,7 @@
 					console.info(error);
 				});
 	        },400);
-	        
+
 	        setTimeout(function(){
 	        	_self.$http.post("/concats_api/query_group_list?queryType=1",{}).then(function (response) {
 					_self.$data.groupChat2 = response.data.result;
@@ -592,7 +592,7 @@
 					console.info(error);
 				});
 	        },600);
-			
+
 			var param = new FormData();
 			param.append("userId", "");
 			setTimeout(function(){
@@ -725,7 +725,7 @@
 //	                        },200);
 //	                    }
 //	                    setTimeout(st, 500);
-//	
+//
 //	                }
 //					/*window.appApi.transpondSetData(JSON.parse(jsonStr))*/
 //	        	},1500);
@@ -737,7 +737,7 @@
 						newArrs[i] = new Array();
 					}
 					for (var j = 0; j < friendArray.length; j++) {
-			
+
 						var f = friendArray[j].nameInitials.toUpperCase();
 						var headerImage = !friendArray[j].avatar || friendArray[j].avatar == "" ? getUrl() + "/static/images/60x60.gif" : friendArray[j].avatar;
 						var obj = {
@@ -860,7 +860,7 @@
 								}
 								newArrs[15][newArrs[15].length] = obj;
 								break;
-			
+
 							case 'Q' :
 								obj['first'] = 'Q';
 								if (newArrs[16].length == 0) {
@@ -937,7 +937,7 @@
 									obj['isp'] = 1;
 								}
 								newArrs[26][newArrs[26].length] = obj;
-			
+
 						}
 					}
 					return newArrs;
@@ -949,5 +949,5 @@
 	}
 </script>
 
-<style>
+<style type="text/css">
 </style>

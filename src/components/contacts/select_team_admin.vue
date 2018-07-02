@@ -26,7 +26,7 @@
         </section>
         <div :class="{'mui-backdrop mui-active' : show == true}" @click="showhide"></div>
         <div id="popover-more" class="mui-popover top-menu" :class="{'show' : this.show === true}">
-            <div class="mui-popover-arrow" style="left: 154px;"></div>  
+            <div class="mui-popover-arrow" style="left: 154px;"></div>
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell"><a @click="add"><span class="mui-icon iconfont icon-piliang-add"></span>批量增加管理员</a>
                 </li>
@@ -86,7 +86,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .show{
         opacity: 1!important;
         display: block;

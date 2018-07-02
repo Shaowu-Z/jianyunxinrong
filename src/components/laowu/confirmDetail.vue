@@ -358,8 +358,8 @@ export default {
       laowu_confirm._self = this;
       laowu_confirm.initVue();
       laowu_confirm.initData();
-     
-    
+
+
   },
  methods: {
    selectStarDetail:function(v1,v2){
@@ -372,7 +372,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 .trend-list:before {
   top: 15px;
   height: calc(100% - 15px);

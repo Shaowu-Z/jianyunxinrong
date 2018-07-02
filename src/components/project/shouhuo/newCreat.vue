@@ -53,7 +53,7 @@
 								<li class="mui-table-view-cell mui-input-row">
 									<label>到货日期</label>
 									<input type="text" name="form.MissionStartDate" v-model="form.MissionStartDate" @click="danjuApi.openPicker" readonly="readonly" placeholder="请选择">
-                                    <mt-datetime-picker  ref="picker"  
+                                    <mt-datetime-picker  ref="picker"
                                       v-model="pickerVisible"
                                       type="date"
                                       year-format="{value} 年"
@@ -61,7 +61,7 @@
                                       date-format="{value} 日"
                                       @confirm="danjuApi.handleConfirm"
                                       >
-  
+
                                     </mt-datetime-picker>
 								</li>
 								<li class="mui-table-view-cell mui-input-row">
@@ -732,7 +732,7 @@ export default {
 						$("#excelFile").click();
 					},
 					/**
-					 * 选择单位  
+					 * 选择单位
 					 * @param {Object} item 清单对象
 					 */
 					selectdUnit: function(item) {
@@ -903,10 +903,10 @@ export default {
 					selectDate: function() {
 						var _self = this
 						// var dtpicker = new mui.DtPicker({
-						// 	type: "date", //设置日历初始视图模式 
-						// 	beginDate: new Date(2015, 04, 25), //设置开始日期 
-						// 	endDate: new Date(2016, 04, 25), //设置结束日期 
-						// 	labels: ['年', '月', '日'], //设置默认标签区域提示语 
+						// 	type: "date", //设置日历初始视图模式
+						// 	beginDate: new Date(2015, 04, 25), //设置开始日期
+						// 	endDate: new Date(2016, 04, 25), //设置结束日期
+						// 	labels: ['年', '月', '日'], //设置默认标签区域提示语
 						// })
 						// dtpicker.show(function(e) {
 						// 	_self.form.MissionStartDate = e.value
@@ -951,7 +951,7 @@ export default {
 							}
 							//							else if(this.danjia == '') {
 							//								isCue = false
-							//							} 
+							//							}
 							else if(this.shuliang == '') {
 								isCue = false
 								isname = "数量"
@@ -996,7 +996,7 @@ export default {
 							userName: decodeURI(_self.username),
 							userID: _self.userid,
 							dateShenqing: _self.fashengDate + " " +
-								_self.nowtime, 
+								_self.nowtime,
 							dateFasheng: _self.form.MissionStartDate + " " + "00:00:00",
 							projectName: _self.projectName,
 							projectSN: _self.projectSn,
@@ -1071,7 +1071,7 @@ export default {
 													"|合计金额=" +
 													_self.money + "元",
 												"fileCount": "0",
-												"url": 
+												"url":
 													'/static/newwebstatic/shouhuo/transfer.html?id=' + response.data.result.id + "&formroomimid=" + _self.currRoomImId + "&fromcurrRoomName=" + _self.currRoomClassName,
 												"colorString": "",
 												"todoViewableMember": "0",
@@ -1102,7 +1102,7 @@ export default {
                                                     tipApi.success("提交成功",2,function(){
                                                         appApi.refreshData(2);
                                                     })
-                                                    
+
 													// ludan("提交成功", 3, 2, function() {
                                                     //     appApi.refreshData(2);
 													// 	/*window.appApi.closeNewWindow()*/
@@ -1162,7 +1162,7 @@ export default {
 						var _self = this
 						var file = document.getElementById(event.target.id).files;
 						var zrid = document.getElementById(event.target.id).getAttribute("id")
-						var url =  "/api/sass_api/upload_file";
+						var url =  "/sass_api/upload_file";
 						var form = new FormData();
 						var forimg = []
 						var forfile = []
@@ -1338,7 +1338,7 @@ export default {
 				},
 }
 </script>
-<style>
+<style type="text/css">
 
 .mui-fullscreen{
     overflow: hidden;

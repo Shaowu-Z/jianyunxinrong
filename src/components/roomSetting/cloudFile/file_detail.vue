@@ -34,7 +34,7 @@
                 </li>
                 <li class="mui-table-view-cell">
                     <div v-if="curInfo.projectId == null || curInfo.projectId == undefined || curInfo.projectId == ''">
-                        <div class="mui-navigate-right text" @click="openDirMini()">    
+                        <div class="mui-navigate-right text" @click="openDirMini()">
                             文件路径
                             <span class="mui-badge mui-badge-inverted textspan" v-text="curInfo.pathStr">
                         </span>
@@ -188,10 +188,10 @@ export default {
 			_self.showEditBox = false;
 		},
 	}
-}   
+}
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .textspan{
         display: inline-block;
         width: 74%;

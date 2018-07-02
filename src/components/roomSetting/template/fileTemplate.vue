@@ -24,7 +24,7 @@
 											<h4 class="oa-contact-name"><span v-text="obj.name"></span></h4>
 											<p class="oa-contact-email text"><span>{{obj.updateDate}}</span><span v-text="obj.size"></span></p>
 										</div>
-									</div>	
+									</div>
 								</a>
 							</li>
 						</ul>
@@ -514,7 +514,7 @@ export default {
 				for(let i=0;i<_self.firstList.length;i++){
 					_self.firstList[i].updateDate = util.fnFormat(_self.firstList[i].updateDate,'yyyy-MM-dd')
 				}
-				
+
 				console.log(rs.data.firstList)
 				_self.loadStatus = true;
 			} else {
@@ -1195,7 +1195,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1325,7 +1325,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -2248,6 +2248,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

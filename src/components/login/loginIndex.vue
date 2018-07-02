@@ -68,7 +68,7 @@ export default {
         regParams:{
             certCode:"",
             certType:0,
-            pwd:"", 
+            pwd:"",
             eventId:"",
             captcha:""
         }
@@ -87,7 +87,7 @@ export default {
     },500)
     return deviceInfo;*/
      this.loginParams.deviceInfo=appApi.getDeviceInfo()
-     
+
     // return appApi.getDeviceInfo();
     //return {deviceCode:"111111111",deviceName:"h5",deviceModel:"andriod 8",deviceType:1,osVersion:"8.0.0",osType:0}
 // }
@@ -129,10 +129,10 @@ export default {
                         } catch (e) {
                             console.info("出现异常(继续运行代码):" + e);
                         }
-                        
+
 
                     // _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});
-                    
+
                      window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
                     // window.appApi.goHome('/myHome')
                 }else if(rs.code == 1002){
@@ -167,7 +167,7 @@ export default {
             tipApi.success("正在授权...")
             window.appApi.openLogin(type == 4 ? 0:1);
             window.appApi.callBackFun = function (callFlag, CONTENT) {
-                 
+
                     if (callFlag == appApi.callBackFlag.QQ_WX_LOGIN) {
                         tipApi.close("success")
                     }
@@ -322,7 +322,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     @import '../../assets/css/common/style.less';
     html,
     body {

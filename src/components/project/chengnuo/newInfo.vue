@@ -71,7 +71,7 @@
 					</div>
 				</div>-->
 				<!--<div v-if="value.confirmStatus==1">
-					 <img class="zhuangtai" src="../../images/approval-by.png" /> 
+					 <img class="zhuangtai" src="../../images/approval-by.png" />
 				</div>
 			 </template> -->-->
 			<div v-if="confirm==2">
@@ -184,7 +184,7 @@
 											<img  class="logo" v-bind:src="value.thumbnailurl">
 											<!-- <div class="bg-company" v-lazy:background-image="imgIcon"></div>  -->
 											<!--<img v-bind:src="n.thumbnailurl">-->
-										</div> 
+										</div>
 									 </li>
 								<!--</template> -->
 							</ul>
@@ -234,7 +234,7 @@
 											<div class="title"><span v-text="content.userName"></span><span class="txt-statue">提交</span><span class="secondary mui-pull-right" v-text='(new Date(timeshenqing)).Format("MM.dd hh:mm")'></span></div>
 											<div class="secondary"><span v-text="fromRoomClass"></span>&nbsp;&nbsp;<span class="txt-statue" v-text="fromRoomClassname"></span></div>
 										</dd> -->
-									<!-- </dl>--> 
+									<!-- </dl>-->
 
 									<!--判断时候显示签收日志-->
 									<!--v-for="n in jieshou"
@@ -300,7 +300,7 @@
 																</div>
 																<div v-for="(n,index) in 5-Number(item.score)" :key="index">
 																	<i class="ystar_3"></i>
-																</div>	
+																</div>
 																<!--<i class="ystar_1"></i>
 																<i class="ystar_1"></i>
 																<i class="ystar_1"></i>
@@ -401,7 +401,7 @@ import util from "../../../playform/util.js";
 import pswipe from "../js/photoSwipe";
 import danjuApi from "../js/danjuAPi.js";
 export default {
-    
+
     data(){
         return{
             util:util,
@@ -480,7 +480,7 @@ export default {
 								if(content.dateChengnuo!=null){
 									_self.dateChengnuo = content.dateChengnuo.split(" ")[0]
 								}
-								
+
 								_self.type = content.type
 								_self.jieshou = result.flowList
 								//判断承诺类型  确认评价推送方
@@ -495,11 +495,11 @@ export default {
 								}else{
 									_self.acceptid=content.personDistributeID
 								}
-								
+
 								//								console.log(_self.sites)
 								_self.content = JSON.parse(response.data.result.contentJson)
 								_self.noral = JSON.parse(response.data.result.noralJson)
-								
+
 								_self.creatorId = data.creatorId
 								//头像 ，标题，业务，日期，详细说明
 								_self.creatorpic = data.creatorAvatar
@@ -516,8 +516,8 @@ export default {
 								}else{
 									_self.tuititle=noral.tablefields.personAccept+"退回与"+noral.tablefields.personDistribute+'的双向承诺'
 								}
-								
-								
+
+
 								content.beizhu = content.beizhu.replace(/#.%#/g, "\n");
 								_self.beizhu = content.beizhu
 								//接受方
@@ -525,7 +525,7 @@ export default {
 								//发送方
 								_self.fromRoomClass = noral.curRoomName
 								_self.fromRoomClassname=noral.ludancompanyName
-								_self.fromRoomname = noral.tablefields.companySaleName 
+								_self.fromRoomname = noral.tablefields.companySaleName
 								_self.fromroomImid = noral.currRoomImId
 								_self.fromuserId = noral.table.userId
 								_self.tuifromcurrRoomName=noral.curRoomName
@@ -690,7 +690,7 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 .mui-content {
   background: #fff;
   text-align: left;

@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
   @import '../../assets/css/myHome/style.css';
   @import '../../assets/css/common/common.less';
   .mycenter-content .myhead{
@@ -146,7 +146,7 @@
 					</div>
 				</a>
 			</li>
-		</ul> 
+		</ul>
 		<div class="singlebox" @click="collect">
 			<a class="mui-navigate-right" >
 				<span class="my-list-icon label-shoucang"></span>

@@ -82,11 +82,11 @@ export default {
     },
     methods: {
         saveSearchHistory:function (keyword) {
-            
+
             var h = localStorage.getItem(this.HISTORY_KEY);
             if(h){
                 var j = JSON.parse(h);
-                
+
                 if(j.hasOwnProperty("keywords")){
                     console.info("save keyword success:" + keyword);
                     console.log(j.keywords[0])
@@ -198,6 +198,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 
 </style>

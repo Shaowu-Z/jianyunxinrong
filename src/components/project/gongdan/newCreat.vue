@@ -222,7 +222,7 @@ export default {
 						reponseId: undefined,
 						attachmentIds:'',
 						excelok:'',
-						
+
 						cfgid:this.$route.query.cfgid,
 						projectName: this.$route.query.projectName,
 						projectSn: this.$route.query.projectSn,
@@ -235,7 +235,7 @@ export default {
                         imgid:[],
                         fujianid:[]
 
-        }               
+        }
     },
     created: function() {
         danjuApi.vue = this;
@@ -243,7 +243,7 @@ export default {
 						var _self = this;
 						if(this.$route.query.id != undefined) {
 							this.informations()
-						} 
+						}
 						_self.getnews()
 						var getTime = new Date()
 						var nowyear = getTime.getUTCFullYear()
@@ -273,7 +273,7 @@ export default {
 //						_self.getHt()
                     },
                     methods: {
-						
+
 						//退回加载数据
 						informations: function() {
 						var _self = this
@@ -314,7 +314,7 @@ export default {
 								_self.tuisongimid = norl.toImid
 								_self.companyBuyRoomID=norl.tablefields.companySaleRoomID,
 								_self.companyBuyClassName=norl.tablefields.companyBuyRoomClassName,
-								
+
 								_self.companyBuyRoomID=norl.tablefields.companySaleRoomID,
 								_self.companyBuyClassName=norl.tablefields.companyBuyRoomClassName,
 								_self.isRoomId=norl.tablefields.companyBuyRoomID,
@@ -323,7 +323,7 @@ export default {
 								_self.companySaleRoomID=norl.tablefields.companySaleRoomID,
 								_self.companySaleName=norl.tablefields.companySaleName,
 								_self.companySaleID=norl.tablefields.companySaleID,
-								
+
 								_self.projectName = norl.tablefields.projectName
 								_self.projectSN = norl.tablefields.projectSN
 								_self.projectSn = norl.table.projectid
@@ -356,7 +356,7 @@ export default {
 						}
 					},
 						/**
-						 * 选择单位  
+						 * 选择单位
 						 * @param {Object} item 清单对象
 						 */
 						selectdUnit: function(item) {
@@ -422,7 +422,7 @@ export default {
 						showSelectdFile: function() {
 							$("#excelFile").click();
 						},
-						
+
 
 
 						//excel表格解析
@@ -495,8 +495,8 @@ export default {
 
 							// 以二进制方式打开文件
 								fileReader.readAsBinaryString(files[0]);
-								
-							
+
+
 						} else {
 							// layer.close(loading("解析中"))
 							tipApi.closeAll()
@@ -569,7 +569,7 @@ export default {
 							} else {
 								fjid = _self.imgid.toString() + "," + _self.fujianid.toString()
 							}
-							
+
 							$.each(_self.tabs, function() {
 								this.shuliang = Number(this.shuliang)
 								this.withShuliang = 0
@@ -634,7 +634,7 @@ export default {
                                         // layer.close(ludan("保存中",0,1))
                                         tipApi.success("保存成功", 2)
 										// ludan("保存成功", 2, 2)
-										
+
 									}
 								} else {
 									alert("推送失败")
@@ -927,7 +927,7 @@ export default {
 
 
 </script>
-<style scoped>
+<style type="text/css" scoped>
 #one{
     color: #777;
 }

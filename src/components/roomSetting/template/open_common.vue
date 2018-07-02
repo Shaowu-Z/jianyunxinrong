@@ -36,7 +36,7 @@
                 <div class="mui-scroll">
 					<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :max-mistance="50">
                     <div id="js-dish-con" class="cloud-content">
-						
+
                         <!--搜索入口-->
                         <div class="cloud-search">
                             <a class="search-inner" href="javascript:;" @click="doSearch()"><span class="mui-icon mui-icon-search"></span>搜索</a>
@@ -568,7 +568,7 @@ export default {
 				console.log(err);
 			})
 		}
-		
+
 		var pageParams = _self.pageParams;
 		pageParams.nodeId = this.$route.query.id
 		pageParams.projectId = this.$route.query.projectSN
@@ -624,7 +624,7 @@ export default {
 				_self.status = 1;
 			}).catch(function(error) {
 				console.log(error);
-			});	
+			});
 		},
 		loadTop () {
 			var _self = this;
@@ -1347,7 +1347,7 @@ export default {
 						if(navigator.userAgent.match(/iphone/i) || navigator.userAgent.match(/ipad/i)) {
 							//                  console.log('iphone');
 							//alert(expectWidth + ',' + expectHeight);
-							//如果方向角不为1，都需要进行旋转 
+							//如果方向角不为1，都需要进行旋转
 							if(Orientation != "" && Orientation != 6) {
 								//                      alert('旋转处理');
 								switch(Orientation) {
@@ -1477,7 +1477,7 @@ export default {
 				step++;
 				//旋转到原位置，即超过最大值
 				step > max_step && (step = min_step);
-			} 
+			}
 			if(direction == 'left') {
 				step--;
 				step < min_step && (step = max_step);
@@ -2421,7 +2421,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 .mui-pull-top-pocket {
 			top: 0 !important;
 		}

@@ -42,7 +42,7 @@
                                     <div style="width:48%;float:left">
                                         <data-bar :title="returntitle" :datanow='startDate'  @datatoParent="childValue"></data-bar>
                                     </div>
-                                    
+
 									<!-- <input class="f-date" type="text" value="" readonly="readonly" placeholder="起始日期" @click="selectDate('start')" v-model="startDate" /> -->
 									<div class="data-w">-</div>
                                     <div style="width:48%;float:left">
@@ -242,7 +242,7 @@ export default {
     dataBar
   },
   data() {
-    
+
     return {
       startime: "",
       danjuApi: danjuApi,
@@ -1370,7 +1370,7 @@ export default {
   }
 };
 </script>
-<style>
+<style type="text/css">
 .mui-title {
   font-size: 17px;
 }

@@ -6,13 +6,13 @@
 			<span class="mui-icon mui-icon-back"></span>返回
 		</button>
 	</header>
-	
+
 	<section id="" class="mui-content">
 		<!-- <div id="pullrefresh" class="mui-content"  style="padding-top: 44px">
 			<div class="mui-scroll"> -->
 				<mt-loadmore v-if="list.length>0" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
 		  			<div  v-for="(obj,index) in list" :key="index">
-						<div  v-if="obj.type == 1" class="module01 openItem" :data-id="obj.productId" :data-type="obj.type" 
+						<div  v-if="obj.type == 1" class="module01 openItem" :data-id="obj.productId" :data-type="obj.type"
 							@touchstart="gtouchstart($event)" @touchmove="gtouchmove($event)" @touchend="gtouchend($event)">
 							<!--材料收藏-->
 							<div class="module01-head header-media">
@@ -44,7 +44,7 @@
 						</div>
 						<div v-else-if="obj.type == 3" class="module01 openItem" :data-id="obj.dishId" :data-type="obj.type"
 							:data-status="obj.status" :data-filename="obj.dishName" :data-url="obj.dishUrl"
-							:data-length="obj.dishSize" :data-thumb="obj.dishImg" 
+							:data-length="obj.dishSize" :data-thumb="obj.dishImg"
 							@touchstart="gtouchstart($event)" @touchmove="gtouchmove($event)" @touchend="gtouchend($event)">
 							<!--云盘收藏-->
 							<div class="mui-card-content">
@@ -90,7 +90,7 @@
 							:data-url="obj.url" :data-msgType="obj.msgType" :data-thumb="obj.thumb"
 							:data-msg="obj.msg" :data-addr="obj.addr" :data-lat="obj.lat"
 							:data-lng="obj.lng" :data-filename="obj.filename"
-							:data-addTime="obj.addTime" :data-length="obj.length" 
+							:data-addTime="obj.addTime" :data-length="obj.length"
 							@touchstart="gtouchstart($event)" @touchmove="gtouchmove($event)" @touchend="gtouchend($event)">
 							<!--消息收藏-->
 							<!--消息文字收藏-->
@@ -265,7 +265,7 @@
 		</div>
 		<!--遮罩层-->
 		<div class="mui-backdrop" v-if="!isSendCollect" id="backdrops" style="display:none;z-index: 999;background-color: rgba(0,0,0,.3)"></div>
-	
+
 		<!--遮罩层-->
 		<div class="mui-backdrop" v-if="isSendCollect" id="backdrop" style="display:none;z-index: 999;background-color: rgba(0,0,0,.3)"></div>
 		<!--长按收藏弹框-->
@@ -279,7 +279,7 @@
 		<div class="mui-popup mui-popup-in" v-if="isSendCollect" id="send_collect" style="display:none;" >
 			<div class="send-box">
 				<div class="send-title">发送给：</div>
-	
+
 				<div class="oa-contact-cell mui-table">
 					<div class="oa-contact-avatar mui-table-cell">
 						<img v-bind:src="message.img">
@@ -288,7 +288,7 @@
 						<h4 class="oa-contact-name" v-text="message.name"></h4>
 					</div>
 				</div>
-	
+
 				<div class="send-con" v-if="type==5">
 					<div class="mui-ellipsis-2 mui-text-left" >
 						<div class="img-content video-content">
@@ -398,20 +398,20 @@
 			    }
 			    return false;
 			}
-			
+
 			$("#backdrops").on("tap",function () {
 				if(this.style.display=="block"){
 			        this.style.display = "none"
 			        document.getElementById("changan_collect").style.display = "none";
 				}
 			 })
-			
-			
+
+
 			function closeMyCollect() {
 			    window.appApi.closeNewWindow();
 			}
 		},
-		created() {		
+		created() {
 	        /*alert("this.$route.query.type:"+this.$route.query.type+",sendId:"+sendId);*/
 			var _self = this;
 	        if(this.$route.query.sendType!=null&&this.$route.query.sendType!=''&&this.$route.query.sendType!=undefined){
@@ -442,7 +442,7 @@
 	                } else {
 	                    Toast("系统出了点小状况，请稍后重新发送");
 	                }
-	
+
 	                document.getElementById("send_collect").style.display = "none";
 	                document.getElementById("backdrop").style.display = "none";
 	            }).catch(function (error) {
@@ -466,7 +466,7 @@
 	         size//大小
 	         */
 			sendMessageNew: function (toImId,toAvatarUrl,toNickName,chatType,types,lat,lng,addr,msg,filename,url,size) {
-	
+
 	            //拼接发送格式
 	            var data ="{'toImId': "+"'" + toImId + "',"
 	                +"'toAvatarUrl':"+ "'" + toAvatarUrl + "',"
@@ -479,9 +479,9 @@
 	                    +"'locationAddress':"+ "'" + addr + "'}";
 	            }
 	            if(types==4){
-	
+
 	                data = data+",'text':"+ "'" + msg + "'}"
-	
+
 	            }
 	            if(types==1||types==2||types==3){
 	                data = data+
@@ -491,8 +491,8 @@
 	            }
 	            var json = eval('(' + data + ')');
 	            /*alert(JSON.stringify(json))*/
-	
-	
+
+
 	            window.appApi.sendCollection(JSON.stringify(json));
 	        },
 	        getSendMessage: function () {
@@ -543,7 +543,7 @@
 	            for(var i=0;i<els.length;i++){
 	                els[i].play();
 	            }
-	
+
 	        },
 			loadData: function () {
 				var _self = this;
@@ -786,7 +786,7 @@
 	            if(suffix && suffix.indexOf(".") > 0) {
 	                suffix = suffix.substring(suffix.lastIndexOf("."), suffix.length);
 	            }
-	
+
 	            switch(suffix) {
 	                case ".txt":
 	                    clazz += "txt";
@@ -1202,7 +1202,7 @@
 							}
 						})
 					});
-			        
+
 			    }
 			    document.getElementById("backdrops").onclick=function() {
 			    	document.getElementById("backdrops").style.display="none";
@@ -1236,7 +1236,7 @@
 				var branchs = branch>10?branch:"0"+branch;
 				var seconds = second>10?second:"0"+second;
 				var times= branchs+":"+seconds
-	
+
 				return times;
 			},
 			formDate: function (timestamps) {
@@ -1253,16 +1253,16 @@
 				hours = Math.floor(interval / (3600 * 1000)); //相差小时数
 				minutes = Math.floor(interval / (60 * 1000)); //相差分钟
 				seconds = Math.floor(interval / 1000); //相差秒数
-	
+
 				var adjustedYear = originalTime.getFullYear(),
 					adjustedMonth = formatNumber((originalTime.getMonth() + 1)),
 					adjustedDate = formatNumber(originalTime.getDate()),
 					adjustedHours = formatNumber(originalTime.getHours()),
 					adjustedMinutes = formatNumber(originalTime.getMinutes()),
 					adjustedSeconds = formatNumber(originalTime.getSeconds());
-	
+
 				var nowTime = new Date;
-	
+
 				if(originalTime.getFullYear() == nowTime.getFullYear() && originalTime.getMonth() == nowTime.getMonth() && originalTime.getDate() == nowTime.getDate()) {
 					if(seconds < 60) {
 						timeHtml = '刚刚';
@@ -1275,11 +1275,11 @@
 					timeHtml = '昨天'
 				} else {
 					var yearHtml = '';
-	
+
 					/*if(adjustedYear != (new Date()).getFullYear()) {
 						yearHtml = adjustedYear + '年'
 					}*/
-	
+
 					timeHtml += adjustedYear + '年'+
 						adjustedMonth + '月' +
 						adjustedDate + '日'/* +
@@ -1302,6 +1302,6 @@
 
 </script>
 
-<style>
+<style type="text/css">
 	@import "../../../assets/css/common/mint.css";
 </style>

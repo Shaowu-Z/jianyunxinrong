@@ -258,7 +258,7 @@ export default {
             }).catch(function (error) {
                 console.info(error);
             });
-           
+
         },
         queryMember(thisObj,requestUrl,param){
             $("#zm_id").hide();//
@@ -390,16 +390,16 @@ export default {
         }
     },
     // mounted(){
-    //     
+    //
     //     //type -- :1:团队部门主页-好友中批量添加,2:团队部门主页-批量转移，3:团队部门主页-批量删除，4:部门信息页-好友中批量添加:
     //     // 5：部门信息页-部门成员中批量添加，6:部门信息页-批量转移成员，7：部门信息页-批量删除成员,8.新增管理员，9.删除管理员
     //     //标题和ID设置
     //     setTitleAndId(this.type);
 
- 
+
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 
 </style>

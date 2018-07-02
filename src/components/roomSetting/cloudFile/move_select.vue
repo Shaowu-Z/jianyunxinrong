@@ -302,7 +302,7 @@ export default {
 			var _self = this;
             var arrs = _self.moveParams.batchIds.split(",");
             console.log(id)
-			if(arrs.indexOf(id) != -1){ 
+			if(arrs.indexOf(id) != -1){
                 // msg("无法移动到此文件夹");
                 Toast({
                     message: "无法移动到此文件夹",
@@ -406,6 +406,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 
 </style>

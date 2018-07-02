@@ -16,7 +16,7 @@
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
 					<div v-for="(items,index1) in phones" :key="index1">
-						
+
 					</div>
 				</div>
 			</div>
@@ -120,14 +120,14 @@ export default {
 			warm('登录失败，请重新登录!');
 			}
 			}*/
-		}	
+		}
 	},
 	methods: {
 		goBack(){
 			this.$router.go(-1)
 		},
 		addFriends(index1, index2) {
-			
+
 			var phoneMap = this.phones[index1][index2];
             var addVo = {cellPhone: phoneMap.phone, receivedUserName: phoneMap.name};
             phoneMap.is_add= !(phoneMap.is_add);
@@ -186,11 +186,11 @@ export default {
 	// mounted(){
 
 	// },
-	
+
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 	@import '../../assets/css/common/mui.indexedList.css';
 	.mui-indexed-lists{
 		position: relative;
@@ -201,6 +201,6 @@ export default {
 		cursor: default;
 	}
 	.showhide{
-		display: block	
+		display: block
 	}
 </style>

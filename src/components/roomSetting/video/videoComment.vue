@@ -337,7 +337,7 @@ export default {
 			    document.getElementById("commentIpt").focus();
 //			    var commentIptq=document.getElementById("commentIpt");
 //				     commentIptq.addEventListener('touchstart',function(){
-//				        commentIptq.focus();                                       
+//				        commentIptq.focus();
 //				})
 			    this.po_Last_Div(document.getElementById("commentIpt"));
 		    }else{//评论
@@ -350,7 +350,7 @@ export default {
 //			    document.getElementById("commentIpt").focus();
 //			     var commentIptq=document.getElementById("commentIpt");
 //				     commentIptq.addEventListener('touchstart',function(){
-//				        commentIptq.focus();                                       
+//				        commentIptq.focus();
 //				})
 			    this.po_Last_Div(document.getElementById("commentIpt"));
 		    }
@@ -366,14 +366,14 @@ export default {
      		});
 	    	msgText.addEventListener('tap',function () {
 				var target=this
-				
+
 			setTimeout(function(){
 				target.scrollIntoView(true)
 			},100)
                 // 光标移动到最后
                 msgTextLastPos(msgText);
                 // 获得输入框键盘焦点
-                msgTextFocus(msgText);          
+                msgTextFocus(msgText);
             })
 	    	// 获得输入框键盘焦点
             var msgTextFocus = function(obj){
@@ -410,7 +410,7 @@ export default {
 		    _data.send_content = document.getElementById("commentIpt").innerText;
 		    var chat=document.getElementsByClassName("chat-btn")[0];
 				     chat.addEventListener('touchstart',function(){
-				        commentIptq.blur();                                       
+				        commentIptq.blur();
 				})
 		    if(!_data.send_content || _data.send_content==""){
 				// msg("评论内容不能为空！");
@@ -457,14 +457,14 @@ export default {
 	    format_Date: function (val) {//格式化时间
 		    if(!val){
 		    	return "";
-		    }   
-		    return util.fnFormat(val,"yyyy-MM-dd hh:mm:ss ") 
+		    }
+		    return util.fnFormat(val,"yyyy-MM-dd hh:mm:ss ")
 	    },
 	    conductData:function (array) {//处理获取的列表数据
 		    for(var i=0; i<array.length; i++){
 			    console.info(array.length);
-			    var s = array[i];  
-			    s.createTime = util.fnFormat(s.createTime,"yyyy-MM-dd hh:mm:ss ") 
+			    var s = array[i];
+			    s.createTime = util.fnFormat(s.createTime,"yyyy-MM-dd hh:mm:ss ")
 			    s.userIcon = imageHost + s.userIcon;
 			    var imgJson= JSON.parse(s.resourcesJ);
 			    if(imgJson && imgJson != "" && imgJson.length > 0) {
@@ -537,7 +537,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     *{
     	-webkit-user-select: auto;
         }
@@ -549,7 +549,7 @@ export default {
         .fixed-bottom.group-chat{
             position: fixed;
             bottom: 0;
-            
+
         }
         .chat-input input{
             width: 100%;
@@ -564,7 +564,7 @@ export default {
         }
         .group-chat .div-textarea{
             min-height: 26px;
-            
+
         }
         .group-chat .chat-btn{
             height: 32px;

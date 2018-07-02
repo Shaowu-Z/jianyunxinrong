@@ -140,7 +140,7 @@ export default {
     _self.createDate = laowu_common.date;
     _self.reqParams.projectId = laowu_common.projectId;
     _self.findroomuserlist(roomId);
-    
+
   },
   methods: {
     findroomuserlist: function(roomId) {
@@ -227,7 +227,7 @@ export default {
     selectUser: function(index) {
       //选择工人
       var _self = this;
-      
+
       setTimeout(function() {
         _self.data.selectIdList = _self.getSelectValcheckBox(index);
         document.getElementById("selectSize").innerHTML =
@@ -322,7 +322,7 @@ export default {
         _self.reqParams.list = _self.data.qufenIdList;
         _self.reqParams.queryTime = _self.createDate;
         _self.$http.post( "/project_work_api/check_user_record_repeat", _self.reqParams  )
-        
+
           .then(function(response) {
             if (response.data.code == 200) {
               var result = response.data.result;
@@ -395,7 +395,7 @@ export default {
     },
     confirm:function () {
 
-        
+
         if(this.data.selectUserList.length<=0){
             msg("请选择工人")
             return;
@@ -417,7 +417,7 @@ export default {
     /**
      * 确认
      */
-    
+
 
 
 //*********移除数组元素******开始**********
@@ -434,14 +434,14 @@ Array.prototype.removeUser = function (val) {
     var index = this.indexOfUser(val);
     if (index > -1) {
         this.splice(index, 1);
-        
+
     }
 };
 
 //*********移除数组元素******结束**********
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 .project {
   position: relative;
   padding: 5px;

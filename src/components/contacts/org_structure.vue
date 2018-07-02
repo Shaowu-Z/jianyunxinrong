@@ -91,7 +91,7 @@ export default {
         return {
             items:[],
             from:'',
-            teamId:'',  
+            teamId:'',
             userId:''
         }
     },
@@ -231,6 +231,6 @@ export default {
 }
 </script>
 
-<style>
+<style type="text/css">
 
 </style>

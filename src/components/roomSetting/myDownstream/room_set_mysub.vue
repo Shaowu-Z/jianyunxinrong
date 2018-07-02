@@ -46,7 +46,7 @@
                 </ul>
             </div>
         </section>
-    </div> 
+    </div>
 </template>
 <script>
 import {getParam} from '../../../playform/common'
@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
     .block{
         display: block!important;
     }

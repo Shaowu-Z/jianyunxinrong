@@ -441,7 +441,7 @@ export default {
 					open_file: function(id) {
 						appApi.openFile( '/sass_api/file/download?id=' + id);
 					},
-					//头像信息	
+					//头像信息
 					lookUserInfo: function(userId) { //查看用户资料
 						window.appApi.openNewWindow(getPagePath() + "/contacts/eg_details.html?userId=" + _self.userId);
 					},
@@ -553,7 +553,7 @@ export default {
 				}
 }
 </script>
-<style scoped>
+<style type="text/css" scoped>
 
 
 .mui-content {

@@ -3,7 +3,7 @@
         <header class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">密码重置</h1>
 	</header>
-	
+
 	<section class="mui-content" id="backpwdform">
 		<div class="register-form">
 			<div class="mui-input-group">
@@ -41,7 +41,7 @@ export default {
         }
     },
     created(){
-        
+
     },
     methods:{
         getcaptcode:function(){
@@ -162,7 +162,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style type="text/css" scoped>
     html,
     body {
         height: 100%;

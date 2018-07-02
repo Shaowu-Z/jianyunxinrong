@@ -112,8 +112,8 @@
 <script>
 
 import project_sign from  "./js/project_sign.js"
-import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js' 
-import tipApi from 	'../../playform/tipApi.js' 
+import {disposeLogImg,disposeLogImgMutil} from '../../playform/common.js'
+import tipApi from 	'../../playform/tipApi.js'
 export default {
     data(){
         return {
@@ -138,7 +138,7 @@ export default {
             img_url:"",//项目图片
             remindTime:"",//提醒期限
             remindName:"",//提醒期限
-            
+
         },
         reqWorkParamsVO:{
             userId:"",
@@ -175,9 +175,9 @@ export default {
 	 project_sign.initData()
 	 tipApi.success("测试",1)
 
-	
-     
-       
+
+
+
     },
      methods:{
         goback(){
@@ -185,21 +185,21 @@ export default {
 		},
 		openImg:function(index,ary){
 			console.log("ary",ary)
-			
+
 			disposeLogImgMutil(index,ary);
 		},
 		delayRemind:function(v1){
 			project_sign.delayRemind(v1)
 		}
-      
+
     },
     mounted(){
-			
+
     }
 }
 </script>
 
-<style scoped>
+<style type="text/css" scoped>
 		.mui-fullscreen {/*大图遮罩*/
 			position: fixed;
 			z-index: 20;
@@ -241,7 +241,7 @@ export default {
 		.sign-btn{
 			padding: 0
 		}
-		
+
 		.statue{
 			width:15px;
 			height:15px;
@@ -253,7 +253,7 @@ export default {
 			background-position:0 -170px
 		}
 		.location-gps p span{display:inline-block;vertical-align:middle;}
-		
+
 	</style>
 
 
