@@ -11,7 +11,7 @@
 	<section class="mui-content" id="phone_list">
 		<div id='list' class="mui-indexed-lists address-list">
 			<div class="mui-indexed-list-search mui-input-row mui-search">
-				<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
+				<input type="search" class="mui-input-clear mui-indexed-list-search-input" id="sosuo" ref="sosuo" placeholder="搜索">
 			</div>
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
@@ -59,13 +59,12 @@
 			</div>
 		</div>
 	</section>
-
   </div>
 </template>
 
 <script>
 import contacts from '../../playform/contacts_comm'
-import { Toast } from 'mint-ui';
+import { Toast,IndexList } from 'mint-ui';
 export default {
 	data(){
 		return{
@@ -73,7 +72,7 @@ export default {
 		}
 	},
 	mounted(){
-		 window.appApi.getContacts();
+		window.appApi.getContacts();
 		let _self = this
 		appApi.callBackFun = function (callFlag, CONTENT) {
 
@@ -96,30 +95,7 @@ export default {
 				}).catch(function (error) {
 					console.info(error);
 				});
-		// let CONTENT = "zhangsan=12321312312,lisi=32132132111"
-		// let resultStr = '12312121211'
-		// this.phones=contacts.convertData(CONTENT, resultStr)
-
-
-
 			}
-			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
-			var result = CONTENT.result;
-			if(result == true){
-			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
-			// console.info('保存用户信息成功！');
-			// warm('保存用户信息成功！');
-			}else{
-			// console.info('保存用户信息失败！');
-			// warm('保存用户信息到本地失败！');
-			}
-			loading('登录成功！正在跳转到主页！');
-			window.appApi.goHome();
-			}else{
-			layer.close(index);
-			warm('登录失败，请重新登录!');
-			}
-			}*/
 		}	
 	},
 	methods: {
@@ -202,5 +178,8 @@ export default {
 	}
 	.showhide{
 		display: block	
+	}
+	.mui-content{
+		width: 100%
 	}
 </style>

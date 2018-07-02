@@ -77,7 +77,7 @@
                     <ul class="mui-table-view">
                         <li class="mui-table-view-cell" @click="Sendout"><a class="text" href="javascript:;"><span class="mui-icon iconfont icon-share"></span>发送名片</a>
                         </li>
-                        <li class="mui-table-view-cell" v-show="items.isFriend==1"><a href="javascript:app.deleteFriend()"><span class="mui-icon iconfont icon-delete"></span>删除好友</a>
+                        <li class="mui-table-view-cell text" v-show="items.isFriend==1" @click="deleteFriend"><a href="javascript:;"><span class="mui-icon iconfont icon-delete"></span>删除好友</a>
                         </li>
                     </ul>
                 </div>
@@ -105,6 +105,7 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
 export default {
     data(){
         return{
@@ -199,18 +200,34 @@ export default {
             this.$router.go(-1)
         },
         deleteFriend: function () {
-            mui('.mui-popover').popover('toggle',document.getElementById("popover-more"));//隐藏右上角菜单
+            let _self = this
+            // $('.mui-popover').popover('toggle',document.getElementById("popover-more"));//隐藏右上角菜单
+            this.show = !this.show
+            var userId = this.$route.query.userId
             layer.open({
                 content: '确定要删除好友关系麽？',
+                item: 1,
                 icon: 1
                 ,btn: ['确认', '取消']
                 ,yes: function(index, layero){
                     var param = {deleteType:"1",friendsUserId:userId};
-                    this.$http.post("/concats_api/delete_friend",param).then(function (response){
-                        remin("好友删除成功!",2);
+                    _self.$http.post("/concats_api/delete_friend",param).then(function (response){
+                        // remin("好友删除成功!",2);
+                        layer.closeAll()
+                        Toast({
+                            message: '好友删除成功!',
+                            position: 'center',
+                            duration: 2000
+                        });
                         window.appApi.closeNewWindow();
                     }).catch(function (error) {
-                        remin("好友删除失败,请联系管理员!",2);
+                        layer.closeAll()
+                        // remin("好友删除失败,请联系管理员!",2);
+                        Toast({
+                            message: '好友删除失败,请联系管理员!',
+                            position: 'center',
+                            duration: 2000
+                        });
                     });
                 }
             });
