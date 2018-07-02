@@ -99,7 +99,7 @@ export default {
             var _this=this
             this.$http.post("/user_api/user_login",{params:this.loginParams},{headers:{'Content-Type':'application/json'}}).then(function (response) {
                 var rs = response.data;
-                console.log(response);
+                console.log("登陆结果",rs.result)
                     Toast({
                         message: response.data.message,
                         position: 'bottom',
@@ -113,9 +113,8 @@ export default {
                     //登录环信
                     window.appApi.loginHXChat(userInfo.imId, userInfo.imPwd, userInfo.userIcon);
                      //保存用户信息
-                    //  alert("保存用户信息"+JSON.stringify(senduserInfo), rs.result.userPwd)
                     // window.appApi.saveUserInfo(JSON.stringify(rs.result.userInfo), rs.result.userPwd);
-                    window.appApi.saveUserInfo(JSON.stringify(senduserInfo), rs.result.userPwd);
+                    window.appApi.saveUserInfo(JSON.stringify(rs.result), rs.result.userPwd);
                       //检测是否有消息需推送(一般第一次登录才会有需要推送的消息)
                     //    window.appApi.goHome('/static/webstatic/mycenter/mycenter.html')
                     //  _this.$router.push({path:'/static/webstatic/mycenter/mycenter.html'});

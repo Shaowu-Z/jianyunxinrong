@@ -662,7 +662,7 @@ export default {
        
   },
   mounted:function(){
-    // this.init();
+   this.init();
   },
   methods:{
      
@@ -731,8 +731,7 @@ export default {
             if(_self.select_member.selectArr.length<1){
                 return;
             }
-            var ary=_self.select_member.selectArr;
-            remove(ary,userId)
+			var ary=_self.select_member.selectArr;
             var userIds="";
             //需要移除当前登陆用户
             if(ary.length>0){
@@ -747,7 +746,7 @@ export default {
                 }
             }
             
-            console.log("当前发生的人员",userIds)
+            console.log("当前发送的人员",userIds)
             return 
 
             if(selectType==3){//发送名片

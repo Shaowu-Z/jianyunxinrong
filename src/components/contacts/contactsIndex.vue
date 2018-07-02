@@ -276,12 +276,7 @@
 </template>
 
 <script>
-// import footerBar from '../common/footerBar'
-// import {findTeamList} from '../../seek'
 export default {
-//   components: {
-// 	footerBar,
-//   },
   data () {
     return {
 	show: false,
@@ -289,7 +284,6 @@ export default {
 	show2: false,
     items:[],
     projects:[],
-    //userInfo:window.appApi.getUserInfo()
 	userInfo:[],
 	Listshow: [],
 	Listshow1: [],
