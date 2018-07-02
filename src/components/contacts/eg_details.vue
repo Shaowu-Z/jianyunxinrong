@@ -5,7 +5,7 @@
                 <span class="mui-icon mui-icon-back"></span>返回
             </button>
             <h1 class="mui-title">详细资料</h1>
-            <a id="menu" class="mui-icon iconfont icon-more mui-pull-right" href="#popover-more"></a>
+            <a id="menu" class="mui-icon iconfont icon-more mui-pull-right" href="javascript:;" @click="showhide"></a>
         </header>
         <section class="mui-content" id="eg_details" style="display: none;">
             <div id="cont_div" style="display: block;">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                <h5 class="mui-content-padded">基础信息</h5>
+                <h5 class="mui-content-padded text">基础信息</h5>
                 <!-- 主体内容--已注册用户的信息列表 -->
                 <ul class="mui-table-view eg-table-view eg-detail-list text" v-show="is_register==1">
                     <li class="mui-table-view-cell hide"><label>团队名称</label><label v-text="items.teamName"></label></li>
@@ -70,12 +70,12 @@
                 <h5 class="mui-content-padded content-added"></h5>
 
 
-
+                <div class="mui-backdrop" style="z-index: 998;" v-show="show"  @click="showhide"></div>
                 <!--右上角的隐藏菜单-->
-                <div id="popover-more" class="mui-popover top-menu">
-                    <div class="mui-popover-arrow"></div>
+                <div id="popover-more" class="mui-popover top-menu" style="opacity:1;right:5px;top:55px;" v-show="show">
+                    <div class="mui-popover-arrow" style="left:168px"></div>
                     <ul class="mui-table-view">
-                        <li class="mui-table-view-cell"><a href="javascript:appApi.openNewWindow(getUrl() + '/static/webstatic/contacts/send_card_list.html?from=1&userId='+userId)"><span class="mui-icon iconfont icon-share"></span>发送名片</a>
+                        <li class="mui-table-view-cell" @click="Sendout"><a class="text" href="javascript:;"><span class="mui-icon iconfont icon-share"></span>发送名片</a>
                         </li>
                         <li class="mui-table-view-cell" v-show="items.isFriend==1"><a href="javascript:app.deleteFriend()"><span class="mui-icon iconfont icon-delete"></span>删除好友</a>
                         </li>
@@ -116,7 +116,8 @@ export default {
             btnText:""//,//按钮的内容
             //userInfo : window.appApi.getUserInfo()
             ,userInfo:{},
-            addClickNum :0
+            addClickNum :0,
+            show:false
         }
     },
     created: function () {
@@ -176,12 +177,21 @@ export default {
         appApi.imgPreview.init();
     },
     methods:{
+        Sendout(){
+            // appApi.openNewWindow(getUrl() + '/static/webstatic/contacts/send_card_list.html?from=1&userId='+userId)
+            this.$router.push({path:'/send_card_list',query:{from:1,userId:this.$route.query.userId}})
+        },
+        showhide(){
+            this.show = !this.show
+        },
         chat() {
+            // alert(this.items.imId)
             var imId = this.items.imId;
             if (appApi.isApp && appApi.isIphoneOs) {//IOS
             
             } else if (appApi.isApp && appApi.isAndroid) {
-                window.webactivity.openChat(imId,app.items.userAvatar,app.items.nickName,1);
+                
+                window.webactivity.openChat(imId,this.items.userAvatar,this.items.nickName,1);
             }
                 appApi.openChat(imId,this.items.userAvatar,this.items.nickName,1);
         },
@@ -196,7 +206,7 @@ export default {
                 ,btn: ['确认', '取消']
                 ,yes: function(index, layero){
                     var param = {deleteType:"1",friendsUserId:userId};
-                    axios.post(getUrl()+"/concats_api/delete_friend",param).then(function (response){
+                    this.$http.post("/concats_api/delete_friend",param).then(function (response){
                         remin("好友删除成功!",2);
                         window.appApi.closeNewWindow();
                     }).catch(function (error) {
@@ -281,5 +291,8 @@ export default {
 <style scoped>
     .text{
         text-align: left
+    }
+    .mui-popover{
+        display: block
     }
 </style>

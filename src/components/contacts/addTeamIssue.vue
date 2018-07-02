@@ -139,10 +139,12 @@ export default {
                 // console.log(document.getElementById("upfile").files[0])
                 // console.log(that.target.files[0])
                 this.fm.issueUrl = imgUrl
+                console.log(that.target.files[0])
                 lrz(that.target.files[0], {
                     width: 800,
                     height: 600
                 }).then(function (rst) {
+                    console.log(rst)
                     this.uploadStatus = true;
                     this.fm["imgData"] = rst.base64;
                     this.fm["width"] = 800;

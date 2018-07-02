@@ -15,6 +15,7 @@
 		<div class="mui-indexed-list-search mui-input-row mui-search">
 			<input type="search"  @keyup="searchUser" v-model="key" class="" placeholder="搜索">
 		</div>
+		
 		<div class="mui-indexed-list-bar">
 			<div class="align-middle">
 				<div v-for="(items,index) in friendsList" :key="index">
@@ -87,37 +88,24 @@ export default {
         },
         searchUser(){
 			var _self = this;
+			_self.friendsList = []
 			console.log(this.key)
             var param = new FormData();
             param.append("userId", "");
             param.append("key", _self.key);
             this.$http.post("/concats_api/find_eg_list", param).then(function (response) {
                 console.info(response.data.result);
-                _self.friendsList = response.data.result
+                _self.friendsList = _self.convertData(response.data.result)
             }).catch(function (error) {
                 console.info(error);
             });
 		},
 		newFriends(){
 			this.$router.push({path: '/newFriends'})
-		}
-    },
-    created(){
-		appApi.hideMenu()
-        var _self = this;
-        var param = new FormData();
-        param.append("userId", "");
-        this.$http.post("/concats_api/find_eg_list",param).then(function (response) {
-            console.info(response.data.result);
-            _self.friendsList = convertData(response.data.result)
-            console.log(_self.friendsList);
-        }).catch(function (error) {
-            console.info(error);
-		});
+		},
 		//转换数据 wyj
-		function convertData (friendArray) {
+		convertData (friendArray) {
 			if (friendArray && friendArray.length > 0) {
-
 				var newArrs = new Array();
 				for (var i = 0; i < 27; i++) {
 					newArrs[i] = new Array();
@@ -325,6 +313,19 @@ export default {
 				return []
 			}
 		}
+    },
+    mounted(){
+		appApi.hideMenu()
+        var _self = this;
+        var param = new FormData();
+        param.append("userId", "");
+        this.$http.post("/concats_api/find_eg_list",param).then(function (response) {
+            console.info(response.data.result);
+            _self.friendsList = _self.convertData(response.data.result)
+            console.log(_self.friendsList);
+        }).catch(function (error) {
+            console.info(error);
+		});
 	},
 }
 </script>

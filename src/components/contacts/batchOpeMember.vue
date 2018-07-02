@@ -5,7 +5,7 @@
             <button id="btn-referrer" class="mui-action-back mui-btn mui-btn-link mui-btn-nav mui-pull-left hide"><span
                     class="mui-icon mui-icon-back"></span>返回
             </button>
-            <button id='done' class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled" onclick="batchOperate()">确定</button>
+            <button id='done' class="mui-btn mui-btn-nav mui-btn-primary mui-pull-right mui-disabled" @click="batchOperate()">确定</button>
         </header>
         <section class="mui-content" id="friend_list">
             <div id='list' class="mui-indexed-list address-list">
@@ -62,7 +62,7 @@ export default {
             //var teamId = window.location.href.split('?')[1].split('=')[2];
             var param = {teamId:this.teamId};
             requestUrl="/concats_api/query_team_members";
-            queryMember(this,requestUrl,param);
+            this.queryMember(this,requestUrl,param);
         }
         if(this.type==4){
             //var teamId = window.location.href.split('?')[1].split('=')[2].split("&")[0];
@@ -75,20 +75,117 @@ export default {
             //var deptId = window.location.href.split('?')[1].split('=')[3];
             var param = {deptId:this.deptId};
             requestUrl = "/concats_api/query_team_members";
-            queryMember(this,requestUrl,param);
+            this.queryMember(this,requestUrl,param);
         }
         if(this.type==8){
             var param = {teamId:this.teamId,queryType:"1"};//查询所有非管理员的成员
             requestUrl = "/concats_api/query_team_members";
-            queryMember(this,requestUrl,param);
+            this.queryMember(this,requestUrl,param);
         }
         if(this.type==9){
             var param = {teamId:this.teamId,queryType:"3"};//查询除自己外的管理员
             requestUrl = "/concats_api/query_team_members";
-            queryMember(this,requestUrl,param);
+            this.queryMember(this,requestUrl,param);
         }
     },
     methods:{
+        batchOperate() {
+            //type -- :1:团队部门主页-好友中批量添加,2:团队部门主页-批量转移，3:团队部门主页-批量删除，4:部门信息页-好友中批量添加:5：部门信息页-部门成员中批量添加，6:部门信息页-批量转移成员，7：部门信息页-批量删除成员
+            //var type = window.location.href.split('?')[1].split('=')[1].split("&")[0];
+            var checkedObj = list.querySelectorAll('input[type="checkbox"]:checked');
+            if(checkedObj== undefined || checkedObj.length<1){
+                return;
+            }
+            if(type==1 || type==4){//添加好友进团队或者部门
+                var newJsonMember = [];
+                //var teamId = 0;
+                var userIds = "";
+
+                for(var i=0; i<checkedObj.length;i++){
+                    /*if(i==checkedObj.length-1){
+                    userIds+=checkedObj[i].value;
+                    }else{
+                    userIds+=checkedObj[i].value+",";
+                    }*/
+                    var indexValue = checkedObj[i].value;
+
+                    var objFriend = newJson[indexValue];//获取选中行的数组数据
+                    if(type==4){//部门添加
+                        //var deptId = window.location.href.split('?')[1].split('=')[3];
+                        //teamId = window.location.href.split('?')[1].split('=')[2].split("&")[0];
+                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:teamId,deptId:deptId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
+                    }else{
+                        //teamId = window.location.href.split('?')[1].split('=')[2];
+                        newJsonMember.push({userId:objFriend.friendsUserId,teamId:teamId,memberName:objFriend.remarksName,phoneNumber:objFriend.cellPhone,memberType:"0",createDate:new Date(),lastUpdateDate:new Date()});
+                    }
+                }
+                console.info(newJsonMember);
+                var newJsonTeamVo = {teamId:teamId,projectTeamMemberTList:newJsonMember};
+                this.$http.post("/concats_api/batch_add_member_f",newJsonTeamVo).then(function (response) {
+                    //_self.$data.items = response.data.result;
+                    loading('批量操作成功！');
+                    window.location.href="../contacts/group_address_m.html?teamId="+teamId;
+                }).catch(function (error) {
+                    console.info(error);
+                    alert("系统异常，请联系管理员!");
+                });
+            }
+
+            var operateUrl = "";
+            var newJsonParam ={};
+            if(type==2 || type==3 || type==5 || type==6 || type==7 || type==8 || type==9){//团队成员操作
+                var memberIds = "";
+                //var checkedObj = list.querySelectorAll('input[type="checkbox"]:checked');
+                for(var i=0; i<checkedObj.length;i++){
+                    /*if(i==checkedObj.length-1){
+                    userIds+=checkedObj[i].value;
+                    }else{
+                    userIds+=checkedObj[i].value+",";
+                    }*/
+                    var indexValue = checkedObj[i].value;
+
+                    var objFriend = newJson[indexValue];//获取选中行的数组数据
+                    if(i==checkedObj.length-1){
+                        memberIds+=objFriend.memberId;
+                    }else{
+                        memberIds+=objFriend.memberId+",";
+                    }
+                }
+
+                if(type==2 || type==6){//批量转移
+                    window.location.href="../contacts/select_group.html?teamId="+teamId+"&deptId="+deptId+"&memberIds="+memberIds;
+                }
+
+                var locationUrl = "../contacts/group_address_m.html?teamId="+teamId;
+                if(type==3 || type==7){//批量删除
+                    operateUrl="/concats_api/delete_member_batch";
+                    newJsonParam={memberIds:memberIds};
+                    locationUrl = "../contacts/group_address_m.html?teamId="+teamId;
+                }
+                if(type==8){
+                    operateUrl="/concats_api/update_team_admin";
+                    newJsonParam={operateType:"1",memberIds:memberIds};//新增管理员
+                    locationUrl = "../contacts/select_team_admin.html?teamId="+teamId;
+                }
+                if(type==9){
+                    operateUrl="/concats_api/update_team_admin";
+                    newJsonParam={operateType:"2",memberIds:memberIds};//删除管理员
+                    locationUrl = "../contacts/select_team_admin.html?teamId="+teamId;
+                }
+
+                console.info(newJsonParam);
+                 this.$http.post(operateUrl,newJsonParam).then(function (response) {
+                    //_self.$data.items = response.data.result;
+                    loading('批量操作成功！');
+                    window.location.href=locationUrl;
+                }).catch(function (error) {
+                    console.info(error);
+                    alert("系统异常，请联系管理员!");
+                });
+            }
+
+
+        },
         queryFriendList(thisObj,requestUrl){
             let _this = this
             var _self = thisObj;
@@ -133,14 +230,22 @@ export default {
                 }
 
                 document.getElementById("strHtml").innerHTML=strHtml;
+                console.log(document.getElementById("strHtml"))
+               $(".mui-checkbox").on("click",function($event){
+                //    console.log($event)
+                //     console.log($event.originalEvent.target.innerHTML)
+                //     console.log($event.originalEvent.target.previousSibling.innerHTML)
+                })
             }).catch(function (error) {
                 console.info(error);
             });
+           
         },
         queryMember(thisObj,requestUrl,param){
             $("#zm_id").hide();//
+            let _this = this
             var _self = thisObj;
-            axios.post(getUrl()+requestUrl,param).then(function (response) {
+             this.$http.post(requestUrl,param).then(function (response) {
                 _self.$data.items = response.data.result;
                 console.info(response.data.result);
 
@@ -161,7 +266,7 @@ export default {
                         userAvatar= getUrl()+"/static/images/60x60.gif";
                     }
 
-                    if(memberType==1 && (type==3 || type==7)){//团队创建人员要做特殊处理
+                    if(memberType==1 && (_this.type==3 || _this.type==7)){//团队创建人员要做特殊处理
                         strHtml+='<li class="mui-table-view-cell mui-checkbox">'+
                                 '<div class="mui-slider-cell">'+
                                 '<div class="oa-contact-cell mui-table">'+
@@ -169,7 +274,7 @@ export default {
                                 '<div class="oa-contact-avatar mui-table-cell"><img src="'+userAvatar+'"></div>'+
                                 '<div class="oa-contact-content mui-table-cell">'+
                                 '<h4 class="oa-contact-name">'+remarksName+'</h4>'+
-                                '<p class="oa-contact-email">'+cellPhone+'</p>'+
+                                '<p class="oa-contact-email text">'+cellPhone+'</p>'+
                                 '<span name="user_id" class="hide">'+memberId+'</span>'+
                                 '</div>'+
                                 '</div>'+
@@ -183,7 +288,7 @@ export default {
                                 '<div class="oa-contact-avatar mui-table-cell"><img src="'+userAvatar+'"></div>'+
                                 '<div class="oa-contact-content mui-table-cell">'+
                                 '<h4 class="oa-contact-name">'+remarksName+'</h4>'+
-                                '<p class="oa-contact-email">'+cellPhone+'</p>'+
+                                '<p class="oa-contact-email text">'+cellPhone+'</p>'+
                                 '<span name="user_id" class="hide">'+memberId+'</span>'+
                                 '</div>'+
                                 '</div>'+
@@ -214,6 +319,9 @@ export default {
                 }
 
                 document.getElementById("strHtml").innerHTML=strHtml;
+                $(".mui-checkbox").addEventListener("click",function(){
+                    alert(5)
+                })
             }).catch(function (error) {
                 console.info(error);
             });

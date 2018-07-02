@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
 export default {
     data(){
         return{
@@ -60,13 +61,28 @@ export default {
         },
         //申请加入
         apply (teamId) {
-            this.$http.post("/project_team_info/send_add_team_News",teamId).then(function(response){
+            let formData = new FormData
+            formData.append('teamId',teamId)
+            let data="{teamId:5666}"
+            var obj=new Object()
+            obj.teamId=teamId
+            this.$http.post("/project_team_info/send_add_team_News",formData).then(function(response){
                 console.log(response);
                 (function success(){
                     if(response.data.code==200||response.data.code==0){
-                        mui.toast("申请成功！")
+                        // mui.toast("申请成功！")
+                        Toast({
+                            message: '申请成功！',
+                            position: 'center',
+                            duration: 1000
+                        });
                     }else if(response.data.code==201){
-                        mui.toast(data.message)
+                        // mui.toast(data.message)
+                        Toast({
+                            message: response.data.message,
+                            position: 'center',
+                            duration: 1000
+                        });
                     }
                 }())
             }).catch(function (error) {
@@ -74,10 +90,13 @@ export default {
 	        });
         },
         onSearch(){
-            let data ={teamName:parseInt(this.$refs.searchStr.value)}
+            console.log(this.$refs.searchStr.value)
+            let formData = new FormData
+            formData.append('teamName',this.$refs.searchStr.value)
+            // let data ={teamName:parseInt(this.$refs.searchStr.value)}
             let _self = this
-            console.log(data);
-            this.$http.post("/project_team_info/search_list",data).then(function(response){
+            // console.log(formData);
+            this.$http.post("/project_team_info/search_list",formData).then(function(response){
                 console.log(response);
                 (function success (){
                     console.log(response.data.code);

@@ -14,7 +14,7 @@
 					<span class="mui-badge mui-badge-inverted">
 						<img class="" @click.stop="disposeLogImg(0,user.smallImg)" v-bind:src ="user.uImg" id="logoImg" />
 					</span>
-					<input type="file" style="width: 80%" id="upfile" accept="image/png,image/gif,image/jpeg" onclick="window.webactivity.setInputType(1);">
+					<input v-on:change="uploadHeadImg" type="file" style="width: 80%" id="upfile" accept="image/png,image/gif,image/jpeg" onclick="window.webactivity.setInputType(1);">
 				</li>
 
 				<li class="mui-table-view-cell"><label>姓名</label><span class="mui-badge mui-badge-inverted" v-text="user.uName"></span></li>
@@ -79,6 +79,8 @@
 	import myaddress from "../../project/js/city";
 	import areaBar from "../../common/areaBar"
 	// import tipApi from "../../../playform/tipApi.js"
+	import tipApi from "../../../playform/tipApi.js"
+	import image_retate from '../../../playform/image_retate.js'
 	export default {
 		 components: {
             'mt-picker': Picker,
@@ -222,55 +224,9 @@
 			function save() {
 				document.getElementById("save_btn").classList.add("mui-hidden");
 			}
-			document.getElementById("upfile").addEventListener('change', function() {
-				var imgFile = document.getElementById("upfile");
-				if(imgFile == null || imgFile == "") {
-					warm("照片不能为空");
-					return;
-				}
-				uploadHeadImg(imgFile)
-			});
+		
 
-			function uploadHeadImg(imgFile) {
-				var fileBase64
-				var _self=this
-				alert("请稍后...")
-				//拍照角度矫正
-				// selectFileImage(imgFile);
-				setTimeout(function() {
-					var file = imgFile.files['0'];
-					if(!file) {
-						fileBase64 = "";
-					}
-					var params = new FormData();
-					params.append("imgData", fileBase64);
-					params.append("imageName", file.name);
-					params.append("width", 96);
-					params.append("height", 96);
-					_self.$http.post("/user_api/upload_user_base64icon", params).then(function(response) {
-
-						if(response.data.code == 0) {
-							var map = response.data.result;
-							msg("上传成功");
-							window.appApi.updateUserInfo("", map.userIcon);
-							setTimeout(function() {
-								appApi.broadcast("reLoad()"); //刷新页面
-								appApi.closeNewWindow();
-							}, 1500)
-						} else {
-							msg("上传失败")
-							setTimeout(function() {
-								layer.closeAll();
-							}, 1500);
-						}
-
-					}).catch(function(error) {
-						console.info(error);
-					});
-
-				}, 1800);
-
-			}
+			
 		},
 		created: function() {
 			appApi.hideMenu();
@@ -331,6 +287,49 @@
 			initAddr:function(){
 				this.updateInfo({provinceId:items[0].value,cityId:items[1].value});
 				this.user.areaInfo = items[0].text + "-" + items[1].text;
+			},
+			uploadHeadImg:function(event) {
+				var fileBase64
+				var _self=this
+				//console.log("请稍后123...",event.target.id)
+				tipApi.load("头像正在上传")
+				var imgFile=document.getElementById("upfile");
+				//console.log(imgFile)
+				//拍照角度矫正
+			   var file= image_retate.selectFileImage(imgFile);
+				setTimeout(function() {
+					if (!file) {
+                      image_retate.fileBase64 = "";
+                     }else{
+					  fileBase64=image_retate.fileBase64;
+					 }
+					var params = new FormData();
+					params.append("imgData", fileBase64);
+					params.append("imageName", file.name);
+					params.append("width", 96);
+					params.append("height", 96);
+					_self.$http.post("/user_api/upload_user_base64icon", params).then(function(response) {
+
+						if(response.data.code == 0) {
+							tipApi.close("load");
+							var map = response.data.result;
+							tipApi.success("上传成功",1);
+							window.appApi.updateUserInfo("", map.userIcon);
+							setTimeout(function() {
+								appApi.broadcast("reLoad()"); //刷新页面
+								appApi.closeNewWindow();
+							}, 1500)
+						} else {
+							alert("上传失败")
+							
+						}
+
+					}).catch(function(error) {
+						console.info(error);
+					});
+
+				}, 1800);
+
 			},
 			 goBack(){
 				this.$router.go(-1)

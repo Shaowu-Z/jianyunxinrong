@@ -53,7 +53,7 @@
 															<img src="../../assets/images/ico_second.gif" />
 														</div>
 														<div class="oa-contact-content mui-table-cell" @click="openChind('select_project',item)">
-															<a href="#select_project"  :data-project-id="item.serialNum"  :data-project-name="item.ProjectName" class="oa-contact-name"><span class="oa-contact-content mui-table-cell">所有参与人员</span></a>
+															<a   :data-project-id="item.serialNum"  :data-project-name="item.ProjectName" class="oa-contact-name"><span class="oa-contact-content mui-table-cell">所有参与人员</span></a>
 														</div>
 													</div>
 												</div>
@@ -166,18 +166,18 @@
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
 										</div>
 										<div v-if="index == 0 && index != (select_children.navList.length-1)">
-											<div @click="secondback('team',obj)" class="mui-control-item selected teamback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+											<div @click="secondback('team',obj,index)" class="mui-control-item selected teamback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'">{{index}}</div>
 										</div>
-								
-									<div v-if="index > 0">
-										<div v-if="index == (select_children.navList.length-1)">
-											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
+									
+										<div v-if="index > 0">
+											<div v-if="index == (select_children.navList.length-1)">
+												<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
+											</div>
+											<div v-else>
+												<div @click="secondback('team',obj,index)" class="mui-control-item selected teamback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'">{{index}}</div>
+											</div>
 										</div>
-										<div v-else>
-											<div class="mui-control-item selected" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
-										</div>
-									</div>
-								</div>
+								  </div>
 							</div>
 						</div>
 					</div>
@@ -231,8 +231,6 @@
 													</div>
 												</a>
 											</li>
-
-											
 										</div>
 									</ul>
 								</div>
@@ -280,7 +278,7 @@
 										<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName" ></div>
 									</div>
 									<div v-if="index == 0 && index != (select_project.navList.length-1)">
-										<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+										<div @click="secondback('pro',obj,index)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
 									</div>
 
 									<div v-if="index > 0">
@@ -289,7 +287,7 @@
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
 										</div>
 										<div v-else>
-											<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+											<div @click="secondback('pro',obj,index)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
 										</div>
 									</div>
 								</div>
@@ -365,14 +363,14 @@
 										<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.teamName"></div>
 									</div>
 									<div v-if="index == 0 && index != (select_project.navList.length-1)">
-										<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
+										<div @click="secondback('pro',obj,index)" class="mui-control-item selected proback2" :data-team-id="obj.teamId" :data-team-name="obj.teamName"  v-text="obj.teamName + '&gt;'"></div>
 									</div>
 									<div v-if="index > 0">
 										<div v-if="index == (select_project.navList.length-1)">
 											<div class="mui-control-item mui-active enabled" href="javascript:;" v-text="obj.deptName"></div>
 										</div>
 										<div v-else>
-											<div @click="secondback('pro',obj)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
+											<div @click="secondback('pro',obj,index)" class="mui-control-item selected proback2" :data-dept-id="obj.deptId" :data-dept-name="obj.deptName"  v-text="obj.deptName + '&gt;'"></div>
 										</div>
 									</div>
 								</div>
@@ -583,29 +581,38 @@ export default {
 		  this.backFun()
 	
 	  },
-	    returnback:function(type){
+	    returnback:function(type){//点击返回按钮返回
 		  if(type=='pro'){
-		    if(proCount==3){//如果当前是第三层，就返回第二层
-				document.getElementsByClassName("proback2")[0].click()
-				proCount=2;
-			  }else if(proCount==2){//如果当前是第二层，返回第一层
-				document.getElementsByClassName("proback1")[0].click()
-				proCount=1;
-			  }
+			  this.proback();
 		  }else if(type=='team'){
-			  if(teamCount==3){//如果当前是第三层，就返回第二层
-				document.getElementsByClassName("teamback2")[0].click()
-				teamCount=2;
-			  }else if(teamCount==2){//如果当前是第二层，返回第一层
-				document.getElementsByClassName("teamback1")[0].click()
-				teamCount=1;
-			  }
+			  this.teamback();
 		  }
-		  console.log("proCount",proCount)
-		  console.log("teamCount",teamCount)
+		
 	
 	  },
-	  secondback:function(type,team){
+	  proback:function(){
+		   if(proCount==2){//如果当前是第二层，返回第一层
+				document.getElementsByClassName("proback1")[0].click()
+				proCount=1;
+			  }else{
+				document.getElementsByClassName("proback2")[0].click()
+				proCount=2;
+			  }
+	  },
+	  teamback:function(){
+			historyArr.pop();
+			var obj = historyArr[historyArr.length-1];
+			if(obj){//一级一级往上返回
+				this.initChildDept(obj.teamId,obj.deptId,obj.deptName);
+				this.popupTeamVisible=true;
+				$("#select_children").show();
+			}else{//直接返回首页
+				 this.popupTeamVisible=!this.popupTeamVisible
+			    $("#select_children").show()
+			}
+	    },
+	  secondback:function(type,team,index){//选择导航进行跳转对应页面
+		  
 		  if(type=='pro'){
   			this.select_project.selDept=this.select_project.test;
 			this.popupProVisible=true;
@@ -614,13 +621,30 @@ export default {
 			proCount=2;
 			$("#select_project").show()
 		  }else if(type=='team'){
-			this.initChildDept(team.teamId,team.deptId,team.deptName);
-			this.popupTeamVisible=true;
-			historyArr.pop();
-			$("#select_children").show();
-			teamCount=2;
+			
+			if(team.teamId){//第二层 
+			    historyArr.splice(1,historyArr.length)
+			
+			}else{//第二层往后
+				var index = this.getIndex(team.deptId);
+				historyArr.splice(index+1,historyArr.length)
+			}
+				this.initChildDept(team.teamId,team.deptId,team.deptName);
+				this.popupTeamVisible=true;
+				$("#select_children").show();
+			
 		  }
 		
+	  },
+	  getIndex:function(deptId){
+		  var index
+            for(var i=0;i<historyArr.length;i++){
+				if(deptId==historyArr[i].deptId){
+					index=i
+					break;
+				}
+			}
+			return index;
 	  },
 	  openProjectChild:function(){
 		  this.openProjectChildtrue=!this.openProjectChildtrue
@@ -647,7 +671,7 @@ export default {
 					_self.initChildDept(obj.teamId, obj.deptId, obj.deptName);//type2表示时团队，1表示时项目
 					$("#select_children").show()
 					appApi.hideBack();
-					teamCount=2;
+				
 				};
 	 		 },
 	
@@ -670,7 +694,7 @@ export default {
 		var par = {deptId:deptId,teamId:teamId};
 		this.$http.post("/concats_api/query_dept_list",par).then(function (response) {
 			_self.select_children.deptList = response.data.result;
-			console.log("团队",_self.select_children.deptList)
+			// console.log("团队",_self.select_children.deptList)
 			setTimeout(function () {
 				$(".dept-select").each(function(){
 					var id = $(this).val();
@@ -681,7 +705,18 @@ export default {
 					}
 				});
 				//mui('.dept-select').input();
+		// 		var cleW=$("#children_scroll").width()-$("#select_children_scroll").width()
+		// console.log($("#select_children_scroll").width())
+		// console.log($("#children_scroll").css("width"))
+		// console.log(cleW)
+		// if(cleW>0){
+		// 	$("#children_scroll").css({
+        // "transform": "translate3d(-"+cleW+30+"px, 0px, 0px)",
+        //  "transition-duration": "300ms"
+		// 		})
+		// }
 			},200)
+			
 		}).catch(function (error) {
 			console.info(error);
 		});
@@ -717,10 +752,22 @@ export default {
 			historyArr = nArr;
 			var _self = this;
 			_self.select_children.navList = historyArr;
-			teamCount=3;
+			
 			_self.initChildDept(undefined,deptId,deptName);
-			event.preventDefault();
-			event.stopPropagation();
+			if(event){
+				event.preventDefault();
+			   event.stopPropagation();
+			}
+		// 	var cleW=$("#children_scroll").width()-$("#select_children_scroll").width()
+		// console.log($("#select_children_scroll").width())
+		// console.log($("#children_scroll").css("width"))
+		// console.log(cleW)
+		// if(cleW<0){
+		// 	$("#children_scroll").css({
+        // "transform": "translate3d(-"+cleW+"px, 0px, 0px)",
+        //  "transition-duration": "300ms"
+        //         })
+		// }	
 
 		},
 	  /**
@@ -1141,9 +1188,9 @@ export default {
 	.mui-table-view-cell:after{
 		height:1px
 	}
-	#select_children_scroll div{
+	/* #select_children_scroll div{
 		float:left
-	}
+	} */
 	.oa-contact-email{
 		text-align: left
 	}
@@ -1156,5 +1203,32 @@ export default {
 	.group-list .sub-btn{
 		top:4px
 	}
+	#dept_head{
+		width: 100%;
+    overflow: hidden;
+    position: relative;
+	}
+	#select_children_scroll{
+		width: 100%;
+    overflow: hidden;
+    position: relative;
+	}
+	#children_scroll{
+		left: 0;
+    position: absolute;
+    width: auto;
+    overflow: scroll;
+	}
+	/* 	children_scroll */
+	#select_children_scroll div{
+		display: inline-block
+	}
+	.group-header {
+    color: #999;
+    line-height: 34px;
+    padding:0px;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
 </style>
 

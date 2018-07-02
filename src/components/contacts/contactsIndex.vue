@@ -461,4 +461,7 @@ export default {
 	.heig{
 		height:63px
 	}
+	.mui-popover{
+		position: fixed;
+	}
 </style>

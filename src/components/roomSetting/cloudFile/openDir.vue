@@ -976,6 +976,17 @@ export default {
 			}
 			_self.showEditBox = false;
 		},
+		refreshPage() {
+            if(this.pullWidget) {
+                this.pullWidget.pullDownLoading();
+            }
+            if(this.isIndex == 1) {
+                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
+                    initFirstData(projectId, getFirstData, roomId);//, roomId
+                else
+                    initFirstData(projectId, getFirstData);//, roomId
+            }
+        },
 		cancelItem: function(id, type, name, suffix, status, event) {
 			//标识作废 或取消作废
 			var _self = this;
@@ -1816,7 +1827,6 @@ export default {
 			return clazz;
 		},
 		selectSort: function(type, text) {
-			var _self = this;
 			var val = {
 				type: type,
 				text: text
@@ -1825,7 +1835,15 @@ export default {
 			this.curSort = val;
 			this.pageParams.sortType = type;
 			this.sortShow = false;
-			_self.refreshPage();
+			this.refreshPage();
+		},
+		initSort: function() {
+			var _self = this;
+			//获取缓存排序方式
+			if(undefined != getDishSort()) {
+				_self.curSort = getDishSort();
+			}
+			_self.pageParams.sortType = _self.curSort.type;
 		},
 		goSelectMode: function(e) {
 			var _self = this;
@@ -2035,18 +2053,6 @@ export default {
 			_self.dishConfirm("文件（夹）删除", qmsg, okFun);
 			_self.backSelectMode();
 		},
-		refreshPage() {
-			// console.log(this.isIndex)
-            if(this.pullWidget) {
-                this.pullWidget.pullDownLoading();
-            }
-            if(this.isIndex == 1) {
-                if(roomId!="" && roomId!="undefined" && roomId!=undefined)
-                    initFirstData(projectId, getFirstData, roomId);//, roomId
-                else
-                    initFirstData(projectId, getFirstData);//, roomId
-            }
-        },
 		batchCopy: function() {
             // msg("功能开发中");
             layer.open({
