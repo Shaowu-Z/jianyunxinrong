@@ -505,17 +505,70 @@ export default {
 					},
 					yes: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName
+						// window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + 
+						// "&projectid=" + _self.projectid + 
+						// "&roomid=" + _self.toroomid + 
+						// "&roomname=" + _self.curoomname + 
+						// "&typ=1" + 
+						// "&nowroomImId=" + _self.nowroomImId + 
+						// "&formroomimid=" + _self.fromroomImid + 
+						// "&fromRoomName=" + _self.fromRoomName
+						var urlcan={
+							projectid: _self.projectid , 
+							roomid :_self.toroomid,  
+							roomname: _self.curoomname , 
+							typ:1,
+							nowroomImId: _self.nowroomImId, 
+							formroomimid: _self.fromroomImid , 
+							fromRoomName: _self.fromRoomName,
+						}
 //						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&fromRoomName=" + _self.fromRoomName)
+						_self.$router.push({ path: '/static/newwebstatic/gongdan/ttp.html', query: { id: _self.$route.query.id+urlcan }})
+
 					},
 					no: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu
+						// window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + 
+						// "&projectid=" + _self.projectid + 
+						// "&roomid=" + _self.toroomid + 
+						// "&roomname=" + _self.curoomname + 
+						// "&typ=4" + 
+						// "&nowroomImId=" + _self.nowroomImId + 
+						// "&formroomimid=" + _self.fromroomImid + 
+						// "&title=" + _self.content.userName + 
+						// "&roomclass=" + _self.tuifromcurrRoomName + 
+						// "&leibie=" + _self.yewu
+						var urlcan={
+							projectid: _self.projectid  ,
+							roomid :_self.toroomid ,
+							roomname: _self.curoomname ,
+							typ :4,
+							nowroomImId: _self.nowroomImId , 
+							formroomimid: _self.fromroomImid  ,
+							title :_self.content.userName,  
+							roomclass: _self.tuifromcurrRoomName  ,
+							leibie: _self.yewu
+						}
 //						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.content.userName + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu)
+						_self.$router.push({ path: '/static/newwebstatic/gongdan/ttp.html', query: { id: _self.$route.query.id+urlcan }})
+
 					},
 					pin: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId
+						// window.location.href= "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + 
+						// "&projectid=" + _self.projectid + 
+						// "&roomid=" + _self.toroomid + 
+						// "&roomname=" + _self.curoomname + 
+						// "&typ=3" + 
+						// "&nowroomImId=" + _self.nowroomImId
+						var urlcan={
+							projectid: _self.projectid, 
+							roomid: _self.toroomid ,
+							roomname: _self.curoomname ,
+							typ:3 ,
+							nowroomImId: _self.nowroomImId
+						}
+						_self.$router.push({ path: '/static/newwebstatic/gongdan/ttp.html', query: { id: _self.$route.query.id+urlcan }})
 //						appApi.openNewWindow( "/static/newwebstatic/gongdan/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3" + "&nowroomImId=" + _self.nowroomImId)
 						//						window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + this.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3"+"&nowroomImId="+_self.nowroomImId
 					},
@@ -524,7 +577,7 @@ export default {
 </script>
 <style type="text/css">
 .mui-content {
-  background: #fff;
+  /* background: #fff; */
   text-align: left;
   /* padding-bottom: 50px; */
   /* position: absolute; */

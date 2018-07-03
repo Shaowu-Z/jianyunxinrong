@@ -52,7 +52,6 @@ import { Toast } from "mint-ui";
             }
         },
         created:function(){
-            alert(this.datanow)
             this.form.MissionStartDate=this.datanow
 
         },

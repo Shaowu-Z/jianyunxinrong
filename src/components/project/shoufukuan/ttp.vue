@@ -62,6 +62,7 @@
 <script>
 import setting from "../../../playform/config.js";
 import danjuApi from "../js/danjuAPi.js";
+import tipApi from '../../../playform/tipApi.js';
 export default {
   data() {
     return {
@@ -164,21 +165,8 @@ export default {
 
 
     },
-    back: function() {
-      var _self = this;
-      if (_self.closewindow == 1) {
-        window.appApi.openChat(
-          this.$route.query.nowroomImId,
-          "",
-          this.$route.query.roomname,
-          2
-        );
-      } else {
-        appApi.closeNewWindow();
-      }
-    },
     masktishi: function() {
-      alert("数据提交中，请勿重复点击");
+      tipApi.waring("数据提交中，请勿重复点击",1);
     },
     mask: function() {
       $(".mask").css({ display: "block", opacity: "0.6" });
@@ -209,10 +197,6 @@ export default {
       } else {
         fjid = _self.zrimg.toString() + "," + _self.zrfujian.toString();
       }
-      //						alert(fjid)
-      //评论内容
-      //						var id="5a6ecbda70474ea263ddfbb5";
-      //						var uid='10392';
       var param = {
         attachment: fjid,
         content: _self.input11,
@@ -231,12 +215,6 @@ export default {
       this.$http.post("/contract/save_note", param).then(function(response) {
         if (response.data.code == 200) {
           console.log(response.data);
-          //								alert(JSON.stringify(_self.noteList))
-          //								_self.sites = response.data.result.tablefields;s
-          //									var wenfou =  window.location.href.split("?")[1]
-          //									window.appApi.closeNewWindow()
-          //									alert(_self.urlcan)
-          //									alert(this.$route.query.fromcurrRoomName + "-" + this.$route.query.roomName)
           if (_self.typ == 4) {
             var todojson = {
               //											"title": decodeURI(username) + "退回的收付款",
@@ -273,12 +251,6 @@ export default {
                     _self.$route.query.projectSn +
                     "&_self.userid=" +
                     _self.userid
-                  //												"pingfen":"",
-                  //												"docid":"",
-                  //												"roomId":"",
-                  //												"roomName":"",
-                  //												"projectSn":"",
-                  //												"_self.userid":""
                 },
                 {
                   type: 1, //按钮点击类型 1=请求url 2=打开url
@@ -294,37 +266,21 @@ export default {
               ]
             };
             //
-            alert(JSON.stringify(todojson))
             // _self.todojsoan = JSON.stringify(todojson);
             window.appApi.sendTodo(todojson, function(d) {
-              alert(d)
               if (d.code == 200) {
-                // ludan("退回成功",2,2,function(){
-                // 	$(".mask").css({"display":"none","opacity":"0.6"})
-
-                // })
-                alert("tuihui")
-                // layer.open({
-                //   type: 1,
-                //   title: "退回成功",
-                //   time: 2,
-                //   content: "",
-                //   end: function() {
-                //     // appApi.refreshData(2);
-                //     window.appApi.openChat(
-                //       _self.$route.query.nowroomImId,
-                //       "",
-                //       _self.$route.query.roomname,
-                //       2
-                //     );
-                //   }
-                // });
+                tipApi.success('退回成功',2,function(){
+                    $(".mask").css({"display":"none","opacity":"0.6"})
+                    window.appApi.openChat(
+                      _self.$route.query.nowroomImId,
+                      "",
+                      _self.$route.query.roomname,
+                      2
+                    );
+                })
               }
             });
-            //										window.location.href = +'/static/newwebstatic/lianxi/work_content.html?'+urllast
           } else if (_self.typ == 1) {
-            //										appApi.refreshData(2)
-            //										window.appApi.closeNewWindow()
             var parm = {
               toImId: _self.$route.query.formroomimid,
               chatType: "2",
@@ -338,50 +294,18 @@ export default {
                 "的收付款"
             };
             appApi.sendNotifyMsg(parm);
-            // ludan("确认成功",2,2,function(){
-            // 	$(".mask").css({"display":"none","opacity":"0.6"})
-            //     appApi.refreshData(2);
-            // 	/*window.appApi.openChat(this.$route.query.nowroomImId, "", this.$route.query.roomname, 2)*/
-            // })
-            layer.open({
-              type: 1,
-              time: 2,
-              title: "确认成功",
-              content: "",
-              end: function() {
+            tipApi.success("确认成功",2,function(){
                 appApi.refreshData(2);
-                window.appApi.openChat(
-                  _self.$route.query.nowroomImId,
-                  "",
-                  _self.$route.query.roomname,
-                  2
-                );
-              }
-            });
-
-            //										appApi.openNewWindow(+'/static/newwebstatic/lianxi/work_kan.html?id='+this.$route.query.id)
-            //										window.location.href=+'/static/newwebstatic/lianxi/work_kan.html?'+_self.urlcan
-            //										$(".mask").css({"display":"none","opacity":"0.6"})
+                _self.$router.go(-1)
+            })
           } else if (_self.typ == 3) {
             // ludan("评论成功",2,2,function(){
             // 	$(".mask").css({"display":"none","opacity":"0.6"})
             // 	window.appApi.openChat(_self.$route.query.nowroomImId, "", _self.$route.query.roomname, 2)
             // })
-            alert(485)
-            layer.open({
-              type: 1,
-              time: 2,
-              title: "评论成功",
-              content: "",
-              end: function() {
-                window.appApi.openChat(
-                  _self.$route.query.nowroomImId,
-                  "",
-                  _self.$route.query.roomname,
-                  2
-                );
-              }
-            });
+            tipApi.success("评论成功",2,function(){
+              _self.$router.go(-1)
+            })
           }
         } else {
           //							msg("获取云盘目录信息失败")
@@ -393,206 +317,7 @@ export default {
     upfile: function(event) {
       danjuApi.upfile(event);
 
-      // 						// loading("上传中")
-      // //						sessionStorage.removeItem("cunnews")
-      // 						var _self=this
-      // 						var file = document.getElementById(event.target.id).files;
-      // 						var zrid = document.getElementById(event.target.id).getAttribute("id")
-      // 						var url = +"/sass_api/upload_file";
-      // 						var form = new FormData();
-      // 						var forimg=[]
-      // 						var forfile=[]
-      // 						for(var i = 0; i < file.length; i++) {
-      // 							form.append("file", file[i]);
-      // 							//读取图片数据
-      // 							var f = document.getElementById(event.target.id).files[i];
-      // 							var imgtype = f.type.split('/')[0]
-      // 							if(zrid == "file") {
-      // 								var reader = new FileReader();
-      // 								reader.onload = function(e) {
-      // 									var data = e.target.result;
-      // 									//加载图片获取图片真实宽度和高度
-      // 									var image = new Image();
-      // 									image.onload = function() {
-      // 										var width = image.width;
-      // 										var height = image.height;
-
-      // 									};
-      // 									image.src = data;
-      // //									if(zrid == "file") {
-      // //										$("#" + event.target.id).parents(".addimg").prepend('<div class="scimg scsc"><img class="imgc" src="' + image.src + '" /><p class="mui-icon mui-icon-closeempty move"></p></div>')
-      // //									} else {
-      // //										$("#" + event.target.id).parents(".addimg").prepend('<div class="scfile scsc"><img class="imgc" src="' + image.src + '" /><span class="filename">' + f.name + '</span><p class="mui-icon mui-icon-closeempty move"></p></div>')
-      // //									}
-      // 									_self.imgs.push({
-      // 										src:image.src
-      // 									})
-      // 								};
-      // 								_self.cunnews=1
-      // //								sessionStorage.setItem("cunnews","1")
-      // 								reader.readAsDataURL(f);
-      // 							} else if(zrid == "files") {
-      // 								_self.cunnews=2
-      // //								sessionStorage.setItem("cunnews","2")
-      // 								var na = file[i].name
-      // //								if(imgtype == "image") {
-      // //									$("#" + event.target.id).parents(".addimg").prepend('<div class="scfile scsc"><img class="imgc" src="../../../static/images/ico_image.png" /><span class="filename">' + na + '</span><p class="mui-icon mui-icon-closeempty move" @click="dfr"></p></div>')
-      // //								} else {
-      // //									$("#" + event.target.id).parents(".addimg").prepend('<div class="scfile scsc"><img class="imgc" src="../../../static/images/label-file.png" /><span class="filename">' + na + '</span><p class="mui-icon mui-icon-closeempty move"></p></div>')
-      // //								}
-      // 									_self.fujians.push({
-      // 										name:f.name
-      // 									})
-      // 									console.log(_self.fujians)
-      // 							}
-      // 							//							reader.readAsDataURL(f);
-
-      // 						}
-      // 						if( _self.cunnews==1){
-      // 								form.append("type", "1");
-      // 							}else{
-      // 								form.append("type", "2");
-      // 							}
-      // 						form.append("module", "contractnote");
-      // 						form.append("_self.userid", _self.userid);
-      // 						var xhr = new XMLHttpRequest();
-      // 						xhr.open("post", url, true);
-      // 						xhr.onload = function(evt) {
-      // 							//请求完成
-      // //							var data = JSON.parse(evt.target.responseText);
-      // //							if( sessionStorage.getItem("cunnews")=='1'){
-      // //								imgid.push(data.result.success)
-      // //								_self.zrimg=imgid.toString().split(',')
-      // //								console.log(imgid.toString())
-      // //							}else{
-      // //								fujianid.push(data.result.success)
-      // //								_self.zrfujian=fujianid.toString().split(',')
-      // //								console.log(fujianid.toString())
-      // //							}
-      // 							// layer.close(loading("上传中"))
-      // 						};
-      // 						xhr.onreadystatechange=function(evt){
-      // 							console.log(xhr)
-      //                             if(xhr.readyState==4 && xhr.status ==200){
-      //                                     console.log(xhr.responseText);
-      //                                     var data = JSON.parse(evt.target.responseText);
-      // 									// if(_self.cunnews == 1) {
-      // 									// 	_self.imgs=_self.imgs.concat(forimg)
-      // 									// 	imgid.push(data.result.success)
-      // 									// 	console.log(imgid)
-      // 									// 	_self.zrimg = imgid.toString().split(',')
-      // 									// } else {
-      // 									// 	fujianid.push(data.result.success)
-      // 									// 	_self.fujians=_self.fujians.concat(forfile)
-      // 									// 	_self.zrfujian = fujianid.toString().split(',')
-      // 									// 	console.log(fujianid.toString())
-      // 									// }
-      //                                 var rtnfiles = data.result.success;
-      //                                 if(sessionStorage.getItem("cunnews") == 1) {
-      //                                     _self.imgs = _self.imgs.concat(rtnfiles)
-      //                                     for(var i=0;i<rtnfiles.length;i++){
-      //                                         imgid.push(rtnfiles[i].fileId);
-      //                                     }
-      //                                     console.log(imgid)
-      // 									if(imgid.toString()){
-      //                                         _self.zrimg = imgid.toString().split(',')
-      //                                     }
-      //                                 } else {
-      //                                     for(var i=0;i<rtnfiles.length;i++){
-      //                                         fujianid.push(rtnfiles[i].fileId);
-      //                                     }
-      //                                     _self.fujians = _self.fujians.concat(forfile)
-      // 									if(fujianid.toString()){
-      //                                         _self.zrfujian = fujianid.toString().split(',')
-      // 									}
-
-      //                                     console.log(fujianid.toString())
-      //                                 }
-
-      //                             }else if(xhr.readyState==4 && xhr.status ==500){
-      //                             	 msg("上传失败")
-      //                             }
-      //                    		 }
-      // 						xhr.onerror = function(evt) {
-      // 							//请求失败
-      // 							var data = JSON.parse(evt.target.responseText);
-      // 							console.log(data);
-      // 						};
-      // 						xhr.send(form);
     },
-    moveimg: function(n) {
-      var _self = this;
-      this.$http
-        .post(
-          "/sass_api/delete_file?_self.userid=_self.userid&fileId=" +
-            _self.zrimg[n - 1]
-        )
-        .then(function(response) {
-          if (response.data.code == 0) {
-            console.log(response.data);
-            // ludan("删除成功",1,2)
-            layer.open({
-              type: 1,
-              time: 2,
-              title: "删除成功",
-              content: ""
-            });
-          }
-        })
-        .catch(function(error) {
-          // ludan(error, 1, 3);
-          layer.open({
-            type: 1,
-            time: 2,
-            title: "请求失败",
-            content: error
-          });
-        });
-      _self.imgs.splice(n - 1, 1);
-      //						console.log(n-1)
-      _self.zrimg.splice(n - 1, 1);
-      console.log(_self.zrimg);
-      console.log(typeof JSON.stringify(_self.zrimg));
-      //						console.log(imgid[1])
-      //						imgid.remove(n-1)
-    },
-    movefj: function(n) {
-      var _self = this;
-      console.log("附件"+ _self.zrfujian[n - 1])
-      this.$http
-        .post(
-          "/sass_api/delete_file?userId="+_self.userid+"&fileId=" +
-            _self.zrfujian[n - 1]
-        )
-        .then(function(response) {
-          if (response.data.code == 0) {
-            console.log(response.data);
-            // ludan("删除成功",1,2)
-            layer.open({
-              type: 1,
-              time: 2,
-              title: "删除成功",
-              content: ""
-            });
-          }
-        })
-        .catch(function(error) {
-          // ludan(error, 1, 3);
-          layer.open({
-            type: 1,
-            time: 2,
-            title: "请求失败",
-            content: error
-          });
-        });
-      _self.fujians.splice(n - 1, 1);
-      //						console.log(n-1)
-      _self.zrfujian.splice(n - 1, 1);
-      console.log(_self.zrfujian);
-      console.log(typeof JSON.stringify(_self.zrfujian));
-      //						console.log(imgid[1])
-      //						imgid.remove(n-1)
-    }
   }
 };
 </script>

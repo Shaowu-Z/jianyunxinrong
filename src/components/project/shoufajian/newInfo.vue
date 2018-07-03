@@ -548,8 +548,26 @@ export default {
 					//判断文件类型
 					yes: function() {
 						var _self = this
-						window.location.href= "/static/newwebstatic/shoufajian/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.content.companySaleName
-					
+						// window.location.href= "/static/newwebstatic/shoufajian/ttp.html?id=" + _self.$route.query.id + 
+						// "&projectid=" + _self.projectid + 
+						// "&roomid=" + _self.toroomid + 
+						// "&roomname=" + _self.curoomname + 
+						// "&typ=1" + 
+						// "&nowroomImId=" + _self.nowroomImId +
+						// "&formroomimid=" + _self.fromroomImid +
+						// "&formroomname=" + _self.content.companySaleName
+						var urlmain={
+							id: _self.$route.query.id,
+							projectid: _self.projectid , 
+							roomid: _self.toroomid,  
+							roomname: _self.curoomname,  
+							typ: 1 ,
+							nowroomImId: _self.nowroomImId ,
+							formroomimid: _self.fromroomImid, 
+							formroomname: _self.content.companySaleName
+						}
+						_self.$router.push({ path: '/static/newwebstatic/lianxi/ttp.html', query:urlmain})
+
 					},
 					no: function() {
 						var _self = this
@@ -587,8 +605,20 @@ export default {
 					},
                     withdraw: function() {
                         var _self = this
-                        window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=99" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.curoomclass + "&leibie=" + _self.yewu
-
+						// window.location.href= "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + 
+						var urlmain={
+							id: _self.$route.query.id,
+							projectid :_self.projectid , 
+							roomid:_self.toroomid , 
+							roomname: _self.curoomname,  
+							typ: 99,
+							nowroomImId: _self.nowroomImId , 
+							formroomimid: _self.fromroomImid,  
+							title: _self.title , 
+							roomclass :_self.curoomclass,  
+							leibie :_self.yewu
+						}
+						_self.$router.push({ path: '/static/newwebstatic/lianxi/ttp.html', query:urlmain})
                     },
 
 				}

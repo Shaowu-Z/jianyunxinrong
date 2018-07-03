@@ -317,7 +317,8 @@ export default {
 	  appApi.showMenu();
 	  var _self = this;
       this.$http.post("/user_api/find_login_user").then(function(response) {
-        _self.user = response.data.result.userInfo;
+		  console.log(response)
+		_self.user = response.data.result.userInfo;
         console.log("用户",_self.user)
       }).catch(function(error) {
         console.info(error);

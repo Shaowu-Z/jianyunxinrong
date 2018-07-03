@@ -164,11 +164,14 @@ var tipApi={
      * 成功图标
      * 其余看第一个说明
     */
-    success:function(content,time){
+    success:function(content,time,obj){
         tipApi.newDom("successmask_zr","success_zr","success_text_zr")
         document.getElementById("success_text_zr").innerHTML=content
         if(time!=undefined && time!=''){
             setTimeout(function(){
+                if(typeof obj =="function"){
+                    obj()
+                }
                 tipApi.close("success")
             },time*1000)
         }

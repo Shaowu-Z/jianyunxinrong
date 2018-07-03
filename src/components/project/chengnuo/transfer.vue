@@ -53,14 +53,18 @@ export default {
 						if(_self.confirm==0){ //退回的
 							if(_self.fromUserid==_self.creatorId){  //查询人是录单人
 								history.replaceState(null, null,"newCreat.html?id="+_self.$route.query.id+_self.urlcan)  //h5  替换当前页面url（手机上url替换但是页面没变）
-						 		location.replace(''); //加载新url页面
+						 		// location.replace(''); //加载新url页面
+								_self.$router.replace({ path: '/static/newwebstatic/chengnuo/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
 							}else{
 								history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id+_self.urlcan)  //h5  替换当前页面url（手机上url替换但是页面没变）
-							 	location.replace('');
+								//  location.replace('');
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
 							}
 						}else{
 							history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id+_self.urlcan)  //h5  替换当前页面url（手机上url替换但是页面没变）
-							location.replace('')
+							// location.replace('')
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
+
 						}
 					},
 					initData: function(){
@@ -103,20 +107,28 @@ export default {
 									if(_self.roomId==_self.currroomid){//判断当前房间是否是推送的房间
 										if(_self.creatorId==_self.userid){ //判断当前人是否是录入人
 											history.replaceState(null, null,"newCreat.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
-									 		location.replace(''); //加载新url页面
+											 // location.replace(''); //加载新url页面
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newCreat.html', query: { id: _self.$route.query.id+_self.urlcan }})
+											 
 //											window.location.replace(getUrl()+"/static/newwebstatic/lianxi/work_content.html?id="+this.$route.query.id)
 										}else{
 											history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
-										 	location.replace(''); //加载新url页面
+											 // location.replace(''); //加载新url页面
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
+											 
 										}
 									}else{
 										history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
-										 location.replace(''); //加载新url页面
+										//  location.replace(''); //加载新url页面
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
+
 //										window.location.replace(getUrl()+"/static/newwebstatic/lianxi/newInfo.html?id="+this.$route.query.id)
 									}
 								}else{
 									 history.replaceState(null, null,"newInfo.html?id="+_self.$route.query.id)  //h5  替换当前页面url（手机上url替换但是页面没变）
-									 location.replace(''); //加载新url页面
+									//  location.replace(''); //加载新url页面
+								 _self.$router.replace({ path: '/static/newwebstatic/chengnuo/newInfo.html', query: { id: _self.$route.query.id+_self.urlcan }})
+
 //									 window.location.replace(getUrl()+"/static/newwebstatic/lianxi/newInfo.html?id="+this.$route.query.id)
 
 								}

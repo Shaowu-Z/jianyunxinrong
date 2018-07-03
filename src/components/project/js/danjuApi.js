@@ -185,7 +185,7 @@ var danjuApi={
 		// var _self = this
 		var file = document.getElementById(event.target.id).files;
 		var zrid = document.getElementById(event.target.id).getAttribute("id")
-		var url = "/sass_api/upload_file";
+		var url = "/api/sass_api/upload_file";
 		var form = new FormData();
 		var forimg = []
 		var forfile = []
@@ -584,6 +584,7 @@ var danjuApi={
 			todo_content="类别=" + _self.yewu + "|日期=" + _self.form.MissionStartDate
 			todo_url="/static/newwebstatic/lianxi/transfer.html?id="
 		}else if(_self.$refs.title_name.innerText=="微承诺"){
+			alert(_self.personDistribute)
 			if (_self.type == "单方承诺") {
 				todo_title =
 				 encodeURIComponent(_self.personAccept) +
@@ -635,6 +636,7 @@ var danjuApi={
 				tipApi.success("提交成功",2)
 				// ludan("提交成功", 2, 2, function() {
 					appApi.refreshData(2);
+					window.appApi.closeNewWindow();
 					// setTimeout(function(){window.location.reload(),200})
 				// })
 			}else{

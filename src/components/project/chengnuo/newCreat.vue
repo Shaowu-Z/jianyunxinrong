@@ -112,7 +112,7 @@ import { Picker } from 'mint-ui';
 import { BackCookie } from "../../../playform/common.js";
 import setting from "../../../playform/config.js";
 import danjuApi from "../js/danjuAPi.js";
-import tipApi from "../js/tipApi.js";
+import tipApi from "../../../playform/tipApi.js";
 import dataBar from "../../common/dataBar"
 export default {
      components: {
@@ -420,6 +420,7 @@ export default {
     chengnuo: function() {
       var _self = this;
       _self.gsdifferent = 1;
+      // alert(_self.personAcceptID)
       window.appApi.openProjectContactSelectPage(
         _self.pa_projectsn,
         "",
@@ -438,7 +439,7 @@ export default {
     beichengnuo: function() {
       var _self = this;
       _self.gsdifferent = 2;
-      //						alert(_self.personDistributeID)
+      						// alert(_self.pa_projectsn+"//"+_self.personDistributeID)
       window.appApi.openProjectContactSelectPage(
         _self.pa_projectsn,
         "",
@@ -465,28 +466,28 @@ export default {
     step1: function(n) {
       var _self = this;
       appApi.hideBack();
-      //						if(_self.personAccept == '') {
-      //							ludan("请选择承诺人", 1, 1)
-      //						} else if(_self.personDistribute == '') {
-      //							ludan("请选择被承诺人", 1, 1)
-      //						} else {
+      						if(_self.personAccept == '') {
+      							tipApi.waring("请选择承诺人",1)
+      						} else if(_self.personDistribute == '') {
+      							tipApi.waring("请选择被承诺人",1)
+      						} else {
       _self.beizhuzhuan = _self.beizhu.replace(/<\/?.+?>/g, "#.%#");
       _self.beizhuzhuan = _self.beizhu.replace(/[\r\n]/g, "#.%#");
       _self.backicon = n;
-      //						}
+      						}
       this.sendyewu();
     },
     //点击第二步
-    step2: function(n) {
-      var _self = this;
-      appApi.hideBack();
-      if (_self.nowCompany.length == 0) {
-        // ludan("请选择接收单位", 1, 1);
-        tipApi.waring("请选择接收单位",2)
-      } else {
-        _self.backicon = n;
-      }
-    },
+    // step2: function(n) {
+    //   var _self = this;
+    //   appApi.hideBack();
+    //   if (_self.nowCompany.length == 0) {
+    //     // ludan("请选择接收单位", 1, 1);
+    //     tipApi.waring("请选择接收单位",2)
+    //   } else {
+    //     _self.backicon = n;
+    //   }
+    // },
     //点击返回按钮
     back: function() {
       var _self = this;
@@ -528,7 +529,7 @@ export default {
           }
         })
         .catch(function(error) {
-        //   ludan(error, 1, 3);
+          tipApi(error,1);
           tipApi.waring(error,2)
         });
     },
@@ -950,9 +951,11 @@ export default {
       if (n == 0) {
         //使用单据状态判断，无法满足需求。2018-5-21新增字段postType(提交保存状态)0=保存 1=提交
         //_self.confirm = '2';
-        _self.postType = "0";
+        _self.confirm = '0';
+        // _self.postType = "0";
       } else {
         //_self.confirm = '0';
+        _self.confirm = '1';
         _self.postType = "1";
       }
       var param = {
@@ -964,7 +967,7 @@ export default {
           userId: _self.userid
           //								uid:'10395'
         },
-        //confirm: _self.confirm ,
+        confirm: _self.confirm ,
         postType: _self.postType,
         ludancompanyName: _self.UserName,
         attachment: fjid + _self.attachmentIds,
@@ -987,7 +990,7 @@ export default {
         createRoomId: this.$route.query.currRoomId
       };
       console.log(param);
-      //						alert(JSON.stringify(param))
+      						alert(JSON.stringify(param))
       this.$http
         .post( "/contract/save", param)
         .then(function(response) {
@@ -1078,6 +1081,7 @@ export default {
           }
         ]
       };
+      alert(JSON.stringify(todojson))
       window.appApi.sendTodo(todojson, function(d) {
         if (d.code == 200) {
           tipApi.success("提交成功",2)
@@ -1141,5 +1145,12 @@ export default {
 #databox input{
   padding-left: 0
 }
-
+.mult-btn-box{
+  position: fixed;
+  bottom: 10px
+}
+.mui-content{
+  overflow: scroll;
+  margin-bottom: 56px
+}
 </style>

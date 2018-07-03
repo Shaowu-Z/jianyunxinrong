@@ -13,11 +13,9 @@
 							<div class="mui-table-cell">
 								<button type="button" class="mui-btn mui-btn-link" @click="pin(3)">评论</button>
 							</div>
-							<div v-if="type=='双方承诺'">
-								<div v-if="values.confirmStatus==1">
-									<div class="mui-table-cell" >
-										<button type="button" class="mui-btn mui-btn-link" @click="pin(6)">评价</button>
-									</div>
+							<div v-if="type=='双方承诺' && values.confirmStatus==1">
+								<div class="mui-table-cell" >
+									<button type="button" class="mui-btn mui-btn-link" @click="pin(6)">评价</button>
 								</div>
 							</div>
 						</div>
@@ -41,8 +39,7 @@
 							</div>
 						</div>
 					</div>
-					<div v-else>
-						<div class="mui-table mui-text-center v-line-half">
+						<div class="mui-table mui-text-center v-line-half" v-else>
 								<div class="mui-table-cell">
 									<button type="button" class="mui-btn mui-btn-link" @click="pin(3)">评论</button>
 								</div>
@@ -50,7 +47,6 @@
 									<button type="button" class="mui-btn mui-btn-link" @click="pin(6)">评价</button>
 								</div>-->
 							</div>
-					</div>
                     <div v-if="values.confirmStatus==1">
 					<!-- <img class="zhuangtai" src="../../images/approval-by.png" /> -->
 				    </div>
@@ -647,21 +643,72 @@ export default {
 						//						appApi.openNewWindow(getUrl() + "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1"+"&formroomimid=" + _self.tuiroomimid+"&roomName=" + _self.roomName+"&fromusername"+ _self.tuifromcurrRoomName+"&nowroomImId="+_self.nowroomImId)
 						// appApi.openNewWindow(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.fromRoomname+"&pingjiaToimid="+_self.pingjiaToimid+"&title=" + _self.title+ "&roomclass=" + _self.tuifromcurrRoomName+ "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser +"&tuititle="+_self.tuititle)
 //						alert(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.fromRoomname+"&pingjiaToimid="+_self.pingjiaToimid+"&title=" + _self.title+ "&roomclass=" + _self.tuifromcurrRoomName+ "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser+  _self.fromuser+"&tuititle="+_self.tuititle)
-						window.location.href="/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.fromRoomname+"&pingjiaToimid="+_self.pingjiaToimid+"&title=" + _self.title+ "&roomclass=" + _self.tuifromcurrRoomName+ "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser +"&tuititle="+_self.tuititle
-//						appApi.openNewWindow(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.fromRoomname+"&pingjiaToimid="+_self.pingjiaToimid+"&title=" + _self.title+ "&roomclass=" + _self.tuifromcurrRoomName+ "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser +"&tuititle="+_self.tuititle)
-//						alert(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=1" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&formroomname=" + _self.fromRoomname+"&pingjiaToimid="+_self.pingjiaToimid+"&title=" + _self.title+ "&roomclass=" + _self.tuifromcurrRoomName+ "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser+  _self.fromuser+"&tuititle="+_self.tuititle)
+						// window.location.href="/static/newwebstatic/chengnuo/ttp.html?
+						// id=" + _self.$route.query.id + 
+						// "&projectid=" + _self.projectid + 
+						// "&roomid=" + _self.toroomid + 
+						// "&roomname=" + _self.curoomname + 
+						// "&typ=1" + 
+						// "&nowroomImId=" + _self.nowroomImId + 
+						// "&formroomimid=" + _self.fromroomImid + 
+						// "&formroomname=" + _self.fromRoomname+
+						// "&pingjiaToimid="+_self.pingjiaToimid+
+						// "&title=" + _self.title+ 
+						// "&roomclass=" + _self.tuifromcurrRoomName+ 
+						// "&leibie=" + _self.yewu+
+						// "&fromuser="+  _self.fromuser +
+						// "&tuititle="+_self.tuititle
+						var urlmain={
+							id: _self.$route.query.id , 
+							projectid: _self.projectid , 
+							roomid: _self.toroomid , 
+							roomname: _self.curoomname , 
+							typ:1,
+							nowroomImId: _self.nowroomImId , 
+							formroomimid: _self.fromroomImid , 
+							formroomname: _self.fromRoomname,
+							pingjiaToimid:_self.pingjiaToimid,
+							title: _self.title, 
+							roomclass: _self.tuifromcurrRoomName, 
+							leibie: _self.yewu,
+							fromuser:  _self.fromuser ,
+							tuititle:_self.tuititle
+						}
+						_self.$router.push({ path: '/static/newwebstatic/chengnuo/ttp.html', query:urlmain})
 					},
 					no: function() {
 						var _self = this
 						// appApi.openNewWindow(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid +"&fromroomname="+_self.fromRoomname+ "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser+"&tuititle="+_self.tuititle)
-						window.location.href="/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid +"&fromroomname="+_self.fromRoomname+ "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser+"&tuititle="+_self.tuititle
-//						appApi.openNewWindow(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid +"&fromroomname="+_self.fromRoomname+ "&roomname=" + _self.curoomname + "&typ=4" + "&nowroomImId=" + _self.nowroomImId + "&formroomimid=" + _self.fromroomImid + "&title=" + _self.title + "&roomclass=" + _self.tuifromcurrRoomName + "&leibie=" + _self.yewu+"&fromuser="+  _self.fromuser+"&tuititle="+_self.tuititle)
+						var urlmain={
+							id: _self.$route.query.id ,
+							projectid: _self.projectid , 
+							roomid: _self.toroomid ,
+							fromroomname:_self.fromRoomname, 
+							roomname: _self.curoomname , 
+							typ:4, 
+							nowroomImId: _self.nowroomImId , 
+							formroomimid: _self.fromroomImid , 
+							title: _self.title , 
+							roomclass: _self.tuifromcurrRoomName , 
+							leibie: _self.yewu,
+							fromuser:  _self.fromuser,
+							tuititle:_self.tuititle
+						}
+						_self.$router.push({ path: '/static/newwebstatic/chengnuo/ttp.html', query:urlmain})
+
 					},
 					pin: function(n) {
 						var _self = this
-						window.location.href="/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=" + n + "&nowroomImId=" + _self.nowroomImId
-//						appApi.openNewWindow(getUrl() + "/static/newwebstatic/chengnuo/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=" + n + "&nowroomImId=" + _self.nowroomImId)
-						//						window.location.href=getUrl() + "/static/newwebstatic/lianxi/ttp.html?id=" + _self.$route.query.id + "&projectid=" + _self.projectid + "&roomid=" + _self.toroomid + "&roomname=" + _self.curoomname + "&typ=3"+"&nowroomImId="+_self.nowroomImId
+						var urlmain={
+							id: _self.$route.query.id , 
+							projectid: _self.projectid , 
+							roomid: _self.toroomid , 
+							roomname: _self.curoomname , 
+							typ: n , 
+							nowroomImId: _self.nowroomImId
+						}
+					_self.$router.push({ path: '/static/newwebstatic/chengnuo/ttp.html', query:urlmain})
+					
 					},
 					//					yes: function() {
 					//						var _self = this

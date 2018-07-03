@@ -432,14 +432,14 @@ export default {
     //点击第二步
     step2: function(n) {
       var _self = this;
-      // appApi.hideBack();
-      // if (_self.nowCompany.length == 0) {
-      //   tipApi.waring("请选择接收单位",1)
-      //   // ludan("请选择接收单位", 1, 1);
-      // } else {
-      //   _self.backicon = n;
-      // }
-      _self.backicon = n
+      appApi.hideBack();
+      if (_self.nowCompany.length == 0) {
+        tipApi.waring("请选择接收单位",1)
+        // ludan("请选择接收单位", 1, 1);
+      } else {
+        _self.backicon = n;
+      }
+      // _self.backicon = n
     },
     //点击返回按钮
     back: function() {

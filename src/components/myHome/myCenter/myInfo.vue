@@ -43,7 +43,7 @@
 				<li class="mui-table-view-cell" id="addrSelect">
 					 <!-- <label>地区</label> -->
 					<!-- <span class="mui-badge mui-badge-inverted" v-text="user.areaInfo"></span>  -->
-					<area-bar :title="returntitle" :areatype="areatype" @toParent="childValue"  ></area-bar>
+					<area-bar :title="returntitle" :areatype="areatype" @toParent="childValue"  :datanow="location"></area-bar>
 				</li>
 				<li class="mui-table-view-cell" @click="openAddEdit"><label>详细地址</label><span class="mui-badge mui-badge-inverted" v-text="user.addrInfo"></span></li>
 			</ul>
@@ -127,6 +127,8 @@
 				auth: "未认证",
 				areas: [],
 				test:'',
+				local:'',
+				location:''
 			}
 		},
 		mounted() {
@@ -205,7 +207,7 @@
 				//更新个人简介
 				var val = cur.value;
 				if(val && val.length > 255) {
-					msg("我的个人简介输入太长");
+					alert("我的个人简介输入太长");
 					return false;
 				}
 				if(val == "") {
@@ -272,6 +274,7 @@
 			});
 			this.$http.post("/common_api/area_list").then(function(response) {
 				_self.$data.areas = response.data.result;
+				console.log(response)
 				_self.initAddr();
 			}).catch(function(error) {
 				console.info(error);
@@ -281,12 +284,19 @@
 		methods: {
 			//选地区
 			childValue:function(val){
-                console.log("value"+val)
+				console.log("value"+val)
+				this.local=val
                 // this.test=val;
             },
 			initAddr:function(){
-				this.updateInfo({provinceId:items[0].value,cityId:items[1].value});
-				this.user.areaInfo = items[0].text + "-" + items[1].text;
+				// var items=this.local
+				var province=this.local.split("-")[0]
+				var city=this.local.split("-")[1]
+				console.log(province+"/"+city)
+				// this.updateInfo({provinceId:items[0].value,cityId:items[1].value});
+				// this.user.areaInfo = items[0].text + "-" + items[1].text;
+				this.updateInfo({provinceId:province,cityId:city});
+				this.location=this.local
 			},
 			uploadHeadImg:function(event) {
 				var fileBase64
