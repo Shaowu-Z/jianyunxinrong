@@ -70,9 +70,53 @@ export default {
 	},
 	mounted(){
 		window.appApi.getContacts();
+<<<<<<< HEAD
 		appApi.setPullRefresh(false)
 		
 		this.getData()
+=======
+		let _self = this
+		appApi.callBackFun = function (callFlag, CONTENT) {
+
+			let isLoginIm = true;
+			if (callFlag === appApi.callBackFlag.CONTACTS) {
+				//查询用户的好友
+				var param = new FormData();
+				param.append("userId", "");
+				_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
+					var resultArray = response.data.result;
+					var resultStr = ",";
+					for(var i in resultArray){
+						resultStr = resultStr + resultArray[i].cellPhone + ",";
+					}
+					// alert(this.convertData())
+
+					_self.phones = contacts.convertData(CONTENT.result, resultStr)
+					// _self.phones = CONTENT.result, resultStr
+
+				}).catch(function (error) {
+					console.info(error);
+				});
+			}
+			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
+			var result = CONTENT.result;
+			if(result == true){
+			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
+			// console.info('保存用户信息成功！');
+			// warm('保存用户信息成功！');
+			}else{
+			// console.info('保存用户信息失败！');
+			// warm('保存用户信息到本地失败！');
+			}
+			loading('登录成功！正在跳转到主页！');
+			window.appApi.goHome();
+			}else{
+			layer.close(index);
+			warm('登录失败，请重新登录!');
+			}
+			}*/
+		}
+>>>>>>> 02616dbc78dc949ab199fc0b9d05c547e8c131f7
 	},
 	methods: {
 		search(){
