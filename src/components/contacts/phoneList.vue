@@ -96,9 +96,6 @@ export default {
 					console.info(error);
 				});
 			}
-<<<<<<< HEAD
-		}	
-=======
 			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
 			var result = CONTENT.result;
 			if(result == true){
@@ -117,7 +114,6 @@ export default {
 			}
 			}*/
 		}
->>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
 	},
 	methods: {
 		goBack(){

@@ -15,8 +15,6 @@
 		<div class="mui-indexed-list-search mui-input-row mui-search">
 			<input type="search"  @keyup="searchUser" v-model="key" class="" placeholder="搜索">
 		</div>
-<<<<<<< HEAD
-=======
 
 		<div class="mui-indexed-list-bar">
 			<div class="align-middle">
@@ -29,7 +27,6 @@
 				</div>
 			</div>
 		</div>
->>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
 		<div class="mui-indexed-list-alert"></div>
 		<div class="mui-indexed-list-inner">
 			<div class="mui-indexed-list-empty-alert" :class="{'hide':this.friendsList.length != 0}">没有数据</div>
