@@ -11,7 +11,7 @@
 	<section class="mui-content" id="phone_list">
 		<div id='list' class="mui-indexed-lists address-list">
 			<div class="mui-indexed-list-search mui-input-row mui-search">
-				<input type="search" class="mui-input-clear mui-indexed-list-search-input" id="sosuo" ref="sosuo" placeholder="搜索">
+				<input type="search" class="mui-input-clear mui-indexed-list-search-input" id="sosuo" ref="sosuo" @keyup="search" placeholder="搜索">
 			</div>
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
@@ -23,12 +23,12 @@
 			<div class="mui-indexed-list-alert"></div>
 			<div class="mui-indexed-list-inner">
 				<div id="empty-view" class="mui-indexed-list-empty-alert" :class="{'showhide' : phones.length<0}">没有数据</div>
-				<ul class="mui-table-view">
-					<div v-for="(items,index1) in phones" :key="index1">
+				<mt-index-list>
+					<mt-index-section v-for="(items,index1) in phones" :key="index1" :index='items.first'>
 						<div v-for="(item,index2) in items" :key="index2">
 							<div v-if="item.name">
 								<div v-if="item.isp == 1">
-								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
+								<li v-text="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
 										{{item.first}}
 									</li>
 								</div>
@@ -47,15 +47,12 @@
 										</div>
 									</a>
 									<button v-show="item.is_add" @click="addFriends(index1, index2)" class="mui-btn">添加</button>
-									<button v-show="!item.is_add" class="mui-btn mui-btn-link mui-badge mui-badge-inverted">已添加</button>
+									<button v-show="!item.is_add" class="mui-btn mui-btn-link mui-badge mui-badge-inverted" style="margin-left:-2px">已添加</button>
 								</li>
 							</div>
 						</div>
-					</div>
-					<div v-for="(items,index1) in phones" :key="index1" >
-
-					</div>
-				</ul>
+					</mt-index-section>
+				</mt-index-list>
 			</div>
 		</div>
 	</section>
@@ -68,58 +65,44 @@ import { Toast,IndexList } from 'mint-ui';
 export default {
 	data(){
 		return{
-			phones:[]
+			phones:[],
 		}
 	},
 	mounted(){
 		window.appApi.getContacts();
-		let _self = this
-		appApi.callBackFun = function (callFlag, CONTENT) {
-
-			let isLoginIm = true;
-			if (callFlag === appApi.callBackFlag.CONTACTS) {
-				//查询用户的好友
-				var param = new FormData();
-				param.append("userId", "");
-				_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
-					var resultArray = response.data.result;
-					var resultStr = ",";
-					for(var i in resultArray){
-						resultStr = resultStr + resultArray[i].cellPhone + ",";
-					}
-					// alert(this.convertData())
-
-					_self.phones = contacts.convertData(CONTENT.result, resultStr)
-					// _self.phones = CONTENT.result, resultStr
-
-				}).catch(function (error) {
-					console.info(error);
-				});
-			}
-<<<<<<< HEAD
-		}	
-=======
-			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
-			var result = CONTENT.result;
-			if(result == true){
-			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
-			// console.info('保存用户信息成功！');
-			// warm('保存用户信息成功！');
-			}else{
-			// console.info('保存用户信息失败！');
-			// warm('保存用户信息到本地失败！');
-			}
-			loading('登录成功！正在跳转到主页！');
-			window.appApi.goHome();
-			}else{
-			layer.close(index);
-			warm('登录失败，请重新登录!');
-			}
-			}*/
-		}
->>>>>>> 249c3732ab1e0ae0ff116855465f99ae30142be7
+		appApi.setPullRefresh(false)
+		
+		this.getData()
 	},
 	methods: {
+		search(){
+
+		},
+		getData(){
+			let _self = this
+			appApi.callBackFun = function (callFlag, CONTENT) {
+				let isLoginIm = true;
+				if (callFlag === appApi.callBackFlag.CONTACTS) {
+					//查询用户的好友
+					var param = new FormData();
+					param.append("userId", "");
+					_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
+						var resultArray = response.data.result;
+						var resultStr = ",";
+						for(var i in resultArray){
+							resultStr = resultStr + resultArray[i].cellPhone + ",";
+						}
+						// alert(this.convertData())
+
+						_self.phones = contacts.convertData(CONTENT.result, resultStr)
+						// _self.phones = CONTENT.result, resultStr
+						alert(JSON.stringify(_self.phones))
+					}).catch(function (error) {
+						console.info(error);
+					});
+				}
+			}	
+		},
 		goBack(){
 			this.$router.go(-1)
 		},

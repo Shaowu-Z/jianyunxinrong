@@ -368,7 +368,6 @@ window.appApi = {
 	 */
 
 	setSelectData: function(arr) {
-		alert(arr)
 		var json = {
 			data: arr
 		};
@@ -506,7 +505,6 @@ window.appApi = {
 	 *  回调方法 setLocationResult
 	 */
 	getLocation: function() {
-		alert(1)
 		if(isApp && isIphoneOs) { //IOS
 			if(!isTop) {
 				this.callFilter("iosGetLocation(");

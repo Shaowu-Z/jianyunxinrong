@@ -125,7 +125,7 @@ export default {
             parentid:[],
             backzr:'',
             backstart:'',
-            userid : BackCookie.getCookie("userid"),
+            userid : setting.getCookie("userid"),
             // filesize: "0KB", //选中文件的大小
         }
     },
@@ -186,7 +186,7 @@ export default {
         //点击列表跳转对应文件柜
         init: function(index) {
             var _self = this
-            //						appApi.hideBack()
+            //appApi.hideBack()
             console.log("/cdish/data?projectId=" + _self.projectSn + "&userid=" + this.userid)
             this.$http.post("/cdish/data?projectId=" + _self.projectSn + "&userid=" + this.userid).then(function(response) {
                 console.log(response,'数据');

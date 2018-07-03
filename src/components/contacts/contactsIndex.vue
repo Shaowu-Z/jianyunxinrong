@@ -34,7 +34,7 @@
 							<img src="../../assets/images/ico_connect.gif" />
 						</div>
 						<div class="oa-contact-content mui-table-cell">
-							<h4 class="oa-contact-name">建云好友</h4>
+							<h4 class="oa-contact-name">我的好友</h4>
 						</div>
 					</div>
 				</div>

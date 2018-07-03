@@ -809,15 +809,15 @@ export default {
                 });
                 return;
             }
-            if(!_self.form.placeShenbao){
-                // msg("工程地点不能为空")
-                Toast({
-                    message: '工程地点不能为空',
-                    position: 'middle',
-                    duration: 1000
-                });
-                return;
-            }
+            // if(!_self.form.placeShenbao){
+            //     // msg("工程地点不能为空")
+            //     Toast({
+            //         message: '工程地点不能为空',
+            //         position: 'middle',
+            //         duration: 1000
+            //     });
+            //     return;
+            // }
             if(!_self.form.gongChengFangID){
                 // msg("我的组织类型不能为空")
                 Toast({
@@ -899,6 +899,11 @@ export default {
 
 
                         // loading("项目创建成功，正在初始虚拟办公室信息...");
+                        Toast({
+                            message: '项目创建成功，正在初始虚拟办公室信息...',
+                            position: 'middle',
+                            duration: 1000
+                        });
                         var roomdata=new FormData();
                         roomdata.append("projectSN",result.projectSN);
                         roomdata.append("roomName",result.roomName);
@@ -909,15 +914,26 @@ export default {
 
                         _self.$http.post("/pcontact_api/initprojectcontact",roomdata).then(function (response) {
                             console.log("房间初始化完成",response.data)
-                            setTimeout(function () {
-                                layer.closeAll();
-                                appApi.closeNewWindow();
-                            },500);
+                            Toast({
+                                message: '房间初始化完成',
+                                position: 'middle',
+                                duration: 1000
+                            });
+                            window.appApi.closeNewWindow();
+                            // setTimeout(function () {
+                            //     // layer.closeAll();
+                                
+                            // },500);
                         }).catch(function (error) {
                             console.info(error);
                         });
                     }else {
-                        msg("项目创建失败!")
+                        // msg("项目创建失败!")
+                        Toast({
+                            message: '项目创建失败!',
+                            position: 'middle',
+                            duration: 1000
+                        });
                     }
                 }).catch(function (error) {
                     console.info(error);
