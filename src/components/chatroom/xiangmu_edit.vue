@@ -81,7 +81,7 @@
                         <!-- <input type="text" name="missionStartDate" v-model="form.missionStartDate" @click="selectDate('s')"
                             readonly="readonly"
                             placeholder="请选择"> -->
-                        <data-bar :title="kaigong" :datanow="cc" style="width:240px"></data-bar>
+                        <data-bar :title="kaigong" :datanow="cc" style="width:170px"></data-bar>
                     </a>
                 </li>
                 <li class="mui-table-view-cell mui-input-row">
@@ -90,7 +90,7 @@
                         <!-- <input type="text" name="missionEndDate" v-model="form.missionEndDate" @click="selectDate('e')"
                             readonly="readonly"
                             placeholder="请选择"> -->
-                            <data-bar :title="jungong" :datanow="form.missionEndDate" style="width:240px"></data-bar>
+                            <data-bar :title="jungong" :datanow="form.missionEndDate" style="width:170px"></data-bar>
                     </a>
                 </li>
         </ul>

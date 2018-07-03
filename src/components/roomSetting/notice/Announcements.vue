@@ -169,6 +169,7 @@
 
 <script>
 import {getParam,BackCookie} from '../../../playform/common'
+import setting from '../../../playform/config'
 import '../../../playform/alert'
 export default {
     data(){
@@ -191,9 +192,9 @@ export default {
     },
     created(){
         this.param_map = getParam(this.href);
-        this.user_id = BackCookie.getCookie("userid");
-        this.user_icon = BackCookie.getCookie("user_icon");
-        this.user_name = decodeURI(BackCookie.getCookie("username"))
+        this.user_id = setting.getCookie("userid");
+        this.user_icon = setting.getCookie("user_icon");
+        this.user_name = decodeURI(setting.getCookie("username"))
         console.log(this.param_map,"param_map");
     },
     //过滤器定义区

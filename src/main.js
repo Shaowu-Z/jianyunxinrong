@@ -25,6 +25,7 @@ import tipApi from "./playform/tipApi.js";
 import "./assets/css/common/layer.less";
 import "./assets/css/common/mint.css";
 import "./assets/css/common/page.css";
+import "./assets/css/common/my-mint.less";
 import "./assets/css/common/calendar-pro.css";
 import "mint-ui/lib/style.css"
 import App from './App';

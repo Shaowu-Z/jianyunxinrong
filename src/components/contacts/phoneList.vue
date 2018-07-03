@@ -11,7 +11,7 @@
 	<section class="mui-content" id="phone_list">
 		<div id='list' class="mui-indexed-lists address-list">
 			<div class="mui-indexed-list-search mui-input-row mui-search">
-				<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
+				<input type="search" class="mui-input-clear mui-indexed-list-search-input" id="sosuo" ref="sosuo" @keyup="search" placeholder="搜索">
 			</div>
 			<div class="mui-indexed-list-bar">
 				<div class="align-middle">
@@ -23,12 +23,12 @@
 			<div class="mui-indexed-list-alert"></div>
 			<div class="mui-indexed-list-inner">
 				<div id="empty-view" class="mui-indexed-list-empty-alert" :class="{'showhide' : phones.length<0}">没有数据</div>
-				<ul class="mui-table-view">
-					<div v-for="(items,index1) in phones" :key="index1">
+				<mt-index-list>
+					<mt-index-section v-for="(items,index1) in phones" :key="index1" :index='items.first'>
 						<div v-for="(item,index2) in items" :key="index2">
 							<div v-if="item.name">
 								<div v-if="item.isp == 1">
-								<li :data-group="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
+								<li v-text="item.first" class="mui-table-view-divider mui-indexed-list-group text" style="border-bottom:1px solid #ccc">
 										{{item.first}}
 									</li>
 								</div>
@@ -47,82 +47,78 @@
 										</div>
 									</a>
 									<button v-show="item.is_add" @click="addFriends(index1, index2)" class="mui-btn">添加</button>
-									<button v-show="!item.is_add" class="mui-btn mui-btn-link mui-badge mui-badge-inverted">已添加</button>
+									<button v-show="!item.is_add" class="mui-btn mui-btn-link mui-badge mui-badge-inverted" style="margin-left:-2px">已添加</button>
 								</li>
 							</div>
 						</div>
-					</div>
-					<div v-for="(items,index1) in phones" :key="index1" >
-
-					</div>
-				</ul>
+					</mt-index-section>
+				</mt-index-list>
 			</div>
 		</div>
 	</section>
-
   </div>
 </template>
 
 <script>
 import contacts from '../../playform/contacts_comm'
-import { Toast } from 'mint-ui';
+import { Toast,IndexList } from 'mint-ui';
 export default {
 	data(){
 		return{
-			phones:[]
+			phones:[],
+			newphones:[],
+			phone:[]
 		}
 	},
 	mounted(){
-		 window.appApi.getContacts();
-		let _self = this
-		appApi.callBackFun = function (callFlag, CONTENT) {
-
-			let isLoginIm = true;
-			if (callFlag === appApi.callBackFlag.CONTACTS) {
-				//查询用户的好友
-				var param = new FormData();
-				param.append("userId", "");
-				_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
-					var resultArray = response.data.result;
-					var resultStr = ",";
-					for(var i in resultArray){
-						resultStr = resultStr + resultArray[i].cellPhone + ",";
-					}
-					// alert(this.convertData())
-
-					_self.phones = contacts.convertData(CONTENT.result, resultStr)
-					// _self.phones = CONTENT.result, resultStr
-
-				}).catch(function (error) {
-					console.info(error);
-				});
-		// let CONTENT = "zhangsan=12321312312,lisi=32132132111"
-		// let resultStr = '12312121211'
-		// this.phones=contacts.convertData(CONTENT, resultStr)
-
-
-
-			}
-			/* if(callFlag == appApi.callBackFlag.HX_LOGIN){
-			var result = CONTENT.result;
-			if(result == true){
-			if(window.appApi.saveUserInfo(JSON.stringify(resultJson),password)){
-			// console.info('保存用户信息成功！');
-			// warm('保存用户信息成功！');
-			}else{
-			// console.info('保存用户信息失败！');
-			// warm('保存用户信息到本地失败！');
-			}
-			loading('登录成功！正在跳转到主页！');
-			window.appApi.goHome();
-			}else{
-			layer.close(index);
-			warm('登录失败，请重新登录!');
-			}
-			}*/
-		}
+		window.appApi.getContacts();
+		appApi.setPullRefresh(false)
+		
+		this.getData()
 	},
 	methods: {
+		search(){
+
+		},
+		getData(){
+			let _self = this
+			appApi.callBackFun = function (callFlag, CONTENT) {
+				let isLoginIm = true;
+				if (callFlag === appApi.callBackFlag.CONTACTS) {
+					//查询用户的好友
+					var param = new FormData();
+					param.append("userId", "");
+					_self.$http.post("/concats_api/find_eg_list", param).then(function (response) {
+						var resultArray = response.data.result;
+						var resultStr = ",";
+						for(var i in resultArray){
+							resultStr = resultStr + resultArray[i].cellPhone + ",";
+						}
+						// alert(this.convertData())
+
+						_self.phones = contacts.convertData(CONTENT.result, resultStr)
+						// _self.phones = CONTENT.result, resultStr
+						for(let i=0;i<_self.phones.length;i++){
+							// alert(_self.phones[i])
+							if(_self.phones[i] != ''){
+								_self.newphones.push(_self.phones[i][0])
+							}
+						}
+						// 获得首字母
+						
+						for(let i=0;i<_self.phones.length;i++){
+							alert(JSON.stringify(_self.phones[i]))
+							
+						}
+
+
+						alert(JSON.stringify(_self.phone,111111111111))
+					}).catch(function (error) {
+						console.info(error);
+					});
+				}
+			}	
+		},
 		goBack(){
 			this.$router.go(-1)
 		},
@@ -202,5 +198,8 @@ export default {
 	}
 	.showhide{
 		display: block
+	}
+	.mui-content{
+		width: 100%
 	}
 </style>

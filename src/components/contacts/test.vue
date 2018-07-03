@@ -25,7 +25,8 @@ export default {
     data(){
         return{
             list:[],
-            allLoaded:false
+            allLoaded:false,
+            newlist:['C','D','H','Q','P','A','V','S','B','M','O','X','I','F','G','J','W','E','R','T','K','Y','U','L','Z','N','#']
         }
     },
     methods:{
@@ -39,7 +40,19 @@ export default {
         loadBottom(){
             console.log('loadBottom')
         },
-    }
+    },
+    mounted(){
+        for(let i=0;i<this.newlist.length;i++){
+            for(let l=0;l<this.newlist.length-1;l++){
+                if(this.newlist[i]<this.newlist[l]){
+                    let c = this.newlist[i]
+                    this.newlist[i] = this.newlist[l]
+                    this.newlist[l] = c
+                }
+            }
+        }
+        console.log(this.newlist)
+    },
 }
 </script>
 
