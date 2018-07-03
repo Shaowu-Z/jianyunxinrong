@@ -66,6 +66,8 @@ export default {
 	data(){
 		return{
 			phones:[],
+			newphones:[],
+			phone:[]
 		}
 	},
 	mounted(){
@@ -96,7 +98,21 @@ export default {
 
 						_self.phones = contacts.convertData(CONTENT.result, resultStr)
 						// _self.phones = CONTENT.result, resultStr
-						alert(JSON.stringify(_self.phones))
+						for(let i=0;i<_self.phones.length;i++){
+							// alert(_self.phones[i])
+							if(_self.phones[i] != ''){
+								_self.newphones.push(_self.phones[i][0])
+							}
+						}
+						// 获得首字母
+						
+						for(let i=0;i<_self.phones.length;i++){
+							alert(JSON.stringify(_self.phones[i]))
+							
+						}
+
+
+						alert(JSON.stringify(_self.phone,111111111111))
 					}).catch(function (error) {
 						console.info(error);
 					});
